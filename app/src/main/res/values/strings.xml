@@ -14,4 +14,6 @@
     <string name="categoryMaxInput">Maximum length: 25 characters</string>
     <string name="noGramValueInDatabaseYetTitle">Gram missing</string>
     <string name="noGramValueInDatabaseYetDescription">This item doesn\'t have a gram value in the database yet. Please fill the field gram.</string>
+    <string name="showCategories">Show categories</string>
+    <string name="close">Close</string>
 </resources>

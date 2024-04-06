@@ -15,4 +15,6 @@
     <string name="categoryMaxInput">Eingabebegrenzung: 25 Zeichen</string>
     <string name="noGramValueInDatabaseYetTitle">Gramm fehlt</string>
     <string name="noGramValueInDatabaseYetDescription">Hierzu liegt noch keine Grammangabe vor. Bitte fülle das Feld \'Gramm Zucker\' aus.</string>
+    <string name="showCategories">Kategorien auflisten</string>
+    <string name="close">Schließen</string>
 </resources>

@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class], version = 1)
+@Database(entities = [Entry::class, Category::class], version = 2)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.AppDatabase
+import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -68,8 +69,8 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
         _savedHistory.value = savedSugarCountGrouped
     }
-    private val candyObserver = Observer<List<String>> {
-        _categories.value = it
+    private val categoryObserver = Observer<List<Category>> {
+        _categories.value = it.map { it.category }
     }
 
     // Observer that is used to observe Dao of RoomDB
@@ -84,7 +85,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         database.appDao().getEntries(nowMinus1Day, nowMinus30days)
             .observeForever(historyObserver)
 
-        database.appDao().getCategories().observeForever(candyObserver)
+        database.appDao().getAllCategories().observeForever(categoryObserver)
 
         database.appDao().getEntries(9999999999999, nowMinus1Day)
             .observeForever(nowMinus1DayObserverObject)
@@ -97,7 +98,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         database.appDao().getEntries(nowMinus1Day, nowMinus30days)
             .removeObserver(historyObserver)
 
-        database.appDao().getCategories().removeObserver(candyObserver)
+        database.appDao().getAllCategories().removeObserver(categoryObserver)
 
         database.appDao().getEntries(9999999999999, nowMinus1Day)
             .removeObserver(nowMinus1DayObserverObject)
@@ -150,6 +151,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
                     gramTotal = gramValueInt * amountValueInt
                 )
             )
+            database.appDao().insertCategory(Category(category = category))
         }
     }
 

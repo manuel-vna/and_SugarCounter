@@ -23,7 +23,14 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM entry_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
     fun checkIfGramValueExistsForCategory(category: String): Entry?
 
-    @Query("""SELECT DISTINCT category FROM entry_table""")
-    fun getCategories(): LiveData<List<String>>
+    @Insert
+    fun insertCategory(vararg category: Category)
+
+    @Query("""SELECT * FROM category_table""")
+    fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("""DELETE FROM category_table WHERE id = :id""")
+    fun deleteSpecificCategory(id: Int)
+
 
 }
