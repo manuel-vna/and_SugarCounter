@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">SugarCounter</string>
+    <string name="foodType">What?</string>
+    <string name="gramSugar">Gram Sugar</string>
+    <string name="amountSugar">Amount</string>
+    <string name="totalAmountSugar">total</string>
+    <string name="saveButton">Save</string>
+    <string name="clearButton">Clear fields</string>
+    <string name="timestampToday">Today</string>
+    <string name="timestampYesterday">Yesterday</string>
+    <string name="sugarCounter">Counter</string>
+    <string name="sugarHistory">History</string>
+    <string name="settings">Settings</string>
+    <string name="categoryMaxInput">Maximum length: 25 characters</string>
+    <string name="noGramValueInDatabaseYetTitle">Gram missing</string>
+    <string name="noGramValueInDatabaseYetDescription">This item doesn\'t have a gram value in the database yet. Please fill the field gram.</string>
+</resources>
