@@ -25,13 +25,20 @@ class SettingsVM(application: Application) : AndroidViewModel(application) {
 
     private val _categories = MutableStateFlow(listOf<Category>())
     val categories = _categories.asStateFlow()
+
+    val _categoryDeleteAlertDialog = MutableStateFlow(false)
+    val categoryDeleteAlertDialog = _categoryDeleteAlertDialog.asStateFlow()
+
+    val _categoryDeleteId = MutableStateFlow(0)
+    val categoryDeleteId = _categoryDeleteId.asStateFlow()
     //SateFlows: END
 
 
     //Observer _categories: START
     // Observer that is used to observe Dao of RoomDB
     private val categoriesObserver = Observer<List<Category>> {
-        _categories.value = it
+        val sortedCategories = it.sortedBy { it.category }
+        _categories.value = sortedCategories
     }
 
     init {
@@ -59,6 +66,16 @@ class SettingsVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun actionShowDeleteAlertDialog(categoryId: Int) {
+        _categoryDeleteAlertDialog.value = true
+        _categoryDeleteId.value = categoryId
+    }
+
+    fun actionDismissAlertDialog() {
+        _categoryDeleteAlertDialog.value = false
+    }
+
+    fun actionDeleteCategory(categoryId: Int) {
+        _categoryDeleteAlertDialog.value = false
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().deleteSpecificCategory(categoryId)
         }
