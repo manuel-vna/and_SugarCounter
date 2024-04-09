@@ -1,6 +1,7 @@
 package com.example.mva_sugarcounter.composables
 
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -21,7 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.Category
@@ -110,28 +115,23 @@ fun SettingsItemButton(settingsVM: SettingsVM, descriptionText: String, buttonIc
 @Composable
 fun CategoryList(settingsVM: SettingsVM, categories: List<Category>) {
 
+    BackHandler {
+        settingsVM.actionHideCategories()
+    }
+
     Column {
 
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Text(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            fontWeight = FontWeight.Bold,
+            fontSize = 20.sp,
+            textAlign = TextAlign.Center,
+            text = stringResource(id = R.string.categoriesScreenDescription)
+        )
 
-            Text(
-                modifier = Modifier.weight(10F),
-                text = stringResource(id = R.string.categoriesScreenDescription)
-            )
-
-            Button(
-                modifier = Modifier.weight(5F),
-                onClick = {
-                    settingsVM.actionHideCategories()
-                }) {
-                Text(text = stringResource(id = R.string.close))
-            }
-        }
-
-
+        Divider(modifier = Modifier.padding(8.dp),thickness = 3.dp)
 
         LazyColumn {
             items(categories) {
@@ -142,7 +142,7 @@ fun CategoryList(settingsVM: SettingsVM, categories: List<Category>) {
                         .clickable {
                             settingsVM.actionShowDeleteAlertDialog(it.id)
                         }
-                        .padding(12.dp),
+                        .padding(6.dp),
                     horizontalArrangement = Arrangement.SpaceAround,
                 )
                 {

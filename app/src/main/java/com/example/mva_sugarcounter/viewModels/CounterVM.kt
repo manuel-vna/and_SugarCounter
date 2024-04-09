@@ -151,7 +151,10 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
                     gramTotal = gramValueInt * amountValueInt
                 )
             )
-            database.appDao().insertCategory(Category(category = category))
+            // check if database already contains the given category string
+            if (!_categories.value.contains(category)) {
+                database.appDao().insertCategory(Category(category = category))
+            }
         }
     }
 

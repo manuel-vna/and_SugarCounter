@@ -18,5 +18,4 @@
     <string name="categoriesScreenDescription">Categories</string>
     <string name="deleteCategroyAlertTitle">Delete</string>
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>
-    <string name="close">Close</string>
 </resources>

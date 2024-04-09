@@ -19,5 +19,4 @@
     <string name="categoriesScreenDescription">Kategorien</string>
     <string name="deleteCategroyAlertTitle">Löschen</string>
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
-    <string name="close">Schließen</string>
 </resources>
