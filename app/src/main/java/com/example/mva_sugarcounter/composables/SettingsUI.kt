@@ -113,7 +113,7 @@ fun SettingsItemButton(settingsVM: SettingsVM, descriptionText: String, buttonIc
 }
 
 @Composable
-fun CategoryList(settingsVM: SettingsVM, categories: List<Category>) {
+fun CategoryList(settingsVM: SettingsVM, categories: Map<Char,List<Category>>) {
 
     BackHandler {
         settingsVM.actionHideCategories()
@@ -133,9 +133,18 @@ fun CategoryList(settingsVM: SettingsVM, categories: List<Category>) {
 
         Divider(modifier = Modifier.padding(8.dp),thickness = 3.dp)
 
-        LazyColumn {
-            items(categories) {
+        LazyColumn{
+            items(categories.toList()) {(key, value) ->
 
+                Text(
+                    modifier = Modifier.padding(start=16.dp,end=4.dp),
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    text = key.toString()
+                )
+
+                Column{
+                    value.forEach{
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -146,7 +155,9 @@ fun CategoryList(settingsVM: SettingsVM, categories: List<Category>) {
                     horizontalArrangement = Arrangement.SpaceAround,
                 )
                 {
-                    Text(text = it.category)
+                            Text(text = it.category)
+                        }
+                    }
                 }
             }
         }

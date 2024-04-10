@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.AppDatabase
 import com.example.mva_sugarcounter.data.Category
+import com.example.mva_sugarcounter.data.Entry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -23,7 +24,10 @@ class SettingsVM(application: Application) : AndroidViewModel(application) {
     val _categoryListShown = MutableStateFlow(false)
     val categoryListShown = _categoryListShown.asStateFlow()
 
-    private val _categories = MutableStateFlow(listOf<Category>())
+    //private val _categories = MutableStateFlow(listOf<Category>())
+    //val categories = _categories.asStateFlow()
+
+    private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
 
     val _categoryDeleteAlertDialog = MutableStateFlow(false)
@@ -36,8 +40,8 @@ class SettingsVM(application: Application) : AndroidViewModel(application) {
 
     //Observer _categories: START
     // Observer that is used to observe Dao of RoomDB
-    private val categoriesObserver = Observer<List<Category>> {
-        val sortedCategories = it.sortedBy { it.category }
+    private val categoriesObserver = Observer<List<Category>> { it ->
+        val sortedCategories = it.groupBy(keySelector = { it.category.first() }).toSortedMap()
         _categories.value = sortedCategories
     }
 
