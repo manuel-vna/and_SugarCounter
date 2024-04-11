@@ -1,19 +1,25 @@
 package com.example.mva_sugarcounter.composables
 
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -113,7 +119,7 @@ fun SettingsItemButton(settingsVM: SettingsVM, descriptionText: String, buttonIc
 }
 
 @Composable
-fun CategoryList(settingsVM: SettingsVM, categories: Map<Char,List<Category>>) {
+fun CategoryList(settingsVM: SettingsVM, categories: Map<Char, List<Category>>) {
 
     BackHandler {
         settingsVM.actionHideCategories()
@@ -121,40 +127,55 @@ fun CategoryList(settingsVM: SettingsVM, categories: Map<Char,List<Category>>) {
 
     Column {
 
-        Text(
+        Box(
             modifier = Modifier
-                .padding(16.dp)
                 .fillMaxWidth(),
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.categoriesScreenDescription)
-        )
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                text = stringResource(id = R.string.categoriesScreenDescription)
+            )
 
-        Divider(modifier = Modifier.padding(8.dp),thickness = 3.dp)
+            IconButton(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(Alignment.CenterEnd),
+                onClick = { Log.d("Tag", "Hello Bochum 22") }) {
+                Icon(
+                    modifier = Modifier.size(28.dp),
+                    imageVector = Icons.Rounded.Info,
+                    contentDescription = "arrow",
+                )
+            }
+        }
 
-        LazyColumn{
-            items(categories.toList()) {(key, value) ->
+        Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
+
+        LazyColumn {
+            items(categories.toList()) { (key, value) ->
 
                 Text(
-                    modifier = Modifier.padding(start=16.dp,end=4.dp),
+                    modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     text = key.toString()
                 )
 
-                Column{
-                    value.forEach{
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            settingsVM.actionShowDeleteAlertDialog(it.id)
-                        }
-                        .padding(6.dp),
-                    horizontalArrangement = Arrangement.SpaceAround,
-                )
-                {
+                Column {
+                    value.forEach {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    settingsVM.actionShowDeleteAlertDialog(it.id)
+                                }
+                                .padding(6.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                        )
+                        {
                             Text(text = it.category)
                         }
                     }
@@ -176,7 +197,7 @@ fun CategoryList(settingsVM: SettingsVM, categories: Map<Char,List<Category>>) {
                     onClick = {
                         settingsVM.actionDismissAlertDialog()
                     }) {
-                    Text("Cancel")
+                    Text(stringResource(id = R.string.generalCancel))
                 }
 
             },
@@ -186,7 +207,7 @@ fun CategoryList(settingsVM: SettingsVM, categories: Map<Char,List<Category>>) {
                     onClick = {
                         settingsVM.actionDeleteCategory(categoryDeleteID)
                     }) {
-                    Text("Okay")
+                    Text(stringResource(id = R.string.generalConfirm))
                 }
             },
             text = {
