@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.Category
+import com.example.mva_sugarcounter.data.states.CategoryListingStates
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
 
@@ -46,9 +49,10 @@ fun CategoriesScreen(context: Context) {
 
     val categoryListShown by categoryListingVM.categoryListShown.collectAsState()
     val categories by categoryListingVM.categories.collectAsState()
+    val deletionCheckboxes by categoryListingVM.deletionCheckboxes.collectAsState()
 
     if (categoryListShown) {
-        CategoryList(context, categoryListingVM, settingsVM, categories)
+        CategoryList(context, categoryListingVM, settingsVM, categories, deletionCheckboxes)
     }
 }
 
@@ -57,7 +61,8 @@ fun CategoryList(
     context: Context,
     categoryListingVM: CategoryListingVM,
     settingsVM: SettingsVM,
-    categories: Map<Char, List<Category>>
+    categories: Map<Char, List<Category>>,
+    deletionCheckboxes: CategoryListingStates
 ) {
 
 
@@ -84,7 +89,13 @@ fun CategoryList(
                 modifier = Modifier
                     .padding(12.dp)
                     .align(Alignment.CenterEnd),
-                onClick = { }) {
+                onClick = {
+                    if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                        categoryListingVM.actionHideDeletionCheckboxes()
+                    } else {
+                        categoryListingVM.actionShowDeletionCheckboxes()
+                    }
+                }) {
                 Icon(
                     modifier = Modifier.size(28.dp),
                     imageVector = Icons.Rounded.Info,
@@ -106,55 +117,40 @@ fun CategoryList(
                 )
 
                 Column {
-                    value.forEach {
-                        Row(
+                    value.forEach { category ->
+                        Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    categoryListingVM.actionShowDeleteAlertDialog(it.id)
-                                }
-                                .padding(6.dp),
-                            horizontalArrangement = Arrangement.SpaceAround,
-                        )
-                        {
-                            Checkbox(checked = false, onCheckedChange = {})
-                            Text(text = it.category)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Text(text = category.category)
+                            if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                                Checkbox(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterEnd)
+                                        .padding(end = 12.dp),
+                                    checked = false,
+                                    onCheckedChange = {
+                                        categoryListingVM.actionChangeDeleteStatus(category.id)
+                                    })
+                            }
                         }
                     }
                 }
             }
         }
-    }
-
-    val categoryDeleteAlertDialog by categoryListingVM.categoryDeleteAlertDialog.collectAsState()
-    val categoryDeleteID by categoryListingVM.categoryDeleteId.collectAsState()
-
-    if (categoryDeleteAlertDialog) {
-        androidx.compose.material3.AlertDialog(
-            title = { Text(text = stringResource(id = R.string.deleteCategroyAlertTitle)) },
-            onDismissRequest = { },
-            dismissButton = {
+        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
                 Button(
-
-                    onClick = {
-                        categoryListingVM.actionDismissAlertDialog()
-                    }) {
-                    Text(stringResource(id = R.string.generalCancel))
+                    onClick = { /*TODO*/ }
+                ) {
+                    Text("Delete")
                 }
-
-            },
-            confirmButton = {
-                Button(
-
-                    onClick = {
-                        categoryListingVM.actionDeleteCategory(categoryDeleteID)
-                    }) {
-                    Text(stringResource(id = R.string.generalConfirm))
-                }
-            },
-            text = {
-                Text(stringResource(id = R.string.deleteCategroyAlertDescription))
             }
-        )
+        }
     }
+
 }

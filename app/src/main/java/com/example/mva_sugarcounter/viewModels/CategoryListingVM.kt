@@ -3,13 +3,11 @@ package com.example.mva_sugarcounter.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.AppDatabase
 import com.example.mva_sugarcounter.data.Category
-import kotlinx.coroutines.Dispatchers
+import com.example.mva_sugarcounter.data.states.CategoryListingStates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class CategoryListingVM(private val application: Application) : AndroidViewModel(application) {
 
@@ -27,6 +25,12 @@ class CategoryListingVM(private val application: Application) : AndroidViewModel
 
     val _categoryDeleteId = MutableStateFlow(0)
     val categoryDeleteId = _categoryDeleteId.asStateFlow()
+
+    val _deletionCheckboxes = MutableStateFlow(CategoryListingStates())
+    val deletionCheckboxes = _deletionCheckboxes.asStateFlow()
+
+    val _deletionList = MutableStateFlow(mutableListOf(0))
+    val deletionList = _deletionList.asStateFlow()
     //SateFlows: END
 
 
@@ -60,19 +64,25 @@ class CategoryListingVM(private val application: Application) : AndroidViewModel
         _categoryListShown.value = false
     }
 
-    fun actionShowDeleteAlertDialog(categoryId: Int) {
-        _categoryDeleteAlertDialog.value = true
-        _categoryDeleteId.value = categoryId
+    fun actionShowDeletionCheckboxes() {
+        _deletionCheckboxes.value = CategoryListingStates(
+            deletionCheckboxesDisplayed = true,
+            deletionButtonsDisplayed = true,
+        )
     }
 
-    fun actionDismissAlertDialog() {
-        _categoryDeleteAlertDialog.value = false
+    fun actionHideDeletionCheckboxes() {
+        _deletionCheckboxes.value = CategoryListingStates(
+            deletionCheckboxesDisplayed = false,
+            deletionButtonsDisplayed = false,
+        )
     }
 
-    fun actionDeleteCategory(categoryId: Int) {
-        _categoryDeleteAlertDialog.value = false
-        viewModelScope.launch(Dispatchers.IO) {
-            database.appDao().deleteSpecificCategory(categoryId)
+    fun actionChangeDeleteStatus(id: Int) {
+        if (_deletionList.value.contains(id)) {
+            _deletionList.value.drop(id)
+        } else {
+            _deletionList.value.add(id)
         }
     }
     //Actions: END
