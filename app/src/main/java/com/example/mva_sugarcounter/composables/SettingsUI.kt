@@ -1,26 +1,14 @@
 package com.example.mva_sugarcounter.composables
 
 
-import android.util.Log
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -29,70 +17,54 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
-import com.example.mva_sugarcounter.data.Category
+import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
 
 
 @Composable
-fun Settings() {
+fun Settings(context: Context) {
 
     //get an instance of the ViewModel
     val settingsVM: SettingsVM = viewModel()
+    val categoryListingVM: CategoryListingVM = viewModel()
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
-    val categoryListShown by settingsVM.categoryListShown.collectAsState()
-    val categories by settingsVM.categories.collectAsState()
 
     if (settingsScreenShown) {
-        SettingsScreen(settingsVM)
+        SettingsScreen(context, settingsVM, categoryListingVM)
     }
-
-    if (categoryListShown) {
-        CategoryList(settingsVM, categories)
-    }
+    CategoriesScreen(context)
 }
 
 @Composable
-fun SettingsScreen(settingsVM: SettingsVM) {
+fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: CategoryListingVM) {
     Column(
         modifier = Modifier.padding(top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.End
     ) {
         SettingsItemButton(
+            context,
             settingsVM,
+            categoryListingVM,
             stringResource(id = R.string.settingsCategoriesText),
             R.drawable.baseline_read_more_24
         )
-        /*
-        SettingsItemCheckbox(settingsVM,"test",)
-        */
     }
 }
 
 @Composable
-fun SettingsItemCheckbox(settingsVM: SettingsVM, descriptionText: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        Text(text = descriptionText)
-
-        Switch(checked = true, onCheckedChange = null)
-    }
-}
-
-@Composable
-fun SettingsItemButton(settingsVM: SettingsVM, descriptionText: String, buttonIcon: Int) {
+fun SettingsItemButton(
+    context: Context,
+    settingsVM: SettingsVM,
+    categoryListingVM: CategoryListingVM,
+    descriptionText: String,
+    buttonIcon: Int
+) {
 
     Row(
         modifier = Modifier
@@ -101,119 +73,20 @@ fun SettingsItemButton(settingsVM: SettingsVM, descriptionText: String, buttonIc
     ) {
 
         Text(
-            //modifier = Modifier.weight(7F),
             text = descriptionText
         )
 
         Button(
-            //modifier = Modifier.weight(3F),
             onClick = {
-                settingsVM.actionShowCategories()
+                settingsVM.actionHideSettingsScreen()
+                categoryListingVM.actionShowCategories()
+
             }) {
             Icon(
                 painter = painterResource(id = buttonIcon),
                 contentDescription = "",
             )
         }
-    }
-}
-
-@Composable
-fun CategoryList(settingsVM: SettingsVM, categories: Map<Char, List<Category>>) {
-
-    BackHandler {
-        settingsVM.actionHideCategories()
-    }
-
-    Column {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.categoriesScreenDescription)
-            )
-
-            IconButton(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.CenterEnd),
-                onClick = { Log.d("Tag", "Hello Bochum 22") }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Info,
-                    contentDescription = "arrow",
-                )
-            }
-        }
-
-        Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
-
-        LazyColumn {
-            items(categories.toList()) { (key, value) ->
-
-                Text(
-                    modifier = Modifier.padding(start = 16.dp, end = 4.dp),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    text = key.toString()
-                )
-
-                Column {
-                    value.forEach {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    settingsVM.actionShowDeleteAlertDialog(it.id)
-                                }
-                                .padding(6.dp),
-                            horizontalArrangement = Arrangement.SpaceAround,
-                        )
-                        {
-                            Text(text = it.category)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    val categoryDeleteAlertDialog by settingsVM.categoryDeleteAlertDialog.collectAsState()
-    val categoryDeleteID by settingsVM.categoryDeleteId.collectAsState()
-
-    if (categoryDeleteAlertDialog) {
-        AlertDialog(
-            title = { Text(text = stringResource(id = R.string.deleteCategroyAlertTitle)) },
-            onDismissRequest = { },
-            dismissButton = {
-                Button(
-
-                    onClick = {
-                        settingsVM.actionDismissAlertDialog()
-                    }) {
-                    Text(stringResource(id = R.string.generalCancel))
-                }
-
-            },
-            confirmButton = {
-                Button(
-
-                    onClick = {
-                        settingsVM.actionDeleteCategory(categoryDeleteID)
-                    }) {
-                    Text(stringResource(id = R.string.generalConfirm))
-                }
-            },
-            text = {
-                Text(stringResource(id = R.string.deleteCategroyAlertDescription))
-            }
-        )
     }
 }
 

@@ -46,7 +46,7 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
             History()
         }
         composable(BottomNavItem.Settings.screenRoute) {
-            Settings()
+            Settings(context)
         }
     }
 }
