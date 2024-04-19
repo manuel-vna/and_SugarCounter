@@ -1,9 +1,12 @@
-package com.example.mva_sugarcounter.data
+package com.example.mva_sugarcounter.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
+import com.example.mva_sugarcounter.data.Category
+import com.example.mva_sugarcounter.data.Entry
 
 @Dao
 interface DaoAppDatabase {
@@ -26,11 +29,16 @@ interface DaoAppDatabase {
     @Insert
     fun insertCategory(vararg category: Category)
 
+    @Update
+    fun updateCategory(vararg category: Category)
+
     @Query("""SELECT * FROM category_table""")
     fun getAllCategories(): LiveData<List<Category>>
 
     @Query("""DELETE FROM category_table WHERE id = :id""")
     fun deleteSpecificCategory(id: Int)
 
+    @Query("""DELETE FROM category_table WHERE deletionCheckbox = true""")
+    fun deleteCheckedCategories()
 
 }

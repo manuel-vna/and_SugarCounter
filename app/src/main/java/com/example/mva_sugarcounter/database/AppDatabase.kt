@@ -1,13 +1,15 @@
-package com.example.mva_sugarcounter.data
+package com.example.mva_sugarcounter.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.mva_sugarcounter.data.Category
+import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class, Category::class], version = 2)
+@Database(entities = [Entry::class, Category::class], version = 3)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 

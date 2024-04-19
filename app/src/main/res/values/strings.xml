@@ -14,7 +14,7 @@
     <string name="categoryMaxInput">Maximum length: 25 characters</string>
     <string name="noGramValueInDatabaseYetTitle">Gram missing</string>
     <string name="noGramValueInDatabaseYetDescription">This item doesn\'t have a gram value in the database yet. Please fill the field gram.</string>
-    <string name="settingsCategoriesText">Here you can list all categories and delete them</string>
+    <string name="settingsCategoriesText">Show categories</string>
     <string name="categoriesScreenDescription">Categories</string>
     <string name="deleteCategroyAlertTitle">Delete</string>
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>

@@ -3,11 +3,14 @@ package com.example.mva_sugarcounter.viewModels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
-import com.example.mva_sugarcounter.data.AppDatabase
+import androidx.lifecycle.viewModelScope
+import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.states.CategoryListingStates
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class CategoryListingVM(private val application: Application) : AndroidViewModel(application) {
 
@@ -29,8 +32,6 @@ class CategoryListingVM(private val application: Application) : AndroidViewModel
     val _deletionCheckboxes = MutableStateFlow(CategoryListingStates())
     val deletionCheckboxes = _deletionCheckboxes.asStateFlow()
 
-    val _deletionList = MutableStateFlow(mutableListOf(0))
-    val deletionList = _deletionList.asStateFlow()
     //SateFlows: END
 
 
@@ -78,11 +79,31 @@ class CategoryListingVM(private val application: Application) : AndroidViewModel
         )
     }
 
-    fun actionChangeDeleteStatus(id: Int) {
-        if (_deletionList.value.contains(id)) {
-            _deletionList.value.drop(id)
-        } else {
-            _deletionList.value.add(id)
+    fun actionChangeDeleteCheckbox(category: Category) {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (category.deletionCheckbox) {
+                database.appDao().updateCategory(
+                    Category(
+                        id = category.id,
+                        category = category.category,
+                        deletionCheckbox = false
+                    )
+                )
+            } else {
+                database.appDao().updateCategory(
+                    Category(
+                        id = category.id,
+                        category = category.category,
+                        deletionCheckbox = true
+                    )
+                )
+            }
+        }
+    }
+
+    fun actionDeleteCheckedCategories() {
+        viewModelScope.launch(Dispatchers.IO) {
+            database.appDao().deleteCheckedCategories()
         }
     }
     //Actions: END

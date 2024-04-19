@@ -2,7 +2,6 @@ package com.example.mva_sugarcounter.composables
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,9 +12,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -26,7 +25,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -98,7 +96,7 @@ fun CategoryList(
                 }) {
                 Icon(
                     modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Info,
+                    imageVector = Icons.Rounded.Delete,
                     contentDescription = "arrow",
                 )
             }
@@ -129,9 +127,9 @@ fun CategoryList(
                                     modifier = Modifier
                                         .align(Alignment.CenterEnd)
                                         .padding(end = 12.dp),
-                                    checked = false,
+                                    checked = category.deletionCheckbox,
                                     onCheckedChange = {
-                                        categoryListingVM.actionChangeDeleteStatus(category.id)
+                                        categoryListingVM.actionChangeDeleteCheckbox(category)
                                     })
                             }
                         }
@@ -142,13 +140,16 @@ fun CategoryList(
         if (deletionCheckboxes.deletionCheckboxesDisplayed) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.End
             ) {
+
                 Button(
-                    onClick = { /*TODO*/ }
+                    modifier = Modifier.padding(12.dp),
+                    onClick = { categoryListingVM.actionDeleteCheckedCategories() }
                 ) {
                     Text("Delete")
                 }
+
             }
         }
     }

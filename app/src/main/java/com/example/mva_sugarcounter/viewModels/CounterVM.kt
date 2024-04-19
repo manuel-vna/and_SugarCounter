@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.example.mva_sugarcounter.data.AppDatabase
+import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.util.HelperMethods
@@ -144,7 +144,10 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             database.appDao().insertEntry(
                 Entry(
                     currentTimestamp = System.currentTimeMillis(),
-                    date = helperMethods.formatDateToString(System.currentTimeMillis(), "YYYY-MM-dd"),
+                    date = helperMethods.formatDateToString(
+                        System.currentTimeMillis(),
+                        "YYYY-MM-dd"
+                    ),
                     gramItem = gramValueInt,
                     amount = amountValueInt,
                     category = category,
