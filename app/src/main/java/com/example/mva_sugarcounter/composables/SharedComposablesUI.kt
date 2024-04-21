@@ -2,6 +2,7 @@ package com.example.mva_sugarcounter.composables
 
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,13 +40,22 @@ fun ShowSugarCountItemsShared(
 ) {
 
     val counterVM: CounterVM = viewModel()
+    val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(valueList)
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 12.dp),
+        border = if (totalGramPerDayBlock > 45) {
+            BorderStroke(2.dp, Color.Magenta)
+        } else if (backgroundColorPrimary) {
+            BorderStroke(2.dp, Color.DarkGray)
+        }
+        else {
+            null
+        },
         colors = CardDefaults.cardColors(
-            containerColor = if (backgroundColorPrimary) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = if (backgroundColorPrimary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.secondaryContainer,
         )
     ) {
 
@@ -106,12 +117,11 @@ fun ShowSugarCountItemsShared(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
 
-            val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(valueList)
-
             Icon(
-                painter = if (totalGramPerDayBlock <= 40) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
+                painter = if (totalGramPerDayBlock <= 45) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
+                tint = if (totalGramPerDayBlock > 45) Color.Magenta else Color.Green,
                 contentDescription = "",
             )
 

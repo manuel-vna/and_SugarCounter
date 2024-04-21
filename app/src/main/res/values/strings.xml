@@ -20,4 +20,8 @@
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>
     <string name="generalConfirm">Confirm</string>
     <string name="generalCancel">Cancel</string>
+    <string name="alertGramThresholdTitle">Warning</string>
+    <string name="alertGramThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
+    <string name="alertGramThresholdConfirmBtn">Delete it</string>
+    <string name="alertGramThresholdDismissBtn">Keep it</string>
 </resources>

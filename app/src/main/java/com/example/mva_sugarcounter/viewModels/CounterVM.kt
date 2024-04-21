@@ -2,6 +2,7 @@ package com.example.mva_sugarcounter.viewModels
 
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
@@ -44,6 +45,9 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     val _categoryItemDeleteObject = MutableStateFlow(Entry(0, 0, "", 0, 0, "", 0))
     val categoryItemDeleteObject = _categoryItemDeleteObject.asStateFlow()
+
+    val _alertDialogGramThreshold = MutableStateFlow(false)
+    val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
 
     //StateFlow: END
 
@@ -117,6 +121,25 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             getLastEntryOfCategory(category, amountValueInt)
         } else {
             saveEntryInDatabase(category, gramValueInt, amountValueInt)
+        }
+        checkGramThreshold()
+    }
+
+    private fun checkGramThreshold() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dateString = helperMethods.formatDateToString(
+                System.currentTimeMillis(),
+                "YYYY-MM-dd"
+            )
+            val sum = database.appDao().checkIfGramThresholdIsBreached(dateString)
+
+            withContext(Dispatchers.Main) {
+                sum?.let {
+                    if (sum.toString() > "45") {
+                        _alertDialogGramThreshold.value = true
+                    }
+                }
+            }
         }
     }
 
@@ -211,6 +234,18 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     fun actionDismissAlertDialog() {
         _alertDialog.value = false
+    }
+
+    fun actionGramThresholdKeepLastEntry() {
+        _alertDialogGramThreshold.value = false
+    }
+
+    fun actionGramThresholdDeleteLastEntry() {
+        _alertDialogGramThreshold.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            database.appDao().deleteLastEntry()
+        }
+
     }
     //Actions End
 

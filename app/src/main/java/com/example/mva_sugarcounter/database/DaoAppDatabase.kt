@@ -23,8 +23,14 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM entry_table WHERE currentTimestamp < :nowMinusTimeframe""")
     fun deleteEntriesOlderThanOneWeek(nowMinusTimeframe: Long)
 
+    @Query("""DELETE FROM entry_table WHERE id = (SELECT MAX(id) FROM entry_table)""")
+    fun deleteLastEntry()
+
     @Query("""SELECT * FROM entry_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
     fun checkIfGramValueExistsForCategory(category: String): Entry?
+
+    @Query("""SELECT SUM(gramItem) FROM entry_table WHERE date = :dateString""")
+    fun checkIfGramThresholdIsBreached(dateString: String): Int?
 
     @Insert
     fun insertCategory(vararg category: Category)

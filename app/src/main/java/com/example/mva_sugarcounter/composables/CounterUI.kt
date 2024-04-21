@@ -28,6 +28,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -261,7 +262,8 @@ fun Counter(context: Context) {
                     category = ""
                     counterVM.actionGramChange("")
                     counterVM.actionAmountChange("")
-                    expanded = false},
+                    expanded = false
+                },
             ) {
                 Text(text = stringResource(id = R.string.saveButton))
             }
@@ -305,6 +307,33 @@ fun Counter(context: Context) {
             },
             text = {
                 Text(stringResource(id = R.string.noGramValueInDatabaseYetDescription))
+            }
+        )
+    }
+
+    val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
+    if (alertDialogGramThreshold) {
+        AlertDialog(
+            title = { Text(text = stringResource(id = R.string.alertGramThresholdTitle)) },
+            onDismissRequest = { },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        counterVM.actionGramThresholdDeleteLastEntry()
+                    }) {
+                    Text(stringResource(id = R.string.alertGramThresholdConfirmBtn))
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = {
+                        counterVM.actionGramThresholdKeepLastEntry()
+                    }) {
+                    Text(stringResource(id = R.string.alertGramThresholdDismissBtn))
+                }
+            },
+            text = {
+                Text(stringResource(id = R.string.alertGramThresholdDescription))
             }
         )
     }

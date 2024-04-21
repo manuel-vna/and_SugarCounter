@@ -21,4 +21,8 @@
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>
     <string name="generalCancel">Abbrechen</string>
+    <string name="alertGramThresholdTitle">Warnung</string>
+    <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
+    <string name="alertGramThresholdConfirmBtn">Löschen</string>
+    <string name="alertGramThresholdDismissBtn">Behalten</string>
 </resources>
