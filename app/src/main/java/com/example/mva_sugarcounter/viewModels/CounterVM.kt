@@ -2,7 +2,6 @@ package com.example.mva_sugarcounter.viewModels
 
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
@@ -122,25 +121,6 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         } else {
             saveEntryInDatabase(category, gramValueInt, amountValueInt)
         }
-        checkGramThreshold()
-    }
-
-    private fun checkGramThreshold() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val dateString = helperMethods.formatDateToString(
-                System.currentTimeMillis(),
-                "YYYY-MM-dd"
-            )
-            val sum = database.appDao().checkIfGramThresholdIsBreached(dateString)
-
-            withContext(Dispatchers.Main) {
-                sum?.let {
-                    if (sum.toString() > "45") {
-                        _alertDialogGramThreshold.value = true
-                    }
-                }
-            }
-        }
     }
 
     private fun getLastEntryOfCategory(category: String, amountValueInt: Int) {
@@ -148,11 +128,11 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             val asyncAnswer = async { checkForExistingGramValue(category) }
             val sugarCounterRow = asyncAnswer.await()
 
-            // if an entry of this catefory exists already, take the gram value from it and save it
+            // if an entry of this category exists already, take the gram value from it and save it
             if (sugarCounterRow != null) {
                 saveEntryInDatabase(category, sugarCounterRow.gramItem, amountValueInt)
             }
-            // if there is noe entry for that category yet, prompt the user that the field gram has to be filled
+            // if there is no entry for that category yet, prompt the user that the field gram has to be filled
             else {
                 withContext(Dispatchers.Main) {
                     Log.d("Tag", "Error: Data has to be entered for gram")
@@ -180,6 +160,26 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             // check if database already contains the given category string
             if (!_categories.value.contains(category)) {
                 database.appDao().insertCategory(Category(category = category))
+            }
+
+            checkGramThreshold()
+        }
+    }
+
+    private fun checkGramThreshold() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val dateString = helperMethods.formatDateToString(
+                System.currentTimeMillis(),
+                "YYYY-MM-dd"
+            )
+            val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString)
+
+            withContext(Dispatchers.Main) {
+                databaseSum?.let {
+                    if (databaseSum > 45) {
+                        _alertDialogGramThreshold.value = true
+                    }
+                }
             }
         }
     }
