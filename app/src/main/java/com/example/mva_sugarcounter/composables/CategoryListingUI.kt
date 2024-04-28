@@ -103,6 +103,22 @@ fun CategoryList(
 
         Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
 
+        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+
+                Button(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { categoryListingVM.actionDeleteCheckedCategories() }
+                ) {
+                    Text("Delete")
+                }
+
+            }
+        }
+
         LazyColumn {
             items(categories.toList()) { (key, value) ->
 
@@ -136,21 +152,5 @@ fun CategoryList(
                 }
             }
         }
-        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-
-                Button(
-                    modifier = Modifier.padding(12.dp),
-                    onClick = { categoryListingVM.actionDeleteCheckedCategories() }
-                ) {
-                    Text("Delete")
-                }
-
-            }
-        }
     }
-
 }
