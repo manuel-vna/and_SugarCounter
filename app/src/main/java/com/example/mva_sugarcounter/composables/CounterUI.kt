@@ -4,10 +4,12 @@ package com.example.mva_sugarcounter.composables
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +42,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
@@ -48,7 +52,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -80,6 +83,17 @@ fun Counter(context: Context) {
         MutableInteractionSource()
     }
 
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(Color.Black, Color.White),
+                    start = Offset.Zero,
+                    end = Offset(0f, Float.POSITIVE_INFINITY)
+                )
+            )
+    )
 
     // Category Field
     Column(
@@ -120,7 +134,7 @@ fun Counter(context: Context) {
                 value = category,
                 onValueChange = {
                     //limit input to 25 characters
-                    if (it.count() <= 25) {
+                    if (it.count() <= 20) {
                         category = it
                         expanded = true
                     } else {
@@ -220,7 +234,7 @@ fun Counter(context: Context) {
                 TextField(
                     value = gramValue,
                     onValueChange = {
-                        if (it.isDigitsOnly()) counterVM.actionGramChange(it)
+                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionGramChange(it)
                     },
                     singleLine = true,
                     trailingIcon = {
@@ -253,7 +267,11 @@ fun Counter(context: Context) {
 
                 TextField(
                     value = amountValue,
-                    onValueChange = { if (it.isDigitsOnly()) counterVM.actionAmountChange(it) },
+                    onValueChange = {
+                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionAmountChange(
+                            it
+                        )
+                    },
                     singleLine = true,
                     trailingIcon = {
                         IconButton(onClick = { counterVM.actionAmountChange("") }) {
@@ -265,7 +283,6 @@ fun Counter(context: Context) {
                         }
                     }
                 )
-
             }
         }
 
@@ -288,7 +305,6 @@ fun Counter(context: Context) {
             ) {
                 Text(text = stringResource(id = R.string.saveButton))
             }
-
         }
 
         val savedSugarCountGrouped by counterVM.savedEntriesNowMinus1Day.collectAsState()

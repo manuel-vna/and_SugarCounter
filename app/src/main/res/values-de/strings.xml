@@ -11,7 +11,7 @@
     <string name="sugarCounter">Zähler</string>
     <string name="sugarHistory">Verlauf</string>
     <string name="settings">Einstellungen</string>
-    <string name="categoryMaxInput">Eingabebegrenzung: 25 Zeichen</string>
+    <string name="categoryMaxInput">Eingabebegrenzung: 20 Zeichen</string>
     <string name="noGramValueInDatabaseYetTitle">Gramm fehlt</string>
     <string name="noGramValueInDatabaseYetDescription">Hierzu liegt noch keine Grammangabe vor. Bitte fülle das Feld \'Gramm Zucker\' aus.</string>
     <string name="settingsCategoriesText">Kategorien anzeigen</string>

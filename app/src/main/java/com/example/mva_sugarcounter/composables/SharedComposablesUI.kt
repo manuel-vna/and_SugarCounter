@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -50,8 +52,7 @@ fun ShowSugarCountItemsShared(
             BorderStroke(2.dp, Color.Magenta)
         } else if (backgroundColorPrimary) {
             BorderStroke(2.dp, Color.DarkGray)
-        }
-        else {
+        } else {
             null
         },
         colors = CardDefaults.cardColors(
@@ -66,6 +67,7 @@ fun ShowSugarCountItemsShared(
         ) {
 
             Text(
+                modifier = Modifier.padding(top = 6.dp),
                 text = when (key) {
                     "TODAY" -> stringResource(R.string.timestampToday)
                     "YESTERDAY" -> stringResource(
@@ -75,7 +77,8 @@ fun ShowSugarCountItemsShared(
                     else -> key
                 },
                 fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontSize = 20.sp,
+                fontStyle = FontStyle.Italic
             )
 
         }
@@ -87,25 +90,47 @@ fun ShowSugarCountItemsShared(
                     .clickable {
                         counterVM.actionShowDeleteAlertDialog(it)
                     },
-                horizontalArrangement = Arrangement.SpaceAround,
-            )
-            {
-                Text(
-                    text = it.amount.toString() + " x " + it.gramItem.toString() + "g",
-                    modifier = Modifier
-                        .padding(4.dp),
-                )
-                Text(
-                    text = it.category,
-                    modifier = Modifier
-                        .padding(4.dp),
-                )
-                Text(
-                    text = it.gramTotal.toString() + "g",
-                    modifier = Modifier
-                        .padding(4.dp),
-                    textAlign = TextAlign.Right,
-                )
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Box(
+                    modifier = Modifier.weight(3f),
+                    contentAlignment = Alignment.TopStart
+                ) {
+                    Text(
+                        textAlign = TextAlign.Start,
+                        text = it.amount.toString() + " x " + if (it.gramItem.toString().length == 1) {
+                            "  "
+                        } else {
+                            ""
+                        } + it.gramItem.toString() + "g",
+                        modifier = Modifier
+                            .padding(start = 8.dp),
+                    )
+                }
+                Box(
+                    modifier = Modifier.weight(8f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        textAlign = TextAlign.Center,
+                        text = it.category,
+                        modifier = Modifier
+                            .padding(horizontal = 2.dp),
+                    )
+                }
+                Box(
+                    modifier = Modifier.weight(2f),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+                    Text(
+                        textAlign = TextAlign.End,
+                        text = it.gramTotal.toString() + "g",
+                        modifier = Modifier
+                            .padding(end = 8.dp),
+                    )
+                }
             }
         }
 
@@ -113,11 +138,12 @@ fun ShowSugarCountItemsShared(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.End)
-                .padding(bottom = 12.dp),
+                .padding(top = 12.dp, bottom = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
 
             Icon(
+                modifier = Modifier.padding(horizontal = 8.dp),
                 painter = if (totalGramPerDayBlock <= 45) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
@@ -126,6 +152,7 @@ fun ShowSugarCountItemsShared(
             )
 
             Text(
+                modifier = Modifier.padding(horizontal = 4.dp),
                 text = stringResource(id = R.string.totalAmountSugar) + ": " + counterVM.calculateTotalGramPerDayBlock(
                     valueList
                 ) + "g ",

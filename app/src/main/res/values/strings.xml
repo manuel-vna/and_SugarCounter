@@ -10,7 +10,7 @@
     <string name="sugarCounter">Counter</string>
     <string name="sugarHistory">History</string>
     <string name="settings">Settings</string>
-    <string name="categoryMaxInput">Maximum length: 25 characters</string>
+    <string name="categoryMaxInput">Maximum length: 20 characters</string>
     <string name="noGramValueInDatabaseYetTitle">Gram missing</string>
     <string name="noGramValueInDatabaseYetDescription">This item doesn\'t have a gram value in the database yet. Please fill the field gram.</string>
     <string name="settingsCategoriesText">Show categories</string>

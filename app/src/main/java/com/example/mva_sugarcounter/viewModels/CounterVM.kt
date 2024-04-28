@@ -6,9 +6,9 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
+import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
