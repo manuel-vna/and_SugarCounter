@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
@@ -110,7 +112,7 @@ fun Counter(context: Context) {
                     .border(
                         width = 1.8.dp,
                         shape = RoundedCornerShape(15.dp),
-                        color = Color.Cyan
+                        color = Color.Transparent
                     )
                     .onGloballyPositioned { coordinates ->
                         textFieldSize = coordinates.size.toSize()
@@ -221,6 +223,15 @@ fun Counter(context: Context) {
                         if (it.isDigitsOnly()) counterVM.actionGramChange(it)
                     },
                     singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { counterVM.actionGramChange("") }) {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "arrow",
+                            )
+                        }
+                    }
                 )
             }
 
@@ -244,6 +255,15 @@ fun Counter(context: Context) {
                     value = amountValue,
                     onValueChange = { if (it.isDigitsOnly()) counterVM.actionAmountChange(it) },
                     singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { counterVM.actionAmountChange("") }) {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "arrow",
+                            )
+                        }
+                    }
                 )
 
             }
@@ -257,6 +277,7 @@ fun Counter(context: Context) {
         ) {
 
             Button(
+                modifier = Modifier.width(160.dp),
                 onClick = {
                     counterVM.saveEntry(category)
                     category = ""
@@ -268,16 +289,6 @@ fun Counter(context: Context) {
                 Text(text = stringResource(id = R.string.saveButton))
             }
 
-            Button(
-                onClick = {
-                    category = ""
-                    counterVM.actionGramChange("")
-                    counterVM.actionAmountChange("")
-                    expanded = false
-                },
-            ) {
-                Text(text = stringResource(id = R.string.clearButton))
-            }
         }
 
         val savedSugarCountGrouped by counterVM.savedEntriesNowMinus1Day.collectAsState()

@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">SugarCounter</string>
-    <string name="foodType">What?</string>
-    <string name="gramSugar">Gram Sugar</string>
+    <string name="foodType">Category</string>
+    <string name="gramSugar">Gram</string>
     <string name="amountSugar">Amount</string>
     <string name="totalAmountSugar">total</string>
     <string name="saveButton">Save</string>
-    <string name="clearButton">Clear fields</string>
     <string name="timestampToday">Today</string>
     <string name="timestampYesterday">Yesterday</string>
     <string name="sugarCounter">Counter</string>

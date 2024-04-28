@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SugarCounter</string>
-    <string name="foodType">Was?</string>
-    <string name="gramSugar">Gramm Zucker</string>
+    <string name="foodType">Kategorie</string>
+    <string name="gramSugar">Gramm</string>
     <string name="amountSugar">Anzahl</string>
     <string name="totalAmountSugar">Gesamt</string>
     <string name="saveButton">Speichern</string>
-    <string name="clearButton">Felder leeren</string>
     <string name="timestampToday">Heute</string>
     <string name="timestampYesterday">Gestern</string>
     <string name="sugarCounter">Zähler</string>
