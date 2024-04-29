@@ -245,7 +245,8 @@ fun Counter(context: Context) {
                                 contentDescription = "arrow",
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
             }
 
@@ -281,7 +282,9 @@ fun Counter(context: Context) {
                                 contentDescription = "arrow",
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    placeholder = { Text("1") }
                 )
             }
         }
