@@ -49,9 +49,9 @@ fun ShowSugarCountItemsShared(
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 12.dp),
         border = if (totalGramPerDayBlock > 45) {
-            BorderStroke(2.dp, Color.Magenta)
+            BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
         } else if (backgroundColorPrimary) {
-            BorderStroke(2.dp, Color.DarkGray)
+            BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         } else {
             null
         },
@@ -147,7 +147,7 @@ fun ShowSugarCountItemsShared(
                 painter = if (totalGramPerDayBlock <= 45) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
-                tint = if (totalGramPerDayBlock > 45) Color.Magenta else Color.Green,
+                tint = if (totalGramPerDayBlock > 45) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
                 contentDescription = "",
             )
 

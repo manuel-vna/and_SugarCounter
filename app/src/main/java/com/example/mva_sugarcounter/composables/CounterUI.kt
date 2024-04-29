@@ -83,18 +83,6 @@ fun Counter(context: Context) {
         MutableInteractionSource()
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(Color.Black, Color.White),
-                    start = Offset.Zero,
-                    end = Offset(0f, Float.POSITIVE_INFINITY)
-                )
-            )
-    )
-
     // Category Field
     Column(
         modifier = Modifier
