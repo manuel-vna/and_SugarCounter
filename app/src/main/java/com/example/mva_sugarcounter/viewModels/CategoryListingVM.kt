@@ -38,7 +38,9 @@ class CategoryListingVM(private val application: Application) : AndroidViewModel
     //Observer _categories: START
     // Observer that is used to observe Dao of RoomDB
     private val categoriesObserver = Observer<List<Category>> { it ->
-        val sortedCategories = it.groupBy(keySelector = { it.category.first() }).toSortedMap()
+        val sortedCategories =
+            it.filter { it.category.isNotBlank() }.groupBy(keySelector = { it.category.first() })
+                .toSortedMap()
         _categories.value = sortedCategories
     }
 
