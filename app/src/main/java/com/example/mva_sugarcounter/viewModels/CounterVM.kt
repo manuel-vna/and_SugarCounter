@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
+import java.time.ZoneId
 
 
 class CounterVM(application: Application) : AndroidViewModel(application) {
@@ -47,16 +49,21 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
-
     //StateFlow: END
 
+    // Timestamps: BEGIN
+    private val today = LocalDate.now()
+    private val yesterday = today.minusDays(1)
 
-    //get timestamp of yesterday
-    val currentTimestamp = System.currentTimeMillis()
-    val nowMinus1Day =
-        currentTimestamp - 90000000 // 86400 seconds (1 day) + 3600 seconds (1 hour) + 000 ( to milliseconds)
-    val nowMinus30days = currentTimestamp - 2592000000
-    val nowMinus150days = currentTimestamp - 12960000000
+    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
+    private val endOfToday = today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000 - 1
+
+    private val startOfYesterday = yesterday.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
+    private val endOfYesterday = startOfToday - 1
+
+    private val currentTimestamp = System.currentTimeMillis()
+    private val endOf30DaysAgo = currentTimestamp - 2592000000 // 2592000000 = 30 days as timestamp in milliseconds
+    // Timestamps: END
 
     // StateFlow that is observed by UI
     private val _savedHistory =
@@ -85,27 +92,25 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getEntries(nowMinus1Day, nowMinus30days)
+        database.appDao().getEntries(endOf30DaysAgo,startOfYesterday)
             .observeForever(historyObserver)
 
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
-        database.appDao().getEntries(9999999999999, nowMinus1Day)
+        database.appDao().getEntries(startOfYesterday, endOfToday)
             .observeForever(nowMinus1DayObserverObject)
-
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(nowMinus1Day, nowMinus30days)
+        database.appDao().getEntries(endOf30DaysAgo,endOfYesterday)
             .removeObserver(historyObserver)
 
         database.appDao().getAllCategories().removeObserver(categoryObserver)
 
-        database.appDao().getEntries(9999999999999, nowMinus1Day)
+        database.appDao().getEntries(startOfYesterday, endOfToday)
             .removeObserver(nowMinus1DayObserverObject)
-
     }
 
     //Saving an Entry: Start
@@ -253,7 +258,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     // Temporary unused: Start
     fun deleteEntry() {
         viewModelScope.launch(Dispatchers.IO) {
-            database.appDao().deleteEntriesOlderThanOneWeek(nowMinus30days)
+            database.appDao().deleteEntriesOlderThanOneWeek(endOf30DaysAgo)
         }
     }
     // Temporary unused: End

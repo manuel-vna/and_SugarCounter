@@ -14,7 +14,7 @@ interface DaoAppDatabase {
     @Insert
     fun insertEntry(vararg sugarCounter: Entry)
 
-    @Query("""SELECT * FROM entry_table WHERE currentTimestamp < :startPoint AND currentTimestamp > :endPoint """)
+    @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntries(startPoint: Long, endPoint: Long): LiveData<List<Entry>>
 
     @Query("""DELETE FROM entry_table WHERE id = :id""")
