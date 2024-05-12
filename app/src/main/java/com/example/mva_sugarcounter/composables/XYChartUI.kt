@@ -13,6 +13,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.drawText
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mva_sugarcounter.util.HelperMethods
@@ -42,7 +44,7 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 strokeWidth = barWidthPix
             )
 
-            val verticalLines = 5
+            val verticalLines = 7
             val verticalSize = size.width / (verticalLines + 1)
             val path = Path()
 
@@ -59,13 +61,16 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
             exampleData.forEach {
                 var height = getXyChartFloat(it.second, size.height)
                 val startX = verticalSize * (it.first + 1)
+                if (it.first == 0) {
+                    path.moveTo(startX, height)
+                }
                 path.lineTo(startX, height)
                 drawPath(path = path, color = Color.Blue, style = Stroke(2.dp.toPx()))
+                //drawText()
 
-                val dayCount = it.first
-                println("it.first: $dayCount")
-                println("startX: $startX")
-                println("height: $height")
+                println("it.first: " + it.first)
+                println("it.second: " + it.second)
+                println("it.third: " + it.third)
 
             }
         }
@@ -83,13 +88,13 @@ fun getXyChartFloat(gramValue: Int, chartHeight: Float): Float {
 }
 
 val exampleData = listOf(
-    Triple(0, 10, "2024-05-1"),
+    Triple(0, 45, "2024-05-1"),
     Triple(1, 5, "2024-05-2"),
-    Triple(2, 45, "2024-05-3"),
-    Triple(3, 45, "2024-05-4"),
+    Triple(2, 40, "2024-05-3"),
+    Triple(3, 60, "2024-05-4"),
     Triple(4, 20, "2024-05-5"),
     Triple(5, 30, "2024-05-6"),
-    Triple(6, 35, "2024-05-7")
+    Triple(6, 45, "2024-05-7")
 )
 
 @Preview
