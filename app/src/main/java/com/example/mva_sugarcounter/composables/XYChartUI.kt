@@ -13,11 +13,13 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.mva_sugarcounter.util.HelperMethods
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
@@ -27,6 +29,15 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
             .fillMaxSize()
             .background(Color.LightGray)
     ) {
+
+        val textMeasurer = rememberTextMeasurer()
+        val style = TextStyle(
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.Black,
+
+            )
+
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -58,7 +69,7 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 )
             }
 
-            exampleData.forEach {
+            exampleData.forEach { it ->
                 var height = getXyChartFloat(it.second, size.height)
                 val startX = verticalSize * (it.first + 1)
                 if (it.first == 0) {
@@ -66,11 +77,46 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 }
                 path.lineTo(startX, height)
                 drawPath(path = path, color = Color.Blue, style = Stroke(2.dp.toPx()))
-                //drawText()
 
                 println("it.first: " + it.first)
                 println("it.second: " + it.second)
                 println("it.third: " + it.third)
+                println("size.width" + size.width)
+
+            }
+
+            val yDistance = size.height / 10
+            val yAxis = listOf<String>(
+                "100g",
+                "90g",
+                "80g",
+                "70g",
+                "60g",
+                "50g",
+                "40g",
+                "30g",
+                "20g",
+                "10g"
+            )
+            var count = 0
+            yAxis.forEach { yAxis ->
+
+                drawText(
+                    textMeasurer = textMeasurer,
+                    text = yAxis,
+                    style = style,
+                    topLeft = Offset(
+                        x = 10.0F,
+                        y = yDistance * count
+                    )
+                )
+                count++
+                drawLine(
+                    Color.Gray,
+                    start = Offset(0F, yDistance * count),
+                    end = Offset(size.width, yDistance * count),
+                    strokeWidth = barWidthPix
+                )
 
             }
         }
