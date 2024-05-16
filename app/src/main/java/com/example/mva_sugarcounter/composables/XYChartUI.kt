@@ -38,6 +38,7 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
 
             )
 
+
         Canvas(
             modifier = Modifier
                 .fillMaxSize()
@@ -45,7 +46,7 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 .padding(16.dp)
         ) {
             val barWidthPix = 1.dp.toPx()
-            drawRect(Color.Black, style = Stroke(barWidthPix))
+            //drawRect(Color.Black, style = Stroke(barWidthPix))
 
             val fortyFiveGramLine = (size.height / 100) * 55
             drawLine(
@@ -58,7 +59,6 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
             val verticalLines = 7
             val verticalSize = size.width / (verticalLines + 1)
             val path = Path()
-
             repeat(verticalLines) { i ->
                 val startX = verticalSize * (i + 1)
                 drawLine(
@@ -87,7 +87,6 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
 
             val yDistance = size.height / 10
             val yAxis = listOf<String>(
-                "100g",
                 "90g",
                 "80g",
                 "70g",
@@ -96,7 +95,8 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 "40g",
                 "30g",
                 "20g",
-                "10g"
+                "10g",
+                "0g"
             )
             var count = 0
             yAxis.forEach { yAxis ->
@@ -127,9 +127,10 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
 
 fun getXyChartFloat(gramValue: Int, chartHeight: Float): Float {
     return if (gramValue <= 100) {
-        (chartHeight / 100) * (100 - gramValue)
+        (chartHeight / 100) * (90 - gramValue)
+
     } else {
-        chartHeight
+        (chartHeight / 100) * (90 - 100) // = maximum of 100g sugar
     }
 }
 
@@ -138,8 +139,8 @@ val exampleData = listOf(
     Triple(1, 5, "2024-05-2"),
     Triple(2, 40, "2024-05-3"),
     Triple(3, 60, "2024-05-4"),
-    Triple(4, 20, "2024-05-5"),
-    Triple(5, 30, "2024-05-6"),
+    Triple(4, 150, "2024-05-5"),
+    Triple(5, 100, "2024-05-6"),
     Triple(6, 45, "2024-05-7")
 )
 
