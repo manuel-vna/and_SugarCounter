@@ -20,14 +20,21 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mva_sugarcounter.data.GraphData
 
 @Composable
-fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
+fun SimpleLine(exampleData: List<GraphData>, darkMode: Int) {
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(
+                if (darkMode == 33) {
+                    Color.White
+                } else {
+                    Color.White
+                }
+            )
     ) {
 
         val textMeasurer = rememberTextMeasurer()
@@ -35,9 +42,7 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             color = Color.Black,
-
-            )
-
+        )
 
         Canvas(
             modifier = Modifier
@@ -46,43 +51,49 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                 .padding(16.dp)
         ) {
             val barWidthPix = 1.dp.toPx()
-            //drawRect(Color.Black, style = Stroke(barWidthPix))
 
-            val fortyFiveGramLine = (size.height / 100) * 55
+            val fortyFiveGramLine = (size.height / 100) * 45
             drawLine(
                 Color.Red,
-                start = Offset(0f, fortyFiveGramLine),
+                start = Offset(125f, fortyFiveGramLine),
                 end = Offset(size.width, fortyFiveGramLine),
-                strokeWidth = barWidthPix
+                strokeWidth = 2.dp.toPx()
             )
 
-            val verticalLines = 7
-            val verticalSize = size.width / (verticalLines + 1)
             val path = Path()
-            repeat(verticalLines) { i ->
-                val startX = verticalSize * (i + 1)
+            exampleData.forEach { it ->
+
+                //vertical lines
+                val verticalSize = size.width / (7 + 1)
+                val startX1 = verticalSize * (it.id + 1)
                 drawLine(
                     Color.Black,
-                    start = Offset(startX, 0f),
-                    end = Offset(startX, size.height),
+                    start = Offset(startX1, 0f),
+                    end = Offset(startX1, (size.height / 10) * 9),
                     strokeWidth = barWidthPix
                 )
-            }
+                drawText(
+                    textMeasurer = textMeasurer,
+                    text = if (it.id < 7) {
+                        it.day
+                    } else {
+                        ""
+                    },
+                    style = style,
+                    topLeft = Offset(
+                        x = startX1 - 50,
+                        y = (size.height / 10) * 9
+                    )
+                )
 
-            exampleData.forEach { it ->
-                var height = getXyChartFloat(it.second, size.height)
-                val startX = verticalSize * (it.first + 1)
-                if (it.first == 0) {
+                // horizontal lines
+                var height = getXyChartFloat(it.gramTotal, size.height)
+                val startX = verticalSize * (it.id + 1)
+                if (it.id == 0) {
                     path.moveTo(startX, height)
                 }
                 path.lineTo(startX, height)
                 drawPath(path = path, color = Color.Blue, style = Stroke(2.dp.toPx()))
-
-                println("it.first: " + it.first)
-                println("it.second: " + it.second)
-                println("it.third: " + it.third)
-                println("size.width" + size.width)
-
             }
 
             val yDistance = size.height / 10
@@ -107,16 +118,18 @@ fun SimpleLine(exampleDate: List<Triple<Int, Int, String>>) {
                     style = style,
                     topLeft = Offset(
                         x = 10.0F,
-                        y = yDistance * count
+                        y = (yDistance * count) - 25
                     )
                 )
                 count++
-                drawLine(
-                    Color.Gray,
-                    start = Offset(0F, yDistance * count),
-                    end = Offset(size.width, yDistance * count),
-                    strokeWidth = barWidthPix
-                )
+                if (count < 10) {
+                    drawLine(
+                        Color.Gray,
+                        start = Offset(125F, yDistance * count),
+                        end = Offset(size.width, yDistance * count),
+                        strokeWidth = barWidthPix
+                    )
+                }
 
             }
         }
@@ -135,19 +148,18 @@ fun getXyChartFloat(gramValue: Int, chartHeight: Float): Float {
 }
 
 val exampleData = listOf(
-    Triple(0, 45, "2024-05-1"),
-    Triple(1, 5, "2024-05-2"),
-    Triple(2, 40, "2024-05-3"),
-    Triple(3, 60, "2024-05-4"),
-    Triple(4, 150, "2024-05-5"),
-    Triple(5, 100, "2024-05-6"),
-    Triple(6, 45, "2024-05-7")
+    GraphData(id = 0, gramTotal = 50, "15.06."),
+    GraphData(id = 1, gramTotal = 50, "16.06."),
+    GraphData(id = 2, gramTotal = 50, "17.06."),
+    GraphData(id = 3, gramTotal = 50, "18.06."),
+    GraphData(id = 4, gramTotal = 50, "21.06."),
+    GraphData(id = 5, gramTotal = 42, "22.06."),
 )
 
 @Preview
 @Composable
 fun GraphPreview() {
     MaterialTheme {
-        SimpleLine(exampleData)
+        SimpleLine(exampleData, 0)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.mva_sugarcounter.composables
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,15 +14,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mva_sugarcounter.data.GraphData
+import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.example.mva_sugarcounter.viewModels.HistoryVM
 
 
 @Composable
-fun History() {
+fun History(context: Context) {
 
+    val helperMethods: HelperMethods = HelperMethods(context)
     val counterVM: CounterVM = viewModel()
     val savedSugarCountGrouped by counterVM.savedHistory.collectAsState()
+    println(savedSugarCountGrouped)
 
     val historyVM: HistoryVM = viewModel()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
@@ -43,18 +48,23 @@ fun History() {
         }
 
         if (historyChartScreenShown) {
+            val graphDataList = savedSugarCountGrouped.values.take(8).mapIndexed { id, value ->
+                GraphData(
+                    id = id,
+                    gramTotal = helperMethods.calculateTotalGramPerDayBlock(value),
+                    day = helperMethods.formatDateToString(
+                        value.first().currentTimestamp,
+                        if (helperMethods.getSystemLanguage() == "en") {
+                            "MM/dd"
+                        } else {
+                            "dd.MM"
+                        }
+                    )
+                )
+            }
 
-            val exampleData = listOf(
-                Triple(0, 45, "2024-05-1"),
-                Triple(1, 5, "2024-05-2"),
-                Triple(2, 40, "2024-05-3"),
-                Triple(3, 60, "2024-05-4"),
-                Triple(4, 150, "2024-05-5"),
-                Triple(5, 100, "2024-05-6"),
-                Triple(6, 45, "2024-05-7")
-            )
-
-            SimpleLine(exampleDate = exampleData)
+            val darkMode = context.resources.configuration.uiMode
+            SimpleLine(exampleData = graphDataList, darkMode = darkMode)
         }
     }
 }

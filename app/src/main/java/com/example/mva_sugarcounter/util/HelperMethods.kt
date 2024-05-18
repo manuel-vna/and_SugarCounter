@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Date
+import java.util.Locale
 
 class HelperMethods(private val context: Context) {
 
@@ -69,6 +70,10 @@ class HelperMethods(private val context: Context) {
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
         return valueList.map { it.gramTotal }.reduce { sum, element -> sum + element }
 
+    }
+
+    fun getSystemLanguage(): String {
+        return Locale.getDefault().language
     }
 
 

@@ -43,7 +43,7 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
             Counter(context)
         }
         composable(BottomNavItem.SugarHistory.screenRoute) {
-            History()
+            History(context)
         }
         composable(BottomNavItem.Settings.screenRoute) {
             Settings(context)
