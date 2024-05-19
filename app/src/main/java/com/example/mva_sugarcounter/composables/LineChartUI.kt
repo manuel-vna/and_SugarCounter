@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.mva_sugarcounter.data.GraphData
 
 @Composable
-fun SimpleLine(exampleData: List<GraphData>, darkMode: Int) {
+fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
 
     Box(
         modifier = Modifier
@@ -50,100 +50,97 @@ fun SimpleLine(exampleData: List<GraphData>, darkMode: Int) {
                 .aspectRatio(3 / 3f)
                 .padding(16.dp)
         ) {
-            val barWidthPix = 1.dp.toPx()
 
-            val fortyFiveGramLine = (size.height / 100) * 45
+            //DrawScope variables
+            val barWidthPix = 1.dp.toPx()
+            val onePercentHeight = size.height / 100
+            val onePercentWidth = size.width / 100
+            val oneWidthSection = size.width / 8 // width is divided in eight sections
+            val oneHeightSection = size.height / 10 // height is divided in ten sections
+            val fortyFiveGramLineHeight =
+                onePercentHeight * 45 //TODO get percentage of users gram threshold from data store
+            val path = Path()
+            // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g
+            val lineGraphYAxisGramTags = (0..9).map { i -> "${(9 - i) * 10}g" }
+
             drawLine(
                 Color.Red,
-                start = Offset(125f, fortyFiveGramLine),
-                end = Offset(size.width, fortyFiveGramLine),
-                strokeWidth = 2.dp.toPx()
+                start = Offset(oneWidthSection, fortyFiveGramLineHeight),
+                end = Offset(size.width, fortyFiveGramLineHeight),
+                strokeWidth = barWidthPix * 2
             )
 
-            val path = Path()
-            exampleData.forEach { it ->
+            graphDataList.forEach { it ->
 
                 //vertical lines
-                val verticalSize = size.width / (7 + 1)
-                val startX1 = verticalSize * (it.id + 1)
+                val xAxisPointVerticalLines =
+                    oneWidthSection * (it.id + 1) // increase value of x-axis by each loop
                 drawLine(
                     Color.Black,
-                    start = Offset(startX1, 0f),
-                    end = Offset(startX1, (size.height / 10) * 9),
+                    start = Offset(xAxisPointVerticalLines, 0f),
+                    end = Offset(
+                        xAxisPointVerticalLines,
+                        oneHeightSection * 9
+                    ), // take 9 HeightSections
                     strokeWidth = barWidthPix
                 )
                 drawText(
                     textMeasurer = textMeasurer,
-                    text = if (it.id < 7) {
+                    text = if (it.id < 7) { // do not write the 8th date on the screen
                         it.day
                     } else {
                         ""
                     },
                     style = style,
                     topLeft = Offset(
-                        x = startX1 - 50,
-                        y = (size.height / 10) * 9
+                        x = xAxisPointVerticalLines - (onePercentWidth * 5), //subtract 5% of the x xis point to have the date values centered under the vertical lines
+                        y = oneHeightSection * 9 // take 9 height sections
                     )
                 )
 
                 // horizontal lines
-                var height = getXyChartFloat(it.gramTotal, size.height)
-                val startX = verticalSize * (it.id + 1)
+                var heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
+                val xAxisPointHorizontalLines = oneWidthSection * (it.id + 1)
                 if (it.id == 0) {
-                    path.moveTo(startX, height)
+                    path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
                 }
-                path.lineTo(startX, height)
+                path.lineTo(xAxisPointHorizontalLines, heightGramDataPoint)
                 drawPath(path = path, color = Color.Blue, style = Stroke(2.dp.toPx()))
             }
 
-            val yDistance = size.height / 10
-            val yAxis = listOf<String>(
-                "90g",
-                "80g",
-                "70g",
-                "60g",
-                "50g",
-                "40g",
-                "30g",
-                "20g",
-                "10g",
-                "0g"
-            )
             var count = 0
-            yAxis.forEach { yAxis ->
+            lineGraphYAxisGramTags.forEach { yAxis ->
 
                 drawText(
                     textMeasurer = textMeasurer,
                     text = yAxis,
                     style = style,
                     topLeft = Offset(
-                        x = 10.0F,
-                        y = (yDistance * count) - 25
+                        x = (onePercentWidth * 2), // move the gram tags of y axis 2% to the left
+                        y = ((oneHeightSection * count) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
                     )
                 )
                 count++
-                if (count < 10) {
+                if (count < 10) { // do not draw last horizontal line at the bottom which is the 10th line
                     drawLine(
                         Color.Gray,
-                        start = Offset(125F, yDistance * count),
-                        end = Offset(size.width, yDistance * count),
+                        start = Offset(oneWidthSection, oneHeightSection * count),
+                        end = Offset(size.width, oneHeightSection * count),
                         strokeWidth = barWidthPix
                     )
                 }
 
             }
         }
-
     }
 }
 
-
-fun getXyChartFloat(gramValue: Int, chartHeight: Float): Float {
+fun getXyChartFloat(gramValue: Int, onePercentHeight: Float): Float {
     return if (gramValue <= 100) {
-        (chartHeight / 100) * (90 - gramValue)
+        onePercentHeight * (90 - gramValue) // 90 = 90% height line graph, 10% height bottom date line
 
     } else {
-        (chartHeight / 100) * (90 - 100) // = maximum of 100g sugar
+        onePercentHeight * (90 - 100) // = maximum of 100g sugar
     }
 }
 
@@ -160,6 +157,6 @@ val exampleData = listOf(
 @Composable
 fun GraphPreview() {
     MaterialTheme {
-        SimpleLine(exampleData, 0)
+        LineChart(exampleData, 0)
     }
 }

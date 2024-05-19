@@ -26,7 +26,6 @@ fun History(context: Context) {
     val helperMethods: HelperMethods = HelperMethods(context)
     val counterVM: CounterVM = viewModel()
     val savedSugarCountGrouped by counterVM.savedHistory.collectAsState()
-    println(savedSugarCountGrouped)
 
     val historyVM: HistoryVM = viewModel()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
@@ -37,6 +36,7 @@ fun History(context: Context) {
         // sets buttons with which the history screen can be selected: Graph or Cards
         ChangeHistoryScreenSelection(historyVM)
 
+        //Card Screen
         if (historyCardsScreenShown) {
             LazyColumn {
                 items(
@@ -47,6 +47,7 @@ fun History(context: Context) {
             }
         }
 
+        // Line Chart Screen
         if (historyChartScreenShown) {
             val graphDataList = savedSugarCountGrouped.values.take(8).mapIndexed { id, value ->
                 GraphData(
@@ -64,7 +65,7 @@ fun History(context: Context) {
             }
 
             val darkMode = context.resources.configuration.uiMode
-            SimpleLine(exampleData = graphDataList, darkMode = darkMode)
+            LineChart(graphDataList = graphDataList, darkMode = darkMode)
         }
     }
 }
