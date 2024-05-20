@@ -25,23 +25,29 @@ import com.example.mva_sugarcounter.data.GraphData
 @Composable
 fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
 
+    var backgroundColor = Color.White
+    var drawColor = Color.Black
+    var lineGraphColor = Color.Blue
+    var thresholdLineColor = Color.Red
+
+    if (darkMode == 33) {
+        backgroundColor = Color.Black
+        drawColor = Color.White
+        lineGraphColor = Color.Magenta
+    }
+
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                if (darkMode == 33) {
-                    Color.White
-                } else {
-                    Color.White
-                }
-            )
+            .background(backgroundColor)
     ) {
 
         val textMeasurer = rememberTextMeasurer()
         val style = TextStyle(
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black,
+            color = drawColor,
         )
 
         Canvas(
@@ -64,7 +70,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             val lineGraphYAxisGramTags = (0..9).map { i -> "${(9 - i) * 10}g" }
 
             drawLine(
-                Color.Red,
+                thresholdLineColor,
                 start = Offset(oneWidthSection, fortyFiveGramLineHeight),
                 end = Offset(size.width, fortyFiveGramLineHeight),
                 strokeWidth = barWidthPix * 2
@@ -76,7 +82,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                 val xAxisPointVerticalLines =
                     oneWidthSection * (it.id + 1) // increase value of x-axis by each loop
                 drawLine(
-                    Color.Black,
+                    drawColor,
                     start = Offset(xAxisPointVerticalLines, 0f),
                     end = Offset(
                         xAxisPointVerticalLines,
@@ -105,7 +111,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
                 }
                 path.lineTo(xAxisPointHorizontalLines, heightGramDataPoint)
-                drawPath(path = path, color = Color.Blue, style = Stroke(2.dp.toPx()))
+                drawPath(path = path, color = lineGraphColor, style = Stroke(2.dp.toPx()))
             }
 
             var count = 0
@@ -123,7 +129,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                 count++
                 if (count < 10) { // do not draw last horizontal line at the bottom which is the 10th line
                     drawLine(
-                        Color.Gray,
+                        drawColor,
                         start = Offset(oneWidthSection, oneHeightSection * count),
                         end = Offset(size.width, oneHeightSection * count),
                         strokeWidth = barWidthPix
