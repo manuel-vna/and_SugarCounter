@@ -39,7 +39,7 @@ class HelperMethods(private val context: Context) {
         return groupedCounterItemsByDay
     }
 
-    private fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
+    fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
         return if (DateUtils.isToday(currentTimestamp)) {
             TodayOrYesterday.TODAY
         } else if (DateUtils.isToday(currentTimestamp + 86400000)) {

@@ -82,4 +82,7 @@ dependencies {
 
     //Navigation Compose
     implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    //MockK
+    testImplementation("io.mockk:mockk:1.13.7")
 }
