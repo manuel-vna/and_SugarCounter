@@ -2,10 +2,11 @@ package com.example.mva_sugarcounter.composables
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,7 +29,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
     var backgroundColor = Color.White
     var drawColor = Color.Black
     var lineGraphColor = Color.Blue
-    var thresholdLineColor = Color.Red
+    val thresholdLineColor = Color.Red
 
     if (darkMode == 33) {
         backgroundColor = Color.Black
@@ -36,25 +37,33 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
         lineGraphColor = Color.Magenta
     }
 
+    val scrollState = rememberScrollState()
+
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            //.fillMaxSize()
             .background(backgroundColor)
+            .horizontalScroll(scrollState)
     ) {
 
         val textMeasurer = rememberTextMeasurer()
-        val style = TextStyle(
-            fontSize = 12.sp,
+        val styleBig = TextStyle(
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            color = drawColor,
+        )
+        val styleSmall = TextStyle(
+            fontSize = 11.sp,
             fontWeight = FontWeight.Bold,
             color = drawColor,
         )
 
         Canvas(
             modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(3 / 3f)
-                .padding(16.dp)
+                .aspectRatio(1 / 1f)
+                .padding(top = 42.dp, bottom = 48.dp)
+                .background(Color.Green)
         ) {
 
             //DrawScope variables
@@ -62,12 +71,13 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             val onePercentHeight = size.height / 100
             val onePercentWidth = size.width / 100
             val oneWidthSection = size.width / 8 // width is divided in eight sections
-            val oneHeightSection = size.height / 10 // height is divided in ten sections
+            val oneHeightSection =
+                size.height / 22 // height is divided in twenty sections (5er steps)
             val fortyFiveGramLineHeight =
-                onePercentHeight * 45 //TODO get percentage of users gram threshold from data store
+                onePercentHeight * 55 //TODO get percentage of users gram threshold from data store
             val path = Path()
             // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g
-            val lineGraphYAxisGramTags = (0..9).map { i -> "${(9 - i) * 10}g" }
+            val lineGraphYAxisGramTags = (0..20).map { i -> "${(20 - i) * 5}g" }
 
             drawLine(
                 thresholdLineColor,
@@ -86,26 +96,22 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     start = Offset(xAxisPointVerticalLines, 0f),
                     end = Offset(
                         xAxisPointVerticalLines,
-                        oneHeightSection * 9
-                    ), // take 9 HeightSections
+                        oneHeightSection * 20
+                    ), // take x HeightSections
                     strokeWidth = barWidthPix
                 )
                 drawText(
                     textMeasurer = textMeasurer,
-                    text = if (it.id < 7) { // do not write the 8th date on the screen
-                        it.day
-                    } else {
-                        ""
-                    },
-                    style = style,
+                    text = it.day,
+                    style = styleBig,
                     topLeft = Offset(
-                        x = xAxisPointVerticalLines - (onePercentWidth * 5), //subtract 5% of the x xis point to have the date values centered under the vertical lines
-                        y = oneHeightSection * 9 // take 9 height sections
+                        x = xAxisPointVerticalLines - (onePercentWidth * 5), //subtract 5% of the x axis point to have the date values centered under the vertical lines
+                        y = oneHeightSection * 20 // take x height sections
                     )
                 )
 
                 // horizontal lines
-                var heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
+                val heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
                 val xAxisPointHorizontalLines = oneWidthSection * (it.id + 1)
                 if (it.id == 0) {
                     path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
@@ -120,14 +126,18 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                 drawText(
                     textMeasurer = textMeasurer,
                     text = yAxis,
-                    style = style,
+                    style = if (count % 2 == 0) {
+                        styleBig
+                    } else {
+                        styleSmall
+                    },
                     topLeft = Offset(
                         x = (onePercentWidth * 2), // move the gram tags of y axis 2% to the left
                         y = ((oneHeightSection * count) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
                     )
                 )
                 count++
-                if (count < 10) { // do not draw last horizontal line at the bottom which is the 10th line
+                if (count < 21) { // do not draw last horizontal line at the bottom which is the 10th line
                     drawLine(
                         drawColor,
                         start = Offset(oneWidthSection, oneHeightSection * count),
@@ -152,9 +162,9 @@ fun getXyChartFloat(gramValue: Int, onePercentHeight: Float): Float {
 
 val exampleData = listOf(
     GraphData(id = 0, gramTotal = 50, "15.06."),
-    GraphData(id = 1, gramTotal = 50, "16.06."),
+    GraphData(id = 1, gramTotal = 50, "20.06."),
     GraphData(id = 2, gramTotal = 50, "17.06."),
-    GraphData(id = 3, gramTotal = 50, "18.06."),
+    GraphData(id = 3, gramTotal = 50, "20.06."),
     GraphData(id = 4, gramTotal = 50, "21.06."),
     GraphData(id = 5, gramTotal = 42, "22.06."),
 )
