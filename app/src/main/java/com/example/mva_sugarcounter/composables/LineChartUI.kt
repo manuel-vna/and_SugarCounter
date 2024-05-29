@@ -4,7 +4,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
@@ -39,116 +43,148 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
 
     val scrollState = rememberScrollState()
 
+    val textMeasurer = rememberTextMeasurer()
+    val styleBig = TextStyle(
+        fontSize = 13.sp,
+        fontWeight = FontWeight.Bold,
+        color = drawColor,
+    )
+    val styleSmall = TextStyle(
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Bold,
+        color = drawColor,
+    )
 
-    Box(
-        modifier = Modifier
-            //.fillMaxSize()
-            .background(backgroundColor)
-            .horizontalScroll(scrollState)
-    ) {
 
-        val textMeasurer = rememberTextMeasurer()
-        val styleBig = TextStyle(
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
-            color = drawColor,
-        )
-        val styleSmall = TextStyle(
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            color = drawColor,
-        )
+    Row {
 
-        Canvas(
-            modifier = Modifier
-                .aspectRatio(1 / 1f)
-                .padding(top = 42.dp, bottom = 48.dp)
-                .background(Color.Green)
+        Box(
+            modifier = Modifier.weight(1f)
         ) {
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .aspectRatio(1 / 12.5f)
+                    .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
+                    .background(Color.LightGray)
+            ) {
+                val lineGraphYAxisGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
+                val onePercentHeight = size.height / 100
+                val onePercentWidth = size.width / 100
+                val oneHeightSection =
+                    size.height / 20 // height is divided in twenty sections (5er steps)
 
-            //DrawScope variables
-            val barWidthPix = 1.dp.toPx()
-            val onePercentHeight = size.height / 100
-            val onePercentWidth = size.width / 100
-            val oneWidthSection = size.width / 8 // width is divided in eight sections
-            val oneHeightSection =
-                size.height / 22 // height is divided in twenty sections (5er steps)
-            val fortyFiveGramLineHeight =
-                onePercentHeight * 55 //TODO get percentage of users gram threshold from data store
-            val path = Path()
-            // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g
-            val lineGraphYAxisGramTags = (0..20).map { i -> "${(20 - i) * 5}g" }
+                var count = 0
+                lineGraphYAxisGramTags.forEach { yAxis ->
 
-            drawLine(
-                thresholdLineColor,
-                start = Offset(oneWidthSection, fortyFiveGramLineHeight),
-                end = Offset(size.width, fortyFiveGramLineHeight),
-                strokeWidth = barWidthPix * 2
-            )
-
-            graphDataList.forEach { it ->
-
-                //vertical lines
-                val xAxisPointVerticalLines =
-                    oneWidthSection * (it.id + 1) // increase value of x-axis by each loop
-                drawLine(
-                    drawColor,
-                    start = Offset(xAxisPointVerticalLines, 0f),
-                    end = Offset(
-                        xAxisPointVerticalLines,
-                        oneHeightSection * 20
-                    ), // take x HeightSections
-                    strokeWidth = barWidthPix
-                )
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = it.day,
-                    style = styleBig,
-                    topLeft = Offset(
-                        x = xAxisPointVerticalLines - (onePercentWidth * 5), //subtract 5% of the x axis point to have the date values centered under the vertical lines
-                        y = oneHeightSection * 20 // take x height sections
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = yAxis,
+                        style = if (count % 2 == 0) {
+                            styleBig
+                        } else {
+                            styleSmall
+                        },
+                        topLeft = Offset(
+                            x = (onePercentWidth * 1), // move the gram tags of y axis x% to the left
+                            y = ((oneHeightSection * count) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
+                        )
                     )
-                )
-
-                // horizontal lines
-                val heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
-                val xAxisPointHorizontalLines = oneWidthSection * (it.id + 1)
-                if (it.id == 0) {
-                    path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
-                }
-                path.lineTo(xAxisPointHorizontalLines, heightGramDataPoint)
-                drawPath(path = path, color = lineGraphColor, style = Stroke(2.dp.toPx()))
-            }
-
-            var count = 0
-            lineGraphYAxisGramTags.forEach { yAxis ->
-
-                drawText(
-                    textMeasurer = textMeasurer,
-                    text = yAxis,
-                    style = if (count % 2 == 0) {
-                        styleBig
-                    } else {
-                        styleSmall
-                    },
-                    topLeft = Offset(
-                        x = (onePercentWidth * 2), // move the gram tags of y axis 2% to the left
-                        y = ((oneHeightSection * count) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
-                    )
-                )
-                count++
-                if (count < 21) { // do not draw last horizontal line at the bottom which is the 10th line
-                    drawLine(
-                        drawColor,
-                        start = Offset(oneWidthSection, oneHeightSection * count),
-                        end = Offset(size.width, oneHeightSection * count),
-                        strokeWidth = barWidthPix
-                    )
+                    count++
                 }
 
             }
         }
+
+        Box(
+            modifier = Modifier
+                .background(backgroundColor)
+                .horizontalScroll(scrollState)
+                .weight(8f)
+        ) {
+
+
+            Canvas(
+                modifier = Modifier
+                    .aspectRatio(4 / 1f)
+                    .padding(top = 42.dp, bottom = 48.dp)
+                //.background(Color.Yellow)
+            ) {
+
+                //DrawScope variables
+                val barWidthPix = 1.dp.toPx()
+                val onePercentHeight = size.height / 100
+                val onePercentWidth = size.width / 100
+                val oneWidthSection = size.width / 35 // width is divided in x sections
+                val oneHeightSection =
+                    size.height / 20 // height is divided in twenty sections (5er steps)
+                val fortyFiveGramLineHeight =
+                    onePercentHeight * 50 //TODO get percentage of users gram threshold from data store
+                val path = Path()
+                // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g
+                val lineGraphYAxisGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
+
+                drawLine(
+                    thresholdLineColor,
+                    start = Offset(0f, fortyFiveGramLineHeight),
+                    end = Offset(size.width, fortyFiveGramLineHeight),
+                    strokeWidth = barWidthPix * 3
+                )
+
+                graphDataList.forEach { it ->
+
+                    //vertical lines
+                    val xAxisPointVerticalLines =
+                        oneWidthSection * (it.id + 1) // increase value of x-axis by each loop
+                    drawLine(
+                        drawColor,
+                        start = Offset(xAxisPointVerticalLines, 0f),
+                        end = Offset(
+                            xAxisPointVerticalLines,
+                            oneHeightSection * 18
+                        ), // take x HeightSections
+                        strokeWidth = barWidthPix
+                    )
+                    drawText(
+                        textMeasurer = textMeasurer,
+                        text = it.day,
+                        style = styleSmall,
+                        topLeft = Offset(
+                            x = xAxisPointVerticalLines - (onePercentWidth * 1), //subtract x% of the x axis point to have the date values centered under the vertical lines
+                            y = oneHeightSection * 18 // take x height sections
+                        )
+                    )
+
+                    // graph lines
+                    val heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
+                    val xAxisPointHorizontalLines = oneWidthSection * (it.id + 1)
+                    if (it.id == 0) {
+                        path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
+                    }
+                    path.lineTo(xAxisPointHorizontalLines, heightGramDataPoint)
+                    drawPath(path = path, color = lineGraphColor, style = Stroke(2.dp.toPx()))
+                }
+
+                // horizontal lines
+                var count = 0
+                lineGraphYAxisGramTags.forEach { yAxis ->
+
+                    if (count < 19) { // do not draw last horizontal line at the bottom which is the 10th line
+                        drawLine(
+                            drawColor,
+                            start = Offset(0f, oneHeightSection * count),
+                            end = Offset(size.width, oneHeightSection * count),
+                            strokeWidth = barWidthPix
+                        )
+                    }
+                    count++
+
+                }
+            }
+        }
+
     }
+
 }
 
 fun getXyChartFloat(gramValue: Int, onePercentHeight: Float): Float {

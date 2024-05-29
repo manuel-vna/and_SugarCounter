@@ -61,24 +61,15 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     private val startOfYesterday = yesterday.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
     private val endOfYesterday = startOfToday - 1
 
-    private val currentTimestamp = System.currentTimeMillis()
-    private val endOf30DaysAgo = currentTimestamp - 2592000000 // 2592000000 = 30 days as timestamp in milliseconds
     // Timestamps: END
 
     // StateFlow that is observed by UI
-    private val _savedHistory =
-        MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
-    val savedHistory = _savedHistory.asStateFlow()
 
     private val _savedEntriesNowMinus1Day =
         MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
     val savedEntriesNowMinus1Day = _savedEntriesNowMinus1Day.asStateFlow()
 
     // Observer that is used to observe Dao of RoomDB
-    private val historyObserver = Observer<List<Entry>> {
-        val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
-        _savedHistory.value = savedSugarCountGrouped
-    }
     private val categoryObserver = Observer<List<Category>> {
         _categories.value = it.map { it.category }
     }
@@ -92,9 +83,6 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getEntries(endOf30DaysAgo,startOfYesterday)
-            .observeForever(historyObserver)
-
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
         database.appDao().getEntries(startOfYesterday, endOfToday)
@@ -104,9 +92,6 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(endOf30DaysAgo,endOfYesterday)
-            .removeObserver(historyObserver)
-
         database.appDao().getAllCategories().removeObserver(categoryObserver)
 
         database.appDao().getEntries(startOfYesterday, endOfToday)
@@ -253,14 +238,5 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     }
     //Actions End
-
-
-    // Temporary unused: Start
-    fun deleteEntry() {
-        viewModelScope.launch(Dispatchers.IO) {
-            database.appDao().deleteEntriesOlderThanOneWeek(endOf30DaysAgo)
-        }
-    }
-    // Temporary unused: End
 
 }

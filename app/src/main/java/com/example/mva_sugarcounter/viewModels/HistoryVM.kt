@@ -2,18 +2,59 @@ package com.example.mva_sugarcounter.viewModels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.Observer
+import com.example.mva_sugarcounter.data.Entry
+import com.example.mva_sugarcounter.database.AppDatabase
+import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.time.LocalDate
+import java.time.ZoneId
 
 
 class HistoryVM(application: Application) : AndroidViewModel(application) {
 
+    private val database = AppDatabase.getInstance(this.getApplication())
+    val helperMethods: HelperMethods = HelperMethods(application)
+
+    //Timestamps: START
+    private val today = LocalDate.now()
+    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
+    private val currentTimestamp = System.currentTimeMillis()
+    private val endOf30DaysAgo =
+        currentTimestamp - 2592000000 // 2592000000 = 30 days as timestamp in milliseconds
+    //Timestamps: END
+
     //SateFlows: START
-    val _historyChartScreenShown = MutableStateFlow(false)
+    val _historyChartScreenShown = MutableStateFlow(true)
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
     val _historyCardsScreenShown = MutableStateFlow(false)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
+    val _savedHistory =
+        MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
+    val savedHistory = _savedHistory.asStateFlow()
     //SateFlows: END
+
+    //Observer: START
+    private val historyObserver = Observer<List<Entry>> {
+        val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
+        _savedHistory.value = savedSugarCountGrouped
+    }
+
+    // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
+    init {
+        database.appDao().getEntries(endOf30DaysAgo, startOfToday)
+            .observeForever(historyObserver)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Stop observing at Dao of RoomDB when this ViewModel is cleared
+        database.appDao().getEntries(endOf30DaysAgo, startOfToday)
+            .removeObserver(historyObserver)
+    }
+    //Observer: END
+
 
     //Actions: START
     fun actionShowHistoryChartScreen() {

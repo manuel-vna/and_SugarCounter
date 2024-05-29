@@ -24,10 +24,9 @@ import com.example.mva_sugarcounter.viewModels.HistoryVM
 fun History(context: Context) {
 
     val helperMethods = HelperMethods(context)
-    val counterVM: CounterVM = viewModel()
-    val savedSugarCountGrouped by counterVM.savedHistory.collectAsState()
 
     val historyVM: HistoryVM = viewModel()
+    val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()
 
