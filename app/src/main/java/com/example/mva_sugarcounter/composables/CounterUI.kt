@@ -39,10 +39,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -58,6 +60,7 @@ import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.viewModels.CounterVM
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Counter(context: Context) {
 
@@ -79,6 +82,8 @@ fun Counter(context: Context) {
     val interactionSource = remember {
         MutableInteractionSource()
     }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     // Category Field
     Column(
@@ -289,6 +294,7 @@ fun Counter(context: Context) {
                     counterVM.actionGramChange("")
                     counterVM.actionAmountChange("")
                     expanded = false
+                    keyboardController?.hide()
                 },
             ) {
                 Text(
