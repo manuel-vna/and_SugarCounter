@@ -48,7 +48,7 @@ fun History(context: Context) {
 
         // Line Chart Screen
         if (historyChartScreenShown) {
-            val graphDataList = savedSugarCountGrouped.values.take(21).mapIndexed { id, value ->
+            val graphDataList = savedSugarCountGrouped.values.take(30).mapIndexed { id, value ->
                 GraphData(
                     id = id,
                     gramTotal = helperMethods.calculateTotalGramPerDayBlock(value),
@@ -63,8 +63,10 @@ fun History(context: Context) {
                 )
             }
 
+            val graphDataListSorted = graphDataList.sortedByDescending { it.id }
+
             val darkMode = context.resources.configuration.uiMode
-            LineChart(graphDataList = graphDataList, darkMode = darkMode)
+            LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
         }
     }
 }

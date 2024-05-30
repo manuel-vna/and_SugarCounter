@@ -19,7 +19,8 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
 
     //Timestamps: START
     private val today = LocalDate.now()
-    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
+    private val endOfToday =
+        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000 - 1
     private val currentTimestamp = System.currentTimeMillis()
     private val endOf30DaysAgo =
         currentTimestamp - 2592000000 // 2592000000 = 30 days as timestamp in milliseconds
@@ -43,14 +44,14 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getEntries(endOf30DaysAgo, startOfToday)
+        database.appDao().getEntries(endOf30DaysAgo, endOfToday)
             .observeForever(historyObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(endOf30DaysAgo, startOfToday)
+        database.appDao().getEntries(endOf30DaysAgo, endOfToday)
             .removeObserver(historyObserver)
     }
     //Observer: END

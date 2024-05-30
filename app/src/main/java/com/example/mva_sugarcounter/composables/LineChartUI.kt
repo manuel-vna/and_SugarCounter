@@ -4,10 +4,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -66,7 +64,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     .fillMaxSize()
                     .aspectRatio(1 / 12.5f)
                     .padding(start = 8.dp, top = 4.dp, bottom = 4.dp)
-                    .background(Color.LightGray)
+                //.background(Color.LightGray)
             ) {
                 val lineGraphYAxisGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
                 val onePercentHeight = size.height / 100
@@ -74,23 +72,23 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                 val oneHeightSection =
                     size.height / 20 // height is divided in twenty sections (5er steps)
 
-                var count = 0
+                var xAxisCount = 0
                 lineGraphYAxisGramTags.forEach { yAxis ->
 
                     drawText(
                         textMeasurer = textMeasurer,
                         text = yAxis,
-                        style = if (count % 2 == 0) {
+                        style = if (xAxisCount % 2 == 0) {
                             styleBig
                         } else {
                             styleSmall
                         },
                         topLeft = Offset(
                             x = (onePercentWidth * 1), // move the gram tags of y axis x% to the left
-                            y = ((oneHeightSection * count) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
+                            y = ((oneHeightSection * xAxisCount) - (onePercentHeight * 2.5)).toFloat() // move gram tags of y axis 2.5% up
                         )
                     )
-                    count++
+                    xAxisCount++
                 }
 
             }
@@ -131,11 +129,12 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     strokeWidth = barWidthPix * 3
                 )
 
+                var yAxisCount = 1
                 graphDataList.forEach { it ->
 
                     //vertical lines
                     val xAxisPointVerticalLines =
-                        oneWidthSection * (it.id + 1) // increase value of x-axis by each loop
+                        oneWidthSection * (yAxisCount) // increase value of x-axis by each loop
                     drawLine(
                         drawColor,
                         start = Offset(xAxisPointVerticalLines, 0f),
@@ -157,27 +156,29 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
 
                     // graph lines
                     val heightGramDataPoint = getXyChartFloat(it.gramTotal, onePercentHeight)
-                    val xAxisPointHorizontalLines = oneWidthSection * (it.id + 1)
-                    if (it.id == 0) {
+                    val xAxisPointHorizontalLines = oneWidthSection * (yAxisCount)
+                    if (yAxisCount == 1) {
                         path.moveTo(xAxisPointHorizontalLines, heightGramDataPoint)
                     }
                     path.lineTo(xAxisPointHorizontalLines, heightGramDataPoint)
                     drawPath(path = path, color = lineGraphColor, style = Stroke(2.dp.toPx()))
+
+                    yAxisCount++
                 }
 
                 // horizontal lines
-                var count = 0
+                var horizontalLinesCount = 0
                 lineGraphYAxisGramTags.forEach { yAxis ->
 
-                    if (count < 19) { // do not draw last horizontal line at the bottom which is the 10th line
+                    if (horizontalLinesCount < 19) { // do not draw last horizontal line at the bottom which is the 10th line
                         drawLine(
                             drawColor,
-                            start = Offset(0f, oneHeightSection * count),
-                            end = Offset(size.width, oneHeightSection * count),
+                            start = Offset(0f, oneHeightSection * horizontalLinesCount),
+                            end = Offset(size.width, oneHeightSection * horizontalLinesCount),
                             strokeWidth = barWidthPix
                         )
                     }
-                    count++
+                    horizontalLinesCount++
 
                 }
             }

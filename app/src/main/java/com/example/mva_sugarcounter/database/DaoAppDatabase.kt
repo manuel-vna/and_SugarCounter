@@ -14,6 +14,7 @@ interface DaoAppDatabase {
     @Insert
     fun insertEntry(vararg sugarCounter: Entry)
 
+    //On the timeline startPoint is further to the left/in the past than endPoint
     @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntries(startPoint: Long, endPoint: Long): LiveData<List<Entry>>
 
