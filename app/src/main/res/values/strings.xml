@@ -23,4 +23,6 @@
     <string name="alertGramThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
     <string name="alertGramThresholdConfirmBtn">Delete it</string>
     <string name="alertGramThresholdDismissBtn">Keep it</string>
+    <string name="historygraphBtn">Graph</string>
+    <string name="historyCardsBtn">Cards</string>
 </resources>

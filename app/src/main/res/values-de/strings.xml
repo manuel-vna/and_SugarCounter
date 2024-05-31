@@ -24,4 +24,6 @@
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
     <string name="alertGramThresholdDismissBtn">Behalten</string>
+    <string name="historygraphBtn">Diagramm</string>
+    <string name="historyCardsBtn">Karten</string>
 </resources>

@@ -1,22 +1,27 @@
 package com.example.mva_sugarcounter.composables
 
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.GraphData
 import com.example.mva_sugarcounter.util.HelperMethods
-import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.example.mva_sugarcounter.viewModels.HistoryVM
 
 
@@ -48,7 +53,7 @@ fun History(context: Context) {
 
         // Line Chart Screen
         if (historyChartScreenShown) {
-            val graphDataList = savedSugarCountGrouped.values.take(30).mapIndexed { id, value ->
+            val graphDataList = savedSugarCountGrouped.values.take(35).mapIndexed { id, value ->
                 GraphData(
                     id = id,
                     gramTotal = helperMethods.calculateTotalGramPerDayBlock(value),
@@ -68,29 +73,41 @@ fun History(context: Context) {
             val darkMode = context.resources.configuration.uiMode
             LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
         }
+
     }
 }
 
 @Composable
 fun ChangeHistoryScreenSelection(historyVM: HistoryVM) {
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-
-    ) {
-        Button(onClick = {
+    Row {
+        Button(
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 12.dp, start = 20.dp, end = 20.dp),
+            onClick = {
             historyVM.actionHideHistoryCardsScreen()
             historyVM.actionShowHistoryChartScreen()
         }) {
-            Text("Graph")
+            Text(stringResource(id = R.string.historygraphBtn))
         }
 
-        Button(onClick = {
+        Button(
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 12.dp, start = 20.dp, end = 20.dp),
+            onClick = {
             historyVM.actionShowHistoryCardsScreen()
             historyVM.actionHideHistoryChartScreen()
         }) {
-            Text("Cards")
+            Text(stringResource(R.string.historyCardsBtn))
+        }
+
+        IconButton(onClick = { historyVM.actionShowInfoBoxForHistoryScreen() }) {
+            Icon(
+                imageVector = Icons.Default.Info,
+                contentDescription = "Info"
+            )
         }
     }
 

@@ -1,6 +1,7 @@
 package com.example.mva_sugarcounter.viewModels
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import com.example.mva_sugarcounter.data.Entry
@@ -23,7 +24,7 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
         today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000 - 1
     private val currentTimestamp = System.currentTimeMillis()
     private val endOf30DaysAgo =
-        currentTimestamp - 2592000000 // 2592000000 = 30 days as timestamp in milliseconds
+        currentTimestamp - 3024000000 // 3024000000 = 35 days in milliseconds
     //Timestamps: END
 
     //SateFlows: START
@@ -73,5 +74,10 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
     fun actionHideHistoryCardsScreen() {
         _historyCardsScreenShown.value = false
     }
+
+    fun actionShowInfoBoxForHistoryScreen() {
+        Log.d("Tag_A", "Info box button pressed")
+    }
+
     //Actions: END
 }

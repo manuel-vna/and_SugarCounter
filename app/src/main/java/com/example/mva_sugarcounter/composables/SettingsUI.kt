@@ -88,6 +88,17 @@ fun SettingsItemButton(
                 contentDescription = "",
             )
         }
+
+        //Testing Purposes: START
+        Button(
+            onClick = {
+                settingsVM.actionAddTestData()
+
+            }) {
+            Text("Add test data")
+        }
+        //Testing Purposes: END
+
     }
 }
 
