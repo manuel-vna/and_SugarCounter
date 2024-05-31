@@ -53,6 +53,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
 
     Box(
         modifier = Modifier
+            .padding(end = 16.dp)
             .background(backgroundColor)
             .horizontalScroll(scrollState)
     ) {

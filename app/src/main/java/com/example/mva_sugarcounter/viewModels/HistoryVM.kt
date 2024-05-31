@@ -24,7 +24,7 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
         today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000 - 1
     private val currentTimestamp = System.currentTimeMillis()
     private val endOf30DaysAgo =
-        currentTimestamp - 3024000000 // 3024000000 = 35 days in milliseconds
+        currentTimestamp - 6048000000 // 6048000000 = 60 days in milliseconds
     //Timestamps: END
 
     //SateFlows: START

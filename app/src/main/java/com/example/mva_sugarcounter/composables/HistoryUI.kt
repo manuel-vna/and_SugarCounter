@@ -53,7 +53,8 @@ fun History(context: Context) {
 
         // Line Chart Screen
         if (historyChartScreenShown) {
-            val graphDataList = savedSugarCountGrouped.values.take(35).mapIndexed { id, value ->
+            val graphDataList =
+                savedSugarCountGrouped.values.toList().takeLast(35).mapIndexed { id, value ->
                 GraphData(
                     id = id,
                     gramTotal = helperMethods.calculateTotalGramPerDayBlock(value),
