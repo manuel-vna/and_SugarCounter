@@ -85,6 +85,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             )
 
             var yAxisCount = 1
+            var previousTotalGramValue = 0
             graphDataList.forEach { it ->
 
                 //vertical lines
@@ -123,10 +124,15 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     text = it.gramTotal.toString(),
                     style = styleSmall,
                     topLeft = Offset(
-                        x = xAxisPointHorizontalLines,
-                        y = heightGramDataPoint
+                        x = xAxisPointHorizontalLines - (onePercentWidth / 2),
+                        y = if (previousTotalGramValue < it.gramTotal) {
+                            heightGramDataPoint - onePercentHeight * 3
+                        } else {
+                            heightGramDataPoint
+                        }
                     )
                 )
+                previousTotalGramValue = it.gramTotal
 
 
                 yAxisCount++
