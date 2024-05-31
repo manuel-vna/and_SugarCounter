@@ -105,7 +105,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     text = it.day,
                     style = styleSmall,
                     topLeft = Offset(
-                        x = xAxisPointVerticalLines - (onePercentWidth * 1), //subtract x% of the x axis point to have the date values centered under the vertical lines
+                        x = xAxisPointVerticalLines - (onePercentWidth / 2), //subtract x% of the x axis point to have the date values centered under the vertical lines
                         y = oneHeightSection * 18 // take x height sections
                     )
                 )
