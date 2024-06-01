@@ -1,7 +1,6 @@
 package com.example.mva_sugarcounter.viewModels
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import com.example.mva_sugarcounter.data.Entry
@@ -32,9 +31,10 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
     val _historyCardsScreenShown = MutableStateFlow(false)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
-    val _savedHistory =
-        MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
+    val _savedHistory = MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
     val savedHistory = _savedHistory.asStateFlow()
+    val _historyInfoDialogShown = MutableStateFlow(false)
+    val historyInfoDialogShown = _historyInfoDialogShown.asStateFlow()
     //SateFlows: END
 
     //Observer: START
@@ -45,15 +45,13 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getEntries(endOf30DaysAgo, endOfToday)
-            .observeForever(historyObserver)
+        database.appDao().getEntries(endOf30DaysAgo, endOfToday).observeForever(historyObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(endOf30DaysAgo, endOfToday)
-            .removeObserver(historyObserver)
+        database.appDao().getEntries(endOf30DaysAgo, endOfToday).removeObserver(historyObserver)
     }
     //Observer: END
 
@@ -76,7 +74,11 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
     }
 
     fun actionShowInfoBoxForHistoryScreen() {
-        Log.d("Tag_A", "Info box button pressed")
+        _historyInfoDialogShown.value = true
+    }
+
+    fun actionDismissInfoDialog() {
+        _historyInfoDialogShown.value = false
     }
 
     //Actions: END

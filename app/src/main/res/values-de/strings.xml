@@ -26,4 +26,7 @@
     <string name="alertGramThresholdDismissBtn">Behalten</string>
     <string name="historygraphBtn">Diagramm</string>
     <string name="historyCardsBtn">Karten</string>
+    <string name="historyInfoDescriptionGraph">Das Diagramm zeigt die letzten 35 Einträge (soweit verfügbar)\n\nDie rote Linie stellt den täglichen Zucker-Gramm-Grenzwert dar, den Sie in den Einstellungen festlegen können.\n\nDie blaue Linie verbindet die Punkte, die den täglichen Zuckerkonsum insgesamt darstellen.\n\nTägliche Grammwerte über 100 g sind zu hoch, um im Diagramm dargestellt zu werden.</string>
+    <string name="historyInfoDescriptionCards">Cards</string>
+    <string name="historyNoDataInfoDescription">Noch keine Einträge vorhanden</string>
 </resources>

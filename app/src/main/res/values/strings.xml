@@ -25,4 +25,7 @@
     <string name="alertGramThresholdDismissBtn">Keep it</string>
     <string name="historygraphBtn">Graph</string>
     <string name="historyCardsBtn">Cards</string>
+    <string name="historyInfoDescriptionGraph">The graph shows the last 35 entries (as far as available)\n\nThe red line represents the daily sugar gram limit that you can set in Settings.\n\nThe blue line connects the dots which represent daily sugar consumptions in total.\n\nDaily gram values over 100g are too high to be represented on the graph.</string>
+    <string name="historyInfoDescriptionCards">Cards</string>
+    <string name="historyNoDataInfoDescription">No entries yet</string>
 </resources>

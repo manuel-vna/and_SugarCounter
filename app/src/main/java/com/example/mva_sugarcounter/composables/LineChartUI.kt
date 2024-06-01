@@ -62,7 +62,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
         Canvas(
             modifier = Modifier
                 .aspectRatio(4 / 1f)
-                .padding(top = 42.dp, bottom = 48.dp)
+                .padding(top = 42.dp, bottom = 42.dp)
         ) {
 
             //DrawScope variables
