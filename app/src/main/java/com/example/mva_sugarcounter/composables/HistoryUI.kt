@@ -52,12 +52,14 @@ fun History(context: Context) {
 
     Column {
 
-        // sets buttons with which the history screen can be selected: Graph or Cards
+        // Area at the top: Buttons and info icon
         HistoryScreenTopArea(historyVM)
 
         //Card Screen
         if (historyCardsScreenShown) {
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+            ) {
                 items(
                     savedSugarCountGrouped.toList()
                         .sortedByDescending { it.first.first }) { (key, value) ->
@@ -95,7 +97,9 @@ fun History(context: Context) {
 @Composable
 fun HistoryScreenTopArea(historyVM: HistoryVM) {
 
-    Row {
+    Row(
+        modifier = Modifier.padding(bottom = 32.dp)
+    ) {
         Button(
             modifier = Modifier
                 .weight(1f)
@@ -130,8 +134,8 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
 
 @Composable
 fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
+
     Dialog(onDismissRequest = { historyVM.actionDismissInfoDialog() }) {
-        // Draw a rectangle shape with rounded corners inside the dialog
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -161,7 +165,6 @@ fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
                     } else {
                         stringResource(R.string.historyInfoDescriptionCards)
                     },
-
                     )
                 TextButton(
                     modifier = Modifier
@@ -169,11 +172,12 @@ fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
                         .padding(8.dp),
                     onClick = { historyVM.actionDismissInfoDialog() },
                 ) {
-                    Text(stringResource(R.string.generalCancel))
+                    Text(stringResource(R.string.generalClose))
                 }
             }
         }
     }
+
 }
 
 

@@ -38,8 +38,8 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
     }
 
     val scrollState = rememberScrollState()
-
     val textMeasurer = rememberTextMeasurer()
+
     val styleBig = TextStyle(
         fontSize = 13.sp,
         fontWeight = FontWeight.Bold,
@@ -71,11 +71,11 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             val onePercentWidth = size.width / 100
             val oneWidthSection = size.width / 35 // width is divided in x sections
             val oneHeightSection =
-                size.height / 20 // height is divided in twenty sections (5er steps)
+                size.height / 20 // height is divided in 20 sections ( 18 x 5er steps + 2 extra horizontal spaces at the bottom)
             val fortyFiveGramLineHeight =
-                onePercentHeight * 45 //TODO get percentage of users gram threshold from data store
+                onePercentHeight * 45 // maximal gram threshold
             val path = Path()
-            // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g
+            // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
             val lineGraphYAxisGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
 
             drawLine(
@@ -135,13 +135,12 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                 )
                 previousTotalGramValue = it.gramTotal
 
-
                 yAxisCount++
             }
 
             // horizontal lines
             var horizontalLinesCount = 0
-            lineGraphYAxisGramTags.forEach { yAxis ->
+            lineGraphYAxisGramTags.forEach { _ ->
 
                 var xAxisCount = 0
                 lineGraphYAxisGramTags.forEach { yAxis ->
@@ -162,7 +161,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
                     xAxisCount++
                 }
 
-                if (horizontalLinesCount < 19) { // do not draw last horizontal line at the bottom which is the 10th line
+                if (horizontalLinesCount < 19) { // do not draw last horizontal lines at the bottom which are the 19th and 20th line
                     drawLine(
                         drawColor,
                         start = Offset(oneWidthSection, oneHeightSection * horizontalLinesCount),
@@ -187,6 +186,7 @@ fun getXyChartFloat(gramValue: Int, onePercentHeight: Float): Float {
     }
 }
 
+//ExampleData: START
 val exampleData = listOf(
     GraphData(id = 0, gramTotal = 50, "15.06."),
     GraphData(id = 1, gramTotal = 50, "20.06."),
@@ -195,7 +195,6 @@ val exampleData = listOf(
     GraphData(id = 4, gramTotal = 50, "21.06."),
     GraphData(id = 5, gramTotal = 42, "22.06."),
 )
-
 @Preview
 @Composable
 fun GraphPreview() {
@@ -203,3 +202,4 @@ fun GraphPreview() {
         LineChart(exampleData, 0)
     }
 }
+//ExampleData: END

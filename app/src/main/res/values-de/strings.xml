@@ -20,6 +20,7 @@
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>
     <string name="generalCancel">Abbrechen</string>
+    <string name="generalClose">Schließen</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
@@ -27,6 +28,6 @@
     <string name="historygraphBtn">Diagramm</string>
     <string name="historyCardsBtn">Karten</string>
     <string name="historyInfoDescriptionGraph">Das Diagramm zeigt die letzten 35 Einträge (soweit verfügbar)\n\nDie rote Linie stellt den täglichen Zucker-Gramm-Grenzwert dar, den Sie in den Einstellungen festlegen können.\n\nDie blaue Linie verbindet die Punkte, die den täglichen Zuckerkonsum insgesamt darstellen.\n\nTägliche Grammwerte über 100 g sind zu hoch, um im Diagramm dargestellt zu werden.</string>
-    <string name="historyInfoDescriptionCards">Cards</string>
+    <string name="historyInfoDescriptionCards">Diese Übersicht zeigt den Verlauf der erfassten Zuckerwerterte je Tag (maximal 35 Tage).\n\nEin grüner Haken unten links zeigt an, dass die gesetzte Zuckerobergrenze an diesem Tag eingehalten wurde. Ein Warnsymbol mit Umrandung des Kärtchens zeigt an, dass die Obergrenze überschirtten wurde.</string>
     <string name="historyNoDataInfoDescription">Noch keine Einträge vorhanden</string>
 </resources>

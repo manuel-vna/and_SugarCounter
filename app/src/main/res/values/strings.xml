@@ -19,6 +19,7 @@
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>
     <string name="generalConfirm">Confirm</string>
     <string name="generalCancel">Cancel</string>
+    <string name="generalClose">Close</string>
     <string name="alertGramThresholdTitle">Warning</string>
     <string name="alertGramThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
     <string name="alertGramThresholdConfirmBtn">Delete it</string>
@@ -26,6 +27,6 @@
     <string name="historygraphBtn">Graph</string>
     <string name="historyCardsBtn">Cards</string>
     <string name="historyInfoDescriptionGraph">The graph shows the last 35 entries (as far as available)\n\nThe red line represents the daily sugar gram limit that you can set in Settings.\n\nThe blue line connects the dots which represent daily sugar consumptions in total.\n\nDaily gram values over 100g are too high to be represented on the graph.</string>
-    <string name="historyInfoDescriptionCards">Cards</string>
+    <string name="historyInfoDescriptionCards">This overview shows the course of the recorded sugar values per day (maximum 35 days).\n\nA green tick at the bottom left indicates that the set upper sugar limit was adhered to on that day. A warning symbol with a border around the card indicates that the upper limit has been exceeded.</string>
     <string name="historyNoDataInfoDescription">No entries yet</string>
 </resources>
