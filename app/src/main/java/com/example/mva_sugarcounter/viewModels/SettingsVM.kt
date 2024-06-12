@@ -31,6 +31,14 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
         _settingsScreenShown.value = false
     }
 
+    fun actionShowThirdPartyLicenses() {
+
+    }
+
+    fun actionHideThirdPartyLicenses() {
+
+    }
+
     //Testing Purposes: START
     fun actionAddTestData() {
         viewModelScope.launch(Dispatchers.IO) {

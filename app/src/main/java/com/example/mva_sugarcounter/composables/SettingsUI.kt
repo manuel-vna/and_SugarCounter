@@ -4,7 +4,6 @@ package com.example.mva_sugarcounter.composables
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -22,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
+import kotlin.reflect.KFunction0
 
 
 @Composable
@@ -48,58 +48,44 @@ fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: 
         horizontalAlignment = Alignment.End
     ) {
         SettingsItemButton(
-            context,
             settingsVM,
-            categoryListingVM,
             stringResource(id = R.string.settingsCategoriesText),
-            R.drawable.baseline_read_more_24
+            R.drawable.baseline_read_more_24,
+            categoryListingVM::actionShowCategories
+        )
+        SettingsItemButton(
+            settingsVM,
+            stringResource(id = R.string.settings_third_party_licenses_text),
+            R.drawable.baseline_read_more_24,
+            settingsVM::actionShowThirdPartyLicenses
+
         )
     }
 }
 
 @Composable
 fun SettingsItemButton(
-    context: Context,
     settingsVM: SettingsVM,
-    categoryListingVM: CategoryListingVM,
     descriptionText: String,
-    buttonIcon: Int
+    buttonIcon: Int,
+    actionShow: KFunction0<Unit>
 ) {
-
-    Row(
+    Button(
         modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround
-    ) {
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = {
+            settingsVM.actionHideSettingsScreen()
+            actionShow.invoke()
 
+        }) {
         Text(
-            text = descriptionText
+            text = "$descriptionText   "
         )
-
-        Button(
-            onClick = {
-                settingsVM.actionHideSettingsScreen()
-                categoryListingVM.actionShowCategories()
-
-            }) {
-            Icon(
-                painter = painterResource(id = buttonIcon),
-                contentDescription = "",
-            )
-        }
-
-        //Testing Purposes: START
-        /*
-        Button(
-            onClick = {
-                settingsVM.actionAddTestData()
-
-            }) {
-            Text("Add test data")
-        }
-         */
-        //Testing Purposes: END
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
 
     }
 }

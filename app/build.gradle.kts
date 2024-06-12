@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -85,4 +86,8 @@ dependencies {
 
     //MockK
     testImplementation("io.mockk:mockk:1.13.7")
+
+    //Third-Party Licenses
+    implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
+    implementation("androidx.appcompat:appcompat:1.3.1")
 }
