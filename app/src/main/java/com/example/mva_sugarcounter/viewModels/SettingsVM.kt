@@ -14,7 +14,7 @@ import kotlin.random.Random
 
 class SettingsVM(private val application: Application) : AndroidViewModel(application) {
 
-    val helperMethods: HelperMethods = HelperMethods(application)
+    private val helperMethods: HelperMethods = HelperMethods(application)
     private val database = AppDatabase.getInstance(this.getApplication())
 
     //SateFlows: START
@@ -30,14 +30,7 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
     fun actionHideSettingsScreen() {
         _settingsScreenShown.value = false
     }
-
-    fun actionShowThirdPartyLicenses() {
-
-    }
-
-    fun actionHideThirdPartyLicenses() {
-
-    }
+    //Actions: END
 
     //Testing Purposes: START
     fun actionAddTestData() {
@@ -64,7 +57,5 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
         }
     }
     //Testing Purposes: END
-
-    //Actions: END
 
 }

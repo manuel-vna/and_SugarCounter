@@ -2,6 +2,7 @@ package com.example.mva_sugarcounter.composables
 
 
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +22,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
-import kotlin.reflect.KFunction0
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 
 @Composable
@@ -37,7 +38,9 @@ fun Settings(context: Context) {
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM, categoryListingVM)
     }
+
     CategoriesScreen(context)
+
 }
 
 @Composable
@@ -47,28 +50,27 @@ fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: 
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.End
     ) {
-        SettingsItemButton(
+        SettingsButtonCategories(
+            categoryListingVM,
             settingsVM,
             stringResource(id = R.string.settingsCategoriesText),
             R.drawable.baseline_read_more_24,
-            categoryListingVM::actionShowCategories
         )
-        SettingsItemButton(
-            settingsVM,
+        SettingsButtonThirdPartyLicenses(
+            context,
             stringResource(id = R.string.settings_third_party_licenses_text),
             R.drawable.baseline_read_more_24,
-            settingsVM::actionShowThirdPartyLicenses
-
         )
     }
 }
 
+
 @Composable
-fun SettingsItemButton(
+fun SettingsButtonCategories(
+    categoryListingVM: CategoryListingVM,
     settingsVM: SettingsVM,
     descriptionText: String,
     buttonIcon: Int,
-    actionShow: KFunction0<Unit>
 ) {
     Button(
         modifier = Modifier
@@ -76,7 +78,34 @@ fun SettingsItemButton(
             .padding(10.dp),
         onClick = {
             settingsVM.actionHideSettingsScreen()
-            actionShow.invoke()
+            categoryListingVM.actionShowCategories()
+
+        }) {
+        Text(
+            text = "$descriptionText   "
+        )
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
+
+    }
+}
+
+@Composable
+fun SettingsButtonThirdPartyLicenses(
+    context: Context,
+    descriptionText: String,
+    buttonIcon: Int,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = {
+            val intent = Intent(context, OssLicensesMenuActivity::class.java)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
 
         }) {
         Text(

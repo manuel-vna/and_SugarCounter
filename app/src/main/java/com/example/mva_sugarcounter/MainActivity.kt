@@ -1,6 +1,5 @@
 package com.example.mva_sugarcounter
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,9 +9,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.mva_sugarcounter.navigation.MainScreenView
 import com.example.mva_sugarcounter.ui.theme.Mva_SugarCounterTheme
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,21 +25,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        startIntent()
     }
 
-    fun startIntent() {
-        val intent = Intent(this, OssLicensesMenuActivity::class.java)
-        startActivity(intent)
-    }
 }
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Mva_SugarCounterTheme {
-        Greeting("Android")
-    }
-}
-*/
