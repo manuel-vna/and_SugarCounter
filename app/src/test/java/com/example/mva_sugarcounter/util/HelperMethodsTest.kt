@@ -9,8 +9,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import org.junit.Rule
 import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 
 
@@ -31,7 +31,8 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any())  } returns true
 
-        val timeString = helperMethods.timestampIsTodayOrYesterday(1715801801000) // 1715801801000 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+        val timeString =
+            helperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         assertEquals(timeString, HelperMethods.TodayOrYesterday.TODAY)
     }
 
@@ -43,14 +44,15 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any())  } returns false
 
-        val timeString = helperMethods.timestampIsTodayOrYesterday(1715801801000) // 1715801801000 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+        val timeString =
+            helperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         assertEquals(timeString, HelperMethods.TodayOrYesterday.LATER)
     }
 
     @Test
     fun formatDateToString() {
         val helperMethods = HelperMethods(mockContext)
-        val dateString = helperMethods.formatDateToString(1716152163000, "YYYY-MM-dd")
+        val dateString = helperMethods.formatDateToString(1716152163, "YYYY-MM-dd")
         assertEquals(dateString, "2024-05-19")
     }
 
@@ -61,7 +63,7 @@ class HelperMethodsTest {
         val exampleListWithEntries = listOf(
             Entry(
                 id = 0,
-                currentTimestamp = 1716233571000,
+                currentTimestamp = 1716233571,
                 date = "2024-05-20",
                 gramItem = 10,
                 amount = 1,
@@ -70,7 +72,7 @@ class HelperMethodsTest {
             ),
             Entry(
                 id = 0,
-                currentTimestamp = 1716233783000,
+                currentTimestamp = 1716233783,
                 date = "2024-05-20",
                 gramItem = 2,
                 amount = 3,
@@ -79,7 +81,7 @@ class HelperMethodsTest {
             ),
             Entry(
                 id = 0,
-                currentTimestamp = 1716233801000,
+                currentTimestamp = 1716233801,
                 date = "2024-05-20",
                 gramItem = 8,
                 amount = 2,
