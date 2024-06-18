@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -18,7 +17,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mva_sugarcounter.data.GraphData
@@ -186,7 +184,9 @@ fun getXyChartFloat(gramValue: Int, onePercentHeight: Float): Float {
     }
 }
 
+
 //ExampleData: START
+/*
 val exampleData = listOf(
     GraphData(id = 0, gramTotal = 50, "15.06."),
     GraphData(id = 1, gramTotal = 50, "20.06."),
@@ -195,6 +195,7 @@ val exampleData = listOf(
     GraphData(id = 4, gramTotal = 50, "21.06."),
     GraphData(id = 5, gramTotal = 42, "22.06."),
 )
+
 @Preview
 @Composable
 fun GraphPreview() {
@@ -202,4 +203,5 @@ fun GraphPreview() {
         LineChart(exampleData, 0)
     }
 }
+ */
 //ExampleData: END

@@ -82,11 +82,12 @@ fun History(context: Context) {
                             } else {
                                 "EEEE \n dd.MM"
                             }
-                        )
+                        ),
+                        date = value.first().date
                     )
                 }
 
-            val graphDataListSorted = graphDataList.sortedByDescending { it.id }
+            val graphDataListSorted = graphDataList.sortedByDescending { it.date }
 
             val darkMode = context.resources.configuration.uiMode
             LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
@@ -165,7 +166,7 @@ fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
                     } else {
                         stringResource(R.string.historyInfoDescriptionCards)
                     },
-                    )
+                )
                 TextButton(
                     modifier = Modifier
                         .weight(1f)

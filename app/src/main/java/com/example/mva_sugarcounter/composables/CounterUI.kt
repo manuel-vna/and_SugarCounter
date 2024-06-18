@@ -57,13 +57,19 @@ import androidx.compose.ui.unit.toSize
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalDate
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Counter(context: Context) {
 
+    val helperMethods = HelperMethods(context)
     val counterVM: CounterVM = viewModel()
     val categories by counterVM.categories.collectAsState()
 
@@ -85,10 +91,10 @@ fun Counter(context: Context) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    // Category Field
+
     Column(
         modifier = Modifier
-            .padding(30.dp)
+            .padding(start = 30.dp, end = 30.dp, bottom = 30.dp)
             .fillMaxWidth()
 
             .clickable(
@@ -99,6 +105,15 @@ fun Counter(context: Context) {
                 }
             )
     ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            Arrangement.Absolute.Center
+        ) {
+            DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+        }
 
         Text(
             modifier = Modifier.padding(start = 3.dp, bottom = 2.dp),
@@ -304,9 +319,10 @@ fun Counter(context: Context) {
                     fontFamily = FontFamily.Monospace
                 )
             }
+
         }
 
-        val savedSugarCountGrouped by counterVM.savedEntriesNowMinus1Day.collectAsState()
+        val savedSugarCountGrouped by counterVM.savedEntriesToday.collectAsState()
 
         LazyColumn {
             items(
@@ -382,6 +398,48 @@ fun CategoryItems(
     ) {
         Text(text = title, fontSize = 16.sp)
     }
+}
+
+@Composable
+fun DatePicker(
+    counterVM: CounterVM,
+    helperMethods: HelperMethods,
+) {
+
+    val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
+    val dateDialogState = rememberMaterialDialogState()
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = {
+                dateDialogState.show()
+            }) {
+            Text(text = helperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
+        }
+    }
+
+    MaterialDialog(
+        dialogState = dateDialogState,
+        buttons = {
+            positiveButton(text = "Ok")
+            negativeButton(text = "Cancel")
+        }) {
+        datepicker(
+            initialDate = LocalDate.now(),
+            title = stringResource(R.string.entryDateTitle),
+            allowedDateValidator = { date ->
+                val today = LocalDate.now()
+                val thirtyDaysAgo = today.minusDays(30)
+                date.isAfter(thirtyDaysAgo) && date.isBefore(today.plusDays(1))
+            }
+        ) {
+            counterVM.actionChangeDateOfEntry(it)
+        }
+    }
+
 }
 
 

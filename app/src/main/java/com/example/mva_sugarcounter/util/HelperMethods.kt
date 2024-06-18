@@ -40,9 +40,9 @@ class HelperMethods(private val context: Context) {
     }
 
     fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
-        return if (DateUtils.isToday(currentTimestamp)) {
+        return if (DateUtils.isToday(currentTimestamp * 1000)) {
             TodayOrYesterday.TODAY
-        } else if (DateUtils.isToday(currentTimestamp + 86400000)) {
+        } else if (DateUtils.isToday(currentTimestamp * 1000 + 86400000)) {
             TodayOrYesterday.YESTERDAY
         } else {
             TodayOrYesterday.LATER
@@ -59,8 +59,7 @@ class HelperMethods(private val context: Context) {
 
         val simpleDateFormat2 = SimpleDateFormat(format)
         val localDate =
-            Instant.ofEpochMilli(currentTimestamp).atZone(ZoneId.systemDefault())
-                .toLocalDate()
+            Instant.ofEpochSecond(currentTimestamp).atZone(ZoneId.systemDefault()).toLocalDate()
         val zoneId: ZoneId = ZoneId.systemDefault()
         val instant = localDate.atStartOfDay(zoneId).toInstant()
 

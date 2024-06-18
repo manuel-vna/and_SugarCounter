@@ -31,4 +31,5 @@
     <string name="historyInfoDescriptionCards">Diese Übersicht zeigt den Verlauf der erfassten Zuckerwerterte je Tag (maximal 35 Tage).\n\nEin grüner Haken unten links zeigt an, dass die gesetzte Zuckerobergrenze an diesem Tag eingehalten wurde. Ein Warnsymbol mit Umrandung des Kärtchens zeigt an, dass die Obergrenze überschirtten wurde.</string>
     <string name="historyNoDataInfoDescription">Noch keine Einträge vorhanden</string>
     <string name="settings_third_party_licenses_text">Drittanbieter-Lizenzen</string>
+    <string name="entryDateTitle">Einträge können für die letzten 30 Tage hinzugeügt werden.</string>
 </resources>

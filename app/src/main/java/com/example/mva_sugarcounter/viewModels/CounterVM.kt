@@ -25,7 +25,12 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val helperMethods: HelperMethods = HelperMethods(application)
     private val database = AppDatabase.getInstance(this.getApplication())
 
+    val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
+
     //StateFlow: START
+    val _dateOfEntryEpochSec = MutableStateFlow(epochTimestampSecondsNow)
+    val dateOfEntryEpochSec = _dateOfEntryEpochSec.asStateFlow()
+
     val _categories = MutableStateFlow(listOf<String>())
     val categories = _categories.asStateFlow()
 
@@ -53,21 +58,15 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     // Timestamps: BEGIN
     private val today = LocalDate.now()
-    private val yesterday = today.minusDays(1)
-
-    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
-    private val endOfToday = today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000 - 1
-
-    private val startOfYesterday = yesterday.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() * 1000
-    private val endOfYesterday = startOfToday - 1
-
+    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() //* 1000
+    private val endOfToday =
+        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1 //* 1000 - 1
     // Timestamps: END
 
     // StateFlow that is observed by UI
-
-    private val _savedEntriesNowMinus1Day =
+    private val _savedEntriesToday =
         MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
-    val savedEntriesNowMinus1Day = _savedEntriesNowMinus1Day.asStateFlow()
+    val savedEntriesToday = _savedEntriesToday.asStateFlow()
 
     // Observer that is used to observe Dao of RoomDB
     private val categoryObserver = Observer<List<Category>> {
@@ -75,18 +74,17 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     }
 
     // Observer that is used to observe Dao of RoomDB
-    private val nowMinus1DayObserverObject = Observer<List<Entry>> {
+    private val todayObserverObject = Observer<List<Entry>> {
         val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
-        _savedEntriesNowMinus1Day.value = savedSugarCountGrouped
+        _savedEntriesToday.value = savedSugarCountGrouped
     }
-
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
-        database.appDao().getEntries(startOfYesterday, endOfToday)
-            .observeForever(nowMinus1DayObserverObject)
+        database.appDao().getEntries(startOfToday, endOfToday)
+            .observeForever(todayObserverObject)
     }
 
     override fun onCleared() {
@@ -94,8 +92,8 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
         database.appDao().getAllCategories().removeObserver(categoryObserver)
 
-        database.appDao().getEntries(startOfYesterday, endOfToday)
-            .removeObserver(nowMinus1DayObserverObject)
+        database.appDao().getEntries(startOfToday, endOfToday)
+            .removeObserver(todayObserverObject)
     }
 
     //Saving an Entry: Start
@@ -136,9 +134,9 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().insertEntry(
                 Entry(
-                    currentTimestamp = System.currentTimeMillis(),
+                    currentTimestamp = dateOfEntryEpochSec.value, //System.currentTimeMillis(),
                     date = helperMethods.formatDateToString(
-                        System.currentTimeMillis(),
+                        dateOfEntryEpochSec.value,
                         "YYYY-MM-dd"
                     ),
                     gramItem = gramValueInt,
@@ -159,7 +157,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     private fun checkGramThreshold() {
         viewModelScope.launch(Dispatchers.IO) {
             val dateString = helperMethods.formatDateToString(
-                System.currentTimeMillis(),
+                epochTimestampSecondsNow,
                 "YYYY-MM-dd"
             )
             val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString)
@@ -235,8 +233,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().deleteLastEntry()
         }
-
     }
+
+    fun actionChangeDateOfEntry(localDate: LocalDate) {
+        val zoneId = ZoneId.systemDefault()
+        val epoch: Long = localDate.atStartOfDay(zoneId).toEpochSecond()
+        _dateOfEntryEpochSec.value = epoch
+    }
+
     //Actions End
 
 }
