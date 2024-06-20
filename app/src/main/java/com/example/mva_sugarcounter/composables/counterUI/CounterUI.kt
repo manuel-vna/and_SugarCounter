@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.counterUI
 
 
 import android.content.Context
@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -54,9 +53,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -214,85 +213,10 @@ fun Counter(context: Context) {
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        TabRow(counterVM)
 
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
+        //CounterPerPiece(counterVM)
 
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = stringResource(R.string.gramSugar),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                val gramValue by counterVM.gramValue.collectAsState()
-                TextField(
-                    value = gramValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionGramChange(it)
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { counterVM.actionGramChange("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
-
-                val amountValue by counterVM.amountValue.collectAsState()
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = stringResource(R.string.amountSugar),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                TextField(
-                    value = amountValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionAmountChange(
-                            it
-                        )
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { counterVM.actionAmountChange("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    placeholder = { Text("1") }
-                )
-            }
-        }
 
         Row(
             modifier = Modifier
@@ -441,7 +365,3 @@ fun DatePicker(
     }
 
 }
-
-
-
-

@@ -2,8 +2,10 @@
 <resources>
     <string name="app_name">SugarCounter</string>
     <string name="foodType">Kategorie</string>
-    <string name="gramSugar">Gramm</string>
-    <string name="amountSugar">Anzahl</string>
+    <string name="gramSugar">Gramm/Stück</string>
+    <string name="quantitySugar">Anzahl</string>
+    <string name="gramPerHundredLabel">Gramm/100g</string>
+    <string name="amountSugar">Menge</string>
     <string name="totalAmountSugar">Gesamt</string>
     <string name="saveButton">Speichern</string>
     <string name="timestampToday">Heute</string>

@@ -19,9 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.mva_sugarcounter.composables.Counter
 import com.example.mva_sugarcounter.composables.History
 import com.example.mva_sugarcounter.composables.Settings
+import com.example.mva_sugarcounter.composables.counterUI.Counter
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
