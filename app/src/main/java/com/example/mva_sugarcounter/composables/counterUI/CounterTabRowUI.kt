@@ -1,13 +1,14 @@
 package com.example.mva_sugarcounter.composables.counterUI
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Abc
-import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.BarChart
+import androidx.compose.material.icons.outlined.Dialpad
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -20,6 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.data.TabId
 import com.example.mva_sugarcounter.data.TabItem
 import com.example.mva_sugarcounter.viewModels.CounterVM
 
@@ -30,14 +35,16 @@ fun TabRow(counterVM: CounterVM) {
 
     val tabItems = listOf(
         TabItem(
-            title = "A",
-            unselectedIcon = Icons.Outlined.Abc,
-            selectedIcon = Icons.Outlined.Abc
+            tabId = TabId.PerHundred,
+            title = stringResource(id = R.string.tabCounterPerHundred),
+            unselectedIcon = Icons.Outlined.BarChart,
+            selectedIcon = Icons.Outlined.BarChart
         ),
         TabItem(
-            title = "B",
-            unselectedIcon = Icons.Outlined.Home,
-            selectedIcon = Icons.Outlined.Home
+            tabId = TabId.PerPiece,
+            title = stringResource(id = R.string.tabCounterPerPiece),
+            unselectedIcon = Icons.Outlined.Dialpad,
+            selectedIcon = Icons.Outlined.Dialpad
         )
     )
 
@@ -54,9 +61,7 @@ fun TabRow(counterVM: CounterVM) {
         if (!pagerState.isScrollInProgress)
             selectedTabIndex = pagerState.currentPage
     }
-    Column(
-        //modifier = Modifier.fillMaxSize()
-    ) {
+    Column {
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = index == selectedTabIndex,
@@ -64,15 +69,18 @@ fun TabRow(counterVM: CounterVM) {
                         selectedTabIndex = index
                     },
                     text = {
-                        Text(text = item.title)
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = if (index == selectedTabIndex) {
-                                item.selectedIcon
-                            } else item.unselectedIcon,
-                            contentDescription = item.title
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
+                            Icon(
+                                imageVector = if (index == selectedTabIndex) {
+                                    item.selectedIcon
+                                } else item.unselectedIcon,
+                                contentDescription = item.title
+                            )
+                            Text(text = item.title)
+                        }
                     }
                 )
             }
@@ -80,23 +88,15 @@ fun TabRow(counterVM: CounterVM) {
 
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier
-                //.fillMaxWidth()
-                .weight(1f)
         ) { index ->
-            Box(
-                //modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
+            Row {
 
-                if (tabItems[index].title == "A") {
-                    CounterPerPiece(counterVM)
+                if (tabItems[index].tabId == TabId.PerPiece) {
+                    CounterPerPiece(counterVM = counterVM)
                 } else {
-                    Text(text = tabItems[index].title)
+                    CounterPerHundred(counterVM = counterVM)
                 }
             }
-
-
         }
     }
 

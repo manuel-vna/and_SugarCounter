@@ -33,4 +33,6 @@
     <string name="historyNoDataInfoDescription">No entries yet</string>
     <string name="settings_third_party_licenses_text">Third-party licenses</string>
     <string name="entryDateTitle">Entries can be added for the last 30 days</string>
+    <string name="tabCounterPerHundred">Gram per 100g</string>
+    <string name="tabCounterPerPiece">Gram per Piece</string>
 </resources>

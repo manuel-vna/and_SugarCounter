@@ -108,10 +108,12 @@ fun Counter(context: Context) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            Arrangement.Absolute.Center
+                .padding(top = 16.dp, bottom = 16.dp),
+            Arrangement.Absolute.SpaceAround
         ) {
             DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+
+            Barcode()
         }
 
         Text(
@@ -214,8 +216,6 @@ fun Counter(context: Context) {
         }
 
         TabRow(counterVM)
-
-        //CounterPerPiece(counterVM)
 
 
         Row(
@@ -321,6 +321,14 @@ fun CategoryItems(
             .padding(10.dp)
     ) {
         Text(text = title, fontSize = 16.sp)
+    }
+}
+
+@Composable
+fun Barcode() {
+    Button(
+        onClick = {}) {
+        Text(text = "Barcode scannen")
     }
 }
 
