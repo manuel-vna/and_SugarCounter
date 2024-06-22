@@ -113,7 +113,7 @@ fun Counter(context: Context) {
         ) {
             DatePicker(counterVM = counterVM, helperMethods = helperMethods)
 
-            Barcode()
+            Barcode(counterVM)
         }
 
         Text(
@@ -140,7 +140,7 @@ fun Counter(context: Context) {
                 value = category,
                 onValueChange = {
                     //limit input to 25 characters
-                    if (it.count() <= 20) {
+                    if (it.count() <= 40) {
                         category = it
                         expanded = true
                     } else {
@@ -277,6 +277,18 @@ fun Counter(context: Context) {
         )
     }
 
+
+    val barcodeNoEntry by counterVM.barcodeNoEntry.collectAsState()
+    if (barcodeNoEntry) {
+        DialogSingleButton(
+            counterVM = counterVM,
+            dialogTitle = "No database entry yet",
+            dialogDescription = "This barcode doesn't have a databse entry yet. It will be added after saving the first entry.",
+            buttonOnClick = { counterVM.actionDismissBarcodeNoEntryDialog() }
+        )
+    }
+
+
     val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
     if (alertDialogGramThreshold) {
         AlertDialog(
@@ -325,9 +337,9 @@ fun CategoryItems(
 }
 
 @Composable
-fun Barcode() {
+fun Barcode(counterVM: CounterVM) {
     Button(
-        onClick = {}) {
+        onClick = { }) {
         Text(text = "Barcode scannen")
     }
 }

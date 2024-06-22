@@ -49,11 +49,19 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val _categoryItemDeleteDialog = MutableStateFlow(false)
     val categoryItemDeleteDialog = _categoryItemDeleteDialog.asStateFlow()
 
-    val _categoryItemDeleteObject = MutableStateFlow(Entry(0, 0, "", 0, 0, "", 0))
+    val _categoryItemDeleteObject = MutableStateFlow(
+        Entry(
+            0, 0, "", "", true,
+            0, 0, 0, 0, 0
+        )
+    )
     val categoryItemDeleteObject = _categoryItemDeleteObject.asStateFlow()
 
     val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
+
+    val _barcodeNoEntry = MutableStateFlow(false)
+    val barcodeNoEntry = _barcodeNoEntry.asStateFlow()
     //StateFlow: END
 
     // Timestamps: BEGIN
@@ -118,7 +126,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
             // if an entry of this category exists already, take the gram value from it and save it
             if (sugarCounterRow != null) {
-                saveEntryInDatabase(category, sugarCounterRow.gramItem, amountValueInt)
+                saveEntryInDatabase(category, sugarCounterRow.perHundredGram, amountValueInt)
             }
             // if there is no entry for that category yet, prompt the user that the field gram has to be filled
             else {
@@ -134,14 +142,17 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().insertEntry(
                 Entry(
-                    currentTimestamp = dateOfEntryEpochSec.value, //System.currentTimeMillis(),
+                    currentTimestamp = dateOfEntryEpochSec.value,
                     date = helperMethods.formatDateToString(
                         dateOfEntryEpochSec.value,
                         "YYYY-MM-dd"
                     ),
-                    gramItem = gramValueInt,
-                    amount = amountValueInt,
                     category = category,
+                    isPerHundred = true,
+                    perPieceGram = gramValueInt,
+                    perPieceQuantity = amountValueInt,
+                    perHundredGram = 0,
+                    perHundredAmount = 0,
                     gramTotal = gramValueInt * amountValueInt
                 )
             )
@@ -179,7 +190,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
             withContext(Dispatchers.Main) {
                 Log.d("Tag", "Set field gram with last entry of chosen category")
-                _gramValue.value = sugarCounterRow?.gramItem.toString()
+                _gramValue.value = sugarCounterRow?.perHundredGram.toString()
                 _amountValue.value = ""
             }
         }
@@ -239,6 +250,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         val zoneId = ZoneId.systemDefault()
         val epoch: Long = localDate.atStartOfDay(zoneId).toEpochSecond()
         _dateOfEntryEpochSec.value = epoch
+    }
+
+    fun actionShowBarcodeNoEntryDialog() {
+        _barcodeNoEntry.value = true
+    }
+
+    fun actionDismissBarcodeNoEntryDialog() {
+        _barcodeNoEntry.value = false
     }
 
     //Actions End

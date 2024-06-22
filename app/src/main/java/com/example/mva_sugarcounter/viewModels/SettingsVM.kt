@@ -47,9 +47,12 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
                             timestamp,
                             "YYYY-MM-dd"
                         ),
-                        gramItem = gramValue,
-                        amount = 1,
                         category = "Test",
+                        isPerHundred = true,
+                        perPieceGram = gramValue,
+                        perPieceQuantity = 1,
+                        perHundredGram = 0,
+                        perHundredAmount = 0,
                         gramTotal = gramValue
                     )
                 )
