@@ -20,6 +20,13 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
     //SateFlows: START
     val _settingsScreenShown = MutableStateFlow(true)
     val settingsScreenShown = _settingsScreenShown.asStateFlow()
+
+    val _faqScreenShown = MutableStateFlow(false)
+    val faqScreenShown = _faqScreenShown.asStateFlow()
+
+    val _faqExpandedId = MutableStateFlow(-1L)
+    var faqSingleSelectMode = _faqExpandedId.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -30,7 +37,20 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
     fun actionHideSettingsScreen() {
         _settingsScreenShown.value = false
     }
+
+    fun actionShowFaqScreen() {
+        _faqScreenShown.value = true
+    }
+
+    fun actionHideFaqScreen() {
+        _faqScreenShown.value = false
+    }
+
+    fun actionChangeExpandedId(id: Long) {
+        _faqExpandedId.value = id
+    }
     //Actions: END
+
 
     //Testing Purposes: START
     fun actionAddTestData() {

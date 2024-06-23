@@ -31,4 +31,9 @@
     <string name="historyNoDataInfoDescription">No entries yet</string>
     <string name="settings_third_party_licenses_text">Third-party licenses</string>
     <string name="entryDateTitle">Entries can be added for the last 30 days</string>
+    <string name="settings_button_faq_text">FAQ</string>
+    <string name="faq_question_one">Frage 1</string>
+    <string name="faq_answer_one">Antwort 1</string>
+    <string name="faq_question_two">Frage 2</string>
+    <string name="faq_answer_two">Antwort 2</string>
 </resources>

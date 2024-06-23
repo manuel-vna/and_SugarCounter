@@ -34,12 +34,20 @@ fun Settings(context: Context) {
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
+    val categoryScreenShown by categoryListingVM.categoryListShown.collectAsState()
+    val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM, categoryListingVM)
     }
 
-    CategoriesScreen(context)
+    if (categoryScreenShown) {
+        CategoriesScreen(context)
+    }
+
+    if (faqScreenShown) {
+        FAQScreen()
+    }
 
 }
 
@@ -61,6 +69,12 @@ fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: 
             stringResource(id = R.string.settings_third_party_licenses_text),
             R.drawable.baseline_read_more_24,
         )
+        SettingsButtonFAQs(
+            context,
+            settingsVM,
+            stringResource(id = R.string.settings_button_faq_text),
+            R.drawable.baseline_read_more_24,
+        )
     }
 }
 
@@ -79,7 +93,6 @@ fun SettingsButtonCategories(
         onClick = {
             settingsVM.actionHideSettingsScreen()
             categoryListingVM.actionShowCategories()
-
         }) {
         Text(
             text = "$descriptionText   "
@@ -107,6 +120,32 @@ fun SettingsButtonThirdPartyLicenses(
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
 
+        }) {
+        Text(
+            text = "$descriptionText   "
+        )
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
+
+    }
+}
+
+@Composable
+fun SettingsButtonFAQs(
+    context: Context,
+    settingsVM: SettingsVM,
+    descriptionText: String,
+    buttonIcon: Int,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+        onClick = {
+            settingsVM.actionHideSettingsScreen()
+            settingsVM.actionShowFaqScreen()
         }) {
         Text(
             text = "$descriptionText   "
