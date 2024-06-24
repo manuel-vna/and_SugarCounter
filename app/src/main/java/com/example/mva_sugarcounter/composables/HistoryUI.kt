@@ -89,7 +89,6 @@ fun History(context: Context) {
 
             val graphDataListSorted = graphDataList.sortedByDescending { it.date }
 
-            //val darkMode = context.resources.configuration.uiMode
             val darkMode = helperMethods.checkForUIMode(context)
             LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
         }

@@ -76,7 +76,7 @@ class HelperMethods(private val context: Context) {
     }
 
     fun checkForUIMode(context: Context): Int {
-        //darkMode == 33 and brightMode =
+        //darkMode == 33 and brightMode = 17
         return context.resources.configuration.uiMode
     }
 
