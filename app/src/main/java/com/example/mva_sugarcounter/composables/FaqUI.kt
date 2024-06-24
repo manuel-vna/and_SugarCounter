@@ -1,5 +1,7 @@
 package com.example.mva_sugarcounter.composables
 
+import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,13 +28,29 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.data.Faq
 import com.example.mva_sugarcounter.data.faqDataList
+import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.SettingsVM
 
 @Composable
-fun FAQScreen() {
+fun FAQScreen(context: Context) {
 
+    val helperMethods = HelperMethods(context)
     val settingsVM: SettingsVM = viewModel()
     val expandedId by settingsVM.faqSingleSelectMode.collectAsState()
+
+    BackHandler {
+        settingsVM.actionHideFaqScreen()
+        settingsVM.actionShowSettingsScreen()
+    }
+
+    val darkMode = helperMethods.checkForUIMode(context)
+    var fontColor = Color.Black
+
+
+    if (darkMode == 33) {
+        fontColor = Color.White
+    }
+
 
     Column(
         modifier = Modifier
@@ -47,7 +65,8 @@ fun FAQScreen() {
                     onItemClick = { id ->
                         settingsVM.actionChangeExpandedId(if (id == expandedId) -1L else id)
                     },
-                    faq = faq
+                    faq = faq,
+                    fontColor
                 )
             }
         }
@@ -59,7 +78,8 @@ fun FAQScreen() {
 fun FaqItem(
     isExpanded: Boolean,
     onItemClick: (Long) -> Unit,
-    faq: Faq
+    faq: Faq,
+    fontColor: Color
 ) {
 
     ElevatedCard(
@@ -76,7 +96,7 @@ fun FaqItem(
             Text(
                 text = stringResource(id = faq.question),
                 modifier = Modifier.weight(1f),
-                color = Color.Black
+                color = fontColor
             )
             Icon(imageVector = Icons.Default.KeyboardArrowUp, contentDescription = null)
 
@@ -84,7 +104,8 @@ fun FaqItem(
         if (isExpanded) {
             Text(
                 text = stringResource(id = faq.answer),
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
+                color = fontColor
             )
         }
 

@@ -46,7 +46,7 @@ fun Settings(context: Context) {
     }
 
     if (faqScreenShown) {
-        FAQScreen()
+        FAQScreen(context)
     }
 
 }

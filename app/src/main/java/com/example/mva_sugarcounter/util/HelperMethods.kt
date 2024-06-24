@@ -75,5 +75,10 @@ class HelperMethods(private val context: Context) {
         return Locale.getDefault().language
     }
 
+    fun checkForUIMode(context: Context): Int {
+        //darkMode == 33 and brightMode =
+        return context.resources.configuration.uiMode
+    }
+
 
 }
