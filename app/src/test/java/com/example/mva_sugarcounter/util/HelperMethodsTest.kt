@@ -65,33 +65,42 @@ class HelperMethodsTest {
                 id = 0,
                 currentTimestamp = 1716233571,
                 date = "2024-05-20",
-                gramItem = 10,
-                amount = 1,
-                category = "Test 1",
-                gramTotal = 10
+                category = "Duplo",
+                isPerHundred = false,
+                perHundredGram = 0,
+                perHundredQuantity = 0,
+                perPieceGram = 9,
+                perPieceAmount = 1,
+                gramTotal = 9
             ),
             Entry(
                 id = 0,
                 currentTimestamp = 1716233783,
                 date = "2024-05-20",
-                gramItem = 2,
-                amount = 3,
-                category = "Test 1",
-                gramTotal = 6
+                category = "Ritter Sport",
+                isPerHundred = true,
+                perHundredGram = 48,
+                perHundredQuantity = 33,
+                perPieceGram = 0,
+                perPieceAmount = 0,
+                gramTotal = 16
             ),
             Entry(
                 id = 0,
                 currentTimestamp = 1716233801,
                 date = "2024-05-20",
-                gramItem = 8,
-                amount = 2,
-                category = "Test 1",
-                gramTotal = 16
+                category = "Kinder Maxi King",
+                isPerHundred = false,
+                perHundredGram = 0,
+                perHundredQuantity = 0,
+                perPieceGram = 13,
+                perPieceAmount = 1,
+                gramTotal = 13
             )
-        ) // gramTotal = 10 + 6 + 16 = 32
+        ) // gramTotal = 9 + 16 + 13 = 32
 
         val totalGramPerDayBlock = helperMethods.calculateTotalGramPerDayBlock(exampleListWithEntries)
-        assertEquals(totalGramPerDayBlock, 32)
+        assertEquals(totalGramPerDayBlock, 38)
     }
 
 }
