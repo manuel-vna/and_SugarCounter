@@ -2,12 +2,12 @@ package com.example.mva_sugarcounter.viewModels
 
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
+import com.example.mva_sugarcounter.data.GramCountMode
 import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.ZoneId
+import kotlin.math.roundToInt
 
 
 class CounterVM(application: Application) : AndroidViewModel(application) {
@@ -31,17 +32,32 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val _dateOfEntryEpochSec = MutableStateFlow(epochTimestampSecondsNow)
     val dateOfEntryEpochSec = _dateOfEntryEpochSec.asStateFlow()
 
+    val _categorySelected = MutableStateFlow("")
+    val categorySelected = _categorySelected.asStateFlow()
+
     val _categories = MutableStateFlow(listOf<String>())
     val categories = _categories.asStateFlow()
 
     val _date = MutableStateFlow("")
     val date = _date.asStateFlow()
 
-    var _gramValue = MutableStateFlow("")
-    val gramValue = _gramValue.asStateFlow()
+    val _isHundredTabIndex = MutableStateFlow(0)
+    val isHundredTabIndex = _isHundredTabIndex.asStateFlow()
 
-    var _amountValue = MutableStateFlow("")
-    val amountValue = _amountValue.asStateFlow()
+    var _gramCountMode = MutableStateFlow(GramCountMode.PerHundred)
+    var gramCountMode = _gramCountMode.asStateFlow()
+
+    var _perPieceGram = MutableStateFlow("")
+    val perPieceGram = _perPieceGram.asStateFlow()
+
+    var _perPieceAmount = MutableStateFlow("")
+    val perPieceAmount = _perPieceAmount.asStateFlow()
+
+    var _perHundredGram = MutableStateFlow("")
+    val perHundredGram = _perHundredGram.asStateFlow()
+
+    var _perHundredQuantity = MutableStateFlow("")
+    val perHundredQuantity = _perHundredQuantity.asStateFlow()
 
     val _alertDialog = MutableStateFlow(false)
     val alertDialog = _alertDialog.asStateFlow()
@@ -49,18 +65,26 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val _categoryItemDeleteDialog = MutableStateFlow(false)
     val categoryItemDeleteDialog = _categoryItemDeleteDialog.asStateFlow()
 
-    val _categoryItemDeleteObject = MutableStateFlow(Entry(0, 0, "", 0, 0, "", 0))
+    val _categoryItemDeleteObject = MutableStateFlow(
+        Entry(
+            0, 0, "", "", true,
+            0, 0, 0, 0, 0
+        )
+    )
     val categoryItemDeleteObject = _categoryItemDeleteObject.asStateFlow()
 
     val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
+
+    val _barcodeNoEntry = MutableStateFlow(false)
+    val barcodeNoEntry = _barcodeNoEntry.asStateFlow()
     //StateFlow: END
 
     // Timestamps: BEGIN
     private val today = LocalDate.now()
-    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond() //* 1000
+    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
     private val endOfToday =
-        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1 //* 1000 - 1
+        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1
     // Timestamps: END
 
     // StateFlow that is observed by UI
@@ -98,51 +122,76 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     //Saving an Entry: Start
     fun saveEntry(category: String) {
-        var gramValueInt = 0
-        var amountValueInt = 1
 
-        if (gramValue.value.isNotEmpty()) gramValueInt = gramValue.value.toInt()
-        if (amountValue.value.isNotEmpty()) amountValueInt = amountValue.value.toInt()
+        var perPieceGramInt = 0
+        var perPieceAmountInt = 1
+        var perHundredGramDouble = 0.0
+        var perHundredQuantityDouble = 0.0
 
-        if (gramValue.value.isEmpty()) {
-            getLastEntryOfCategory(category, amountValueInt)
+        if (gramCountMode.value == GramCountMode.PerHundred) {
+            if (perHundredGram.value.isNotEmpty()) perHundredGramDouble =
+                perHundredGram.value.toDouble()
+            if (perHundredQuantity.value.isNotEmpty()) perHundredQuantityDouble =
+                perHundredQuantity.value.toDouble()
+
+            if (perHundredGram.value.isEmpty()) {
+                _alertDialog.value = true
+            } else {
+                saveEntryInDatabase(
+                    category = category,
+                    isPerHundred = true,
+                    perHundredGramInt = perHundredGramDouble.toInt(),
+                    perHundredQuantityInt = perHundredQuantityDouble.toInt(),
+                    perPieceGramInt = 0,
+                    perPieceAmountInt = 0,
+                    gramTotalInt = ((perHundredGramDouble / 100) * perHundredQuantityDouble).roundToInt()  // rule of three: Calculate sugar on basis of the quantity eaten
+                )
+            }
         } else {
-            saveEntryInDatabase(category, gramValueInt, amountValueInt)
-        }
-    }
+            if (perPieceGram.value.isNotEmpty()) perPieceGramInt = perPieceGram.value.toInt()
+            if (perPieceAmount.value.isNotEmpty()) perPieceAmountInt = perPieceAmount.value.toInt()
 
-    private fun getLastEntryOfCategory(category: String, amountValueInt: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val asyncAnswer = async { checkForExistingGramValue(category) }
-            val sugarCounterRow = asyncAnswer.await()
-
-            // if an entry of this category exists already, take the gram value from it and save it
-            if (sugarCounterRow != null) {
-                saveEntryInDatabase(category, sugarCounterRow.gramItem, amountValueInt)
-            }
-            // if there is no entry for that category yet, prompt the user that the field gram has to be filled
-            else {
-                withContext(Dispatchers.Main) {
-                    Log.d("Tag", "Error: Data has to be entered for gram")
-                    _alertDialog.value = true
-                }
+            if (perPieceGram.value.isEmpty()) {
+                _alertDialog.value = true
+            } else {
+                saveEntryInDatabase(
+                    category = category,
+                    isPerHundred = false,
+                    perHundredGramInt = 0,
+                    perHundredQuantityInt = 0,
+                    perPieceGramInt = perPieceGramInt,
+                    perPieceAmountInt = perPieceAmountInt,
+                    gramTotalInt = perPieceGramInt * perPieceAmountInt // multiplying gram per piece value with amount of itmes eaten
+                )
             }
         }
+
     }
 
-    private fun saveEntryInDatabase(category: String, gramValueInt: Int, amountValueInt: Int) {
+    private fun saveEntryInDatabase(
+        category: String,
+        isPerHundred: Boolean,
+        perHundredGramInt: Int,
+        perHundredQuantityInt: Int,
+        perPieceGramInt: Int,
+        perPieceAmountInt: Int,
+        gramTotalInt: Int
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().insertEntry(
                 Entry(
-                    currentTimestamp = dateOfEntryEpochSec.value, //System.currentTimeMillis(),
+                    currentTimestamp = dateOfEntryEpochSec.value,
                     date = helperMethods.formatDateToString(
                         dateOfEntryEpochSec.value,
                         "YYYY-MM-dd"
                     ),
-                    gramItem = gramValueInt,
-                    amount = amountValueInt,
                     category = category,
-                    gramTotal = gramValueInt * amountValueInt
+                    isPerHundred = isPerHundred,
+                    perPieceGram = perPieceGramInt,
+                    perPieceAmount = perPieceAmountInt,
+                    perHundredGram = perHundredGramInt,
+                    perHundredQuantity = perHundredQuantityInt,
+                    gramTotal = gramTotalInt
                 )
             )
             // check if database already contains the given category string
@@ -172,15 +221,21 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadLastEntryForGivenCategory(category: String) {
+    fun loadLastEntryForGivenCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            val asyncAnswer = async { checkForExistingGramValue(category) }
-            val sugarCounterRow = asyncAnswer.await()
+            val asyncAnswer = async { checkForExistingGramValue(_categorySelected.value) }
+            val entryReply = asyncAnswer.await()
 
             withContext(Dispatchers.Main) {
-                Log.d("Tag", "Set field gram with last entry of chosen category")
-                _gramValue.value = sugarCounterRow?.gramItem.toString()
-                _amountValue.value = ""
+                if (entryReply?.perPieceGram != 0) {
+                    _perPieceGram.value = entryReply?.perPieceGram.toString()
+                    _perHundredGram.value = ""
+                    _isHundredTabIndex.value = 1
+                } else {
+                    _perHundredGram.value = entryReply?.perHundredGram.toString()
+                    _perPieceGram.value = ""
+                    _isHundredTabIndex.value = 0
+                }
             }
         }
     }
@@ -212,12 +267,32 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun actionGramChange(gramValue: String) {
-        _gramValue.value = gramValue
+    fun actionChangeSelectedCategory(categorySelected: String) {
+        _categorySelected.value = categorySelected
     }
 
-    fun actionAmountChange(amountValue: String) {
-        _amountValue.value = amountValue
+    fun actionSetIsHundredTabIndex(tabIndex: Int) {
+        _isHundredTabIndex.value = tabIndex
+    }
+
+    fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
+        _gramCountMode.value = gramCountMode
+    }
+
+    fun actionPerPieceGramChange(perPieceGram: String) {
+        _perPieceGram.value = perPieceGram
+    }
+
+    fun actionPerPieceAmountChange(perPieceAmount: String) {
+        _perPieceAmount.value = perPieceAmount
+    }
+
+    fun actionPerHundredChange(perHundredGram: String) {
+        _perHundredGram.value = perHundredGram
+    }
+
+    fun actionPerHundredQuantityChange(perHundredQuantity: String) {
+        _perHundredQuantity.value = perHundredQuantity
     }
 
     fun actionDismissAlertDialog() {
@@ -239,6 +314,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         val zoneId = ZoneId.systemDefault()
         val epoch: Long = localDate.atStartOfDay(zoneId).toEpochSecond()
         _dateOfEntryEpochSec.value = epoch
+    }
+
+    fun actionShowBarcodeNoEntryDialog() {
+        _barcodeNoEntry.value = true
+    }
+
+    fun actionDismissBarcodeNoEntryDialog() {
+        _barcodeNoEntry.value = false
     }
 
     //Actions End

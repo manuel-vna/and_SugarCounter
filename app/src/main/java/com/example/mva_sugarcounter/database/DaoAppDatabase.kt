@@ -30,7 +30,7 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM entry_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
     fun checkIfGramValueExistsForCategory(category: String): Entry?
 
-    @Query("""SELECT SUM(gramItem) FROM entry_table WHERE date = :dateString""")
+    @Query("""SELECT SUM(gramTotal) FROM entry_table WHERE date = :dateString""")
     fun checkIfGramThresholdIsBreached(dateString: String): Int?
 
     @Insert

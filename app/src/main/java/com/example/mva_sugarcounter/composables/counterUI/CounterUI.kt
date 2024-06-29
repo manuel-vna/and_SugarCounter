@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.counterUI
 
 
 import android.content.Context
@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -47,16 +46,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -71,11 +69,10 @@ fun Counter(context: Context) {
 
     val helperMethods = HelperMethods(context)
     val counterVM: CounterVM = viewModel()
-    val categories by counterVM.categories.collectAsState()
 
-    var category by remember {
-        mutableStateOf("")
-    }
+    val categories by counterVM.categories.collectAsState()
+    val category by counterVM.categorySelected.collectAsState()
+
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -109,16 +106,18 @@ fun Counter(context: Context) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            Arrangement.Absolute.Center
+                .padding(top = 16.dp, bottom = 16.dp),
+            Arrangement.Absolute.SpaceAround
         ) {
             DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+
+            Barcode(counterVM)
         }
 
         Text(
             modifier = Modifier.padding(start = 3.dp, bottom = 2.dp),
             text = stringResource(R.string.foodType),
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
 
@@ -139,8 +138,8 @@ fun Counter(context: Context) {
                 value = category,
                 onValueChange = {
                     //limit input to 25 characters
-                    if (it.count() <= 20) {
-                        category = it
+                    if (it.count() <= 40) {
+                        counterVM.actionChangeSelectedCategory(it)
                         expanded = true
                     } else {
                         Toast.makeText(
@@ -194,7 +193,7 @@ fun Counter(context: Context) {
                                     .sorted()
                             ) {
                                 CategoryItems(title = it) { title ->
-                                    category = title
+                                    counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
                                 }
                             }
@@ -203,9 +202,9 @@ fun Counter(context: Context) {
                                 categories.sorted()
                             ) {
                                 CategoryItems(title = it) { title ->
-                                    category = title
+                                    counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
-                                    counterVM.loadLastEntryForGivenCategory(category)
+                                    counterVM.loadLastEntryForGivenCategory()
                                 }
                             }
                         }
@@ -214,85 +213,8 @@ fun Counter(context: Context) {
             }
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        TabRow(counterVM)
 
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
-
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = stringResource(R.string.gramSugar),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                val gramValue by counterVM.gramValue.collectAsState()
-                TextField(
-                    value = gramValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionGramChange(it)
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { counterVM.actionGramChange("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
-
-                val amountValue by counterVM.amountValue.collectAsState()
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = stringResource(R.string.amountSugar),
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                TextField(
-                    value = amountValue,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionAmountChange(
-                            it
-                        )
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { counterVM.actionAmountChange("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    placeholder = { Text("1") }
-                )
-            }
-        }
 
         Row(
             modifier = Modifier
@@ -305,9 +227,11 @@ fun Counter(context: Context) {
                 modifier = Modifier.width(160.dp),
                 onClick = {
                     counterVM.saveEntry(category)
-                    category = ""
-                    counterVM.actionGramChange("")
-                    counterVM.actionAmountChange("")
+                    counterVM.actionChangeSelectedCategory("")
+                    counterVM.actionPerPieceGramChange("")
+                    counterVM.actionPerPieceAmountChange("")
+                    counterVM.actionPerHundredChange("")
+                    counterVM.actionPerHundredQuantityChange("")
                     expanded = false
                     keyboardController?.hide()
                 },
@@ -316,7 +240,7 @@ fun Counter(context: Context) {
                     text = stringResource(id = R.string.saveButton),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    fontFamily = FontFamily.Monospace
+                    //fontFamily = FontFamily.Monospace
                 )
             }
 
@@ -352,6 +276,18 @@ fun Counter(context: Context) {
             }
         )
     }
+
+
+    val barcodeNoEntry by counterVM.barcodeNoEntry.collectAsState()
+    if (barcodeNoEntry) {
+        DialogSingleButton(
+            counterVM = counterVM,
+            dialogTitle = "No database entry yet",
+            dialogDescription = "This barcode doesn't have a databse entry yet. It will be added after saving the first entry.",
+            buttonOnClick = { counterVM.actionDismissBarcodeNoEntryDialog() }
+        )
+    }
+
 
     val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
     if (alertDialogGramThreshold) {
@@ -401,6 +337,14 @@ fun CategoryItems(
 }
 
 @Composable
+fun Barcode(counterVM: CounterVM) {
+    Button(
+        onClick = { }) {
+        Text(text = "Barcode scannen")
+    }
+}
+
+@Composable
 fun DatePicker(
     counterVM: CounterVM,
     helperMethods: HelperMethods,
@@ -441,7 +385,3 @@ fun DatePicker(
     }
 
 }
-
-
-
-

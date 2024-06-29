@@ -99,11 +99,13 @@ fun ShowSugarCountItemsShared(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = it.amount.toString() + " x " + if (it.gramItem.toString().length == 1) {
-                            "  "
+                        text =
+                        if (it.isPerHundred) {
+                            it.perHundredQuantity.toString() + " à " + it.perHundredGram
                         } else {
-                            ""
-                        } + it.gramItem.toString() + "g",
+                            it.perPieceAmount.toString() + " x " + it.perPieceGram.toString()
+                        },
+
                         modifier = Modifier
                             .padding(start = 8.dp),
                     )
