@@ -99,7 +99,7 @@ fun ShowSugarCountItemsShared(
                 ) {
                     Text(
                         textAlign = TextAlign.Start,
-                        text = it.perPieceQuantity.toString() + " x " + if (it.perPieceGram.toString().length == 1) {
+                        text = it.perPieceAmount.toString() + " x " + if (it.perPieceGram.toString().length == 1) {
                             "  "
                         } else {
                             ""

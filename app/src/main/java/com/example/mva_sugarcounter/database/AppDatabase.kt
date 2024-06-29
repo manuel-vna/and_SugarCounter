@@ -9,7 +9,7 @@ import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class, Category::class], version = 5)
+@Database(entities = [Entry::class, Category::class], version = 6)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 

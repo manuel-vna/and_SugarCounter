@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.mva_sugarcounter.R
-import com.example.mva_sugarcounter.data.TabId
+import com.example.mva_sugarcounter.data.GramCountMode
 import com.example.mva_sugarcounter.data.TabItem
 import com.example.mva_sugarcounter.viewModels.CounterVM
 
@@ -35,13 +35,13 @@ fun TabRow(counterVM: CounterVM) {
 
     val tabItems = listOf(
         TabItem(
-            tabId = TabId.PerHundred,
+            gramCountMode = GramCountMode.PerHundred,
             title = stringResource(id = R.string.tabCounterPerHundred),
             unselectedIcon = Icons.Outlined.BarChart,
             selectedIcon = Icons.Outlined.BarChart
         ),
         TabItem(
-            tabId = TabId.PerPiece,
+            gramCountMode = GramCountMode.PerPiece,
             title = stringResource(id = R.string.tabCounterPerPiece),
             unselectedIcon = Icons.Outlined.Dialpad,
             selectedIcon = Icons.Outlined.Dialpad
@@ -91,10 +91,12 @@ fun TabRow(counterVM: CounterVM) {
         ) { index ->
             Row {
 
-                if (tabItems[index].tabId == TabId.PerPiece) {
+                if (tabItems[index].gramCountMode == GramCountMode.PerPiece) {
                     CounterPerPiece(counterVM = counterVM)
+                    counterVM.actionChangeGramCountMode(GramCountMode.PerPiece)
                 } else {
                     CounterPerHundred(counterVM = counterVM)
+                    counterVM.actionChangeGramCountMode(GramCountMode.PerHundred)
                 }
             }
         }

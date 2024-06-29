@@ -50,9 +50,9 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
                         category = "Test",
                         isPerHundred = true,
                         perPieceGram = gramValue,
-                        perPieceQuantity = 1,
+                        perPieceAmount = 1,
                         perHundredGram = 0,
-                        perHundredAmount = 0,
+                        perHundredQuantity = 0,
                         gramTotal = gramValue
                     )
                 )

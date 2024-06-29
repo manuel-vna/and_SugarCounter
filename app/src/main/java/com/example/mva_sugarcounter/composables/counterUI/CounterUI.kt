@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
+import com.example.mva_sugarcounter.data.GramCountMode
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -70,11 +71,10 @@ fun Counter(context: Context) {
 
     val helperMethods = HelperMethods(context)
     val counterVM: CounterVM = viewModel()
-    val categories by counterVM.categories.collectAsState()
 
-    var category by remember {
-        mutableStateOf("")
-    }
+    val categories by counterVM.categories.collectAsState()
+    val category by counterVM.categorySelected.collectAsState()
+
     var expanded by remember {
         mutableStateOf(false)
     }
@@ -141,7 +141,7 @@ fun Counter(context: Context) {
                 onValueChange = {
                     //limit input to 25 characters
                     if (it.count() <= 40) {
-                        category = it
+                        counterVM.actionChangeSelectedCategory(it)
                         expanded = true
                     } else {
                         Toast.makeText(
@@ -195,7 +195,7 @@ fun Counter(context: Context) {
                                     .sorted()
                             ) {
                                 CategoryItems(title = it) { title ->
-                                    category = title
+                                    counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
                                 }
                             }
@@ -204,9 +204,12 @@ fun Counter(context: Context) {
                                 categories.sorted()
                             ) {
                                 CategoryItems(title = it) { title ->
-                                    category = title
+                                    counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
-                                    counterVM.loadLastEntryForGivenCategory(category)
+                                    counterVM.loadLastEntryForGivenCategory(
+                                        category,
+                                        GramCountMode.PerPiece
+                                    )
                                 }
                             }
                         }
@@ -229,9 +232,11 @@ fun Counter(context: Context) {
                 modifier = Modifier.width(160.dp),
                 onClick = {
                     counterVM.saveEntry(category)
-                    category = ""
-                    counterVM.actionGramChange("")
-                    counterVM.actionAmountChange("")
+                    counterVM.actionChangeSelectedCategory("")
+                    counterVM.actionPerPieceGramChange("")
+                    counterVM.actionPerPieceAmountChange("")
+                    counterVM.actionPerHundredChange("")
+                    counterVM.actionPerHundredQuantityChange("")
                     expanded = false
                     keyboardController?.hide()
                 },

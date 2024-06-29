@@ -12,8 +12,8 @@ data class Entry(
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "isPerHundred") val isPerHundred: Boolean,
     @ColumnInfo(name = "perHundredGram") val perHundredGram: Int,
-    @ColumnInfo(name = "perHundredAmount") val perHundredAmount: Int,
-    @ColumnInfo(name = "perPieceGram") val perPieceGram: Int, //gramItem: Int,
-    @ColumnInfo(name = "perPieceQuantity") val perPieceQuantity: Int, //gramItem: Int,
+    @ColumnInfo(name = "perHundredQuantity") val perHundredQuantity: Int,
+    @ColumnInfo(name = "perPieceGram") val perPieceGram: Int,
+    @ColumnInfo(name = "perPieceAmount") val perPieceAmount: Int,
     @ColumnInfo(name = "gramTotal") val gramTotal: Int
 )

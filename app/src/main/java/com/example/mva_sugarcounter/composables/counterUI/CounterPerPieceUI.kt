@@ -51,15 +51,15 @@ fun CounterPerPiece(counterVM: CounterVM) {
                 fontWeight = FontWeight.Medium
             )
 
-            val gramValue by counterVM.gramValue.collectAsState()
+            val perPieceGram by counterVM.perPieceGram.collectAsState()
             TextField(
-                value = gramValue,
+                value = perPieceGram,
                 onValueChange = {
-                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionGramChange(it)
+                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerPieceGramChange(it)
                 },
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = { counterVM.actionGramChange("") }) {
+                    IconButton(onClick = { counterVM.actionPerPieceGramChange("") }) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
@@ -79,7 +79,7 @@ fun CounterPerPiece(counterVM: CounterVM) {
             Arrangement.SpaceEvenly
         ) {
 
-            val amountValue by counterVM.amountValue.collectAsState()
+            val perPieceAmount by counterVM.perPieceAmount.collectAsState()
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = stringResource(R.string.quantitySugar),
@@ -88,15 +88,15 @@ fun CounterPerPiece(counterVM: CounterVM) {
             )
 
             TextField(
-                value = amountValue,
+                value = perPieceAmount,
                 onValueChange = {
-                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionAmountChange(
+                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerPieceAmountChange(
                         it
                     )
                 },
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = { counterVM.actionAmountChange("") }) {
+                    IconButton(onClick = { counterVM.actionPerPieceAmountChange("") }) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
