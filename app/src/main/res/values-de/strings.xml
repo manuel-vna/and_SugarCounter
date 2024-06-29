@@ -2,10 +2,10 @@
 <resources>
     <string name="app_name">SugarCounter</string>
     <string name="foodType">Kategorie</string>
-    <string name="gramSugar">Gramm/Stück</string>
-    <string name="quantitySugar">Anzahl</string>
-    <string name="gramPerHundredLabel">Gramm/100g</string>
-    <string name="amountSugar">Menge</string>
+    <string name="gramSugar">Zucker pro Stück</string>
+    <string name="quantitySugar">Verzehrte Anzahl</string>
+    <string name="gramPerHundredLabel">Zucker pro 100g</string>
+    <string name="amountSugar">Verzehrte Menge</string>
     <string name="totalAmountSugar">Gesamt</string>
     <string name="saveButton">Speichern</string>
     <string name="timestampToday">Heute</string>
@@ -34,6 +34,6 @@
     <string name="historyNoDataInfoDescription">Noch keine Einträge vorhanden</string>
     <string name="settings_third_party_licenses_text">Drittanbieter-Lizenzen</string>
     <string name="entryDateTitle">Einträge können für die letzten 30 Tage hinzugeügt werden.</string>
-    <string name="tabCounterPerHundred">Gramm pro 100g</string>
-    <string name="tabCounterPerPiece">Gramm pro Stück</string>
+    <string name="tabCounterPerHundred">Zucker/100g</string>
+    <string name="tabCounterPerPiece">Zucker/Stück</string>
 </resources>

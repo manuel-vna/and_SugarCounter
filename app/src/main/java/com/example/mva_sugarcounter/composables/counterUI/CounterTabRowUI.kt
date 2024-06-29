@@ -15,10 +15,8 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -48,25 +46,25 @@ fun TabRow(counterVM: CounterVM) {
         )
     )
 
-    var selectedTabIndex by remember {
-        mutableStateOf(0)
-    }
-    var pagerState = rememberPagerState {
+    val selectedTabIndex by counterVM.isHundredTabIndex.collectAsState()
+    val pagerState = rememberPagerState {
         tabItems.size
     }
+
     LaunchedEffect(key1 = selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
     }
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress)
-            selectedTabIndex = pagerState.currentPage
+            counterVM.actionSetIsHundredTabIndex(pagerState.currentPage) //selectedTabIndex = pagerState.currentPage
     }
+
     Column {
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = index == selectedTabIndex,
                     onClick = {
-                        selectedTabIndex = index
+                        counterVM.actionSetIsHundredTabIndex(index) //selectedTabIndex = index
                     },
                     text = {
                         Row(

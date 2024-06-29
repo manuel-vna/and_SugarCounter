@@ -46,7 +46,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,7 +55,6 @@ import androidx.compose.ui.unit.toSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
-import com.example.mva_sugarcounter.data.GramCountMode
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -119,7 +117,7 @@ fun Counter(context: Context) {
         Text(
             modifier = Modifier.padding(start = 3.dp, bottom = 2.dp),
             text = stringResource(R.string.foodType),
-            fontSize = 16.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Medium
         )
 
@@ -206,10 +204,7 @@ fun Counter(context: Context) {
                                 CategoryItems(title = it) { title ->
                                     counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
-                                    counterVM.loadLastEntryForGivenCategory(
-                                        category,
-                                        GramCountMode.PerPiece
-                                    )
+                                    counterVM.loadLastEntryForGivenCategory()
                                 }
                             }
                         }
@@ -245,7 +240,7 @@ fun Counter(context: Context) {
                     text = stringResource(id = R.string.saveButton),
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    fontFamily = FontFamily.Monospace
+                    //fontFamily = FontFamily.Monospace
                 )
             }
 

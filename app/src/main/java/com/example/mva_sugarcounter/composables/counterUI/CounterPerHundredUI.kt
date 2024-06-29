@@ -47,7 +47,7 @@ fun CounterPerHundred(counterVM: CounterVM) {
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = stringResource(R.string.gramPerHundredLabel),
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
 
@@ -68,6 +68,7 @@ fun CounterPerHundred(counterVM: CounterVM) {
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                placeholder = { Text("g") }
             )
         }
 
@@ -83,7 +84,7 @@ fun CounterPerHundred(counterVM: CounterVM) {
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = stringResource(R.string.amountSugar),
-                fontSize = 16.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
 
@@ -105,7 +106,7 @@ fun CounterPerHundred(counterVM: CounterVM) {
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                placeholder = { Text("1") }
+                placeholder = { Text("g") }
             )
         }
     }

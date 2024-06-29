@@ -41,6 +41,9 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val _date = MutableStateFlow("")
     val date = _date.asStateFlow()
 
+    val _isHundredTabIndex = MutableStateFlow(0)
+    val isHundredTabIndex = _isHundredTabIndex.asStateFlow()
+
     var _gramCountMode = MutableStateFlow(GramCountMode.PerHundred)
     var gramCountMode = _gramCountMode.asStateFlow()
 
@@ -218,16 +221,20 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadLastEntryForGivenCategory(category: String, gramCountMode: GramCountMode) {
+    fun loadLastEntryForGivenCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            val asyncAnswer = async { checkForExistingGramValue(category) }
+            val asyncAnswer = async { checkForExistingGramValue(_categorySelected.value) }
             val entryReply = asyncAnswer.await()
 
             withContext(Dispatchers.Main) {
-                if (gramCountMode == GramCountMode.PerPiece) {
+                if (entryReply?.perPieceGram != 0) {
                     _perPieceGram.value = entryReply?.perPieceGram.toString()
+                    _perHundredGram.value = ""
+                    _isHundredTabIndex.value = 1
                 } else {
                     _perHundredGram.value = entryReply?.perHundredGram.toString()
+                    _perPieceGram.value = ""
+                    _isHundredTabIndex.value = 0
                 }
             }
         }
@@ -264,6 +271,9 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         _categorySelected.value = categorySelected
     }
 
+    fun actionSetIsHundredTabIndex(tabIndex: Int) {
+        _isHundredTabIndex.value = tabIndex
+    }
 
     fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
         _gramCountMode.value = gramCountMode
