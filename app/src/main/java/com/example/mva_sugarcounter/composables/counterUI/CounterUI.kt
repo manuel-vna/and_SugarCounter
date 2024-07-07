@@ -26,11 +26,16 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -109,7 +114,8 @@ fun Counter(context: Context) {
                 .padding(top = 16.dp, bottom = 16.dp),
             Arrangement.Absolute.SpaceAround
         ) {
-            DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+            //DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+            DatePickerM3(counterVM = counterVM, helperMethods = helperMethods)
 
             Barcode(counterVM)
         }
@@ -372,6 +378,7 @@ fun DatePicker(
             negativeButton(text = "Cancel")
         }) {
         datepicker(
+            //colors = DatePickerDefaults.colors(containerColor = DatePickerColors.),
             initialDate = LocalDate.now(),
             title = stringResource(R.string.entryDateTitle),
             allowedDateValidator = { date ->
@@ -383,5 +390,62 @@ fun DatePicker(
             counterVM.actionChangeDateOfEntry(it)
         }
     }
+}
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerM3(
+    counterVM: CounterVM,
+    helperMethods: HelperMethods,
+) {
+
+    val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
+    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Picker)
+    val openDialog = remember { mutableStateOf(false) }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = {
+                openDialog.value = !openDialog.value
+            }) {
+            Text(helperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
+        }
+    }
+
+    if (openDialog.value) {
+        DatePickerDialog(
+            onDismissRequest = {
+                openDialog.value = false
+            },
+            confirmButton = {
+                Button(onClick = {
+                    openDialog.value = false
+                    datePickerState.selectedDateMillis?.let {
+                        counterVM.actionChangeDateOfEntryM3(
+                            it / 1000
+                        )
+                    }
+                }) {
+                    Text(text = stringResource(id = R.string.saveButton))
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.generalCancel))
+                }
+            }) {
+            DatePicker(
+                title = {},
+                state = datePickerState,
+                dateValidator = { true })
+        }
+    }
 }

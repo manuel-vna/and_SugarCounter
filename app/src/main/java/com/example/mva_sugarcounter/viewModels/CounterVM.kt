@@ -310,10 +310,16 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    //Deprecated:Start
     fun actionChangeDateOfEntry(localDate: LocalDate) {
         val zoneId = ZoneId.systemDefault()
         val epoch: Long = localDate.atStartOfDay(zoneId).toEpochSecond()
         _dateOfEntryEpochSec.value = epoch
+    }
+    //Deprecated: End
+
+    fun actionChangeDateOfEntryM3(epochSec: Long) {
+        _dateOfEntryEpochSec.value = epochSec
     }
 
     fun actionShowBarcodeNoEntryDialog() {
