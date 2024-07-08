@@ -62,10 +62,6 @@ import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.date.datepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.LocalDate
 
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -115,7 +111,7 @@ fun Counter(context: Context) {
             Arrangement.Absolute.SpaceAround
         ) {
             //DatePicker(counterVM = counterVM, helperMethods = helperMethods)
-            DatePickerM3(counterVM = counterVM, helperMethods = helperMethods)
+            DatePicker(counterVM = counterVM, helperMethods = helperMethods)
 
             Barcode(counterVM)
         }
@@ -350,6 +346,7 @@ fun Barcode(counterVM: CounterVM) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePicker(
     counterVM: CounterVM,
@@ -357,52 +354,10 @@ fun DatePicker(
 ) {
 
     val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
-    val dateDialogState = rememberMaterialDialogState()
-
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Button(
-            onClick = {
-                dateDialogState.show()
-            }) {
-            Text(text = helperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
-        }
-    }
-
-    MaterialDialog(
-        dialogState = dateDialogState,
-        buttons = {
-            positiveButton(text = "Ok")
-            negativeButton(text = "Cancel")
-        }) {
-        datepicker(
-            //colors = DatePickerDefaults.colors(containerColor = DatePickerColors.),
-            initialDate = LocalDate.now(),
-            title = stringResource(R.string.entryDateTitle),
-            allowedDateValidator = { date ->
-                val today = LocalDate.now()
-                val thirtyDaysAgo = today.minusDays(30)
-                date.isAfter(thirtyDaysAgo) && date.isBefore(today.plusDays(1))
-            }
-        ) {
-            counterVM.actionChangeDateOfEntry(it)
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerM3(
-    counterVM: CounterVM,
-    helperMethods: HelperMethods,
-) {
-
-    val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
+    val datePickerShown by counterVM.datePickerShown.collectAsState()
     val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Picker)
-    val openDialog = remember { mutableStateOf(false) }
+    val nowMillis = System.currentTimeMillis()
+    val xDaysAgoMillis = nowMillis - 2629743000
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -410,20 +365,20 @@ fun DatePickerM3(
     ) {
         Button(
             onClick = {
-                openDialog.value = !openDialog.value
+                counterVM.actionChangeDatePickerVisibility(!datePickerShown)
             }) {
             Text(helperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
         }
     }
 
-    if (openDialog.value) {
+    if (datePickerShown) {
         DatePickerDialog(
             onDismissRequest = {
-                openDialog.value = false
+                counterVM.actionChangeDatePickerVisibility(false)
             },
             confirmButton = {
                 Button(onClick = {
-                    openDialog.value = false
+                    counterVM.actionChangeDatePickerVisibility(false)
                     datePickerState.selectedDateMillis?.let {
                         counterVM.actionChangeDateOfEntryM3(
                             it / 1000
@@ -436,16 +391,29 @@ fun DatePickerM3(
             dismissButton = {
                 Button(
                     onClick = {
-                        openDialog.value = false
+                        counterVM.actionChangeDatePickerVisibility(false)
                     }
                 ) {
                     Text(text = stringResource(id = R.string.generalCancel))
                 }
             }) {
             DatePicker(
-                title = {},
+                title = {
+                    Text(
+                        modifier = Modifier.padding(12.dp),
+                        fontSize = 12.sp,
+                        text = stringResource(R.string.entryDateDescription)
+                    )
+                },
+                headline = {
+                    Text(
+                        modifier = Modifier.padding(2.dp),
+                        fontSize = 18.sp,
+                        text = stringResource(R.string.entryDateTitle)
+                    )
+                },
                 state = datePickerState,
-                dateValidator = { true })
+                dateValidator = { it in (xDaysAgoMillis + 1)..<nowMillis })
         }
     }
 }

@@ -29,6 +29,10 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
 
     //StateFlow: START
+
+    val _datePickerShown = MutableStateFlow(false)
+    val datePickerShown = _datePickerShown.asStateFlow()
+
     val _dateOfEntryEpochSec = MutableStateFlow(epochTimestampSecondsNow)
     val dateOfEntryEpochSec = _dateOfEntryEpochSec.asStateFlow()
 
@@ -37,9 +41,6 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     val _categories = MutableStateFlow(listOf<String>())
     val categories = _categories.asStateFlow()
-
-    val _date = MutableStateFlow("")
-    val date = _date.asStateFlow()
 
     val _isHundredTabIndex = MutableStateFlow(0)
     val isHundredTabIndex = _isHundredTabIndex.asStateFlow()
@@ -252,6 +253,11 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
 
     //Actions Start: User actions reported by the UI to the ViewModel
+
+    fun actionChangeDatePickerVisibility(datePickerShownValue: Boolean) {
+        _datePickerShown.value = datePickerShownValue
+    }
+
     fun actionShowDeleteAlertDialog(item: Entry) {
         _categoryItemDeleteObject.value = item
         _categoryItemDeleteDialog.value = true
@@ -309,14 +315,6 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             database.appDao().deleteLastEntry()
         }
     }
-
-    //Deprecated:Start
-    fun actionChangeDateOfEntry(localDate: LocalDate) {
-        val zoneId = ZoneId.systemDefault()
-        val epoch: Long = localDate.atStartOfDay(zoneId).toEpochSecond()
-        _dateOfEntryEpochSec.value = epoch
-    }
-    //Deprecated: End
 
     fun actionChangeDateOfEntryM3(epochSec: Long) {
         _dateOfEntryEpochSec.value = epochSec
