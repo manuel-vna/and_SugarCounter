@@ -202,11 +202,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             checkGramThreshold()
         }
     }
+    //Saving an Entry: End
 
+
+    //Checking an Entry: Start
     private fun checkGramThreshold() {
         viewModelScope.launch(Dispatchers.IO) {
             val dateString = helperMethods.formatDateToString(
-                epochTimestampSecondsNow,
+                dateOfEntryEpochSec.value,
                 "YYYY-MM-dd"
             )
             val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString)
@@ -220,7 +223,8 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-    //Saving an Entry: End
+    //Checking an Entry: End
+
 
     //Loading an Entry: End
     fun loadLastEntryForGivenCategory() {
@@ -244,12 +248,10 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     }
     //Loading an Entry: End
 
-
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
         return helperMethods.calculateTotalGramPerDayBlock(valueList)
     }
-
-
+    
     //Actions Start: User actions reported by the UI to the ViewModel
 
     fun actionChangeDatePickerVisibility(datePickerShownValue: Boolean) {
