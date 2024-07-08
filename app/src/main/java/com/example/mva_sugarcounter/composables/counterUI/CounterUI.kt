@@ -110,7 +110,6 @@ fun Counter(context: Context) {
                 .padding(top = 16.dp, bottom = 16.dp),
             Arrangement.Absolute.SpaceAround
         ) {
-            //DatePicker(counterVM = counterVM, helperMethods = helperMethods)
             DatePicker(counterVM = counterVM, helperMethods = helperMethods)
 
             Barcode(counterVM)
@@ -171,7 +170,6 @@ fun Counter(context: Context) {
                 }
             )
 
-
             AnimatedVisibility(visible = expanded) {
                 Card(
                     modifier = Modifier
@@ -185,29 +183,13 @@ fun Counter(context: Context) {
                         modifier = Modifier.heightIn(max = 150.dp),
                     ) {
 
-                        if (category.isNotEmpty()) {
-                            items(
-                                categories.filter {
-                                    it.lowercase()
-                                        .contains(category.lowercase()) || it.lowercase()
-                                        .contains("others")
-                                }
-                                    .sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    counterVM.actionChangeSelectedCategory(title)
-                                    expanded = false
-                                }
-                            }
-                        } else {
-                            items(
-                                categories.sorted()
-                            ) {
-                                CategoryItems(title = it) { title ->
-                                    counterVM.actionChangeSelectedCategory(title)
-                                    expanded = false
-                                    counterVM.loadLastEntryForGivenCategory()
-                                }
+                        items(
+                            categories.sorted()
+                        ) {
+                            CategoryItems(title = it) { title ->
+                                counterVM.actionChangeSelectedCategory(title)
+                                expanded = false
+                                counterVM.loadLastEntryForGivenCategory()
                             }
                         }
                     }

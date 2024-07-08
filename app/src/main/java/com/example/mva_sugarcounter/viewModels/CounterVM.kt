@@ -11,7 +11,6 @@ import com.example.mva_sugarcounter.data.GramCountMode
 import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -221,11 +220,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+    //Saving an Entry: End
 
+    //Loading an Entry: End
     fun loadLastEntryForGivenCategory() {
         viewModelScope.launch(Dispatchers.IO) {
-            val asyncAnswer = async { checkForExistingGramValue(_categorySelected.value) }
-            val entryReply = asyncAnswer.await()
+
+            val entryReply =
+                database.appDao().checkIfGramValueExistsForCategory(_categorySelected.value)
 
             withContext(Dispatchers.Main) {
                 if (entryReply?.perPieceGram != 0) {
@@ -233,18 +235,14 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
                     _perHundredGram.value = ""
                     _isHundredTabIndex.value = 1
                 } else {
-                    _perHundredGram.value = entryReply?.perHundredGram.toString()
+                    _perHundredGram.value = entryReply.perHundredGram.toString()
                     _perPieceGram.value = ""
                     _isHundredTabIndex.value = 0
                 }
             }
         }
     }
-
-    private fun checkForExistingGramValue(category: String): Entry? {
-        return database.appDao().checkIfGramValueExistsForCategory(category)
-    }
-    //Saving an Entry: End
+    //Loading an Entry: End
 
 
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {

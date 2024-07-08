@@ -28,7 +28,7 @@ interface DaoAppDatabase {
     fun deleteLastEntry()
 
     @Query("""SELECT * FROM entry_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
-    fun checkIfGramValueExistsForCategory(category: String): Entry?
+    suspend fun checkIfGramValueExistsForCategory(category: String): Entry?
 
     @Query("""SELECT SUM(gramTotal) FROM entry_table WHERE date = :dateString""")
     fun checkIfGramThresholdIsBreached(dateString: String): Int?
