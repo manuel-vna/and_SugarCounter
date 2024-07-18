@@ -183,13 +183,28 @@ fun Counter(context: Context) {
                         modifier = Modifier.heightIn(max = 150.dp),
                     ) {
 
-                        items(
-                            categories.sorted()
-                        ) {
-                            CategoryItems(title = it) { title ->
-                                counterVM.actionChangeSelectedCategory(title)
-                                expanded = false
-                                counterVM.loadLastEntryForGivenCategory()
+                        if (category.isNotEmpty()) {
+                            items(
+                                categories.filter {
+                                    it.lowercase()
+                                        .contains(category.lowercase())
+                                }
+                                    .sorted()
+                            ) {
+                                CategoryItems(title = it) { title ->
+                                    counterVM.actionChangeSelectedCategory(title)
+                                    expanded = false
+                                }
+                            }
+                        } else {
+                            items(
+                                categories.sorted()
+                            ) {
+                                CategoryItems(title = it) { title ->
+                                    counterVM.actionChangeSelectedCategory(title)
+                                    expanded = false
+                                    counterVM.loadLastEntryForGivenCategory()
+                                }
                             }
                         }
                     }
@@ -198,7 +213,6 @@ fun Counter(context: Context) {
         }
 
         TabRow(counterVM)
-
 
         Row(
             modifier = Modifier
