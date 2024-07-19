@@ -38,6 +38,9 @@ fun Settings(context: Context) {
     val categoryScreenShown by categoryListingVM.categoryListShown.collectAsState()
     val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
+    //Testing
+    settingsVM.actionUpdateGramThresholdSharedPref()
+
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM, categoryListingVM)
     }

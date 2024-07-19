@@ -1,5 +1,7 @@
 package com.example.mva_sugarcounter.viewModels
 
+import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.Entry
@@ -11,11 +13,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 import kotlin.random.Random
 
 class SettingsVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
+    private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
 
     //SateFlows: START
     val _settingsScreenShown = MutableStateFlow(true)
@@ -27,6 +31,8 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _faqExpandedId = MutableStateFlow(-1L)
     var faqSingleSelectMode = _faqExpandedId.asStateFlow()
 
+    val _gramThreshold = MutableStateFlow("")
+    val gramThreshold = _gramThreshold.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -48,6 +54,19 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     fun actionChangeExpandedId(id: Long) {
         _faqExpandedId.value = id
+    }
+
+    fun actionUpdateGramThresholdSharedPref() {
+        //Testing:START
+        _gramThreshold.value = "50"
+        //Testing:END
+        if (_gramThreshold.value != "") {
+            val editorSharedPrefsMain = sharedPrefsMain.edit()
+            editorSharedPrefsMain.putInt("gramThresholdValue", _gramThreshold.value.toInt())
+            editorSharedPrefsMain.apply()
+        } else {
+            Log.d("Tag", "Gram Threshold: $gramThreshold")
+        }
     }
     //Actions: END
 

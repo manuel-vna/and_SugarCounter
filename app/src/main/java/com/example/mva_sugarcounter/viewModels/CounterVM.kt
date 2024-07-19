@@ -1,5 +1,6 @@
 package com.example.mva_sugarcounter.viewModels
 
+import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.qualifier.named
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.math.roundToInt
@@ -23,6 +25,7 @@ import kotlin.math.roundToInt
 class CounterVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
+    private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
 
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
 
@@ -215,7 +218,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
             withContext(Dispatchers.Main) {
                 databaseSum?.let {
-                    if (databaseSum > 45) {
+                    if (databaseSum > sharedPrefsMain.getInt("gramThresholdValue", 50)) {
                         _alertDialogGramThreshold.value = true
                     }
                 }
