@@ -23,13 +23,14 @@ import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun Settings(context: Context) {
 
     //get an instance of the ViewModel
-    val settingsVM: SettingsVM = viewModel()
+    val settingsVM: SettingsVM = koinViewModel()
     val categoryListingVM: CategoryListingVM = viewModel()
 
     //collecting states

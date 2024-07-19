@@ -29,20 +29,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.states.CategoryListingStates
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun CategoriesScreen(context: Context) {
 
     //get an instance of the ViewModel
-    val categoryListingVM: CategoryListingVM = viewModel()
-    val settingsVM: SettingsVM = viewModel()
+    val categoryListingVM: CategoryListingVM = koinViewModel()
+    val settingsVM: SettingsVM = koinViewModel()
 
     val categoryListShown by categoryListingVM.categoryListShown.collectAsState()
     val categories by categoryListingVM.categories.collectAsState()

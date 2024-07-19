@@ -27,16 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.data.Faq
 import com.example.mva_sugarcounter.data.faqDataList
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.SettingsVM
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FAQScreen(context: Context) {
 
-    val settingsVM: SettingsVM = viewModel()
+    val settingsVM: SettingsVM = koinViewModel()
     val expandedId by settingsVM.faqSingleSelectMode.collectAsState()
 
     BackHandler {

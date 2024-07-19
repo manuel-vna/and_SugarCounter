@@ -20,7 +20,7 @@ import java.time.ZoneId
 import kotlin.math.roundToInt
 
 
-class CounterVM() : ViewModel(), KoinComponent {
+class CounterVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
 

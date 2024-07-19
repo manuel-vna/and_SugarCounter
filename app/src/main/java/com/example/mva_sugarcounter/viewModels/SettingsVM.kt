@@ -1,7 +1,6 @@
 package com.example.mva_sugarcounter.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.database.AppDatabase
@@ -10,11 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.random.Random
 
-class SettingsVM(private val application: Application) : AndroidViewModel(application) {
+class SettingsVM : ViewModel(), KoinComponent {
 
-    private val database = AppDatabase.getInstance(this.getApplication())
+    private val database by inject<AppDatabase>()
 
     //SateFlows: START
     val _settingsScreenShown = MutableStateFlow(true)

@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.viewModels.CounterVM
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ShowSugarCountItemsShared(
@@ -40,7 +40,7 @@ fun ShowSugarCountItemsShared(
     backgroundColorPrimary: Boolean
 ) {
 
-    val counterVM: CounterVM = viewModel()
+    val counterVM: CounterVM = koinViewModel()
     val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(valueList)
 
     Card(

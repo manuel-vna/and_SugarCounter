@@ -1,20 +1,21 @@
 package com.example.mva_sugarcounter.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.states.CategoryListingStates
+import com.example.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class CategoryListingVM(private val application: Application) : AndroidViewModel(application) {
+class CategoryListingVM : ViewModel(), KoinComponent {
 
-    private val database = AppDatabase.getInstance(this.getApplication())
+    private val database by inject<AppDatabase>()
 
     //SateFlows: START
     val _categoryListShown = MutableStateFlow(false)

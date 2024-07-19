@@ -28,17 +28,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.GraphData
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.HistoryVM
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun History(context: Context) {
 
-    val historyVM: HistoryVM = viewModel()
+    val historyVM: HistoryVM = koinViewModel()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()

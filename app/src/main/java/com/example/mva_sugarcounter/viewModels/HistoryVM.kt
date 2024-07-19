@@ -1,20 +1,21 @@
 package com.example.mva_sugarcounter.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.database.AppDatabase
 import com.example.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.time.LocalDate
 import java.time.ZoneId
 
 
-class HistoryVM(application: Application) : AndroidViewModel(application) {
+class HistoryVM : ViewModel(), KoinComponent {
 
-    private val database = AppDatabase.getInstance(this.getApplication())
+    private val database by inject<AppDatabase>()
 
     //Timestamps: START
     private val today = LocalDate.now()
