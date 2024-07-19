@@ -93,6 +93,8 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.3.1")
 
     //DI
-    implementation("io.insert-koin:koin-android:3.5.3")
-    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    testImplementation(libs.koin.test.junit4)
+    implementation("androidx.compose.runtime:runtime:1.0.0")
 }

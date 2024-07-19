@@ -1,9 +1,7 @@
 package com.example.mva_sugarcounter.viewModels
 
-
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.Entry
@@ -15,15 +13,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.math.roundToInt
 
 
-class CounterVM(application: Application) : AndroidViewModel(application) {
+class CounterVM() : ViewModel(), KoinComponent {
 
-    val helperMethods: HelperMethods = HelperMethods(application)
-    private val database = AppDatabase.getInstance(this.getApplication())
+    private val database by inject<AppDatabase>()
 
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
 
@@ -99,7 +98,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
 
     // Observer that is used to observe Dao of RoomDB
     private val todayObserverObject = Observer<List<Entry>> {
-        val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
+        val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
         _savedEntriesToday.value = savedSugarCountGrouped
     }
 
@@ -181,7 +180,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
             database.appDao().insertEntry(
                 Entry(
                     currentTimestamp = dateOfEntryEpochSec.value,
-                    date = helperMethods.formatDateToString(
+                    date = HelperMethods.formatDateToString(
                         dateOfEntryEpochSec.value,
                         "YYYY-MM-dd"
                     ),
@@ -208,7 +207,7 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     //Checking an Entry: Start
     private fun checkGramThreshold() {
         viewModelScope.launch(Dispatchers.IO) {
-            val dateString = helperMethods.formatDateToString(
+            val dateString = HelperMethods.formatDateToString(
                 dateOfEntryEpochSec.value,
                 "YYYY-MM-dd"
             )
@@ -249,9 +248,9 @@ class CounterVM(application: Application) : AndroidViewModel(application) {
     //Loading an Entry: End
 
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
-        return helperMethods.calculateTotalGramPerDayBlock(valueList)
+        return HelperMethods.calculateTotalGramPerDayBlock(valueList)
     }
-    
+
     //Actions Start: User actions reported by the UI to the ViewModel
 
     fun actionChangeDatePickerVisibility(datePickerShownValue: Boolean) {

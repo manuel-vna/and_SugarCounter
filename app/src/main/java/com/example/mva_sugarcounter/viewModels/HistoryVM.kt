@@ -15,7 +15,6 @@ import java.time.ZoneId
 class HistoryVM(application: Application) : AndroidViewModel(application) {
 
     private val database = AppDatabase.getInstance(this.getApplication())
-    val helperMethods: HelperMethods = HelperMethods(application)
 
     //Timestamps: START
     private val today = LocalDate.now()
@@ -40,7 +39,7 @@ class HistoryVM(application: Application) : AndroidViewModel(application) {
 
     //Observer: START
     private val historyObserver = Observer<List<Entry>> {
-        val savedSugarCountGrouped = helperMethods.groupCounterItemsInGroupsByDay(it)
+        val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
         _savedHistory.value = savedSugarCountGrouped
     }
 

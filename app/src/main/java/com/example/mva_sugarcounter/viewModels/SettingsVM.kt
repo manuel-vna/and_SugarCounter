@@ -14,7 +14,6 @@ import kotlin.random.Random
 
 class SettingsVM(private val application: Application) : AndroidViewModel(application) {
 
-    private val helperMethods: HelperMethods = HelperMethods(application)
     private val database = AppDatabase.getInstance(this.getApplication())
 
     //SateFlows: START
@@ -63,7 +62,7 @@ class SettingsVM(private val application: Application) : AndroidViewModel(applic
                 database.appDao().insertEntry(
                     Entry(
                         currentTimestamp = timestamp,
-                        date = helperMethods.formatDateToString(
+                        date = HelperMethods.formatDateToString(
                             timestamp,
                             "YYYY-MM-dd"
                         ),

@@ -57,19 +57,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.CounterVM
+import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Counter(context: Context) {
 
-    val helperMethods = HelperMethods(context)
-    val counterVM: CounterVM = viewModel()
+    val counterVM: CounterVM = koinViewModel()
 
     val categories by counterVM.categories.collectAsState()
     val category by counterVM.categorySelected.collectAsState()
@@ -110,7 +109,7 @@ fun Counter(context: Context) {
                 .padding(top = 16.dp, bottom = 16.dp),
             Arrangement.Absolute.SpaceAround
         ) {
-            DatePicker(counterVM = counterVM, helperMethods = helperMethods)
+            DatePicker(counterVM = counterVM)
 
             Barcode(counterVM)
         }
@@ -346,7 +345,6 @@ fun Barcode(counterVM: CounterVM) {
 @Composable
 fun DatePicker(
     counterVM: CounterVM,
-    helperMethods: HelperMethods,
 ) {
 
     val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
@@ -363,7 +361,7 @@ fun DatePicker(
             onClick = {
                 counterVM.actionChangeDatePickerVisibility(!datePickerShown)
             }) {
-            Text(helperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
+            Text(HelperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
         }
     }
 

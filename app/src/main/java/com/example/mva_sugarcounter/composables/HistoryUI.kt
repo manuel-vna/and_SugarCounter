@@ -38,8 +38,6 @@ import com.example.mva_sugarcounter.viewModels.HistoryVM
 @Composable
 fun History(context: Context) {
 
-    val helperMethods = HelperMethods(context)
-
     val historyVM: HistoryVM = viewModel()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
@@ -74,10 +72,10 @@ fun History(context: Context) {
                 savedSugarCountGrouped.values.toList().takeLast(35).mapIndexed { id, value ->
                     GraphData(
                         id = id,
-                        gramTotal = helperMethods.calculateTotalGramPerDayBlock(value),
-                        day = helperMethods.formatDateToString(
+                        gramTotal = HelperMethods.calculateTotalGramPerDayBlock(value),
+                        day = HelperMethods.formatDateToString(
                             value.first().currentTimestamp,
-                            if (helperMethods.getSystemLanguage() == "en") {
+                            if (HelperMethods.getSystemLanguage() == "en") {
                                 "EEEE \n MM/dd"
                             } else {
                                 "EEEE \n dd.MM"
@@ -89,7 +87,7 @@ fun History(context: Context) {
 
             val graphDataListSorted = graphDataList.sortedByDescending { it.date }
 
-            val darkMode = helperMethods.checkForUIMode(context)
+            val darkMode = HelperMethods.checkForUIMode(context)
             LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
         }
     }

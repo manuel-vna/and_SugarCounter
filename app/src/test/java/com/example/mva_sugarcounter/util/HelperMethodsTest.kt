@@ -24,41 +24,38 @@ class HelperMethodsTest {
 
 
     @Test
-    fun timestampIsTodayOrYesterday_checkToday(){
-        val helperMethods = HelperMethods(mockContext)
+    fun timestampIsTodayOrYesterday_checkToday() {
 
         mockkStatic(DateUtils::class)
         mockk<DateUtils>()
-        every { DateUtils.isToday(any())  } returns true
+        every { DateUtils.isToday(any()) } returns true
 
         val timeString =
-            helperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         assertEquals(timeString, HelperMethods.TodayOrYesterday.TODAY)
     }
 
     @Test
-    fun timestampIsTodayOrYesterday_checkLater(){
-        val helperMethods = HelperMethods(mockContext)
+    fun timestampIsTodayOrYesterday_checkLater() {
+
 
         mockkStatic(DateUtils::class)
         mockk<DateUtils>()
-        every { DateUtils.isToday(any())  } returns false
+        every { DateUtils.isToday(any()) } returns false
 
         val timeString =
-            helperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         assertEquals(timeString, HelperMethods.TodayOrYesterday.LATER)
     }
 
     @Test
     fun formatDateToString() {
-        val helperMethods = HelperMethods(mockContext)
-        val dateString = helperMethods.formatDateToString(1716152163, "YYYY-MM-dd")
+        val dateString = HelperMethods.formatDateToString(1716152163, "YYYY-MM-dd")
         assertEquals(dateString, "2024-05-19")
     }
 
     @Test
     fun calculateTotalGramPerDayBlock() {
-        val helperMethods = HelperMethods(mockContext)
 
         val exampleListWithEntries = listOf(
             Entry(
@@ -99,7 +96,8 @@ class HelperMethodsTest {
             )
         ) // gramTotal = 9 + 16 + 13 = 32
 
-        val totalGramPerDayBlock = helperMethods.calculateTotalGramPerDayBlock(exampleListWithEntries)
+        val totalGramPerDayBlock =
+            HelperMethods.calculateTotalGramPerDayBlock(exampleListWithEntries)
         assertEquals(totalGramPerDayBlock, 38)
     }
 

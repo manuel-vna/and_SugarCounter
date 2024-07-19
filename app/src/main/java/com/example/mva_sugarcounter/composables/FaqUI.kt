@@ -36,7 +36,6 @@ import com.example.mva_sugarcounter.viewModels.SettingsVM
 @Composable
 fun FAQScreen(context: Context) {
 
-    val helperMethods = HelperMethods(context)
     val settingsVM: SettingsVM = viewModel()
     val expandedId by settingsVM.faqSingleSelectMode.collectAsState()
 
@@ -45,7 +44,7 @@ fun FAQScreen(context: Context) {
         settingsVM.actionShowSettingsScreen()
     }
 
-    val darkMode = helperMethods.checkForUIMode(context)
+    val darkMode = HelperMethods.checkForUIMode(context)
     var fontColor = Color.Black
 
 
