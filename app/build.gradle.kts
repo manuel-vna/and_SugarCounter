@@ -91,4 +91,8 @@ dependencies {
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
+
+    //DI
+    implementation("io.insert-koin:koin-android:3.5.3")
+    implementation("io.insert-koin:koin-androidx-compose:3.5.3")
 }
