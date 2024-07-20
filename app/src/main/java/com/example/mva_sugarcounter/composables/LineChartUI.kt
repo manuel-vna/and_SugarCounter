@@ -1,5 +1,6 @@
 package com.example.mva_sugarcounter.composables
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -20,9 +21,15 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mva_sugarcounter.data.GraphData
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
-fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
+fun LineChart(
+    graphDataList: List<GraphData>,
+    darkMode: Int,
+    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+) {
 
     var backgroundColor = Color.White
     var drawColor = Color.Black
@@ -61,6 +68,7 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             modifier = Modifier
                 .aspectRatio(4 / 1f)
                 .padding(top = 42.dp, bottom = 42.dp)
+                .background(Color.Blue)
         ) {
 
             //DrawScope variables
@@ -70,16 +78,24 @@ fun LineChart(graphDataList: List<GraphData>, darkMode: Int) {
             val oneWidthSection = size.width / 35 // width is divided in x sections
             val oneHeightSection =
                 size.height / 20 // height is divided in 20 sections ( 18 x 5er steps + 2 extra horizontal spaces at the bottom)
-            val fortyFiveGramLineHeight =
-                onePercentHeight * 45 // maximal gram threshold
+
+            val thresholdLineHeight =
+                onePercentHeight * (90 - sharedPrefsMain.getInt(
+                    "gramThresholdValue",
+                    50
+                ))
+            // thresholdLineHeight explanation: 90 is subtracted from the users threshold gram choice since the graph has 9*10 areas.
+            // The 10th 10-area is used by x-axis text (Friday, 01.07.2024,...)
+            // The subtraction is needed because the 0,0-point is in the top-left of the graph.
+
             val path = Path()
             // create array that tags the x axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
             val lineGraphYAxisGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
 
             drawLine(
                 thresholdLineColor,
-                start = Offset(oneWidthSection, fortyFiveGramLineHeight),
-                end = Offset(size.width, fortyFiveGramLineHeight),
+                start = Offset(oneWidthSection, thresholdLineHeight),
+                end = Offset(size.width, thresholdLineHeight),
                 strokeWidth = barWidthPix * 3
             )
 

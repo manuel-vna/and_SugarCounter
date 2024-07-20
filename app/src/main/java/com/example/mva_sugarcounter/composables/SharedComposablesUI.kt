@@ -1,6 +1,7 @@
 package com.example.mva_sugarcounter.composables
 
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -32,22 +33,27 @@ import com.example.mva_sugarcounter.R
 import com.example.mva_sugarcounter.data.Entry
 import com.example.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
 fun ShowSugarCountItemsShared(
     key: String,
     valueList: List<Entry>,
-    backgroundColorPrimary: Boolean
+    backgroundColorPrimary: Boolean,
+    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
 
     val counterVM: CounterVM = koinViewModel()
+
     val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(valueList)
+    val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 12.dp),
-        border = if (totalGramPerDayBlock > 45) {
+        border = if (totalGramPerDayBlock > gramThresholdValue) {
             BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
         } else if (backgroundColorPrimary) {
             BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
@@ -145,10 +151,10 @@ fun ShowSugarCountItemsShared(
 
             Icon(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                painter = if (totalGramPerDayBlock <= 45) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
+                painter = if (totalGramPerDayBlock <= gramThresholdValue) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
-                tint = if (totalGramPerDayBlock > 45) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
+                tint = if (totalGramPerDayBlock > gramThresholdValue) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
                 contentDescription = "",
             )
 
