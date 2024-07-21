@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.historyUI
 
 import android.content.SharedPreferences
 import androidx.compose.foundation.Canvas

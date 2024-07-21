@@ -42,4 +42,6 @@
     <string name="faq_answer_one">Eine Idee dieser App ist, ein besseres Gefühl für seinen Zuckerkonsum zu entwickeln. Das eigenstädnige Eingeben der Zuckerwerte soll dies unterstüzuen, in dem man die Zuckermengen selbst einträgt.</string>
     <string name="faq_question_two">Frage 2</string>
     <string name="faq_answer_two">Antwort 2</string>
+    <string name="gram_threshold_title">Ihre tägliche Zucker-Obergrenze</string>
+    <string name="gram_threshold_description"> Gramm</string>
 </resources>

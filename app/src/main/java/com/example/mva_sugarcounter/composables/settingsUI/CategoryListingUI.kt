@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
 import androidx.activity.compose.BackHandler

@@ -33,6 +33,9 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     val _gramThreshold = MutableStateFlow("")
     val gramThreshold = _gramThreshold.asStateFlow()
+
+    val _gramThresholdSlider = MutableStateFlow(0F)
+    val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -56,10 +59,9 @@ class SettingsVM : ViewModel(), KoinComponent {
         _faqExpandedId.value = id
     }
 
-    fun actionUpdateGramThresholdSharedPref() {
-        //Testing:START
-        _gramThreshold.value = "50"
-        //Testing:END
+    fun actionUpdateGramThresholdSharedPref(gramThreshold: String) {
+        _gramThreshold.value = gramThreshold
+
         if (_gramThreshold.value != "") {
             val editorSharedPrefsMain = sharedPrefsMain.edit()
             editorSharedPrefsMain.putInt("gramThresholdValue", _gramThreshold.value.toInt())
@@ -68,6 +70,11 @@ class SettingsVM : ViewModel(), KoinComponent {
             Log.d("Tag", "Gram Threshold: $gramThreshold")
         }
     }
+
+    fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
+        _gramThresholdSlider.value = sliderPosition
+    }
+
     //Actions: END
 
 

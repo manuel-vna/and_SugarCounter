@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.historyUI
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.example.mva_sugarcounter.data.GraphData
 import com.example.mva_sugarcounter.util.HelperMethods
 import com.example.mva_sugarcounter.viewModels.HistoryVM

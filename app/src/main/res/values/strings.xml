@@ -41,4 +41,6 @@
     <string name="faq_answer_one">Antwort 1</string>
     <string name="faq_question_two">Frage 2</string>
     <string name="faq_answer_two">Antwort 2</string>
+    <string name="gram_threshold_title">Your daily sugar limit</string>
+    <string name="gram_threshold_description"> gram</string>
 </resources>

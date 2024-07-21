@@ -1,14 +1,16 @@
-package com.example.mva_sugarcounter.composables
+package com.example.mva_sugarcounter.composables.settingsUI
 
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -24,6 +26,8 @@ import com.example.mva_sugarcounter.viewModels.CategoryListingVM
 import com.example.mva_sugarcounter.viewModels.SettingsVM
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 
 @Composable
@@ -39,7 +43,7 @@ fun Settings(context: Context) {
     val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
     //Testing
-    settingsVM.actionUpdateGramThresholdSharedPref()
+    settingsVM.actionUpdateGramThresholdSharedPref("50")
 
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM, categoryListingVM)
@@ -56,12 +60,22 @@ fun Settings(context: Context) {
 }
 
 @Composable
-fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: CategoryListingVM) {
+fun SettingsScreen(
+    context: Context,
+    settingsVM: SettingsVM,
+    categoryListingVM: CategoryListingVM,
+    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+) {
     Column(
-        modifier = Modifier.padding(top = 16.dp),
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalAlignment = Alignment.End
+        horizontalAlignment = Alignment.End,
     ) {
+        SettingsSliderGramThreshold(
+            sharedPrefsMain,
+            settingsVM
+        )
+
         SettingsButtonCategories(
             categoryListingVM,
             settingsVM,
@@ -78,6 +92,30 @@ fun SettingsScreen(context: Context, settingsVM: SettingsVM, categoryListingVM: 
             settingsVM,
             stringResource(id = R.string.settings_button_faq_text),
             R.drawable.baseline_read_more_24,
+        )
+    }
+}
+
+@Composable
+fun SettingsSliderGramThreshold(
+    sharedPrefsMain: SharedPreferences,
+    settingsVM: SettingsVM
+) {
+
+    val sliderPosition by settingsVM.gramThresholdSlider.collectAsState()
+
+    Column {
+
+        Text(text = stringResource(id = R.string.gram_threshold_title))
+
+        Slider(
+            value = sliderPosition,
+            onValueChange = { settingsVM.actionUpdateGramThresholdSlider(it) },
+            valueRange = 0f..100f
+        )
+        Text(
+            text = sliderPosition.toInt()
+                .toString() + " " + stringResource(id = R.string.gram_threshold_description)
         )
     }
 }
