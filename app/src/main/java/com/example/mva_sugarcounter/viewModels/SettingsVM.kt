@@ -1,7 +1,6 @@
 package com.example.mva_sugarcounter.viewModels
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mva_sugarcounter.data.Entry
@@ -31,11 +30,11 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _faqExpandedId = MutableStateFlow(-1L)
     var faqSingleSelectMode = _faqExpandedId.asStateFlow()
 
-    val _gramThreshold = MutableStateFlow("")
-    val gramThreshold = _gramThreshold.asStateFlow()
-
     val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
+
+    val _gramThresholDialogCheck = MutableStateFlow(false)
+    val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -59,22 +58,26 @@ class SettingsVM : ViewModel(), KoinComponent {
         _faqExpandedId.value = id
     }
 
-    fun actionUpdateGramThresholdSharedPref(gramThreshold: String) {
-        _gramThreshold.value = gramThreshold
-
-        if (_gramThreshold.value != "") {
-            val editorSharedPrefsMain = sharedPrefsMain.edit()
-            editorSharedPrefsMain.putInt("gramThresholdValue", _gramThreshold.value.toInt())
-            editorSharedPrefsMain.apply()
-        } else {
-            Log.d("Tag", "Gram Threshold: $gramThreshold")
-        }
+    fun actionUpdateGramThresholdSharedPref() {
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putInt("gramThresholdValue", _gramThresholdSlider.value.toInt())
+        editorSharedPrefsMain.apply()
     }
 
     fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
         _gramThresholdSlider.value = sliderPosition
     }
 
+    fun actionGramThresholdDialogCheck(isShown: Boolean) {
+        _gramThresholDialogCheck.value = isShown
+    }
+
+    fun actionResetGramThresholdSliderToSharedPref() {
+        _gramThresholdSlider.value = sharedPrefsMain.getInt(
+            "gramThresholdValue",
+            50
+        ).toFloat()
+    }
     //Actions: END
 
 

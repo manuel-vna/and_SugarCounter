@@ -22,6 +22,7 @@
     <string name="generalConfirm">Confirm</string>
     <string name="generalCancel">Cancel</string>
     <string name="generalClose">Close</string>
+    <string name="general_gram">gram</string>
     <string name="alertGramThresholdTitle">Warning</string>
     <string name="alertGramThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
     <string name="alertGramThresholdConfirmBtn">Delete it</string>
@@ -42,5 +43,5 @@
     <string name="faq_question_two">Frage 2</string>
     <string name="faq_answer_two">Antwort 2</string>
     <string name="gram_threshold_title">Your daily sugar limit</string>
-    <string name="gram_threshold_description"> gram</string>
+    <string name="gram_threshold_dialog_title">Select this value as your new daily sugar limit?</string>
 </resources>

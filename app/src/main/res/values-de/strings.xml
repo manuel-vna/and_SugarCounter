@@ -23,6 +23,7 @@
     <string name="generalConfirm">Bestätigen</string>
     <string name="generalCancel">Abbrechen</string>
     <string name="generalClose">Schließen</string>
+    <string name="general_gram">Gramm</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
@@ -43,5 +44,5 @@
     <string name="faq_question_two">Frage 2</string>
     <string name="faq_answer_two">Antwort 2</string>
     <string name="gram_threshold_title">Ihre tägliche Zucker-Obergrenze</string>
-    <string name="gram_threshold_description"> Gramm</string>
+    <string name="gram_threshold_dialog_title">Diesen Wert als neue Zucker-Obergrenze g´festlegen?</string>
 </resources>
