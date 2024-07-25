@@ -1,7 +1,6 @@
 package com.example.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,10 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mva_sugarcounter.R
+import com.example.mva_sugarcounter.composables.SharedToppAppBar
 import com.example.mva_sugarcounter.data.Category
 import com.example.mva_sugarcounter.data.states.CategoryListingStates
 import com.example.mva_sugarcounter.viewModels.CategoryListingVM
@@ -62,44 +61,30 @@ fun CategoryList(
     deletionCheckboxes: CategoryListingStates
 ) {
 
-
-    BackHandler {
-        categoryListingVM.actionHideCategories()
-        settingsVM.actionShowSettingsScreen()
-    }
-
     Column {
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
-                textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.categoriesScreenDescription)
-            )
-
-            IconButton(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.CenterEnd),
-                onClick = {
-                    if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-                        categoryListingVM.actionHideDeletionCheckboxes()
-                    } else {
-                        categoryListingVM.actionShowDeletionCheckboxes()
-                    }
-                }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Delete,
-                    contentDescription = "arrow",
-                )
+        SharedToppAppBar(appBarTitle = stringResource(R.string.categoriesScreenDescription),
+            onBackClickAction = {
+                categoryListingVM.actionHideCategories()
+                settingsVM.actionShowSettingsScreen()
+            },
+            actionIconFirst = {
+                IconButton(
+                    onClick = {
+                        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                            categoryListingVM.actionHideDeletionCheckboxes()
+                        } else {
+                            categoryListingVM.actionShowDeletionCheckboxes()
+                        }
+                    }) {
+                    Icon(
+                        modifier = Modifier.size(28.dp),
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = "arrow",
+                    )
+                }
             }
-        }
+        )
 
         Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
 
@@ -113,7 +98,7 @@ fun CategoryList(
                     modifier = Modifier.padding(8.dp),
                     onClick = { categoryListingVM.actionDeleteCheckedCategories() }
                 ) {
-                    Text("Delete")
+                    Text(stringResource(id = R.string.general_delete))
                 }
 
             }

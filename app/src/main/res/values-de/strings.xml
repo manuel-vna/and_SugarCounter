@@ -18,12 +18,12 @@
     <string name="noGramValueInDatabaseYetDescription">Hierzu liegt noch keine Grammangabe vor. Bitte fülle das Feld \'Gramm Zucker\' aus.</string>
     <string name="settingsCategoriesText">Kategorien anzeigen</string>
     <string name="categoriesScreenDescription">Kategorien</string>
-    <string name="deleteCategroyAlertTitle">Löschen</string>
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>
     <string name="generalCancel">Abbrechen</string>
     <string name="generalClose">Schließen</string>
     <string name="general_gram">Gramm</string>
+    <string name="general_delete">Löschen</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
@@ -39,6 +39,7 @@
     <string name="tabCounterPerHundred">Zucker/100g</string>
     <string name="tabCounterPerPiece">Zucker/Stück</string>
     <string name="settings_button_faq_text">FAQ</string>
+    <string name="settings_title_faq_text">Häufige Fragen</string>
     <string name="faq_question_one">Warum müssen die Zuckerwete einer Produktkategorie vom Nutzer selbst eingetragen werden?</string>
     <string name="faq_answer_one">Eine Idee dieser App ist, ein besseres Gefühl für seinen Zuckerkonsum zu entwickeln. Das eigenstädnige Eingeben der Zuckerwerte soll dies unterstüzuen, in dem man die Zuckermengen selbst einträgt.</string>
     <string name="faq_question_two">Frage 2</string>
