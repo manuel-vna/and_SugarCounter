@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mva_sugarcounter"
+    namespace = "com.jumparoundcreations.mva_sugarcounter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mva_sugarcounter"
+        applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
