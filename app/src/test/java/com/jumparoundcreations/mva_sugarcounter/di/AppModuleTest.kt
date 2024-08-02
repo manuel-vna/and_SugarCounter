@@ -1,4 +1,4 @@
-package com.example.mva_sugarcounter.di
+package com.jumparoundcreations.mva_sugarcounter.di
 
 import org.koin.core.annotation.KoinExperimentalAPI
 import org.koin.test.KoinTest

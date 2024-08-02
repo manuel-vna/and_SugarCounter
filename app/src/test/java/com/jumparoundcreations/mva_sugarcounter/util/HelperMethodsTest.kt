@@ -1,9 +1,9 @@
-package com.example.mva_sugarcounter.util
+package com.jumparoundcreations.mva_sugarcounter.util
 
 
 import android.content.Context
 import android.text.format.DateUtils
-import com.example.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit4.MockKRule
