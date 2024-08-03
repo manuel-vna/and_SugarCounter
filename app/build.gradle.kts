@@ -1,15 +1,9 @@
-import java.io.ByteArrayOutputStream
-
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
 }
-
-val gitTag = getGitTag2()
-val versionNameValue = getVersionName(gitTag)
-val versionCodeValue = getVersionCode(gitTag)
 
 android {
     namespace = "com.jumparoundcreations.mva_sugarcounter"
@@ -20,7 +14,7 @@ android {
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = gitTag
+        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -67,25 +61,6 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-}
-
-fun getGitTag2(): String {
-    val stdout = ByteArrayOutputStream()
-    exec {
-        commandLine("git", "describe", "--tags", "--long", "--always")
-        standardOutput = stdout
-    }
-    val gitVersion = stdout.toString().trim()
-    println("Git Tag: $gitVersion")
-    return gitVersion
-}
-
-fun getVersionCode(gitTag: String): String {
-    return ""
-}
-
-fun getVersionName(gitTag: String): String {
-    return ""
 }
 
 dependencies {
