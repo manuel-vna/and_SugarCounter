@@ -84,7 +84,7 @@ assembleDebug:
     paths:
       - app/build/outputs/
   except:
-    - $MASTER_BRANCH
+    - "master"
 
 
 assembleRelease:
@@ -102,5 +102,5 @@ assembleRelease:
     name: "sugarCounter-${CI_COMMIT_REF_NAME}"
     expire_in: 1 week
   only:
-    - $MASTER_BRANCH
+    - "master"
 
