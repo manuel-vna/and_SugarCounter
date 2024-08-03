@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mva_sugarcounter"
+    namespace = "com.jumparoundcreations.mva_sugarcounter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mva_sugarcounter"
+        applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -22,9 +22,21 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = System.getenv("SUGAR_COUNTER_KEY_ALIAS") ?: "debug"
+            keyPassword = System.getenv("SUGAR_COUNTER_KEY") ?: "password"
+            storeFile = file(System.getenv("SUGAR_COUNTER_KEY_FILE") ?: "debug.keystore")
+            storePassword = System.getenv("RELEASE_PLAY_CONSOLE_MVA_KEYSTORE") ?: "password"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -83,18 +95,18 @@ dependencies {
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     //Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.7.5")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
 
     //MockK
     testImplementation("io.mockk:mockk:1.13.7")
 
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
 
     //DI
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.0.0")
+    implementation("androidx.compose.runtime:runtime:1.6.8")
 }
