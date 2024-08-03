@@ -78,14 +78,14 @@ debugTests:
     - ./gradlew -Pci --console=plain :app:testDebug
 
 # Make Project
-assembleDebug:
+assemble:
   interruptible: true
   stage: build
   variables:
     SECURE_FILES_DOWNLOAD_PATH: './'
     SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
   script:
-    - ./gradlew assembleRelease
+    - ./gradlew assemble bundleRelease
   artifacts:
     paths:
       - app/build/outputs/
