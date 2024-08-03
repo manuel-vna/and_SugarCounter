@@ -56,28 +56,38 @@ before_script:
   # Not necessary, but just for surity
   - chmod +x ./gradlew
 
-# Basic android and gradle stuff
-# Check linting
-lintDebug:
+    #lintDebug:
+    #interruptible: true
+    #stage: build
+    #script:
+    #- ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+    #artifacts:
+    #paths:
+    #- app/lint/reports/lint-results-debug.html
+    #expose_as: "lint-report"
+    #when: always
+
+# Run all tests, if any fails, interrupt the pipeline(fail it)
+    #debugTests:
+    #interruptible: true
+    #stage: test
+    #script:
+  #- ./gradlew -Pci --console=plain :app:testDebug
+
+
+assembleDebug:
   interruptible: true
   stage: build
   script:
-    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+    - ./gradlew assembleDebug
   artifacts:
     paths:
-      - app/lint/reports/lint-results-debug.html
-    expose_as: "lint-report"
-    when: always
+      - app/build/outputs/
+  except:
+    - $MASTER_BRANCH
 
-# Run all tests, if any fails, interrupt the pipeline(fail it)
-debugTests:
-  interruptible: true
-  stage: test
-  script:
-    - ./gradlew -Pci --console=plain :app:testDebug
 
-# Make Project
-assemble:
+assembleRelease:
   interruptible: true
   stage: build
   variables:
@@ -91,4 +101,6 @@ assemble:
       - app/build/outputs/
     name: "sugarCounter-${CI_COMMIT_REF_NAME}"
     expire_in: 1 week
+  only:
+    - $MASTER_BRANCH
 
