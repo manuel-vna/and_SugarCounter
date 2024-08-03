@@ -84,6 +84,7 @@ assemble:
     SECURE_FILES_DOWNLOAD_PATH: './'
     SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
   script:
+    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assembleRelease
   artifacts:
     paths:
