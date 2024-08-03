@@ -71,7 +71,6 @@ lintDebug:
 
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 debugTests:
-  needs: [ lintDebug, assembleDebug ]
   interruptible: true
   stage: test
   script:
@@ -85,7 +84,7 @@ assemble:
     SECURE_FILES_DOWNLOAD_PATH: './'
     SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
   script:
-    - ./gradlew assemble bundleRelease
+    - ./gradlew assembleRelease
   artifacts:
     paths:
       - app/build/outputs/
