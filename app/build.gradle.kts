@@ -22,6 +22,15 @@ android {
         }
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = System.getenv("SUGAR_COUNTER_KEY_ALIAS") ?: "debug"
+            keyPassword = System.getenv("SUGAR_COUNTER_KEY") ?: "password"
+            storeFile = file(System.getenv("SUGAR_COUNTER_KEY_FILE") ?: "debug.keystore")
+            storePassword = System.getenv("RELEASE_PLAY_CONSOLE_MVA_KEYSTORE") ?: "password"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false

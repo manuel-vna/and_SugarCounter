@@ -69,20 +69,26 @@ lintDebug:
     expose_as: "lint-report"
     when: always
 
-# Make Project
-assembleDebug:
-  interruptible: true
-  stage: build
-  script:
-    - ./gradlew assembleDebug
-  artifacts:
-    paths:
-      - app/build/outputs/
-
 # Run all tests, if any fails, interrupt the pipeline(fail it)
 debugTests:
-  needs: [lintDebug, assembleDebug]
+  needs: [ lintDebug, assembleDebug ]
   interruptible: true
   stage: test
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
+
+# Make Project
+assembleDebug:
+  interruptible: true
+  stage: build
+  variables:
+    SECURE_FILES_DOWNLOAD_PATH: './'
+    SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
+  script:
+    - ./gradlew assembleRelease
+  artifacts:
+    paths:
+      - app/build/outputs/
+    name: "sugarCounter-${CI_COMMIT_REF_NAME}"
+    expire_in: 1 week
+
