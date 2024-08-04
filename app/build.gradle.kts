@@ -67,15 +67,15 @@ tasks.register("writeVersionInfo") {
     doLast {
         val versionCode = android.defaultConfig.versionCode
         val versionName = android.defaultConfig.versionName
-        val versionInfoFile = file("$buildDir/version-info.txt")
+        val versionInfoFile = file("${layout.buildDirectory}/version-info.txt")
         versionInfoFile.parentFile.mkdirs()
         versionInfoFile.writeText("versionCode=$versionCode\nversionName=$versionName")
     }
 }
-
 tasks.named("preBuild") {
     dependsOn("writeVersionInfo")
 }
+
 
 dependencies {
 

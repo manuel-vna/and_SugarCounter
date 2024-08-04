@@ -81,8 +81,7 @@ assembleDebug:
   script:
     - ./gradlew assembleDebug
     - source app/build/version-info.txt
-    #- mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-debug.apk
-    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${versionName}-${versionCode}.apk
+    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}(${versionCode}).apk
   artifacts:
     paths:
       - app/build/outputs/
