@@ -81,7 +81,7 @@ assembleDebug:
   script:
     - ./gradlew assembleDebug
     - source app/build/version-info.txt #file version_info.txt was created in build.gradle.kts:app
-    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}(${versionCode})-debug.apk # renames the apk-file with
+    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}'('${versionCode}')'-debug.apk # renames the apk-file with
   artifacts:
     paths:
       - app/build/outputs/
