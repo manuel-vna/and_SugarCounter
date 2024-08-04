@@ -63,6 +63,19 @@ android {
     }
 }
 
+tasks.register("writeVersionInfo") {
+    doLast {
+        val versionCode = android.defaultConfig.versionCode
+        val versionName = android.defaultConfig.versionName
+        val versionInfoFile = file("${layout.buildDirectory}/version-info.txt")
+        versionInfoFile.writeText("versionCode=$versionCode\nversionName=$versionName")
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn("writeVersionInfo")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
