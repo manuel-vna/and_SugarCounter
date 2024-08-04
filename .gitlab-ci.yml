@@ -81,14 +81,14 @@ assembleDebug:
   script:
     - ./gradlew assembleDebug
     - source app/build/version-info.txt #file version_info.txt was created in build.gradle.kts:app
-    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}'('${versionCode}')'-debug.apk # renames the apk-file with
+    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-debug.apk # renames the apk-file with
   artifacts:
     paths:
-      - app/build/outputs/
-    name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}"
+      - app/build/outputs/ # place artifcts in this directory
+    name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}" #name of the build-zip-file
     expire_in: 1 week
   except:
-    - "master"
+    - "master" #run this job 'assembleDebug' for all branches but not for master
 
 
 assembleRelease:
@@ -101,13 +101,13 @@ assembleRelease:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assemble bundleRelease
     - source app/build/version-info.txt
-    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-v${versionName}'('${versionCode}')'-release.apk
-    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-v${versionName}'('${versionCode}')'-release.aab
+    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-release.apk
+    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-release.aab
   artifacts:
     paths:
       - app/build/outputs/
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}"
     expire_in: 1 week
   only:
-    - "master"
+    - "master" #run this job 'assembleRelease' for branch master only
 
