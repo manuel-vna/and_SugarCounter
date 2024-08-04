@@ -101,8 +101,8 @@ assembleRelease:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assemble bundleRelease
     - source app/build/version-info.txt
-    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-v${versionName}(${versionCode})-release.apk
-    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-v${versionName}(${versionCode})-release.aab
+    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-v${versionName}'('${versionCode}')'-release.apk
+    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-v${versionName}'('${versionCode}')'-release.aab
   artifacts:
     paths:
       - app/build/outputs/
