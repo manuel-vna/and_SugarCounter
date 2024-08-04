@@ -56,23 +56,23 @@ before_script:
   # Not necessary, but just for surity
   - chmod +x ./gradlew
 
-    #lintDebug:
-    #interruptible: true
-    #stage: build
-    #script:
-    #- ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
-    #artifacts:
-    #paths:
-    #- app/lint/reports/lint-results-debug.html
-    #expose_as: "lint-report"
-    #when: always
+lintCheck:
+  interruptible: true
+  stage: build
+  script:
+    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+  artifacts:
+    paths:
+      - app/lint/reports/lint-results-debug.html
+    expose_as: "lint-report"
+    when: always
 
-# Run all tests, if any fails, interrupt the pipeline(fail it)
-    #debugTests:
-    #interruptible: true
-    #stage: test
-    #script:
-  #- ./gradlew -Pci --console=plain :app:testDebug
+
+debugTests:
+  interruptible: true
+  stage: test
+  script:
+    - ./gradlew -Pci --console=plain :app:testDebug
 
 
 assembleDebug:
@@ -89,6 +89,9 @@ assembleDebug:
     expire_in: 1 week
   except:
     - "master" #run this job 'assembleDebug' for all branches but not for master
+  needs:
+    - lintCheck
+    - debugTests
 
 
 assembleRelease:
@@ -110,4 +113,6 @@ assembleRelease:
     expire_in: 1 week
   only:
     - "master" #run this job 'assembleRelease' for branch master only
-
+  needs:
+    - lintCheck
+    - debugTests
