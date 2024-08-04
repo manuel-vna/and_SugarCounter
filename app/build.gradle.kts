@@ -67,7 +67,7 @@ tasks.register("writeVersionInfo") {
     doLast {
         val versionCode = android.defaultConfig.versionCode
         val versionName = android.defaultConfig.versionName
-        val versionInfoFile = file("$buildDir/version-info.txt")
+        val versionInfoFile = file("app/build/version-info.txt")
         versionInfoFile.writeText("versionCode=$versionCode\nversionName=$versionName")
     }
 }
