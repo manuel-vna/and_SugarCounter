@@ -80,9 +80,12 @@ assembleDebug:
   stage: build
   script:
     - ./gradlew assembleDebug
+    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-debug.apk
   artifacts:
     paths:
       - app/build/outputs/
+    name: "sugarCounter-${CI_COMMIT_REF_NAME}"
+    expire_in: 1 week
   except:
     - "master"
 
