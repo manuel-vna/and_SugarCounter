@@ -1,9 +1,17 @@
+import java.io.ByteArrayOutputStream
+import java.util.regex.Pattern
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
 }
+
+// retrieve versionCode and versionName from the last commit-TAG
+val gitVersion = getAppGitVersion().ifEmpty { "v0.0.0" }
+val versionCodeValue = getAppVersionCode(gitVersion)
+val versionNameValue = getAppVersionNameValue(gitVersion)
 
 android {
     namespace = "com.jumparoundcreations.mva_sugarcounter"
@@ -13,8 +21,8 @@ android {
         applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.0.1"
+        versionCode = versionCodeValue // e.g. 1
+        versionName = versionNameValue // e.g. "v0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,6 +84,35 @@ tasks.named("preBuild") {
     dependsOn("writeVersionInfo")
 }
 
+fun getAppGitVersion(): String {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine("git", "describe", "--tags", "--long", "--always")
+        standardOutput = stdout
+    }
+    val gitVersion = stdout.toString().trim()
+    return gitVersion
+}
+
+fun getAppVersionCode(gitVersion: String): Int {
+    var versionCode = ""
+    val pattern = Pattern.compile("v.*_([0-9]+)-.*")
+    val matcher = pattern.matcher(gitVersion)
+    if (matcher.matches()) {
+        versionCode = matcher.group(1)
+    }
+    return versionCode.toInt()
+}
+
+fun getAppVersionNameValue(gitVersion: String): String {
+    var versionName = ""
+    val pattern = Pattern.compile("(v[0-9.]+)_.*")
+    val matcher = pattern.matcher(gitVersion)
+    if (matcher.matches()) {
+        versionName = matcher.group(1)
+    }
+    return versionName
+}
 
 dependencies {
 
