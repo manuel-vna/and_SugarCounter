@@ -85,12 +85,14 @@ tasks.named("preBuild") {
 }
 
 fun getAppGitVersion(): String {
+    println("ABC")
     val stdout = ByteArrayOutputStream()
     exec {
         commandLine("git", "describe", "--tags", "--long", "--always")
         standardOutput = stdout
     }
     val gitVersion = stdout.toString().trim()
+    println("git Version XYZ:$gitVersion")
     return gitVersion
 }
 
