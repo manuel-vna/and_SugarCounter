@@ -26,6 +26,10 @@ variables:
   # when the script was last modified for latest compileSdkVersion, it was which is written down below
   ANDROID_SDK_TOOLS: "9477386"
 
+stages:
+  - test
+  - build
+
 # Packages installation before running script
 before_script:
   - apt-get --quiet update --yes
@@ -58,7 +62,7 @@ before_script:
 
 lintCheck:
   interruptible: true
-  stage: build
+  stage: test
   script:
     - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
   artifacts:
