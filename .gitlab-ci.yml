@@ -61,16 +61,16 @@ before_script:
   # Not necessary, but just for surity
   - chmod +x ./gradlew
 
-#lintCheck:
-  #interruptible: true
-  #stage: test
-  #script:
-    #- ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
-  #artifacts:
-    #paths:
-      #- app/lint/reports/lint-results-debug.html
-    #expose_as: "lint-report"
-    #when: always
+lintCheck:
+  interruptible: true
+  stage: test
+  script:
+    - ./gradlew -Pci --console=plain :app:lintDebug -PbuildDir=lint
+  artifacts:
+    paths:
+      - app/lint/reports/lint-results-debug.html
+    expose_as: "lint-report"
+    when: always
 
 
 debugTests:
