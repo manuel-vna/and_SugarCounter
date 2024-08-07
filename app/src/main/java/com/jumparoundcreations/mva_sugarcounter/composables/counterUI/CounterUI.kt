@@ -336,7 +336,7 @@ fun CategoryItems(
 @Composable
 fun Barcode(counterVM: CounterVM) {
     Button(
-        onClick = { }) {
+        onClick = { counterVM.scanBarcode() }) {
         Text(text = "Barcode scannen")
     }
 }

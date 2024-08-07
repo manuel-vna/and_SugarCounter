@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
@@ -26,6 +27,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
+    private val barcodeScanner by inject<GmsBarcodeScanner>(qualifier = named("barcodeScanner"))
 
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
 
@@ -249,6 +251,13 @@ class CounterVM : ViewModel(), KoinComponent {
         }
     }
     //Loading an Entry: End
+
+    fun scanBarcode() {
+        barcodeScanner.startScan()
+            .addOnSuccessListener { barcode ->
+                println("Barcode: " + barcode.rawValue)
+            }
+    }
 
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
         return HelperMethods.calculateTotalGramPerDayBlock(valueList)

@@ -162,4 +162,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
     implementation("androidx.compose.runtime:runtime:1.6.8")
+
+    //Google Code Scanner
+    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 }
