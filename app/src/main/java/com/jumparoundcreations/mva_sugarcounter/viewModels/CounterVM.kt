@@ -232,10 +232,37 @@ class CounterVM : ViewModel(), KoinComponent {
 
     //Loading an Entry: End
     fun loadLastEntryForGivenCategory() {
-        viewModelScope.launch(Dispatchers.IO) {
+        getEntryByCategory(_categorySelected.value)
+    }
 
+    fun scanBarcode() {
+        barcodeScanner.startScan()
+            .addOnSuccessListener { barcode ->
+                println("Barcode: " + barcode.rawValue)
+
+                val barcodeNumber = barcode.rawValue
+                if (barcodeNumber?.isEmpty() == true) {
+
+                    println("TBD: No category for barcode yet")
+
+                } else {
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val categoryFromBarcode =
+                            barcode.rawValue?.let {
+                                database.appDao().getCategoryByBarcodeNumber(it)
+                            }
+                        _categorySelected.value = categoryFromBarcode.toString()
+                        getEntryByCategory(categoryFromBarcode.toString())
+                    }
+                }
+            }
+            .addOnFailureListener { e -> println("Barcode scanning failure") }
+    }
+
+    private fun getEntryByCategory(category: String) {
+        viewModelScope.launch(Dispatchers.IO) {
             val entryReply =
-                database.appDao().checkIfGramValueExistsForCategory(_categorySelected.value)
+                database.appDao().checkIfGramValueExistsForCategory(category)
 
             withContext(Dispatchers.Main) {
                 if (entryReply?.perPieceGram != 0) {
@@ -251,13 +278,6 @@ class CounterVM : ViewModel(), KoinComponent {
         }
     }
     //Loading an Entry: End
-
-    fun scanBarcode() {
-        barcodeScanner.startScan()
-            .addOnSuccessListener { barcode ->
-                println("Barcode: " + barcode.rawValue)
-            }
-    }
 
     fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
         return HelperMethods.calculateTotalGramPerDayBlock(valueList)
