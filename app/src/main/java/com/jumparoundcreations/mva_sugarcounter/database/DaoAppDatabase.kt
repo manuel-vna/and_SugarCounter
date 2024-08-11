@@ -48,7 +48,10 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM category_table WHERE deletionCheckbox = true""")
     fun deleteCheckedCategories()
 
+    @Query("""SELECT * from category_table WHERE category = :category LIMIT 1""")
+    fun getCategoryByCategoryName(category: String): Category
+
     @Query("""SELECT category from category_table WHERE barcodeNumber = :barcodeNumber""")
-    fun getCategoryByBarcodeNumber(barcodeNumber: String): String
+    fun getCategoryByBarcodeNumber(barcodeNumber: String): String?
 
 }

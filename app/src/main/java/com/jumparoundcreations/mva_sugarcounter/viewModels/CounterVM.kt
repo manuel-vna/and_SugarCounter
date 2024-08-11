@@ -80,8 +80,11 @@ class CounterVM : ViewModel(), KoinComponent {
     val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
 
-    val _barcodeNoEntry = MutableStateFlow(false)
-    val barcodeNoEntry = _barcodeNoEntry.asStateFlow()
+    val _noBarcodeYetInfo = MutableStateFlow(false)
+    val noBarcodeYetInfo = _noBarcodeYetInfo.asStateFlow()
+
+    val _barcodeNumber = MutableStateFlow("")
+    val barcodeNumber = _barcodeNumber.asStateFlow()
     //StateFlow: END
 
     // Timestamps: BEGIN
@@ -169,7 +172,6 @@ class CounterVM : ViewModel(), KoinComponent {
                 )
             }
         }
-
     }
 
     private fun saveEntryInDatabase(
@@ -198,9 +200,28 @@ class CounterVM : ViewModel(), KoinComponent {
                     gramTotal = gramTotalInt
                 )
             )
-            // check if database already contains the given category string
-            if (!_categories.value.contains(category)) {
+            // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
+            if (!_categories.value.contains(category) && !_noBarcodeYetInfo.value) {
                 database.appDao().insertCategory(Category(category = category))
+            }
+
+            // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
+            if (!_categories.value.contains(category) && _noBarcodeYetInfo.value) {
+                database.appDao().insertCategory(
+                    Category(
+                        category = category,
+                        barcodeNumber = _barcodeNumber.value
+                    )
+                )
+                removeLastBarcodeInput()
+            }
+
+            //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
+            if (_categories.value.contains(category) && _noBarcodeYetInfo.value) {
+                val categoryRow = database.appDao().getCategoryByCategoryName(category)
+                categoryRow.barcodeNumber = _barcodeNumber.value
+                database.appDao().updateCategory(categoryRow)
+                removeLastBarcodeInput()
             }
 
             checkGramThreshold()
@@ -239,24 +260,28 @@ class CounterVM : ViewModel(), KoinComponent {
         barcodeScanner.startScan()
             .addOnSuccessListener { barcode ->
                 println("Barcode: " + barcode.rawValue)
+                _barcodeNumber.value = barcode.rawValue.toString()
 
-                val barcodeNumber = barcode.rawValue
-                if (barcodeNumber?.isEmpty() == true) {
-
-                    println("TBD: No category for barcode yet")
-
+                if (_barcodeNumber.value.isEmpty()) {
+                    println("Barcode Scanning did not work")
                 } else {
                     viewModelScope.launch(Dispatchers.IO) {
                         val categoryFromBarcode =
-                            barcode.rawValue?.let {
-                                database.appDao().getCategoryByBarcodeNumber(it)
-                            }
-                        _categorySelected.value = categoryFromBarcode.toString()
-                        getEntryByCategory(categoryFromBarcode.toString())
+                            database.appDao().getCategoryByBarcodeNumber(_barcodeNumber.value)
+                        if (categoryFromBarcode.isNullOrEmpty()) {
+                            _noBarcodeYetInfo.value = true
+                        } else {
+                            _categorySelected.value = categoryFromBarcode
+                            getEntryByCategory(categoryFromBarcode)
+                        }
                     }
                 }
             }
             .addOnFailureListener { e -> println("Barcode scanning failure") }
+    }
+
+    fun removeLastBarcodeInput() {
+        _noBarcodeYetInfo.value = false
     }
 
     private fun getEntryByCategory(category: String) {
@@ -351,13 +376,6 @@ class CounterVM : ViewModel(), KoinComponent {
         _dateOfEntryEpochSec.value = epochSec
     }
 
-    fun actionShowBarcodeNoEntryDialog() {
-        _barcodeNoEntry.value = true
-    }
-
-    fun actionDismissBarcodeNoEntryDialog() {
-        _barcodeNoEntry.value = false
-    }
 
     //Actions End
 
