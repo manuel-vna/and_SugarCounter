@@ -202,6 +202,7 @@ fun Counter(context: Context) {
                                 CategoryItems(title = it) { title ->
                                     counterVM.actionChangeSelectedCategory(title)
                                     expanded = false
+                                    counterVM.loadLastEntryForGivenCategory()
                                 }
                             }
                         } else {
