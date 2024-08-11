@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -35,6 +36,13 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     val _gramThresholDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
+
+    val _categoryBottomSheetShown = MutableStateFlow(false)
+    val categoryBottomSheetShown = _categoryBottomSheetShown.asStateFlow()
+
+    val _clickedCategory =
+        MutableStateFlow(Category(category = "", deletionCheckbox = false, barcodeNumber = ""))
+    val clickedCategory = _clickedCategory.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -77,6 +85,14 @@ class SettingsVM : ViewModel(), KoinComponent {
             "gramThresholdValue",
             50
         ).toFloat()
+    }
+
+    fun actionChangeCategoryBottomSheetShown(
+        categoryBottomSheet: Boolean,
+        clickedCategory: Category?
+    ) {
+        _categoryBottomSheetShown.value = categoryBottomSheet
+        clickedCategory?.let { _clickedCategory.value = it }
     }
     //Actions: END
 

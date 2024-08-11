@@ -1,6 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,6 +51,8 @@ fun CategoriesScreen(context: Context) {
     if (categoryListShown) {
         CategoryList(context, categoryListingVM, settingsVM, categories, deletionCheckboxes)
     }
+
+    CategoryBottomSheet()
 }
 
 @Composable
@@ -118,7 +121,13 @@ fun CategoryList(
                     value.forEach { category ->
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth(),
+                                .fillMaxWidth()
+                                .clickable {
+                                    settingsVM.actionChangeCategoryBottomSheetShown(
+                                        true,
+                                        category
+                                    )
+                                },
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(text = category.category)

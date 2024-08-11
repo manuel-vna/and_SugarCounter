@@ -63,4 +63,5 @@
     <string name="gram_threshold_title">Ihre tägliche Zucker-Obergrenze</string>
     <string name="gram_threshold_dialog_title">Diesen Wert als neue Zucker-Obergrenze g´festlegen?</string>
     <string name="no_barcode_yet_string">Diesem Barcode ist noch keine Kategorie zugeordnet</string>
+    <string name="category_listing_bottom_sheet_barcode">Barcode (EAN): %1$s</string>
 </resources>

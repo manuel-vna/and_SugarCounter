@@ -62,4 +62,5 @@
     <string name="gram_threshold_title">Your daily sugar limit</string>
     <string name="gram_threshold_dialog_title">Select this value as your new daily sugar limit?</string>
     <string name="no_barcode_yet_string">No category has been linked yet with this barcode</string>
+    <string name="category_listing_bottom_sheet_barcode">Barcode (EAN): %1$s</string>
 </resources>
