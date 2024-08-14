@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.DialogDoubleButton
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryListingVM
@@ -71,14 +72,14 @@ fun SettingsScreen(
     Column(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalAlignment = Alignment.End,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         SettingsSliderGramThreshold(
             sharedPrefsMain,
             settingsVM
         )
 
-        Divider()
+        Divider(modifier = Modifier.padding(bottom = 32.dp))
 
         SettingsButtonCategories(
             categoryListingVM,
@@ -99,6 +100,8 @@ fun SettingsScreen(
             stringResource(id = R.string.settings_third_party_licenses_text),
             R.drawable.baseline_read_more_24,
         )
+
+        SettingsVersionCode()
     }
 }
 
@@ -109,7 +112,9 @@ fun SettingsSliderGramThreshold(
 ) {
 
     val sliderPosition by settingsVM.gramThresholdSlider.collectAsState()
-    Column {
+    Column(
+        modifier = Modifier.padding(top = 8.dp)
+    ) {
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -173,7 +178,7 @@ fun SettingsButtonCategories(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(2.dp),
         onClick = {
             settingsVM.actionHideSettingsScreen()
             categoryListingVM.actionShowCategories()
@@ -198,7 +203,7 @@ fun SettingsButtonThirdPartyLicenses(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(2.dp),
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -226,7 +231,7 @@ fun SettingsButtonFAQs(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(2.dp),
         onClick = {
             settingsVM.actionHideSettingsScreen()
             settingsVM.actionShowFaqScreen()
@@ -239,6 +244,13 @@ fun SettingsButtonFAQs(
             contentDescription = "",
         )
     }
+}
+
+@Composable
+fun SettingsVersionCode() {
+    Text(
+        text = "SugarCounter " + BuildConfig.VERSION_NAME
+    )
 }
 
 
