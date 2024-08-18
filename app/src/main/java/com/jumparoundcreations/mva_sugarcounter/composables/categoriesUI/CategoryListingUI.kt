@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
+package com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI
 
 import android.content.Context
 import androidx.compose.foundation.clickable
@@ -26,10 +26,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.SharedToppAppBar
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryListingStates
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryListingVM
@@ -38,26 +38,22 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun CategoriesScreen(context: Context) {
+fun Categories(context: Context) {
 
     //get an instance of the ViewModel
     val categoryListingVM: CategoryListingVM = koinViewModel()
     val settingsVM: SettingsVM = koinViewModel()
 
-    val categoryListShown by categoryListingVM.categoryListShown.collectAsState()
     val categories by categoryListingVM.categories.collectAsState()
     val deletionCheckboxes by categoryListingVM.deletionCheckboxes.collectAsState()
 
-    if (categoryListShown) {
-        CategoryList(context, categoryListingVM, settingsVM, categories, deletionCheckboxes)
-    }
+    CategoryList(categoryListingVM, settingsVM, categories, deletionCheckboxes)
 
     CategoryBottomSheet()
 }
 
 @Composable
 fun CategoryList(
-    context: Context,
     categoryListingVM: CategoryListingVM,
     settingsVM: SettingsVM,
     categories: Map<Char, List<Category>>,
@@ -66,7 +62,8 @@ fun CategoryList(
 
     Column {
 
-        SharedToppAppBar(appBarTitle = stringResource(R.string.categoriesScreenDescription),
+        /*
+        SharedTopAppBar(appBarTitle = stringResource(R.string.categoriesScreenDescription),
             onBackClickAction = {
                 categoryListingVM.actionHideCategories()
                 settingsVM.actionShowSettingsScreen()
@@ -88,6 +85,38 @@ fun CategoryList(
                 }
             }
         )
+         */
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center,
+                text = stringResource(id = R.string.categoriesScreenDescription)
+            )
+
+            IconButton(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .align(Alignment.CenterEnd),
+                onClick = {
+                    if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                        categoryListingVM.actionHideDeletionCheckboxes()
+                    } else {
+                        categoryListingVM.actionShowDeletionCheckboxes()
+                    }
+                }) {
+                Icon(
+                    modifier = Modifier.size(28.dp),
+                    imageVector = Icons.Rounded.Delete,
+                    contentDescription = "arrow",
+                )
+            }
+        }
 
         Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
 

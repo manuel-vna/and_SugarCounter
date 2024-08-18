@@ -18,9 +18,6 @@ class CategoryListingVM : ViewModel(), KoinComponent {
     private val database by inject<AppDatabase>()
 
     //SateFlows: START
-    val _categoryListShown = MutableStateFlow(false)
-    val categoryListShown = _categoryListShown.asStateFlow()
-
     private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
 
@@ -60,14 +57,6 @@ class CategoryListingVM : ViewModel(), KoinComponent {
 
 
     //Actions: START
-    fun actionShowCategories() {
-        _categoryListShown.value = true
-    }
-
-    fun actionHideCategories() {
-        _categoryListShown.value = false
-    }
-
     fun actionShowDeletionCheckboxes() {
         _deletionCheckboxes.value = CategoryListingStates(
             deletionCheckboxesDisplayed = true,

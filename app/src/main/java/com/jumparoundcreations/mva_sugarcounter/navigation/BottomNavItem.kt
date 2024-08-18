@@ -2,12 +2,21 @@ package com.jumparoundcreations.mva_sugarcounter.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AreaChart
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.FormatAlignJustify
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.jumparoundcreations.mva_sugarcounter.R
 
-sealed class BottomNavItem(var title:String, var icon: ImageVector, var screenRoute:String){
-    object SugarCounter: BottomNavItem("Counter", Icons.Filled.FormatAlignJustify,"counter")
-    object SugarHistory: BottomNavItem("History",Icons.Filled.AreaChart,"history")
-    object Settings: BottomNavItem("Settings", Icons.Filled.Settings,"settings")
+sealed class BottomNavItem(var title: Int, var icon: ImageVector, var screenRoute: String) {
+    data object SugarCounter :
+        BottomNavItem(R.string.counterTitle, Icons.Filled.FormatAlignJustify, "counter")
+
+    data object SugarHistory :
+        BottomNavItem(R.string.historyTitle, Icons.Filled.AreaChart, "history")
+
+    data object CategoryTitle :
+        BottomNavItem(R.string.categoryTitle, Icons.Filled.Category, "category")
+
+    data object Settings : BottomNavItem(R.string.settingsTitle, Icons.Filled.Settings, "settings")
 }

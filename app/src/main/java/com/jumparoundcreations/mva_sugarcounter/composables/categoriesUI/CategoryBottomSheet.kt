@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
+package com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

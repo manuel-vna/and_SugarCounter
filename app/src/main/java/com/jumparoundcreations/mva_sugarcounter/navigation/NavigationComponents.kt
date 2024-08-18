@@ -13,12 +13,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
@@ -45,6 +47,9 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
         composable(BottomNavItem.SugarHistory.screenRoute) {
             History(context)
         }
+        composable(BottomNavItem.CategoryTitle.screenRoute) {
+            Categories(context)
+        }
         composable(BottomNavItem.Settings.screenRoute) {
             Settings(context)
         }
@@ -55,7 +60,12 @@ fun NavigationGraph(navController: NavHostController, context: Context) {
 fun BottomNavigation(navController: NavController) {
 
     val items =
-        listOf(BottomNavItem.SugarCounter, BottomNavItem.SugarHistory, BottomNavItem.Settings)
+        listOf(
+            BottomNavItem.SugarCounter,
+            BottomNavItem.SugarHistory,
+            BottomNavItem.CategoryTitle,
+            BottomNavItem.Settings
+        )
 
     NavigationBar {
 
@@ -65,8 +75,8 @@ fun BottomNavigation(navController: NavController) {
         items.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.screenRoute,
-                icon = { Icon(item.icon, contentDescription = item.title) },
-                label = { Text(item.title) },
+                icon = { Icon(item.icon, contentDescription = stringResource(id = item.title)) },
+                label = { Text(stringResource(id = item.title)) },
                 onClick = {
                     navController.navigate(item.screenRoute) {
                         navController.graph.startDestinationRoute?.let { screenRoute ->

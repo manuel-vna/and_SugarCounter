@@ -10,13 +10,13 @@
     <string name="saveButton">Speichern</string>
     <string name="timestampToday">Heute</string>
     <string name="timestampYesterday">Gestern</string>
-    <string name="sugarCounter">Zähler</string>
-    <string name="sugarHistory">Verlauf</string>
-    <string name="settings">Einstellungen</string>
+    <string name="counterTitle">Zähler</string>
+    <string name="historyTitle">Verlauf</string>
+    <string name="categoryTitle">Kategorien</string>
+    <string name="settingsTitle">Einstellungen</string>
     <string name="categoryMaxInput">Eingabebegrenzung: 40 Zeichen</string>
     <string name="noGramValueInDatabaseYetTitle">Gramm fehlt</string>
     <string name="noGramValueInDatabaseYetDescription">Hierzu liegt noch keine Grammangabe vor. Bitte fülle das Feld \'Gramm Zucker\' aus.</string>
-    <string name="settingsCategoriesText">Kategorien anzeigen</string>
     <string name="categoriesScreenDescription">Kategorien</string>
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>

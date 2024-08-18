@@ -43,17 +43,12 @@ fun Settings(context: Context) {
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
-    val categoryScreenShown by categoryListingVM.categoryListShown.collectAsState()
     val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
     settingsVM.actionResetGramThresholdSliderToSharedPref()
 
     if (settingsScreenShown) {
-        SettingsScreen(context, settingsVM, categoryListingVM)
-    }
-
-    if (categoryScreenShown) {
-        CategoriesScreen(context)
+        SettingsScreen(context, settingsVM)
     }
 
     if (faqScreenShown) {
@@ -66,7 +61,6 @@ fun Settings(context: Context) {
 fun SettingsScreen(
     context: Context,
     settingsVM: SettingsVM,
-    categoryListingVM: CategoryListingVM,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
     Column(
@@ -80,13 +74,6 @@ fun SettingsScreen(
         )
 
         Divider(modifier = Modifier.padding(bottom = 32.dp))
-
-        SettingsButtonCategories(
-            categoryListingVM,
-            settingsVM,
-            stringResource(id = R.string.settingsCategoriesText),
-            R.drawable.baseline_read_more_24,
-        )
 
         SettingsButtonFAQs(
             context,
@@ -165,32 +152,6 @@ fun SettingsSliderGramThreshold(
             },
             buttonOnDismiss = { settingsVM.actionGramThresholdDialogCheck(false) }
         )
-    }
-}
-
-@Composable
-fun SettingsButtonCategories(
-    categoryListingVM: CategoryListingVM,
-    settingsVM: SettingsVM,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        onClick = {
-            settingsVM.actionHideSettingsScreen()
-            categoryListingVM.actionShowCategories()
-        }) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
-
     }
 }
 

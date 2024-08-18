@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.SharedToppAppBar
+import com.jumparoundcreations.mva_sugarcounter.composables.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.data.Faq
 import com.jumparoundcreations.mva_sugarcounter.data.faqDataList
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -56,7 +56,7 @@ fun FAQScreen(context: Context) {
     ) {
 
 
-        SharedToppAppBar(
+        SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_title_faq_text),
             onBackClickAction = {
                 settingsVM.actionHideFaqScreen()
