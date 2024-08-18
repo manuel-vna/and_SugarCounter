@@ -4,7 +4,6 @@ package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,8 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -35,7 +32,6 @@ import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -117,7 +113,7 @@ fun Counter(context: Context) {
             Barcode(counterVM)
         }
 
-        val noBarcodeYetInfo by counterVM.noBarcodeYetInfo.collectAsState()
+        val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
         val barcodeNumber by counterVM.barcodeNumber.collectAsState()
         if (noBarcodeYetInfo) {
             NoBarcodeYetInfo(counterVM, barcodeNumber)
@@ -328,68 +324,6 @@ fun CategoryItems(
             .padding(10.dp)
     ) {
         Text(text = title, fontSize = 16.sp)
-    }
-}
-
-@Composable
-fun Barcode(counterVM: CounterVM) {
-    Button(
-        onClick = { counterVM.scanBarcode() }) {
-        Text(text = "Barcode scannen")
-    }
-}
-
-@Composable
-fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
-
-
-    Text(
-        modifier = Modifier
-            .padding(bottom = 4.dp),
-        text = "Barcode: $barcodeNumber", fontWeight = FontWeight.Bold,
-    )
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 6.dp),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.error)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-        ) {
-
-            IconButton(
-                onClick = { }) {
-                Icon(
-                    modifier = Modifier
-                        .size(22.dp)
-                        .weight(0.1f),
-                    imageVector = Icons.Rounded.Info,
-                    contentDescription = "info",
-                )
-            }
-
-            Text(
-                modifier = Modifier
-                    .weight(0.8f)
-                    .align(Alignment.CenterVertically),
-                text = stringResource(id = R.string.no_barcode_yet_string, barcodeNumber)
-            )
-
-            IconButton(
-                onClick = { counterVM.removeLastBarcodeInput() }) {
-                Icon(
-                    modifier = Modifier
-                        .size(22.dp)
-                        .weight(0.1f),
-                    imageVector = Icons.Rounded.Clear,
-                    contentDescription = "arrow",
-                )
-            }
-        }
     }
 }
 

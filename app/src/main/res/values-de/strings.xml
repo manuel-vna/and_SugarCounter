@@ -62,6 +62,8 @@
     <string name="faq_answer_ten">10</string>
     <string name="gram_threshold_title">Ihre tägliche Zucker-Obergrenze</string>
     <string name="gram_threshold_dialog_title">Diesen Wert als neue Zucker-Obergrenze g´festlegen?</string>
-    <string name="no_barcode_yet_string">Diesem Barcode ist noch keine Kategorie zugeordnet</string>
+    <string name="scan_barcode_button">Barcode scannen</string>
+    <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
+    <string name="no_barcode_yet_info_description">Diesem Barcode ist noch keine Kategorie eines Produkts zugeordnet.\n\nWenn du die weiteren Felder ausfüllst und den Eintrag speicherst, wird der im Feld \'<i>Kategorie</i>\' eingetragene Produktname automatisch dem oben aufgeführten Barcode <i>%1$s</i> zugeordnet.</string>
     <string name="category_listing_bottom_sheet_barcode">Barcode (EAN): %1$s</string>
 </resources>

@@ -61,6 +61,8 @@
     <string name="faq_answer_ten">10</string>
     <string name="gram_threshold_title">Your daily sugar limit</string>
     <string name="gram_threshold_dialog_title">Select this value as your new daily sugar limit?</string>
-    <string name="no_barcode_yet_string">No category has been linked yet with this barcode</string>
+    <string name="scan_barcode_button">Scan barcode</string>
+    <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
+    <string name="no_barcode_yet_info_description">No product category has yet been assigned to this barcode.\n\nIf you fill in the other fields and save the entry, the product name entered in the \'<i>Category</i>\' field is automatically assigned to the barcode <i>%1$s</i> listed above.</string>
     <string name="category_listing_bottom_sheet_barcode">Barcode (EAN): %1$s</string>
 </resources>
