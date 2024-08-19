@@ -4,7 +4,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.Category
-import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryListingStates
+import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class CategoryListingVM : ViewModel(), KoinComponent {
+class CategoryVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
 
@@ -27,8 +28,31 @@ class CategoryListingVM : ViewModel(), KoinComponent {
     val _categoryDeleteId = MutableStateFlow(0)
     val categoryDeleteId = _categoryDeleteId.asStateFlow()
 
-    val _deletionCheckboxes = MutableStateFlow(CategoryListingStates())
+    val _deletionCheckboxes = MutableStateFlow(CategoryStates())
     val deletionCheckboxes = _deletionCheckboxes.asStateFlow()
+
+    val _categoryBottomSheetShown = MutableStateFlow(false)
+    val categoryBottomSheetShown = _categoryBottomSheetShown.asStateFlow()
+
+    val _clickedCategory =
+        MutableStateFlow(Category(category = "", deletionCheckbox = false, barcodeNumber = ""))
+    val clickedCategory = _clickedCategory.asStateFlow()
+
+    val _entryForClickedCategory = MutableStateFlow(
+        Entry(
+            id = 0,
+            currentTimestamp = 1L,
+            date = "",
+            category = "",
+            isPerHundred = false,
+            perHundredGram = 0,
+            perHundredQuantity = 0,
+            perPieceGram = 0,
+            perPieceAmount = 0,
+            gramTotal = 0
+        )
+    )
+    val entryForClickedCategory = _entryForClickedCategory.asStateFlow()
 
     //SateFlows: END
 
@@ -58,14 +82,14 @@ class CategoryListingVM : ViewModel(), KoinComponent {
 
     //Actions: START
     fun actionShowDeletionCheckboxes() {
-        _deletionCheckboxes.value = CategoryListingStates(
+        _deletionCheckboxes.value = CategoryStates(
             deletionCheckboxesDisplayed = true,
             deletionButtonsDisplayed = true,
         )
     }
 
     fun actionHideDeletionCheckboxes() {
-        _deletionCheckboxes.value = CategoryListingStates(
+        _deletionCheckboxes.value = CategoryStates(
             deletionCheckboxesDisplayed = false,
             deletionButtonsDisplayed = false,
         )
@@ -98,6 +122,27 @@ class CategoryListingVM : ViewModel(), KoinComponent {
             database.appDao().deleteCheckedCategories()
         }
     }
+
+    fun actionChangeCategoryBottomSheetShown(
+        categoryBottomSheet: Boolean,
+        clickedCategory: Category?
+    ) {
+        _categoryBottomSheetShown.value = categoryBottomSheet
+        clickedCategory?.let {
+            _clickedCategory.value = it
+            retrieveLastEntryForClickedCategory(clickedCategory = it)
+        }
+    }
+
+    private fun retrieveLastEntryForClickedCategory(clickedCategory: Category) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val lastEntry: Entry? =
+                database.appDao().checkIfGramValueExistsForCategory(clickedCategory.category)
+            lastEntry?.let { _entryForClickedCategory.value = it }
+        }
+
+    }
+
     //Actions: END
 
 

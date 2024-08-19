@@ -7,7 +7,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryListingVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
@@ -22,7 +22,7 @@ val appModule = module {
     viewModel { CounterVM() }
     viewModel { SettingsVM() }
     viewModel { HistoryVM() }
-    viewModel { CategoryListingVM() }
+    viewModel { CategoryVM() }
     single(named("sharedPrefsMain")) { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
 }

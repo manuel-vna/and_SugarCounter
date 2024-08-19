@@ -27,7 +27,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.DialogDoubleButton
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryListingVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -39,7 +39,7 @@ fun Settings(context: Context) {
 
     //get an instance of the ViewModel
     val settingsVM: SettingsVM = koinViewModel()
-    val categoryListingVM: CategoryListingVM = viewModel()
+    val categoryVM: CategoryVM = viewModel()
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()

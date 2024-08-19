@@ -31,9 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Category
-import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryListingStates
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryListingVM
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -41,51 +40,24 @@ import org.koin.androidx.compose.koinViewModel
 fun Categories(context: Context) {
 
     //get an instance of the ViewModel
-    val categoryListingVM: CategoryListingVM = koinViewModel()
-    val settingsVM: SettingsVM = koinViewModel()
+    val categoryVM: CategoryVM = koinViewModel()
 
-    val categories by categoryListingVM.categories.collectAsState()
-    val deletionCheckboxes by categoryListingVM.deletionCheckboxes.collectAsState()
+    val categories by categoryVM.categories.collectAsState()
+    val deletionCheckboxes by categoryVM.deletionCheckboxes.collectAsState()
 
-    CategoryList(categoryListingVM, settingsVM, categories, deletionCheckboxes)
+    CategoryList(categoryVM, categories, deletionCheckboxes)
 
     CategoryBottomSheet()
 }
 
 @Composable
 fun CategoryList(
-    categoryListingVM: CategoryListingVM,
-    settingsVM: SettingsVM,
+    categoryVM: CategoryVM,
     categories: Map<Char, List<Category>>,
-    deletionCheckboxes: CategoryListingStates
+    deletionCheckboxes: CategoryStates
 ) {
 
     Column {
-
-        /*
-        SharedTopAppBar(appBarTitle = stringResource(R.string.categoriesScreenDescription),
-            onBackClickAction = {
-                categoryListingVM.actionHideCategories()
-                settingsVM.actionShowSettingsScreen()
-            },
-            actionIconFirst = {
-                IconButton(
-                    onClick = {
-                        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-                            categoryListingVM.actionHideDeletionCheckboxes()
-                        } else {
-                            categoryListingVM.actionShowDeletionCheckboxes()
-                        }
-                    }) {
-                    Icon(
-                        modifier = Modifier.size(28.dp),
-                        imageVector = Icons.Rounded.Delete,
-                        contentDescription = "arrow",
-                    )
-                }
-            }
-        )
-         */
 
         Box(
             modifier = Modifier
@@ -105,9 +77,9 @@ fun CategoryList(
                     .align(Alignment.CenterEnd),
                 onClick = {
                     if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-                        categoryListingVM.actionHideDeletionCheckboxes()
+                        categoryVM.actionHideDeletionCheckboxes()
                     } else {
-                        categoryListingVM.actionShowDeletionCheckboxes()
+                        categoryVM.actionShowDeletionCheckboxes()
                     }
                 }) {
                 Icon(
@@ -128,7 +100,7 @@ fun CategoryList(
 
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = { categoryListingVM.actionDeleteCheckedCategories() }
+                    onClick = { categoryVM.actionDeleteCheckedCategories() }
                 ) {
                     Text(stringResource(id = R.string.general_delete))
                 }
@@ -152,7 +124,7 @@ fun CategoryList(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    settingsVM.actionChangeCategoryBottomSheetShown(
+                                    categoryVM.actionChangeCategoryBottomSheetShown(
                                         true,
                                         category
                                     )
@@ -167,7 +139,7 @@ fun CategoryList(
                                         .padding(end = 12.dp),
                                     checked = category.deletionCheckbox,
                                     onCheckedChange = {
-                                        categoryListingVM.actionChangeDeleteCheckbox(category)
+                                        categoryVM.actionChangeDeleteCheckbox(category)
                                     })
                             }
                         }

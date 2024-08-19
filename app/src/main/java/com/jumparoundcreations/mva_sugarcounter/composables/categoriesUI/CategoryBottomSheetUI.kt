@@ -16,21 +16,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryBottomSheet() {
 
-    val settingsVM: SettingsVM = koinViewModel()
-    val categoryBottomSheet by settingsVM.categoryBottomSheetShown.collectAsState()
-    val clickedCategory by settingsVM.clickedCategory.collectAsState()
+    val categoryVM: CategoryVM = koinViewModel()
+    val categoryBottomSheet by categoryVM.categoryBottomSheetShown.collectAsState()
+    val clickedCategory by categoryVM.clickedCategory.collectAsState()
+    val entryForClickedCategory by categoryVM.entryForClickedCategory.collectAsState()
 
     if (categoryBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = {
-                settingsVM.actionChangeCategoryBottomSheetShown(
+                categoryVM.actionChangeCategoryBottomSheetShown(
                     false,
                     null
                 )
@@ -47,12 +48,29 @@ fun CategoryBottomSheet() {
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
+                if (clickedCategory.barcodeNumber.isNotEmpty()) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        text = stringResource(
+                            R.string.category_bottom_sheet_barcode,
+                            clickedCategory.barcodeNumber
+                        )
+                    )
+                }
+                Text(
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    text = "Letzter Eintrag:"
+                )
+                Text(
+                    modifier = Modifier.padding(bottom = 12.dp),
+                    text = stringResource(
+                        R.string.category_bottom_sheet_per_piece_gram,
+                        entryForClickedCategory.perPieceGram
+                    )
+                )
                 Text(
                     modifier = Modifier.padding(bottom = 120.dp),
-                    text = stringResource(
-                        R.string.category_listing_bottom_sheet_barcode,
-                        clickedCategory.barcodeNumber
-                    )
+                    text = entryForClickedCategory.date
                 )
             }
         }
