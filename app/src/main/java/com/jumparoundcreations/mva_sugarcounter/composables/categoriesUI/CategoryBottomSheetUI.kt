@@ -1,6 +1,8 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,37 +45,71 @@ fun CategoryBottomSheet() {
             ) {
 
                 Text(
-                    modifier = Modifier.padding(bottom = 24.dp),
+                    modifier = Modifier.padding(bottom = 36.dp),
                     text = clickedCategory.category,
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp
                 )
-                if (clickedCategory.barcodeNumber.isNotEmpty()) {
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(
-                        modifier = Modifier.padding(bottom = 12.dp),
-                        text = stringResource(
-                            R.string.category_bottom_sheet_barcode,
-                            clickedCategory.barcodeNumber
+                        modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
+                        text = "Zuckerwert"
+                    )
+                    Text(
+                        modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                        text =
+                        if (entryForClickedCategory.isPerHundred) stringResource(
+                            R.string.category_bottom_sheet_per_hundred_gram,
+                            entryForClickedCategory.perHundredGram
+                        )
+                        else stringResource(
+                            R.string.category_bottom_sheet_per_piece_gram,
+                            entryForClickedCategory.perPieceGram
                         )
                     )
                 }
-                Text(
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    text = "Letzter Eintrag:"
-                )
-                Text(
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    text = stringResource(
-                        R.string.category_bottom_sheet_per_piece_gram,
-                        entryForClickedCategory.perPieceGram
+
+                if (clickedCategory.barcodeNumber.isNotEmpty()) {
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
+                            text = "Barcode (EAN)"
+                        )
+                        Text(
+                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                            text = stringResource(
+                                R.string.category_bottom_sheet_barcode,
+                                clickedCategory.barcodeNumber
+                            )
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        modifier = Modifier.padding(start = 24.dp, bottom = 80.dp),
+                        text = "Letzte Verwendung"
                     )
-                )
-                Text(
-                    modifier = Modifier.padding(bottom = 120.dp),
-                    text = entryForClickedCategory.date
-                )
+
+                    Text(
+                        modifier = Modifier.padding(end = 24.dp, bottom = 80.dp),
+                        text = entryForClickedCategory.date
+                    )
+                }
+
+
             }
         }
     }
-
 }
