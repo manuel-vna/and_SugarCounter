@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,9 @@ class CategoryVM : ViewModel(), KoinComponent {
     //SateFlows: START
     private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
+
+    val _categoryListScrollState = MutableStateFlow(LazyListState(0, 0))
+    val categoryListScrollState = _categoryListScrollState.asStateFlow()
 
     val _categoryDeleteAlertDialog = MutableStateFlow(false)
     val categoryDeleteAlertDialog = _categoryDeleteAlertDialog.asStateFlow()
@@ -81,6 +85,13 @@ class CategoryVM : ViewModel(), KoinComponent {
 
 
     //Actions: START
+    fun actionHandleCategoryScrollState(index: Int, scrollState: LazyListState) {
+        viewModelScope.launch {
+            scrollState.scrollToItem(index)
+        }
+        _categoryListScrollState.value = scrollState
+    }
+
     fun actionShowDeletionCheckboxes() {
         _deletionCheckboxes.value = CategoryStates(
             deletionCheckboxesDisplayed = true,

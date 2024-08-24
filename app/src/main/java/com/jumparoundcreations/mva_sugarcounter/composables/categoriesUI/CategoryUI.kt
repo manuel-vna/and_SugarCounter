@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.SportsCricket
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
@@ -44,8 +46,9 @@ fun Categories(context: Context) {
 
     val categories by categoryVM.categories.collectAsState()
     val deletionCheckboxes by categoryVM.deletionCheckboxes.collectAsState()
+    val scrollState by categoryVM.categoryListScrollState.collectAsState()
 
-    CategoryList(categoryVM, categories, deletionCheckboxes)
+    CategoryList(categoryVM, categories, deletionCheckboxes, scrollState)
 
     CategoryBottomSheet()
 }
@@ -54,39 +57,67 @@ fun Categories(context: Context) {
 fun CategoryList(
     categoryVM: CategoryVM,
     categories: Map<Char, List<Category>>,
-    deletionCheckboxes: CategoryStates
+    deletionCheckboxes: CategoryStates,
+    scrollState: LazyListState
 ) {
 
     Column {
 
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth(),
-            contentAlignment = Alignment.Center,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
+
+            IconButton(
+                modifier = Modifier
+                    .padding(12.dp),
+                onClick = {
+                    categoryVM.actionHandleCategoryScrollState(
+                        index = 21,
+                        scrollState = scrollState
+                    )
+                }) {
+                Icon(
+                    modifier = Modifier.size(28.dp),
+                    imageVector = Icons.Rounded.SportsCricket,
+                    contentDescription = "arrow",
+                )
+            }
+
             Text(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
                 text = stringResource(id = R.string.categoriesScreenDescription)
             )
-
-            IconButton(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .align(Alignment.CenterEnd),
-                onClick = {
-                    if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-                        categoryVM.actionHideDeletionCheckboxes()
-                    } else {
-                        categoryVM.actionShowDeletionCheckboxes()
-                    }
-                }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.Delete,
-                    contentDescription = "arrow",
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(6.dp),
+                    text = categories.size.toString(),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
                 )
+                IconButton(
+                    modifier = Modifier
+                        .padding(6.dp),
+                    onClick = {
+                        if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                            categoryVM.actionHideDeletionCheckboxes()
+                        } else {
+                            categoryVM.actionShowDeletionCheckboxes()
+                        }
+                    }) {
+                    Icon(
+                        modifier = Modifier.size(28.dp),
+                        imageVector = Icons.Rounded.Delete,
+                        contentDescription = "arrow",
+                    )
+                }
             }
         }
 
@@ -108,7 +139,7 @@ fun CategoryList(
             }
         }
 
-        LazyColumn {
+        LazyColumn(state = scrollState) {
             items(categories.toList()) { (key, value) ->
 
                 Text(
