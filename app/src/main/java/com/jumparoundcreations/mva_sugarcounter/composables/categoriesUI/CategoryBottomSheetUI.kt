@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,63 +52,71 @@ fun CategoryBottomSheet() {
                     fontSize = 18.sp
                 )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                        text = "Zuckerwert"
-                    )
-                    Text(
-                        modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                        text =
-                        if (entryForClickedCategory.isPerHundred) stringResource(
-                            R.string.category_bottom_sheet_per_hundred_gram,
-                            entryForClickedCategory.perHundredGram
-                        )
-                        else stringResource(
-                            R.string.category_bottom_sheet_per_piece_gram,
-                            entryForClickedCategory.perPieceGram
-                        )
-                    )
-                }
-
-                if (clickedCategory.barcodeNumber.isNotEmpty()) {
-
+                if (entryForClickedCategory.category.isNotEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
                             modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                            text = "Barcode (EAN)"
+                            text = stringResource(R.string.category_bottom_sheet_sugar_value)
                         )
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                            text = stringResource(
-                                R.string.category_bottom_sheet_barcode,
-                                clickedCategory.barcodeNumber
+                            text =
+                            if (entryForClickedCategory.isPerHundred) stringResource(
+                                R.string.category_bottom_sheet_per_hundred_gram,
+                                entryForClickedCategory.perHundredGram
+                            )
+                            else stringResource(
+                                R.string.category_bottom_sheet_per_piece_gram,
+                                entryForClickedCategory.perPieceGram
                             )
                         )
                     }
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        modifier = Modifier.padding(start = 24.dp, bottom = 80.dp),
-                        text = "Letzte Verwendung"
-                    )
+                if (clickedCategory.barcodeNumber.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
+                            text = stringResource(
+                                R.string.category_bottom_sheet_barcode
+                            )
+                        )
+                        Text(
+                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                            text = clickedCategory.barcodeNumber
+                        )
+                    }
+                }
 
+                if (entryForClickedCategory.category.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
+                            text = stringResource(R.string.category_bottom_sheet_date)
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                            text = entryForClickedCategory.date
+                        )
+                    }
+                } else {
                     Text(
-                        modifier = Modifier.padding(end = 24.dp, bottom = 80.dp),
-                        text = entryForClickedCategory.date
+                        modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                        text = stringResource(R.string.category_bottom_sheet_no_entry_yet)
                     )
                 }
 
+                Spacer(modifier = Modifier.padding(60.dp))
 
             }
         }

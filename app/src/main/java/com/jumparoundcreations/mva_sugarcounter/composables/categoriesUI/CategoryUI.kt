@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.SportsCricket
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
@@ -70,21 +69,7 @@ fun CategoryList(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(
-                modifier = Modifier
-                    .padding(12.dp),
-                onClick = {
-                    categoryVM.actionHandleCategoryScrollState(
-                        index = 21,
-                        scrollState = scrollState
-                    )
-                }) {
-                Icon(
-                    modifier = Modifier.size(28.dp),
-                    imageVector = Icons.Rounded.SportsCricket,
-                    contentDescription = "arrow",
-                )
-            }
+            ScrollToSpecificLetter(categoryVM = categoryVM, scrollState = scrollState)
 
             Text(
                 fontWeight = FontWeight.Bold,
@@ -97,14 +82,14 @@ fun CategoryList(
             ) {
                 Text(
                     modifier = Modifier
-                        .padding(6.dp),
-                    text = categories.size.toString(),
+                        .padding(2.dp),
+                    text = categories.flatMap { it.value }.size.toString(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
                 IconButton(
                     modifier = Modifier
-                        .padding(6.dp),
+                        .padding(2.dp),
                     onClick = {
                         if (deletionCheckboxes.deletionCheckboxesDisplayed) {
                             categoryVM.actionHideDeletionCheckboxes()
@@ -141,7 +126,6 @@ fun CategoryList(
 
         LazyColumn(state = scrollState) {
             items(categories.toList()) { (key, value) ->
-
                 Text(
                     modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                     fontSize = 18.sp,

@@ -19,6 +19,35 @@ class CategoryVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
 
+    val letters = mapOf(
+        Pair("A", 0),
+        Pair("B", 1),
+        Pair("C", 2),
+        Pair("D", 3),
+        Pair("E", 4),
+        Pair("F", 5),
+        Pair("G", 6),
+        Pair("H", 7),
+        Pair("I", 8),
+        Pair("J", 9),
+        Pair("K", 10),
+        Pair("L", 11),
+        Pair("M", 12),
+        Pair("N", 13),
+        Pair("O", 14),
+        Pair("P", 15),
+        Pair("Q", 16),
+        Pair("R", 17),
+        Pair("S", 18),
+        Pair("T", 19),
+        Pair("U", 20),
+        Pair("V", 21),
+        Pair("W", 22),
+        Pair("X", 23),
+        Pair("Y", 24),
+        Pair("Z", 25),
+    )
+
     //SateFlows: START
     private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
@@ -26,11 +55,8 @@ class CategoryVM : ViewModel(), KoinComponent {
     val _categoryListScrollState = MutableStateFlow(LazyListState(0, 0))
     val categoryListScrollState = _categoryListScrollState.asStateFlow()
 
-    val _categoryDeleteAlertDialog = MutableStateFlow(false)
-    val categoryDeleteAlertDialog = _categoryDeleteAlertDialog.asStateFlow()
-
-    val _categoryDeleteId = MutableStateFlow(0)
-    val categoryDeleteId = _categoryDeleteId.asStateFlow()
+    val _scrollSearchMenuExpanded = MutableStateFlow(false)
+    val scrollSearchMenuExpanded = _scrollSearchMenuExpanded.asStateFlow()
 
     val _deletionCheckboxes = MutableStateFlow(CategoryStates())
     val deletionCheckboxes = _deletionCheckboxes.asStateFlow()
@@ -65,7 +91,8 @@ class CategoryVM : ViewModel(), KoinComponent {
     // Observer that is used to observe Dao of RoomDB
     private val categoriesObserver = Observer<List<Category>> { it ->
         val sortedCategories =
-            it.filter { it.category.isNotBlank() }.groupBy(keySelector = { it.category.first() })
+            it.filter { it.category.isNotBlank() }
+                .groupBy(keySelector = { it.category.uppercase().first() })
                 .toSortedMap()
         _categories.value = sortedCategories
     }
@@ -90,6 +117,10 @@ class CategoryVM : ViewModel(), KoinComponent {
             scrollState.scrollToItem(index)
         }
         _categoryListScrollState.value = scrollState
+    }
+
+    fun actionChangeScrollSearchMenuExpanded(expanded: Boolean) {
+        _scrollSearchMenuExpanded.value = expanded
     }
 
     fun actionShowDeletionCheckboxes() {
@@ -144,6 +175,7 @@ class CategoryVM : ViewModel(), KoinComponent {
             retrieveLastEntryForClickedCategory(clickedCategory = it)
         }
     }
+    //Actions: END
 
     private fun retrieveLastEntryForClickedCategory(clickedCategory: Category) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -151,10 +183,29 @@ class CategoryVM : ViewModel(), KoinComponent {
                 database.appDao().checkIfGramValueExistsForCategory(clickedCategory.category)
             lastEntry?.let { _entryForClickedCategory.value = it }
         }
-
     }
 
-    //Actions: END
+    //Testing Purposes: START
+    //Call to this method has to be added somewhere
+    fun addCategoryTestData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repeat(150) {
+                val lettersKeys = letters.keys
+                val randomLetter1 = lettersKeys.random()
+                val randomLetter2 = lettersKeys.random()
+                val randomLetter3 = lettersKeys.random()
+                val randomWord = randomLetter1 + randomLetter2 + randomLetter3
+
+                database.appDao().insertCategory(
+                    Category(
+                        category = randomWord,
+                        barcodeNumber = "123456789"
+                    )
+                )
+            }
+        }
+    }
+    //Testing Purposes: END
 
 
 }
