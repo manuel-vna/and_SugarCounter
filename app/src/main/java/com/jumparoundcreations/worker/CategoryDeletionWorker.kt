@@ -14,11 +14,17 @@ class CategoryDeletionWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
     private val appDatabase = AppDatabase.getInstance(context)
+    private val MAXIMUM_AMOUNT_CATEGORIES = 100
+    private val AMOUNT_OF_ENTRIES_TO_DELETE = 5
 
     companion object {
+        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
         fun scheduleCategoryDeletionWorker(context: Context) {
             val workRequest =
-                PeriodicWorkRequestBuilder<CategoryDeletionWorker>(20, TimeUnit.MINUTES)
+                PeriodicWorkRequestBuilder<CategoryDeletionWorker>(
+                    WORK_REPEAT_INTERVAL_IN_DAYS,
+                    TimeUnit.DAYS
+                )
                     .build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
@@ -31,10 +37,11 @@ class CategoryDeletionWorker(context: Context, params: WorkerParameters) :
 
     override suspend fun doWork(): Result {
         val categoryTableRowCount = appDatabase.appDao().getCategoryTableRowCount()
-        if (categoryTableRowCount > 15) {
-            val oldestEntries = appDatabase.appDao().getOldestUniqueEntries()
+        if (categoryTableRowCount > MAXIMUM_AMOUNT_CATEGORIES) {
+            val oldestEntries = appDatabase.appDao()
+                .getOldestUniqueEntries(amountOfEntries = AMOUNT_OF_ENTRIES_TO_DELETE)
             oldestEntries.forEach {
-                appDatabase.appDao().deleteSpecificEntryRow(it.id)
+                appDatabase.appDao().deleteSpecificCategoryByName(it.category)
             }
         }
         return Result.success()

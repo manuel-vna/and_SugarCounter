@@ -44,10 +44,10 @@ interface DaoAppDatabase {
             HAVING COUNT(category) = 1
         )
         ORDER BY currentTimestamp ASC 
-        LIMIT 3
+        LIMIT :amountOfEntries
     """
     )
-    suspend fun getOldestUniqueEntries(): List<Entry>
+    suspend fun getOldestUniqueEntries(amountOfEntries: Int): List<Entry>
 
     @Insert
     fun insertCategory(vararg category: Category)
@@ -60,6 +60,9 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM category_table WHERE id = :id""")
     fun deleteSpecificCategory(id: Int)
+
+    @Query("""DELETE FROM category_table WHERE category = :categoryName""")
+    suspend fun deleteSpecificCategoryByName(categoryName: String)
 
     @Query("""DELETE FROM category_table WHERE deletionCheckbox = true""")
     fun deleteCheckedCategories()
