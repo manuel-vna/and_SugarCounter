@@ -33,6 +33,22 @@ interface DaoAppDatabase {
     @Query("""SELECT SUM(gramTotal) FROM entry_table WHERE date = :dateString""")
     fun checkIfGramThresholdIsBreached(dateString: String): Int?
 
+    @Query(
+        """
+        SELECT * 
+        FROM entry_table
+        WHERE category IN (
+            SELECT category 
+            FROM entry_table
+            GROUP BY category 
+            HAVING COUNT(category) = 1
+        )
+        ORDER BY currentTimestamp ASC 
+        LIMIT 3
+    """
+    )
+    suspend fun getOldestUniqueEntries(): List<Entry>
+
     @Insert
     fun insertCategory(vararg category: Category)
 
@@ -53,5 +69,8 @@ interface DaoAppDatabase {
 
     @Query("""SELECT category from category_table WHERE barcodeNumber = :barcodeNumber""")
     fun getCategoryByBarcodeNumber(barcodeNumber: String): String?
+
+    @Query("SELECT COUNT(*) FROM category_table")
+    suspend fun getCategoryTableRowCount(): Int
 
 }

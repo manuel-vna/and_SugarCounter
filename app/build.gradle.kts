@@ -166,4 +166,7 @@ dependencies {
 
     //Google Code Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
+
+    //WorkManager
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
 }
