@@ -134,7 +134,7 @@ fun CategoryList(
                 )
 
                 Column {
-                    value.forEach { category ->
+                    value.sortedBy { it.category }.forEach { category ->
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
