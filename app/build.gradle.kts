@@ -169,4 +169,7 @@ dependencies {
 
     //WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.1")
+
+    //Onboarding
+    implementation("de.sldw:compose-onboarding:0.0.2-0")
 }
