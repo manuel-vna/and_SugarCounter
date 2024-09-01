@@ -44,12 +44,12 @@
     <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch das Erfassen des konsumierten Zuckers in Gramm.</string>
     <string name="faq_question_two">Wie kann ich meinen Zuckerkonsum festhalten?</string>
     <string name="faq_answer_two">Per Direkteingabe oder per Barcode-Scan.</string>
-    <string name="faq_question_three">Warum müssen die Zuckerwete einer Produktkategorie vom Nutzer selbst eingetragen werden?</string>
+    <string name="faq_question_three">Warum müssen die Zuckerwete einer Kategorie vom Nutzer selbst eingetragen werden?</string>
     <string name="faq_answer_three">Durch das eigenstädnige Eingeben der Zuckerwerte soll ein besseres Gefühl für den eigenen Zuckerkonsum entstehen.</string>
-    <string name="faq_question_four">Was bedeutet die Eingabevariante Zucker/100g vs. Zucker/Stück?</string>
+    <string name="faq_question_four">Was bedeutet die Eingabevariante\nZucker/100g?</string>
     <string name="faq_answer_four">Für die Variante Zucker/100g kann der Zuckergehalt pro 100g von der Packung abgelesen und im ersten Feld eingetragen werden. Zudem muss die konsumierte Menge angegeben werden. Der Zuckergehalt wird dann automatisch berechnet.</string>
-    <string name="faq_question_five">Was bedeutet die Eingabevariante Zucker/Stück?</string>
-    <string name="faq_answer_five">5</string>
+    <string name="faq_question_five">Was bedeutet die Eingabevariante\nZucker/Stück?</string>
+    <string name="faq_answer_five">Wenn die Zuckermenge eines Produkts auch pro Stück bekannt ist, kann der Zuckergehalt je Teilstück angegeben werden.</string>
     <string name="faq_question_six">Wofür ist die Zucker-Obergrenze gedacht?</string>
     <string name="faq_answer_six">Die Festlegung einer täglichen Obergrenze soll dabei helfen, ein tägliches Maximum nicht zu überschreiten.</string>
     <string name="faq_question_seven">7</string>
