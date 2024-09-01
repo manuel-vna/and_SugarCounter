@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -31,16 +32,15 @@ fun LineChart(
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
 
-    var backgroundColor = Color.White
-    var drawColor = Color.Black
-    var lineGraphColor = Color.Blue
+    val backgroundColor = MaterialTheme.colorScheme.background
     val thresholdLineColor = Color.Red
+    val drawColor = MaterialTheme.colorScheme.onSurface
+    var lineGraphColor = Color.Blue
 
     if (darkMode == 33) {
-        backgroundColor = Color.Black
-        drawColor = Color.White
         lineGraphColor = Color.Magenta
     }
+
 
     val scrollState = rememberScrollState()
     val textMeasurer = rememberTextMeasurer()
@@ -58,7 +58,7 @@ fun LineChart(
 
     Box(
         modifier = Modifier
-            .padding(end = 16.dp)
+            .padding(end = 4.dp)
             .background(backgroundColor)
             .horizontalScroll(scrollState)
     ) {

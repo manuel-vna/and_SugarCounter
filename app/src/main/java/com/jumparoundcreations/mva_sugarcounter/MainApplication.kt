@@ -2,7 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter
 
 import android.app.Application
 import com.jumparoundcreations.mva_sugarcounter.di.appModule
-import com.jumparoundcreations.worker.CategoryDeletionWorker
+import com.jumparoundcreations.mva_sugarcounter.worker.CategoryDeletionWorker
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

@@ -1,4 +1,4 @@
-package com.jumparoundcreations.worker
+package com.jumparoundcreations.mva_sugarcounter.worker
 
 import android.content.Context
 import androidx.work.CoroutineWorker

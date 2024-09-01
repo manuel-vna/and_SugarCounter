@@ -16,7 +16,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -57,7 +56,7 @@ fun History(context: Context) {
         //Card Screen
         if (historyCardsScreenShown) {
             LazyColumn(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
             ) {
                 items(
                     savedSugarCountGrouped.toList()
@@ -97,9 +96,7 @@ fun History(context: Context) {
 @Composable
 fun HistoryScreenTopArea(historyVM: HistoryVM) {
 
-    Row(
-        modifier = Modifier.padding(bottom = 32.dp)
-    ) {
+    Row {
         Button(
             modifier = Modifier
                 .weight(1f)
@@ -121,7 +118,15 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
             }) {
             Text(stringResource(R.string.historyCardsBtn))
         }
+    }
 
+    // Info button for diagram and cards history screens
+    /*
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+
+    ) {
         IconButton(onClick = { historyVM.actionShowInfoBoxForHistoryScreen() }) {
             Icon(
                 imageVector = Icons.Default.Info,
@@ -129,6 +134,8 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
             )
         }
     }
+     */
+
 }
 
 
@@ -177,7 +184,6 @@ fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
             }
         }
     }
-
 }
 
 
