@@ -23,6 +23,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
@@ -86,6 +88,13 @@ fun SettingsScreen(
             context,
             stringResource(id = R.string.settings_third_party_licenses_text),
             R.drawable.baseline_read_more_24,
+        )
+
+        SettingsButtonExportEntries(
+            context = context,
+            settingsVM = settingsVM,
+            descriptionText = "Export",
+            buttonIcon = R.drawable.baseline_read_more_24
         )
 
         SettingsVersionCode()
@@ -196,6 +205,35 @@ fun SettingsButtonFAQs(
         onClick = {
             settingsVM.actionHideSettingsScreen()
             settingsVM.actionShowFaqScreen()
+        }) {
+        Text(
+            text = "$descriptionText   "
+        )
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun SettingsButtonExportEntries(
+    context: Context,
+    settingsVM: SettingsVM,
+    descriptionText: String,
+    buttonIcon: Int,
+) {
+
+    val permissionState =
+        rememberPermissionState(permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp),
+        onClick = {
+            settingsVM.actionExportEntries(context, permissionState)
         }) {
         Text(
             text = "$descriptionText   "

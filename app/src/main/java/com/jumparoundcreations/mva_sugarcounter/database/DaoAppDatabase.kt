@@ -18,6 +18,9 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntries(startPoint: Long, endPoint: Long): LiveData<List<Entry>>
 
+    @Query("""SELECT * FROM entry_table""")
+    fun getAllEntries(): List<Entry>
+
     @Query("""DELETE FROM entry_table WHERE id = :id""")
     fun deleteSpecificEntryRow(id: Int)
 

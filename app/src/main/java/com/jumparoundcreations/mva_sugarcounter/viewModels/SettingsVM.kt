@@ -1,9 +1,15 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -77,6 +83,35 @@ class SettingsVM : ViewModel(), KoinComponent {
             "gramThresholdValue",
             50
         ).toFloat()
+    }
+
+    @OptIn(ExperimentalPermissionsApi::class)
+    fun actionExportEntries(context: Context, permissionState: PermissionState) {
+
+        val currentTimestamp = System.currentTimeMillis() / 1000
+        val currentDate = HelperMethods.formatDateToString(
+            currentTimestamp,
+            "YYYY-MM-dd_hh:mm"
+        )
+        val fileName = "sugarCounter-export-$currentDate"
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val allEntries = database.appDao().getAllEntries()
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                ExportData.exportEntriesViaMediaStore(context, allEntries, fileName)
+            } else {
+                if (!permissionState.status.isGranted) {
+                    //permissionState.launchPermissionRequest()
+                    //Thread.sleep(5_000)
+                    //ExportData.exportEntriesToCsvFile(context)
+                }
+            }
+
+        }
+
+
     }
 
     //Actions: END

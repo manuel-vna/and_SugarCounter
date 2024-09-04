@@ -169,4 +169,7 @@ dependencies {
 
     //WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.1")
+
+    //Compose Permission Accompanist
+    implementation("com.google.accompanist:accompanist-permissions:0.29.2-rc")
 }
