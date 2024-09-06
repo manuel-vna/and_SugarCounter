@@ -393,7 +393,8 @@ fun DatePicker(
                     )
                 },
                 state = datePickerState,
-                dateValidator = { it in (xDaysAgoMillis + 1)..<nowMillis })
+                //dateValidator = { it in (xDaysAgoMillis + 1)..<nowMillis }
+            )
         }
     }
 }

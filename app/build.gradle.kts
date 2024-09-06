@@ -4,6 +4,7 @@ import java.util.regex.Pattern
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
 }
@@ -62,9 +63,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -117,7 +115,9 @@ fun getAppVersionNameValue(gitVersion: String): String {
     return versionName
 }
 
+//noinspection UseTomlInstead
 dependencies {
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -140,6 +140,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     //Room
+
     implementation("androidx.room:room-common:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
@@ -152,7 +153,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
     //MockK
-    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("io.mockk:mockk:1.13.12")
 
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
