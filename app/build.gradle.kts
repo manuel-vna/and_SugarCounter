@@ -74,7 +74,7 @@ tasks.register("writeVersionInfo") {
     doLast {
         val versionCode = android.defaultConfig.versionCode
         val versionName = android.defaultConfig.versionName
-        val versionInfoFile = file("${buildDir}/version-info.txt")
+        val versionInfoFile = file("${layout.buildDirectory}/version-info.txt")
         versionInfoFile.parentFile.mkdirs()
         versionInfoFile.writeText("versionCode=$versionCode\nversionName=$versionName")
     }
@@ -118,7 +118,6 @@ fun getAppVersionNameValue(gitVersion: String): String {
 //noinspection UseTomlInstead
 dependencies {
 
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -150,7 +149,7 @@ dependencies {
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     //Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     //MockK
     testImplementation("io.mockk:mockk:1.13.12")
@@ -163,7 +162,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.6.8")
+    implementation("androidx.compose.runtime:runtime:1.7.0")
 
     //Google Code Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")

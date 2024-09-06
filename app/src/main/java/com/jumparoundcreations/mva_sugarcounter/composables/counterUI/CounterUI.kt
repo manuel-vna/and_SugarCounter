@@ -33,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
@@ -332,12 +333,19 @@ fun CategoryItems(
 fun DatePicker(
     counterVM: CounterVM,
 ) {
+    val nowMillis = System.currentTimeMillis()
+    val xDaysAgoMillis = nowMillis - 2629743000
 
     val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
     val datePickerShown by counterVM.datePickerShown.collectAsState()
-    val datePickerState = rememberDatePickerState(initialDisplayMode = DisplayMode.Picker)
-    val nowMillis = System.currentTimeMillis()
-    val xDaysAgoMillis = nowMillis - 2629743000
+    val datePickerState = rememberDatePickerState(
+        initialDisplayMode = DisplayMode.Picker,
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis in (xDaysAgoMillis + 1)..<nowMillis
+            }
+        }
+    )
 
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -393,7 +401,6 @@ fun DatePicker(
                     )
                 },
                 state = datePickerState,
-                //dateValidator = { it in (xDaysAgoMillis + 1)..<nowMillis }
             )
         }
     }
