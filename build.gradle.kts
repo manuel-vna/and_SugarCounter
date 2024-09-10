@@ -2,8 +2,10 @@
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
+    alias(libs.plugins.compose.compiler) apply false
 }
 
+//noinspection UseTomlInstead
 buildscript {
     dependencies {
         classpath("com.google.android.gms:oss-licenses-plugin:0.10.6")

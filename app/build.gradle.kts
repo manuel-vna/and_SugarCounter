@@ -4,6 +4,7 @@ import java.util.regex.Pattern
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
 }
@@ -62,9 +63,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -76,7 +74,7 @@ tasks.register("writeVersionInfo") {
     doLast {
         val versionCode = android.defaultConfig.versionCode
         val versionName = android.defaultConfig.versionName
-        val versionInfoFile = file("${buildDir}/version-info.txt")
+        val versionInfoFile = file("${layout.buildDirectory}/version-info.txt")
         versionInfoFile.parentFile.mkdirs()
         versionInfoFile.writeText("versionCode=$versionCode\nversionName=$versionName")
     }
@@ -117,6 +115,7 @@ fun getAppVersionNameValue(gitVersion: String): String {
     return versionName
 }
 
+//noinspection UseTomlInstead
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -140,6 +139,7 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     //Room
+
     implementation("androidx.room:room-common:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation("androidx.room:room-runtime:2.6.1")
@@ -149,10 +149,10 @@ dependencies {
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     //Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-compose:2.8.0")
 
     //MockK
-    testImplementation("io.mockk:mockk:1.13.7")
+    testImplementation("io.mockk:mockk:1.13.12")
 
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
@@ -162,11 +162,14 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.6.8")
+    implementation("androidx.compose.runtime:runtime:1.7.0")
 
     //Google Code Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
     //WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.1")
+
+    //Onboarding
+    implementation("de.sldw:compose-onboarding:0.0.2-0")
 }
