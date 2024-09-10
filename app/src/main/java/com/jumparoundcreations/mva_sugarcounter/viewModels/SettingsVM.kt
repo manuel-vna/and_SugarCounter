@@ -24,9 +24,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _settingsScreenShown = MutableStateFlow(true)
     val settingsScreenShown = _settingsScreenShown.asStateFlow()
 
-    val _onboardingScreenShown = MutableStateFlow(false)
-    val onboardingScreenShown = _onboardingScreenShown.asStateFlow()
-
     val _faqScreenShown = MutableStateFlow(false)
     val faqScreenShown = _faqScreenShown.asStateFlow()
 
@@ -47,10 +44,6 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     fun actionHideSettingsScreen() {
         _settingsScreenShown.value = false
-    }
-
-    fun actionChangeOnboardingScreenVisibility(isShown: Boolean) {
-        _onboardingScreenShown.value = isShown
     }
 
     fun actionShowFaqScreen() {

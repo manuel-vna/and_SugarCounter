@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
@@ -27,7 +27,6 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.DialogDoubleButton
-import com.jumparoundcreations.mva_sugarcounter.composables.onboardingUI.OnboardingUI
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
@@ -44,14 +43,9 @@ fun Settings(context: Context) {
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
-    val onboardingScreenShown by settingsVM.onboardingScreenShown.collectAsState()
     val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
     settingsVM.actionResetGramThresholdSliderToSharedPref()
-
-    if (onboardingScreenShown) {
-        OnboardingUI()
-    }
 
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM)
@@ -79,14 +73,8 @@ fun SettingsScreen(
             settingsVM
         )
 
-        Divider(modifier = Modifier.padding(bottom = 32.dp))
+        HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
 
-        SettingsButtonOnboarding(
-            context,
-            settingsVM,
-            "App Introduction", //stringResource(id = R.string.saveButton),
-            R.drawable.baseline_read_more_24,
-        )
 
         SettingsButtonFAQs(
             context,
@@ -164,30 +152,6 @@ fun SettingsSliderGramThreshold(
                 settingsVM.actionUpdateGramThresholdSharedPref()
             },
             buttonOnDismiss = { settingsVM.actionGramThresholdDialogCheck(false) }
-        )
-    }
-}
-
-@Composable
-fun SettingsButtonOnboarding(
-    context: Context,
-    settingsVM: SettingsVM,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        onClick = {
-            settingsVM.actionChangeOnboardingScreenVisibility(true)
-        }) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
         )
     }
 }
