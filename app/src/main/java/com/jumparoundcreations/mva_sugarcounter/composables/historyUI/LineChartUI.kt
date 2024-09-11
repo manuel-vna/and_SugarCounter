@@ -58,7 +58,7 @@ fun LineChart(
 
     Box(
         modifier = Modifier
-            .padding(end = 4.dp)
+            .padding(top = 28.dp, end = 4.dp)
             .background(backgroundColor)
             .horizontalScroll(scrollState)
     ) {

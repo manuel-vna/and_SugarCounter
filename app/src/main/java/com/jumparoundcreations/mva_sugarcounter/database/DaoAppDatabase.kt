@@ -11,6 +11,8 @@ import com.jumparoundcreations.mva_sugarcounter.data.Entry
 @Dao
 interface DaoAppDatabase {
 
+    // Entries
+
     @Insert
     fun insertEntry(vararg sugarCounter: Entry)
 
@@ -29,6 +31,9 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM entry_table WHERE id = (SELECT MAX(id) FROM entry_table)""")
     fun deleteLastEntry()
+
+    @Query("""DELETE FROM entry_table WHERE id IN (SELECT id FROM entry_table ORDER BY id ASC LIMIT :n)""")
+    fun deleteOldestNEntries(n: Int)
 
     @Query("""SELECT * FROM entry_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
     suspend fun checkIfGramValueExistsForCategory(category: String): Entry?
@@ -51,6 +56,12 @@ interface DaoAppDatabase {
     """
     )
     suspend fun getOldestUniqueEntries(amountOfEntries: Int): List<Entry>
+
+    @Query("SELECT COUNT(*) FROM entry_table")
+    suspend fun getEntryTableRowCount(): Int
+
+
+    // Categories
 
     @Insert
     fun insertCategory(vararg category: Category)

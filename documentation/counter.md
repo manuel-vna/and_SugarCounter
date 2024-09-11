@@ -40,3 +40,26 @@ Saving option 2: The category is not in the database yet and a barcode is displa
 Save the category and the barcode in a new row
 Saving option 3: The category is already in the database and the user is displayed a barcode: Get
 that category from the database and save the barcode with it
+
+## Data Input
+
+Entry(
+currentTimestamp: Long, controlled by DatePickerDilaog() composable
+date: String, controlled by HelperMethods.formatDateToString(),
+category: String. Maximum amount of characters controlled by the according CounterUI.TextField()
+composable method. (same as Category.category)
+isPerHundred: Boolean controlled by logic in CounterVM implementation
+perPieceGram: String, checks if string character is digit and checks that input is not more than 3
+characters
+perPieceAmount: " "
+perHundredGram: " "
+perHundredQuantity: " "
+gramTotal: Int calculated value by logic of CounterVM
+)
+
+Category(
+category: String. Maximum amount of characters controlled by the according CounterUI.TextField()
+composable method. (same as Entry.category)
+barcodeNumber: String returned by Google lig GMsBarcodeScanner
+)
+
