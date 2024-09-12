@@ -127,6 +127,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.material)
+    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -162,7 +163,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.7.0")
+    implementation("androidx.compose.runtime:runtime:1.7.1")
 
     //Google Code Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
