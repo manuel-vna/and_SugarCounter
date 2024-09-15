@@ -71,4 +71,6 @@
     <string name="category_bottom_sheet_no_entry_yet">Für diese Kategorie gibt es noch keinen Eintrag.</string>
     <string name="category_bottom_sheet_date">Letzte Verwendung</string>
     <string name="category_bottom_sheet_sugar_value">Zuckerwert</string>
+    <string name="export_bottom_sheet_success">Deine Daten wurden erfolgreich in einer Datei im Donwloads-Ordner gespeichert.</string>
+    <string name="export_bottom_sheet_button">Zur Datei gehen</string>
 </resources>

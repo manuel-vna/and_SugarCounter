@@ -22,14 +22,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.DialogDoubleButton
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -41,7 +37,6 @@ fun Settings(context: Context) {
 
     //get an instance of the ViewModel
     val settingsVM: SettingsVM = koinViewModel()
-    val categoryVM: CategoryVM = viewModel()
 
     //collecting states
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
@@ -99,6 +94,8 @@ fun SettingsScreen(
         )
 
         SettingsVersionCode()
+
+        ExportBottomSheet(context)
     }
 }
 
@@ -217,34 +214,6 @@ fun SettingsButtonFAQs(
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun SettingsButtonExportEntries(
-    context: Context,
-    settingsVM: SettingsVM,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-
-    val permissionState =
-        rememberPermissionState(permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        onClick = {
-            settingsVM.actionExportEntries(context, permissionState)
-        }) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
-    }
-}
 
 @Composable
 fun SettingsVersionCode() {

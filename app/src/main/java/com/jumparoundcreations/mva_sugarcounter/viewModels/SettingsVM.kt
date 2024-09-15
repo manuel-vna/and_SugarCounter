@@ -1,13 +1,11 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
@@ -41,6 +39,10 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     val _gramThresholDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
+
+    val _dataSuccesfullyExportedShown = MutableStateFlow(false)
+    val dataSuccesfullyExportedShown = _dataSuccesfullyExportedShown.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -85,35 +87,42 @@ class SettingsVM : ViewModel(), KoinComponent {
         ).toFloat()
     }
 
-    @OptIn(ExperimentalPermissionsApi::class)
-    fun actionExportEntries(context: Context, permissionState: PermissionState) {
 
-        val currentTimestamp = System.currentTimeMillis() / 1000
-        val currentDate = HelperMethods.formatDateToString(
-            currentTimestamp,
+    @TargetApi(Build.VERSION_CODES.R)
+    fun actionExportEntries(
+        context: Context,
+        osVersionHigherOrEqualsR: Boolean,
+        settingsVM: SettingsVM
+    ) {
+
+        val currentTimestampLong = System.currentTimeMillis() / 1000
+        val currentTimestamp = HelperMethods.formatDateToString(
+            currentTimestampLong,
             "YYYY-MM-dd_hh:mm"
         )
-        val fileName = "sugarCounter-export-$currentDate"
+        val fileName = "sugarCounter-export-$currentTimestamp.txt"
 
         viewModelScope.launch(Dispatchers.IO) {
 
             val allEntries = database.appDao().getAllEntries()
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                ExportData.exportEntriesViaMediaStore(context, allEntries, fileName)
+            if (osVersionHigherOrEqualsR) {
+                ExportData.exportEntriesViaMediaStore(
+                    context = context,
+                    allEntries = allEntries,
+                    fileName = fileName,
+                    settingsVM = settingsVM
+                )
             } else {
-                if (!permissionState.status.isGranted) {
-                    //permissionState.launchPermissionRequest()
-                    //Thread.sleep(5_000)
-                    //ExportData.exportEntriesToCsvFile(context)
-                }
+                ExportData.exportEntriesViaFileWriter(allEntries, fileName, settingsVM)
             }
-
+            println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")
         }
-
-
     }
 
+    fun actionChangeExportBottomSheetShown(isShown: Boolean) {
+        _dataSuccesfullyExportedShown.value = isShown
+    }
     //Actions: END
 
 
