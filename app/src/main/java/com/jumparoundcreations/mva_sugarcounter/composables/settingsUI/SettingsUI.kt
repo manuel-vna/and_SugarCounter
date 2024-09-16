@@ -89,7 +89,7 @@ fun SettingsScreen(
         SettingsButtonExportEntries(
             context = context,
             settingsVM = settingsVM,
-            descriptionText = "Export",
+            descriptionText = stringResource(R.string.export_settings_button),
             buttonIcon = R.drawable.baseline_read_more_24
         )
 

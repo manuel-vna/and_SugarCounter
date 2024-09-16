@@ -72,4 +72,5 @@
     <string name="category_bottom_sheet_sugar_value">Sugar value</string>
     <string name="export_bottom_sheet_success">Your data was successfully saved into a file to your downloads folder.</string>
     <string name="export_bottom_sheet_button">Go to the file</string>
+    <string name="export_settings_button">Export sugar entries</string>
 </resources>
