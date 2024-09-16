@@ -17,6 +17,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.random.Random
 
 class SettingsVM : ViewModel(), KoinComponent {
@@ -95,12 +98,11 @@ class SettingsVM : ViewModel(), KoinComponent {
         settingsVM: SettingsVM
     ) {
 
-        val currentTimestampLong = System.currentTimeMillis() / 1000
-        val currentTimestamp = HelperMethods.formatDateToString(
-            currentTimestampLong,
-            "YYYY-MM-dd_hh:mm"
-        )
-        val fileName = "sugarCounter-export-$currentTimestamp.txt"
+        val timestamp = System.currentTimeMillis()
+        val date = Date(timestamp)
+        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm", Locale.getDefault())
+        val timestampString = sdf.format(date)
+        val fileName = "sugarCounter-$timestampString.txt"
 
         viewModelScope.launch(Dispatchers.IO) {
 
