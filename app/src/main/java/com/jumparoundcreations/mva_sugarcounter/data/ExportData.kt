@@ -20,6 +20,8 @@ object ExportData : KoinComponent {
     private val database by inject<AppDatabase>()
     lateinit var csvFile: File
     var uri: Uri? = null
+    private const val HeaderString =
+        "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
 
 
     fun exportEntriesViaFileWriter(
@@ -35,10 +37,15 @@ object ExportData : KoinComponent {
 
         try {
             val writer = FileWriter(csvFile)
-            writer.append("ID,Name,Email\n") // Write the header
+            //Header
+            writer.append(HeaderString)
 
             for (entry in allEntries) {
-                writer.append("${entry.id},${entry.category},${entry.date}\n")
+                if (entry.isPerHundred) {
+                    writer.append("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n")
+                } else {
+                    writer.append("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n")
+                }
             }
 
             writer.flush()
@@ -76,10 +83,16 @@ object ExportData : KoinComponent {
             uri?.let {
                 context.contentResolver.openOutputStream(it)?.use { outputStream ->
 
-                    for (entry in allEntries) {
-                        outputStream.write("${entry.id},${entry.category},${entry.date}\n".toByteArray())
-                    }
+                    // Header
+                    outputStream.write(HeaderString.toByteArray())
 
+                    for (entry in allEntries) {
+                        if (entry.isPerHundred) {
+                            outputStream.write("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n".toByteArray())
+                        } else {
+                            outputStream.write("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n".toByteArray())
+                        }
+                    }
                 }
             }
 
