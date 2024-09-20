@@ -131,27 +131,30 @@ class SettingsVM : ViewModel(), KoinComponent {
     //Testing Purposes: START
     fun actionAddTestData() {
         viewModelScope.launch(Dispatchers.IO) {
-            var timestamp = 1713643692000
-            repeat(40) {
-                timestamp += 86400000
-                var gramValue = Random.nextInt(from = 1, until = 61)
+            var timestamp = 1600617740.toLong()
+            repeat((365 * 4)) {
+                timestamp += 86400
 
-                database.appDao().insertEntry(
-                    Entry(
-                        currentTimestamp = timestamp,
-                        date = HelperMethods.formatDateToString(
-                            timestamp,
-                            "YYYY-MM-dd"
-                        ),
-                        category = "Test",
-                        isPerHundred = true,
-                        perPieceGram = gramValue,
-                        perPieceAmount = 1,
-                        perHundredGram = 0,
-                        perHundredQuantity = 0,
-                        gramTotal = gramValue
+                repeat((1..4).random()) {
+                    var gramValue = Random.nextInt(from = 1, until = 20)
+
+                    database.appDao().insertEntry(
+                        Entry(
+                            currentTimestamp = timestamp,
+                            date = HelperMethods.formatDateToString(
+                                timestamp,
+                                "YYYY-MM-dd"
+                            ),
+                            category = "Test",
+                            isPerHundred = true,
+                            perPieceGram = gramValue,
+                            perPieceAmount = 1,
+                            perHundredGram = 0,
+                            perHundredQuantity = 0,
+                            gramTotal = gramValue
+                        )
                     )
-                )
+                }
             }
         }
     }
