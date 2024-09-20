@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
@@ -73,6 +75,23 @@ fun SettingsButtonExportEntries(
         Icon(
             painter = painterResource(id = buttonIcon),
             contentDescription = "",
+        )
+    }
+}
+
+@Composable
+fun ProgressIndicator(settingsVM: SettingsVM) {
+
+    val exportProgressIndicator by settingsVM.exportProgressIndicator.collectAsState()
+    val exportProgressIndicatorShown by settingsVM.exportProgressIndicatorShown.collectAsState()
+
+    if (exportProgressIndicatorShown) {
+        LinearProgressIndicator(
+            modifier = Modifier
+                .zIndex(1f),
+            progress = {
+                exportProgressIndicator
+            }
         )
     }
 }

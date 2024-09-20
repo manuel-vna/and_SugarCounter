@@ -72,7 +72,6 @@ fun SettingsScreen(
 
         HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
 
-
         SettingsButtonFAQs(
             context,
             settingsVM,
@@ -94,6 +93,8 @@ fun SettingsScreen(
         )
 
         SettingsVersionCode()
+
+        ProgressIndicator(settingsVM = settingsVM)
 
         ExportBottomSheet(context)
     }

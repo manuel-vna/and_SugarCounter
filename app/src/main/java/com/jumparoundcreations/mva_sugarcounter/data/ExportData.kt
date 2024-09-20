@@ -40,19 +40,37 @@ object ExportData : KoinComponent {
             //Header
             writer.append(HeaderString)
 
+            settingsVM.actionChangExportProgressIndicatorVisibility(isShown = true)
+
+            //START: Variables for ProgressIndicator
+            var count = 0
+            var multiplier = 1
+            val tenPercent = allEntries.count() / 10
+            var currentStep = tenPercent
+            //END: Variables for ProgressIndicator
+
             for (entry in allEntries) {
                 if (entry.isPerHundred) {
                     writer.append("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n")
                 } else {
                     writer.append("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n")
                 }
+
+                //progress indicator
+                count++
+                if (currentStep == count) {
+                    settingsVM.actionIncrementExportProgressIndicator()
+                    multiplier++
+                    currentStep = tenPercent * multiplier
+                }
+
             }
 
             writer.flush()
             writer.close()
 
-            println("Data successfully exported to ${csvFile.absolutePath}")
-            settingsVM.actionChangeExportBottomSheetShown(true)
+            settingsVM.actionChangExportProgressIndicatorVisibility(isShown = false)
+            settingsVM.actionChangeExportBottomSheetShown(isShown = true)
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -76,6 +94,8 @@ object ExportData : KoinComponent {
                 put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS)
             }
 
+            settingsVM.actionChangExportProgressIndicatorVisibility(isShown = true)
+
             uri = context.contentResolver.insert(
                 MediaStore.Downloads.EXTERNAL_CONTENT_URI,
                 contentValues
@@ -86,17 +106,33 @@ object ExportData : KoinComponent {
                     // Header
                     outputStream.write(HeaderString.toByteArray())
 
+                    //START: Variables for ProgressIndicator
+                    var count = 0
+                    var multiplier = 1
+                    val tenPercent = allEntries.count() / 10
+                    var currentStep = tenPercent
+                    //END: Variables for ProgressIndicator
+
                     for (entry in allEntries) {
                         if (entry.isPerHundred) {
                             outputStream.write("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n".toByteArray())
                         } else {
                             outputStream.write("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n".toByteArray())
                         }
+
+                        //progress indicator
+                        count++
+                        if (currentStep == count) {
+                            settingsVM.actionIncrementExportProgressIndicator()
+                            multiplier++
+                            currentStep = tenPercent * multiplier
+                        }
                     }
                 }
             }
 
-            settingsVM.actionChangeExportBottomSheetShown(true)
+            settingsVM.actionChangExportProgressIndicatorVisibility(isShown = false)
+            settingsVM.actionChangeExportBottomSheetShown(isShown = true)
 
         } catch (e: IOException) {
             e.printStackTrace()

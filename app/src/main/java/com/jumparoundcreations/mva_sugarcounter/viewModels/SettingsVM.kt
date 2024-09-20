@@ -43,6 +43,12 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _gramThresholDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
 
+    val _exportProgressIndicator = MutableStateFlow(0.1f)
+    val exportProgressIndicator = _exportProgressIndicator.asStateFlow()
+
+    val _exportProgressIndicatorShown = MutableStateFlow(false)
+    val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
+
     val _dataSuccesfullyExportedShown = MutableStateFlow(false)
     val dataSuccesfullyExportedShown = _dataSuccesfullyExportedShown.asStateFlow()
 
@@ -90,7 +96,6 @@ class SettingsVM : ViewModel(), KoinComponent {
         ).toFloat()
     }
 
-
     @TargetApi(Build.VERSION_CODES.R)
     fun actionExportEntries(
         context: Context,
@@ -120,6 +125,15 @@ class SettingsVM : ViewModel(), KoinComponent {
             }
             println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")
         }
+    }
+
+    fun actionIncrementExportProgressIndicator() {
+        _exportProgressIndicator.value += 0.1f
+        println("ProgressIndicator: ${exportProgressIndicator.value}")
+    }
+
+    fun actionChangExportProgressIndicatorVisibility(isShown: Boolean) {
+        _exportProgressIndicatorShown.value = isShown
     }
 
     fun actionChangeExportBottomSheetShown(isShown: Boolean) {
