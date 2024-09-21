@@ -49,7 +49,7 @@ fun SettingsButtonExportEntries(
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted: Boolean ->
-            settingsVM.actionExportEntries(context = context, true, settingsVM)
+            settingsVM.actionExportEntries(context = context, false, settingsVM)
             println("Permission 'Write External Storage' granted!")
         })
 
@@ -60,10 +60,18 @@ fun SettingsButtonExportEntries(
         onClick = {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                settingsVM.actionExportEntries(context = context, true, settingsVM)
+                settingsVM.actionExportEntries(
+                    context = context,
+                    osVersionHigherOrEqualsR = true,
+                    settingsVM = settingsVM
+                )
             } else {
                 if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                    settingsVM.actionExportEntries(context = context, false, settingsVM)
+                    settingsVM.actionExportEntries(
+                        context = context,
+                        osVersionHigherOrEqualsR = false,
+                        settingsVM = settingsVM
+                    )
                 } else {
                     requestPermissionLauncher.launch(input = Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 }
@@ -80,7 +88,7 @@ fun SettingsButtonExportEntries(
 }
 
 @Composable
-fun ProgressIndicator(settingsVM: SettingsVM) {
+fun ExportProgressIndicator(settingsVM: SettingsVM) {
 
     val exportProgressIndicator by settingsVM.exportProgressIndicator.collectAsState()
     val exportProgressIndicatorShown by settingsVM.exportProgressIndicatorShown.collectAsState()
@@ -101,6 +109,7 @@ fun ProgressIndicator(settingsVM: SettingsVM) {
 fun ExportBottomSheet(context: Context) {
     val settingsVM: SettingsVM = koinViewModel()
     val dataSuccessfullyExportedShown by settingsVM.dataSuccesfullyExportedShown.collectAsState()
+    val exportSuccessful by settingsVM.exportSuccessfully.collectAsState()
 
     if (dataSuccessfullyExportedShown) {
         ModalBottomSheet(
@@ -115,20 +124,34 @@ fun ExportBottomSheet(context: Context) {
                 horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
-                Text(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    textAlign = TextAlign.Center,
-                    text = stringResource(R.string.export_bottom_sheet_success)
-                )
-                Button(
-                    modifier = Modifier.padding(bottom = 16.dp),
-                    onClick = {
-                        openFile(context = context, mimeType = "text/plain")
+                if (exportSuccessful) {
+                    Text(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.export_bottom_sheet_success)
+                    )
+                    Button(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        onClick = {
+                            openFile(context = context, mimeType = "text/plain")
+                        }
+                    )
+                    {
+                        Text(stringResource(R.string.export_bottom_sheet_button))
                     }
-                )
-                {
-                    Text(stringResource(R.string.export_bottom_sheet_button))
+                } else {
+                    Text(
+                        modifier = Modifier.padding(all = 32.dp),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.general_error)
+                    )
+                    Text(
+                        modifier = Modifier.padding(bottom = 16.dp),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(R.string.export_data_error_message)
+                    )
                 }
+
             }
         }
     }

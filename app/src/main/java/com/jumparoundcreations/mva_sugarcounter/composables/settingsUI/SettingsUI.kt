@@ -94,7 +94,7 @@ fun SettingsScreen(
 
         SettingsVersionCode()
 
-        ProgressIndicator(settingsVM = settingsVM)
+        ExportProgressIndicator(settingsVM = settingsVM)
 
         ExportBottomSheet(context)
     }

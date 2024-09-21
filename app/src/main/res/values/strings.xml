@@ -23,6 +23,7 @@
     <string name="generalClose">Close</string>
     <string name="general_gram">gram</string>
     <string name="general_delete">Delete</string>
+    <string name="general_error">Error</string>
     <string name="alertGramThresholdTitle">Warning</string>
     <string name="alertGramThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
     <string name="alertGramThresholdConfirmBtn">Delete it</string>
@@ -73,4 +74,5 @@
     <string name="export_bottom_sheet_success">Your data was successfully saved to the Downloads folder.</string>
     <string name="export_bottom_sheet_button">Go to the file</string>
     <string name="export_settings_button">Export sugar entries</string>
+    <string name="export_data_error_message">Unfortunately, the sugar entries could not be saved in a file. Please try again.</string>
 </resources>

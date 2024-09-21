@@ -74,6 +74,7 @@ object ExportData : KoinComponent {
 
         } catch (e: IOException) {
             e.printStackTrace()
+            settingsVM.actionChangeExportSuccessfully(wasSuccessful = false)
             println("Failed to export data: ${e.message}")
         }
     }
@@ -136,6 +137,7 @@ object ExportData : KoinComponent {
 
         } catch (e: IOException) {
             e.printStackTrace()
+            settingsVM.actionChangeExportSuccessfully(wasSuccessful = false)
             println("Failed to export data: ${e.message}")
         }
     }

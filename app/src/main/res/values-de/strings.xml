@@ -24,6 +24,7 @@
     <string name="generalClose">Schließen</string>
     <string name="general_gram">Gramm</string>
     <string name="general_delete">Löschen</string>
+    <string name="general_error">Error</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
@@ -74,4 +75,5 @@
     <string name="export_bottom_sheet_success">Deine Daten wurden erfolgreich unter Downloads gespeichert.</string>
     <string name="export_bottom_sheet_button">Zur Datei gehen</string>
     <string name="export_settings_button">Zuckereinträge exportieren</string>
+    <string name="export_data_error_message">Leider konnten die Zuckereinträge nicht in einer Datei gespeichert werden. Bitte erneut versuchen.</string>
 </resources>

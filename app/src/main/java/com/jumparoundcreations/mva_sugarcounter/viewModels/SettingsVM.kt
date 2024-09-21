@@ -52,6 +52,9 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _dataSuccesfullyExportedShown = MutableStateFlow(false)
     val dataSuccesfullyExportedShown = _dataSuccesfullyExportedShown.asStateFlow()
 
+    val _exportSuccessfully = MutableStateFlow(true)
+    val exportSuccessfully = _exportSuccessfully.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -121,7 +124,11 @@ class SettingsVM : ViewModel(), KoinComponent {
                     settingsVM = settingsVM
                 )
             } else {
-                ExportData.exportEntriesViaFileWriter(allEntries, fileName, settingsVM)
+                ExportData.exportEntriesViaFileWriter(
+                    allEntries = allEntries,
+                    fileName = fileName,
+                    settingsVM = settingsVM
+                )
             }
             println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")
         }
@@ -138,6 +145,10 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     fun actionChangeExportBottomSheetShown(isShown: Boolean) {
         _dataSuccesfullyExportedShown.value = isShown
+    }
+
+    fun actionChangeExportSuccessfully(wasSuccessful: Boolean) {
+        _exportSuccessfully.value = wasSuccessful
     }
     //Actions: END
 
