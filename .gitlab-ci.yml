@@ -62,8 +62,6 @@ before_script:
   - chmod +x ./gradlew
 
 lintCheck:
-  rules:
-    - when: never
   interruptible: true
   stage: test
   script:
@@ -76,8 +74,6 @@ lintCheck:
 
 
 debugTests:
-  rules:
-    - when: never
   interruptible: true
   stage: test
   script:
