@@ -154,6 +154,8 @@ dependencies {
 
     //MockK
     testImplementation("io.mockk:mockk:1.13.12")
+    //Turbine for testing the flows
+    testImplementation("app.cash.turbine:turbine:1.1.0")
 
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")

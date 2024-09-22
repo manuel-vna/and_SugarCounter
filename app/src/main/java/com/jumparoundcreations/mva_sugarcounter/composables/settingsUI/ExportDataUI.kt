@@ -114,7 +114,7 @@ fun ExportBottomSheet(context: Context) {
     if (dataSuccessfullyExportedShown) {
         ModalBottomSheet(
             onDismissRequest = {
-                settingsVM.actionChangeExportBottomSheetShown(isShown = false)
+                settingsVM.actionChangeExportBottomSheetVisibility(isShown = false)
             }
         ) {
             Column(

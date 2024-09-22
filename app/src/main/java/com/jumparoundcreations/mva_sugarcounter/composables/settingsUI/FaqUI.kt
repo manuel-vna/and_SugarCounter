@@ -59,8 +59,8 @@ fun FAQScreen(context: Context) {
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_title_faq_text),
             onBackClickAction = {
-                settingsVM.actionHideFaqScreen()
-                settingsVM.actionShowSettingsScreen()
+                settingsVM.actionChangeFaqScreenVisibility(isShown = false)
+                settingsVM.actionChangeSettingsScreenVisibility(isShown = true)
             }
         )
 

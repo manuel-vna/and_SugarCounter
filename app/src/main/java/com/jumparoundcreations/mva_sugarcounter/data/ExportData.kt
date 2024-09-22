@@ -70,7 +70,7 @@ object ExportData : KoinComponent {
             writer.close()
 
             settingsVM.actionChangExportProgressIndicatorVisibility(isShown = false)
-            settingsVM.actionChangeExportBottomSheetShown(isShown = true)
+            settingsVM.actionChangeExportBottomSheetVisibility(isShown = true)
 
         } catch (e: IOException) {
             e.printStackTrace()
@@ -133,7 +133,7 @@ object ExportData : KoinComponent {
             }
 
             settingsVM.actionChangExportProgressIndicatorVisibility(isShown = false)
-            settingsVM.actionChangeExportBottomSheetShown(isShown = true)
+            settingsVM.actionChangeExportBottomSheetVisibility(isShown = true)
 
         } catch (e: IOException) {
             e.printStackTrace()

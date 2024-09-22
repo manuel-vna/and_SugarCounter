@@ -202,8 +202,8 @@ fun SettingsButtonFAQs(
             .fillMaxWidth()
             .padding(2.dp),
         onClick = {
-            settingsVM.actionHideSettingsScreen()
-            settingsVM.actionShowFaqScreen()
+            settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
+            settingsVM.actionChangeFaqScreenVisibility(isShown = true)
         }) {
         Text(
             text = "$descriptionText   "

@@ -58,20 +58,13 @@ class SettingsVM : ViewModel(), KoinComponent {
     //SateFlows: END
 
     //Actions: START
-    fun actionShowSettingsScreen() {
-        _settingsScreenShown.value = true
+
+    fun actionChangeSettingsScreenVisibility(isShown: Boolean) {
+        _settingsScreenShown.value = isShown
     }
 
-    fun actionHideSettingsScreen() {
-        _settingsScreenShown.value = false
-    }
-
-    fun actionShowFaqScreen() {
-        _faqScreenShown.value = true
-    }
-
-    fun actionHideFaqScreen() {
-        _faqScreenShown.value = false
+    fun actionChangeFaqScreenVisibility(isShown: Boolean) {
+        _faqScreenShown.value = isShown
     }
 
     fun actionChangeExpandedId(id: Long) {
@@ -143,7 +136,7 @@ class SettingsVM : ViewModel(), KoinComponent {
         _exportProgressIndicatorShown.value = isShown
     }
 
-    fun actionChangeExportBottomSheetShown(isShown: Boolean) {
+    fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
         _dataSuccesfullyExportedShown.value = isShown
     }
 
