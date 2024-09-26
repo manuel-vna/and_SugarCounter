@@ -17,7 +17,7 @@ import java.io.IOException
 
 object ExportData : KoinComponent {
 
-    private val database by inject<AppDatabase>()
+    val database by inject<AppDatabase>()
     lateinit var csvFile: File
     var uri: Uri? = null
     private const val HeaderString =

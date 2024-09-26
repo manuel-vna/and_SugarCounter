@@ -4,13 +4,19 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
+import kotlin.random.Random
 
-class HelperMethods {
+class HelperMethods : KoinComponent {
 
     companion object {
 
@@ -75,6 +81,38 @@ class HelperMethods {
             //darkMode == 33 and brightMode = 17
             return context.resources.configuration.uiMode
         }
+
+        //Testing Purposes: START
+        fun actionAddTestData() {
+            GlobalScope.launch(Dispatchers.IO) {
+                var timestamp = 1600617740.toLong()
+                repeat((365 * 4)) {
+                    timestamp += 86400
+
+                    repeat((1..4).random()) {
+                        var gramValue = Random.nextInt(from = 1, until = 20)
+
+                        database.appDao().insertEntry(
+                            Entry(
+                                currentTimestamp = timestamp,
+                                date = HelperMethods.formatDateToString(
+                                    timestamp,
+                                    "YYYY-MM-dd"
+                                ),
+                                category = "Test",
+                                isPerHundred = true,
+                                perPieceGram = gramValue,
+                                perPieceAmount = 1,
+                                perHundredGram = 0,
+                                perHundredQuantity = 0,
+                                gramTotal = gramValue
+                            )
+                        )
+                    }
+                }
+            }
+        }
+        //Testing Purposes: END
 
     }
 

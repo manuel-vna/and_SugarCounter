@@ -156,6 +156,8 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.12")
     //Turbine for testing the flows
     testImplementation("app.cash.turbine:turbine:1.1.0")
+    // Coroutines testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 
     //Third-Party Licenses
     implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
