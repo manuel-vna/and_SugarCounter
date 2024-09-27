@@ -91,7 +91,7 @@ fun getAppGitVersion(): String {
         standardOutput = stdout
     }
     val gitVersion = stdout.toString().trim()
-    println("git Version XYZ:$gitVersion")
+    println("Print git Version:$gitVersion")
     return gitVersion
 }
 

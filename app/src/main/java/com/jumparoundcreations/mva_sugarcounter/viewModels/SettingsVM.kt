@@ -100,7 +100,7 @@ class SettingsVM : ViewModel(), KoinComponent {
         val date = Date(timestamp)
         val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm", Locale.getDefault())
         val timestampString = sdf.format(date)
-        val fileName = "sugarCounter-$timestampString.txt"
+        val fileName = "sugarCounter-$timestampString"
 
         viewModelScope.launch(Dispatchers.IO) {
 
