@@ -89,8 +89,7 @@ assembleDebug:
   stage: build
   script:
     - ./gradlew assembleDebug
-    - source app/build/version-info.txt #file version_info.txt was created in build.gradle.kts:app
-    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-debug.apk # renames the apk-file with
+    - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${CI_COMMIT_SHORT_SHA}-debug.apk # renames the apk-file with
   artifacts:
     paths:
       - app/build/outputs/ # place artifcts in this directory
@@ -109,9 +108,8 @@ assembleRelease:
   script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assemble bundleRelease
-    - source app/build/version-info.txt
-    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-release.apk
-    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-v${versionName}'.'${CI_COMMIT_SHORT_SHA}'('${versionCode}')'-release.aab
+    - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.apk
+    - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.aab
   artifacts:
     paths:
       - app/build/outputs/
