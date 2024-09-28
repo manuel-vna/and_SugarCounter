@@ -36,6 +36,12 @@ class HistoryVM : ViewModel(), KoinComponent {
     val savedHistory = _savedHistory.asStateFlow()
     val _historyInfoDialogShown = MutableStateFlow(false)
     val historyInfoDialogShown = _historyInfoDialogShown.asStateFlow()
+    val _historyCardSearchFieldShown = MutableStateFlow(false)
+    val historyCardSearchFieldShown = _historyCardSearchFieldShown.asStateFlow()
+    val _historyCardSearchFieldText = MutableStateFlow("")
+    val historyCardSearchFieldText = _historyCardSearchFieldText.asStateFlow()
+
+
     //SateFlows: END
 
     //Observer: START
@@ -81,6 +87,15 @@ class HistoryVM : ViewModel(), KoinComponent {
     fun actionDismissInfoDialog() {
         _historyInfoDialogShown.value = false
     }
+
+    fun actionChangeHistoryCardSearchFieldShown(isShown: Boolean) {
+        _historyCardSearchFieldShown.value = isShown
+    }
+
+    fun actionChangeHistoryCardSearchFieldText(searchText: String) {
+        _historyCardSearchFieldText.value = searchText
+    }
+
 
     //Actions: END
 }

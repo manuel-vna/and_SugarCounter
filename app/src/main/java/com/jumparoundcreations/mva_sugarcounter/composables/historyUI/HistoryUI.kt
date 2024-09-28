@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -28,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.ShowSugarCountItemsShared
 import com.jumparoundcreations.mva_sugarcounter.data.GraphData
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
@@ -44,6 +41,7 @@ fun History(context: Context) {
     val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()
     val historyInfoDialogShown by historyVM.historyInfoDialogShown.collectAsState()
 
+
     if (historyInfoDialogShown) {
         InfoDialog(historyVM, historyChartScreenShown)
     }
@@ -55,15 +53,7 @@ fun History(context: Context) {
 
         //Card Screen
         if (historyCardsScreenShown) {
-            LazyColumn(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
-            ) {
-                items(
-                    savedSugarCountGrouped.toList()
-                        .sortedByDescending { it.first.first }) { (key, value) ->
-                    ShowSugarCountItemsShared(key = key.second, valueList = value, false)
-                }
-            }
+            CardsScreen(historyVM = historyVM, savedSugarCountGrouped = savedSugarCountGrouped)
         }
 
         // Line Chart Screen
