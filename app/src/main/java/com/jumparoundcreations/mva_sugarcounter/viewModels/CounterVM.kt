@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -98,8 +99,7 @@ class CounterVM : ViewModel(), KoinComponent {
     // Timestamps: END
 
     // StateFlow that is observed by UI
-    private val _savedEntriesToday =
-        MutableStateFlow(emptyMap<Pair<String, String>, List<Entry>>())
+    private val _savedEntriesToday = MutableStateFlow(listOf(EntryGroup("", "", listOf())))
     val savedEntriesToday = _savedEntriesToday.asStateFlow()
 
     // Observer that is used to observe Dao of RoomDB

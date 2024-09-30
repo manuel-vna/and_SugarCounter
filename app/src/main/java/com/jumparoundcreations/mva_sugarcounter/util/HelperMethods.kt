@@ -4,6 +4,7 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,15 +21,16 @@ class HelperMethods : KoinComponent {
 
     companion object {
 
-        fun groupCounterItemsInGroupsByDay(savedEntry: List<Entry>): Map<Pair<String, String>, List<Entry>> {
-
-            val groupedCounterItemsByDay =
-                mutableMapOf<Pair<String, String>, MutableList<Entry>>()
+        fun groupCounterItemsInGroupsByDay(savedEntries: List<Entry>): List<EntryGroup> {
 
             lateinit var todayOrYesterday: TodayOrYesterday
+            val tempGroupedEntriesByDay =
+                mutableMapOf<Pair<String, String>, MutableList<Entry>>()
+            val groupedEntriesByDay = mutableListOf<EntryGroup>()
 
-            for (item in savedEntry) {
-
+            // This intermediate step prepares the data for further processing
+            // It creates group entries within a map, grouped by day.
+            for (item in savedEntries) {
                 todayOrYesterday = timestampIsTodayOrYesterday(item.currentTimestamp)
                 val date = item.date
                 val dayDisplayFormat =
@@ -37,14 +39,29 @@ class HelperMethods : KoinComponent {
                         "EEEE (dd.MM.)"
                     ) else todayOrYesterday.name
 
-                groupedCounterItemsByDay.computeIfAbsent(
+
+                tempGroupedEntriesByDay.computeIfAbsent(
                     Pair(
                         date,
                         dayDisplayFormat
                     )
                 ) { mutableListOf() }.add(item)
             }
-            return groupedCounterItemsByDay
+
+            // Move grouped data of map (data type: Map<Pair<String, String>, List<Entry>>) into a List<EntryGroup>
+            // This data structure makes it easier to work with the data
+            tempGroupedEntriesByDay.toList()
+                .sortedByDescending { it.first.first }.forEach {
+                    groupedEntriesByDay.add(
+                        EntryGroup(
+                            date = it.first.first,
+                            dayDisplayFormat = it.first.second,
+                            entryList = it.second
+                        )
+                    )
+                }
+
+            return groupedEntriesByDay
         }
 
         fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
@@ -69,8 +86,11 @@ class HelperMethods : KoinComponent {
         }
 
         fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
-            return valueList.map { it.gramTotal }.reduce { sum, element -> sum + element }
-
+            if (valueList.isNotEmpty()) {
+                return valueList.map { it.gramTotal }.reduce { sum, element -> sum + element }
+            } else {
+                return 0
+            }
         }
 
         fun getSystemLanguage(): String {

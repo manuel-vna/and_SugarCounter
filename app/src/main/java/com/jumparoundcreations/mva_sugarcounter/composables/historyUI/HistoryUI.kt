@@ -59,19 +59,19 @@ fun History(context: Context) {
         // Line Chart Screen
         if (historyChartScreenShown) {
             val graphDataList =
-                savedSugarCountGrouped.values.toList().takeLast(35).mapIndexed { id, value ->
+                savedSugarCountGrouped.takeLast(35).mapIndexed { id, entryGroup ->
                     GraphData(
                         id = id,
-                        gramTotal = HelperMethods.calculateTotalGramPerDayBlock(value),
+                        gramTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
                         day = HelperMethods.formatDateToString(
-                            value.first().currentTimestamp,
+                            entryGroup.entryList.first().currentTimestamp,
                             if (HelperMethods.getSystemLanguage() == "en") {
                                 "EEEE \n MM/dd"
                             } else {
                                 "EEEE \n dd.MM"
                             }
                         ),
-                        date = value.first().date
+                        date = entryGroup.date
                     )
                 }
 
@@ -94,6 +94,7 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
             onClick = {
                 historyVM.actionHideHistoryCardsScreen()
                 historyVM.actionShowHistoryChartScreen()
+                historyVM.actionChangeHistoryCardSearchFieldText("")
             }) {
             Text(stringResource(id = R.string.historygraphBtn))
         }

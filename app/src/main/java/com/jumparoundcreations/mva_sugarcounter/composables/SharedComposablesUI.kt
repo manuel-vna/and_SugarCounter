@@ -30,7 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -38,15 +38,14 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun ShowSugarCountItemsShared(
-    key: String,
-    valueList: List<Entry>,
+    entryGroup: EntryGroup,
     backgroundColorPrimary: Boolean,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
 
     val counterVM: CounterVM = koinViewModel()
 
-    val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(valueList)
+    val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(entryGroup.entryList)
     val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
 
     Card(
@@ -73,13 +72,13 @@ fun ShowSugarCountItemsShared(
 
             Text(
                 modifier = Modifier.padding(top = 6.dp),
-                text = when (key) {
+                text = when (entryGroup.dayDisplayFormat) {
                     "TODAY" -> stringResource(R.string.timestampToday)
                     "YESTERDAY" -> stringResource(
                         R.string.timestampYesterday
                     )
 
-                    else -> key
+                    else -> entryGroup.dayDisplayFormat
                 },
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
@@ -88,7 +87,7 @@ fun ShowSugarCountItemsShared(
 
         }
 
-        valueList.forEach {
+        entryGroup.entryList.forEach {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -161,7 +160,7 @@ fun ShowSugarCountItemsShared(
             Text(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 text = stringResource(id = R.string.totalAmountSugar) + ": " + counterVM.calculateTotalGramPerDayBlock(
-                    valueList
+                    entryGroup.entryList
                 ) + "g ",
                 fontWeight = FontWeight.Bold
             )
