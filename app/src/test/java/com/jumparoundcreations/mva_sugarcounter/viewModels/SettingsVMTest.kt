@@ -7,16 +7,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import kotlin.test.BeforeTest
 import kotlin.test.assertNotEquals
 
 @RunWith(JUnit4::class)
 class SettingsVMTest {
-
-    @BeforeTest
-    fun setup() {
-        //val settingsVM = SettingsVM()
-    }
 
     @Test
     fun check_initialisations_of_state_flows() {
