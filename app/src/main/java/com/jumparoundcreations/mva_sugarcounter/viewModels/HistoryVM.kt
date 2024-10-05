@@ -29,7 +29,7 @@ class HistoryVM : ViewModel(), KoinComponent {
             .toEpochSecond() - 1 //ToDo millisecond approach: * 1000 - 1
     private val currentTimestamp = System.currentTimeMillis() / 1000
     private val endOf30DaysAgo =
-        currentTimestamp - 6048000 // 6048000000 = 60 days in milliseconds
+        currentTimestamp - 7776000 // 7776000 = 90 days in seconds
     //Timestamps: END
 
     //SateFlows: START

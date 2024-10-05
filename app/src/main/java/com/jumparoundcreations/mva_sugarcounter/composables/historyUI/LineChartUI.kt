@@ -66,7 +66,7 @@ fun LineChart(
 
         Canvas(
             modifier = Modifier
-                .aspectRatio(4 / 1f)
+                .aspectRatio(6 / 1f)
                 .padding(top = 42.dp, bottom = 42.dp)
         ) {
 
@@ -74,7 +74,7 @@ fun LineChart(
             val barWidthPix = 1.dp.toPx()
             val onePercentHeight = size.height / 100
             val onePercentWidth = size.width / 100
-            val oneWidthSection = size.width / 35 // width is divided in x sections
+            val oneWidthSection = size.width / 60 // width is divided in x sections
             val oneHeightSection =
                 size.height / 20 // height is divided in 20 sections ( 18 x 5er steps + 2 extra horizontal spaces at the bottom)
 
@@ -140,7 +140,7 @@ fun LineChart(
                     topLeft = Offset(
                         x = xAxisPointHorizontalLines - (onePercentWidth / 2),
                         y = if (previousTotalGramValue < it.gramTotal) {
-                            heightGramDataPoint - onePercentHeight * 3
+                            heightGramDataPoint - onePercentHeight * 2
                         } else {
                             heightGramDataPoint
                         }
