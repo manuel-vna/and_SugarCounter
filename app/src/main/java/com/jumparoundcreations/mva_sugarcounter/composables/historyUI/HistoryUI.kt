@@ -62,7 +62,7 @@ fun History(context: Context) {
                 savedSugarCountGrouped.take(60).mapIndexed { id, entryGroup ->
                     GraphData(
                         id = id,
-                        gramTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
+                        valueTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
                         day = HelperMethods.formatDateToString(
                             entryGroup.entryList.first().currentTimestamp,
                             if (HelperMethods.getSystemLanguage() == "en") {
@@ -76,9 +76,18 @@ fun History(context: Context) {
                 }
 
             val graphDataListSorted = graphDataList.sortedByDescending { it.date }
+            // create array that tags the y axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
+            val lineGraphGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
 
-            val darkMode = HelperMethods.checkForUIMode(context)
-            LineChart(graphDataList = graphDataListSorted, darkMode = darkMode)
+            //Testing Calories:
+            //val lineGraphCaloriesTags = (0..18).map { i -> "${1600+ (18 - i) * (100)}" }
+
+            LineChart(
+                context = context,
+                countMode = HelperMethods.CountMode.SUGAR,
+                graphDataList = graphDataListSorted,
+                lineGraphYAxisTag = lineGraphGramTags
+            )
         }
     }
 }
