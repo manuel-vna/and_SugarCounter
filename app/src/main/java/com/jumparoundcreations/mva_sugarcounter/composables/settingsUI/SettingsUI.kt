@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -65,12 +66,24 @@ fun SettingsScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
+        SettingsActivateCaloriesCounter(settingsVM)
+
+        HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
+
         SettingsSliderGramThreshold(
             sharedPrefsMain,
             settingsVM
         )
 
         HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
+
+        SettingsButtonExportEntries(
+            context = context,
+            settingsVM = settingsVM,
+            descriptionText = stringResource(R.string.export_settings_button),
+            buttonIcon = R.drawable.baseline_read_more_24
+        )
 
         SettingsButtonFAQs(
             context,
@@ -85,19 +98,35 @@ fun SettingsScreen(
             R.drawable.baseline_read_more_24,
         )
 
-        SettingsButtonExportEntries(
-            context = context,
-            settingsVM = settingsVM,
-            descriptionText = stringResource(R.string.export_settings_button),
-            buttonIcon = R.drawable.baseline_read_more_24
-        )
-
         SettingsVersionCode()
 
         ExportProgressIndicator(settingsVM = settingsVM)
 
         ExportBottomSheet(context)
     }
+}
+
+@Composable
+fun SettingsActivateCaloriesCounter(
+    settingsVM: SettingsVM
+) {
+
+    val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.calories_activation_switch_title)
+        )
+        Switch(
+            checked = caloriesCounterActivated,
+            onCheckedChange = { settingsVM.actionChangeCaloriesCounterActivated(it) }
+        )
+    }
+
 }
 
 @Composable
@@ -164,6 +193,31 @@ fun SettingsSliderGramThreshold(
 }
 
 @Composable
+fun SettingsButtonFAQs(
+    context: Context,
+    settingsVM: SettingsVM,
+    descriptionText: String,
+    buttonIcon: Int,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(2.dp),
+        onClick = {
+            settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
+            settingsVM.actionChangeFaqScreenVisibility(isShown = true)
+        }) {
+        Text(
+            text = "$descriptionText   "
+        )
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
+    }
+}
+
+@Composable
 fun SettingsButtonThirdPartyLicenses(
     context: Context,
     descriptionText: String,
@@ -187,31 +241,6 @@ fun SettingsButtonThirdPartyLicenses(
             contentDescription = "",
         )
 
-    }
-}
-
-@Composable
-fun SettingsButtonFAQs(
-    context: Context,
-    settingsVM: SettingsVM,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(2.dp),
-        onClick = {
-            settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
-            settingsVM.actionChangeFaqScreenVisibility(isShown = true)
-        }) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
     }
 }
 

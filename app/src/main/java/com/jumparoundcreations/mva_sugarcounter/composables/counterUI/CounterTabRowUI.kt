@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -27,7 +26,6 @@ import com.jumparoundcreations.mva_sugarcounter.data.TabItem
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TabRow(counterVM: CounterVM) {
 

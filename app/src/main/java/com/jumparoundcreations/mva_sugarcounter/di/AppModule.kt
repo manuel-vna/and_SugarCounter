@@ -8,11 +8,12 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterCaloriesVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.android.ext.koin.androidApplication
-import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
@@ -20,6 +21,7 @@ import org.koin.dsl.module
 val appModule = module {
     single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
     viewModel { CounterVM() }
+    viewModel { CounterCaloriesVM() }
     viewModel { SettingsVM() }
     viewModel { HistoryVM() }
     viewModel { CategoryVM() }

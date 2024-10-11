@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
@@ -31,9 +32,21 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 @Composable
 fun Barcode(counterVM: CounterVM) {
+
+    val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
+    val barcodeNumber by counterVM.barcodeNumber.collectAsState()
+
+    if (noBarcodeYetInfo) {
+        NoBarcodeYetInfo(counterVM, barcodeNumber)
+    }
+
     Button(
         onClick = { counterVM.scanBarcode() }) {
-        Text(text = stringResource(id = R.string.scan_barcode_button))
+        Text(
+            text = stringResource(id = R.string.scan_barcode_button),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
     }
 }
 

@@ -76,4 +76,8 @@
     <string name="export_bottom_sheet_button">Zur Datei gehen</string>
     <string name="export_settings_button">Zuckereinträge exportieren</string>
     <string name="export_data_error_message">Leider konnten die Zuckereinträge nicht in einer Datei gespeichert werden. Bitte erneut versuchen.</string>
+    <string name="calories_activation_switch_title">Kalorienzähler zusätzlich aktivieren</string>
+    <string name="calories_textfield_title">Kalorien</string>
+    <string name="calories_textfield_placeholder">kcal</string>
+
 </resources>

@@ -52,6 +52,9 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
+    val _caloriesCounterActivated = MutableStateFlow(false)
+    val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -140,6 +143,19 @@ class SettingsVM : ViewModel(), KoinComponent {
     fun actionChangeExportSuccessfully(wasSuccessful: Boolean) {
         _exportSuccessfully.value = wasSuccessful
     }
+
+    fun actionChangeCaloriesCounterActivated(isActivated: Boolean) {
+        _caloriesCounterActivated.value = isActivated
+
+        //Save activation boolean in SharedPreferences
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putBoolean(
+            "caloriesCounterActivated",
+            _caloriesCounterActivated.value
+        )
+        editorSharedPrefsMain.apply()
+    }
+
     //Actions: END
 
 }

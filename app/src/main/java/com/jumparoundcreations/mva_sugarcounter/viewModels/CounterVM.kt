@@ -1,6 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
 import android.content.SharedPreferences
+import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,6 +43,12 @@ class CounterVM : ViewModel(), KoinComponent {
 
     val _categorySelected = MutableStateFlow("")
     val categorySelected = _categorySelected.asStateFlow()
+
+    val _categoryFieldExpanded = MutableStateFlow(false)
+    val categoryFieldExpanded = _categoryFieldExpanded.asStateFlow()
+
+    val _categoryFieldSize = MutableStateFlow(Size.Zero)
+    val categoryFieldSize = _categoryFieldSize.asStateFlow()
 
     val _categories = MutableStateFlow(listOf<String>())
     val categories = _categories.asStateFlow()
@@ -338,6 +345,14 @@ class CounterVM : ViewModel(), KoinComponent {
 
     fun actionChangeSelectedCategory(categorySelected: String) {
         _categorySelected.value = categorySelected
+    }
+
+    fun actionChangeCategoryFieldExpanded(isExpanded: Boolean) {
+        _categoryFieldExpanded.value = isExpanded
+    }
+
+    fun actionChangeCategoryFieldSize(newSize: Size) {
+        _categoryFieldSize.value = newSize
     }
 
     fun actionSetIsHundredTabIndex(tabIndex: Int) {
