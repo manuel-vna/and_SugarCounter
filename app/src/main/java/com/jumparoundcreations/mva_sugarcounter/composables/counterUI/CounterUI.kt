@@ -83,15 +83,13 @@ fun Counter(
         ) {
 
             CategoryDropdownField(
-                context, counterVM, caloriesCounterActivated,
-                modifier = Modifier.weight(2f)
+                context = context,
+                counterVM = counterVM,
+                caloriesCounterActivated = caloriesCounterActivated,
             )
 
             CounterCaloriesUI(
-                caloriesCounterActivated = caloriesCounterActivated,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(2.dp)
+                caloriesCounterActivated = caloriesCounterActivated
             )
 
         }
