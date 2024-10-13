@@ -30,7 +30,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RowScope.CounterCaloriesUI(
     caloriesCounterActivated: Boolean,
-    modifier: Modifier = Modifier
+    //modifier: Modifier = Modifier
 ) {
 
     // States
@@ -40,7 +40,9 @@ fun RowScope.CounterCaloriesUI(
     if (caloriesCounterActivated) {
 
         Column(
-            modifier = modifier
+            modifier = Modifier
+                .weight(1f)
+                .padding(2.dp)
         ) {
 
             Text(
