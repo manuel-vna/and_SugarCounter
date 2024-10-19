@@ -5,11 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "entry_table")
+@Entity(tableName = "calories_table")
 data class EntryCalories(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "currentTimestamp") val currentTimestamp: Long,
     @ColumnInfo(name = "date") val date: String,
     @ColumnInfo(name = "category") val category: String,
-    @ColumnInfo(name = "caloriesTotal") val caloriesTotal: String,
+    @ColumnInfo(name = "caloriesTotal") val caloriesTotal: Int,
 )

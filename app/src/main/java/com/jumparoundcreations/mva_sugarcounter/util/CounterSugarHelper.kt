@@ -114,7 +114,7 @@ class CounterSugarHelper : KoinComponent {
                     )
                 )
 
-                counterVM.categoryHandling(category)
+                counterVM.checkGramThreshold()
 
             }
         }

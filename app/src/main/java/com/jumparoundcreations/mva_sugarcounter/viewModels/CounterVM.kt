@@ -149,53 +149,57 @@ class CounterVM : ViewModel(), KoinComponent {
             viewModelScope = viewModelScope,
             counterVM = this,
             category = category,
-            dateOfEntryEpochSecValue = dateOfEntryEpochSec.value,
-            gramCountModeValue = gramCountMode.value,
-            perHundredGramValue = perHundredGram.value,
-            perHundredQuantityValue = perHundredQuantity.value,
-            perPieceGramValue = perPieceGram.value,
-            perPieceAmountValue = perPieceAmount.value
+            dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
+            gramCountModeValue = _gramCountMode.value,
+            perHundredGramValue = _perHundredGram.value,
+            perHundredQuantityValue = _perHundredQuantity.value,
+            perPieceGramValue = _perPieceGram.value,
+            perPieceAmountValue = _perPieceAmount.value
         )
 
         CounterCaloriesHelper.saveCaloriesEntryInDatabase(
-            counterVM = this,
-            caloriesInputValue = caloriesInput.value
+            viewModelScope = viewModelScope,
+            category = category,
+            dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
+            caloriesInputValue = _caloriesInput.value
         )
 
     }
 
     fun categoryHandling(category: String) {
 
-        // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
-        if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
-            database.appDao().insertCategory(Category(category = category))
-        }
+        viewModelScope.launch(Dispatchers.IO) {
 
-        // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
-        if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
-            database.appDao().insertCategory(
-                Category(
-                    category = category,
-                    barcodeNumber = _barcodeNumber.value
+            // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
+            if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
+                database.appDao().insertCategory(Category(category = category))
+            }
+
+            // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
+            if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
+                database.appDao().insertCategory(
+                    Category(
+                        category = category,
+                        barcodeNumber = _barcodeNumber.value
+                    )
                 )
-            )
-            removeLastBarcodeInput()
+                removeLastBarcodeInput()
+            }
+
+            //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
+            if (_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
+                val categoryRow = database.appDao().getCategoryByCategoryName(category)
+                categoryRow.barcodeNumber = _barcodeNumber.value
+                database.appDao().updateCategory(categoryRow)
+                removeLastBarcodeInput()
+            }
         }
 
-        //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
-        if (_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
-            val categoryRow = database.appDao().getCategoryByCategoryName(category)
-            categoryRow.barcodeNumber = _barcodeNumber.value
-            database.appDao().updateCategory(categoryRow)
-            removeLastBarcodeInput()
-        }
-
-        checkGramThreshold()
     }
 
 
     //Checking an Entry: Start
-    private fun checkGramThreshold() {
+    fun checkGramThreshold() {
         viewModelScope.launch(Dispatchers.IO) {
             val dateString = HelperMethods.formatDateToString(
                 dateOfEntryEpochSec.value,

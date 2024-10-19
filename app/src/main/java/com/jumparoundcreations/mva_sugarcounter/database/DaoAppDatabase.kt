@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 
 @Dao
 interface DaoAppDatabase {
@@ -78,7 +79,7 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM category_table WHERE category = :categoryName""")
     suspend fun deleteSpecificCategoryByName(categoryName: String)
 
-    @Query("""DELETE FROM category_table WHERE deletionCheckbox = true""")
+    @Query("""DELETE FROM category_table WHERE deletionCheckbox = 1""") //1 = Boolean: true
     fun deleteCheckedCategories()
 
     @Query("""SELECT * from category_table WHERE category = :category LIMIT 1""")
@@ -89,5 +90,11 @@ interface DaoAppDatabase {
 
     @Query("SELECT COUNT(*) FROM category_table")
     suspend fun getCategoryTableRowCount(): Int
+
+    // Calories
+
+    @Insert
+    fun insertEntryCalories(vararg caloriesEntry: EntryCalories)
+
 
 }

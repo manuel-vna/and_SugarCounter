@@ -105,12 +105,14 @@ fun Counter(
                 modifier = Modifier.width(160.dp),
                 onClick = {
                     counterVM.saveEntry(category)
+                    counterVM.categoryHandling(category)
                     counterVM.actionChangeSelectedCategory("")
                     counterVM.actionPerPieceGramChange("")
                     counterVM.actionPerPieceAmountChange("")
                     counterVM.actionPerHundredChange("")
                     counterVM.actionPerHundredQuantityChange("")
                     counterVM.actionChangeCategoryFieldExpanded(false)
+                    counterVM.actionCaloriesChange("")
                     keyboardController?.hide()
                 },
             ) {
