@@ -11,6 +11,8 @@ import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.util.CounterCaloriesHelper
+import com.jumparoundcreations.mva_sugarcounter.util.CounterSugarHelper
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +24,6 @@ import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 import java.time.LocalDate
 import java.time.ZoneId
-import kotlin.math.roundToInt
 
 
 class CounterVM : ViewModel(), KoinComponent {
@@ -96,6 +97,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
     val _barcodeNumber = MutableStateFlow("")
     val barcodeNumber = _barcodeNumber.asStateFlow()
+
+    var _caloriesInput = MutableStateFlow("")
+    val caloriesInput = _caloriesInput.asStateFlow()
+
     //StateFlow: END
 
     // Timestamps: BEGIN
@@ -140,104 +145,53 @@ class CounterVM : ViewModel(), KoinComponent {
     //Saving an Entry: Start
     fun saveEntry(category: String) {
 
-        var perPieceGramInt = 0
-        var perPieceAmountInt = 1
-        var perHundredGramDouble = 0.0
-        var perHundredQuantityDouble = 0.0
+        CounterSugarHelper.checkModeForSugarSaving(
+            viewModelScope = viewModelScope,
+            counterVM = this,
+            category = category,
+            dateOfEntryEpochSecValue = dateOfEntryEpochSec.value,
+            gramCountModeValue = gramCountMode.value,
+            perHundredGramValue = perHundredGram.value,
+            perHundredQuantityValue = perHundredQuantity.value,
+            perPieceGramValue = perPieceGram.value,
+            perPieceAmountValue = perPieceAmount.value
+        )
 
-        if (gramCountMode.value == GramCountMode.PerHundred) {
-            if (perHundredGram.value.isNotEmpty()) perHundredGramDouble =
-                perHundredGram.value.toDouble()
-            if (perHundredQuantity.value.isNotEmpty()) perHundredQuantityDouble =
-                perHundredQuantity.value.toDouble()
+        CounterCaloriesHelper.saveCaloriesEntryInDatabase(
+            counterVM = this,
+            caloriesInputValue = caloriesInput.value
+        )
 
-            if (perHundredGram.value.isEmpty()) {
-                _alertDialog.value = true
-            } else {
-                saveEntryInDatabase(
-                    category = category,
-                    isPerHundred = true,
-                    perHundredGramInt = perHundredGramDouble.toInt(),
-                    perHundredQuantityInt = perHundredQuantityDouble.toInt(),
-                    perPieceGramInt = 0,
-                    perPieceAmountInt = 0,
-                    gramTotalInt = ((perHundredGramDouble / 100) * perHundredQuantityDouble).roundToInt()  // rule of three: Calculate sugar on basis of the quantity eaten
-                )
-            }
-        } else {
-            if (perPieceGram.value.isNotEmpty()) perPieceGramInt = perPieceGram.value.toInt()
-            if (perPieceAmount.value.isNotEmpty()) perPieceAmountInt = perPieceAmount.value.toInt()
-
-            if (perPieceGram.value.isEmpty()) {
-                _alertDialog.value = true
-            } else {
-                saveEntryInDatabase(
-                    category = category,
-                    isPerHundred = false,
-                    perHundredGramInt = 0,
-                    perHundredQuantityInt = 0,
-                    perPieceGramInt = perPieceGramInt,
-                    perPieceAmountInt = perPieceAmountInt,
-                    gramTotalInt = perPieceGramInt * perPieceAmountInt // multiplying gram per piece value with amount of itmes eaten
-                )
-            }
-        }
     }
 
-    private fun saveEntryInDatabase(
-        category: String,
-        isPerHundred: Boolean,
-        perHundredGramInt: Int,
-        perHundredQuantityInt: Int,
-        perPieceGramInt: Int,
-        perPieceAmountInt: Int,
-        gramTotalInt: Int
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            database.appDao().insertEntry(
-                Entry(
-                    currentTimestamp = dateOfEntryEpochSec.value,
-                    date = HelperMethods.formatDateToString(
-                        dateOfEntryEpochSec.value,
-                        "YYYY-MM-dd"
-                    ),
+    fun categoryHandling(category: String) {
+
+        // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
+        if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
+            database.appDao().insertCategory(Category(category = category))
+        }
+
+        // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
+        if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
+            database.appDao().insertCategory(
+                Category(
                     category = category,
-                    isPerHundred = isPerHundred,
-                    perPieceGram = perPieceGramInt,
-                    perPieceAmount = perPieceAmountInt,
-                    perHundredGram = perHundredGramInt,
-                    perHundredQuantity = perHundredQuantityInt,
-                    gramTotal = gramTotalInt
+                    barcodeNumber = _barcodeNumber.value
                 )
             )
-            // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
-            if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
-                database.appDao().insertCategory(Category(category = category))
-            }
-
-            // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
-            if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
-                database.appDao().insertCategory(
-                    Category(
-                        category = category,
-                        barcodeNumber = _barcodeNumber.value
-                    )
-                )
-                removeLastBarcodeInput()
-            }
-
-            //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
-            if (_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
-                val categoryRow = database.appDao().getCategoryByCategoryName(category)
-                categoryRow.barcodeNumber = _barcodeNumber.value
-                database.appDao().updateCategory(categoryRow)
-                removeLastBarcodeInput()
-            }
-
-            checkGramThreshold()
+            removeLastBarcodeInput()
         }
+
+        //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
+        if (_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
+            val categoryRow = database.appDao().getCategoryByCategoryName(category)
+            categoryRow.barcodeNumber = _barcodeNumber.value
+            database.appDao().updateCategory(categoryRow)
+            removeLastBarcodeInput()
+        }
+
+        checkGramThreshold()
     }
-    //Saving an Entry: End
 
 
     //Checking an Entry: Start
@@ -261,11 +215,32 @@ class CounterVM : ViewModel(), KoinComponent {
     //Checking an Entry: End
 
 
-    //Loading an Entry: End
+    //Loading an Entry: Start
     fun loadLastEntryForGivenCategory() {
         getEntryByCategory(_categorySelected.value)
     }
 
+    private fun getEntryByCategory(category: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entryReply =
+                database.appDao().checkIfGramValueExistsForCategory(category)
+
+            withContext(Dispatchers.Main) {
+                if (entryReply?.perPieceGram != 0) {
+                    _perPieceGram.value = entryReply?.perPieceGram.toString()
+                    _perHundredGram.value = ""
+                    _isHundredTabIndex.value = 1
+                } else {
+                    _perHundredGram.value = entryReply.perHundredGram.toString()
+                    _perPieceGram.value = ""
+                    _isHundredTabIndex.value = 0
+                }
+            }
+        }
+    }
+    //Loading an Entry: End
+
+    //Barcode: Start
     fun scanBarcode() {
         barcodeScanner.startScan()
             .addOnSuccessListener { barcode ->
@@ -293,30 +268,8 @@ class CounterVM : ViewModel(), KoinComponent {
     fun removeLastBarcodeInput() {
         _noBarcodeYetInfoTitle.value = false
     }
+    //Barcode: End
 
-    private fun getEntryByCategory(category: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val entryReply =
-                database.appDao().checkIfGramValueExistsForCategory(category)
-
-            withContext(Dispatchers.Main) {
-                if (entryReply?.perPieceGram != 0) {
-                    _perPieceGram.value = entryReply?.perPieceGram.toString()
-                    _perHundredGram.value = ""
-                    _isHundredTabIndex.value = 1
-                } else {
-                    _perHundredGram.value = entryReply.perHundredGram.toString()
-                    _perPieceGram.value = ""
-                    _isHundredTabIndex.value = 0
-                }
-            }
-        }
-    }
-    //Loading an Entry: End
-
-    fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
-        return HelperMethods.calculateTotalGramPerDayBlock(valueList)
-    }
 
     //Actions Start: User actions reported by the UI to the ViewModel
 
@@ -379,6 +332,10 @@ class CounterVM : ViewModel(), KoinComponent {
         _perHundredQuantity.value = perHundredQuantity
     }
 
+    fun actionChangeAlertDialogValue(showDialog: Boolean) {
+        _alertDialog.value = showDialog
+    }
+
     fun actionDismissAlertDialog() {
         _alertDialog.value = false
     }
@@ -398,6 +355,9 @@ class CounterVM : ViewModel(), KoinComponent {
         _dateOfEntryEpochSec.value = epochSec
     }
 
+    fun actionCaloriesChange(caloriesInKcal: String) {
+        _caloriesInput.value = caloriesInKcal
+    }
 
     //Actions End
 

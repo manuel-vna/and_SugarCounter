@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
+import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -45,7 +46,8 @@ fun ShowSugarCountItemsShared(
 
     val counterVM: CounterVM = koinViewModel()
 
-    val totalGramPerDayBlock = counterVM.calculateTotalGramPerDayBlock(entryGroup.entryList)
+    val totalGramPerDayBlock =
+        HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList) //counterVM.calculateTotalGramPerDayBlock(entryGroup.entryList)
     val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
 
     Card(
@@ -159,7 +161,7 @@ fun ShowSugarCountItemsShared(
 
             Text(
                 modifier = Modifier.padding(horizontal = 4.dp),
-                text = stringResource(id = R.string.totalAmountSugar) + ": " + counterVM.calculateTotalGramPerDayBlock(
+                text = stringResource(id = R.string.totalAmountSugar) + ": " + HelperMethods.calculateTotalGramPerDayBlock(
                     entryGroup.entryList
                 ) + "g ",
                 fontWeight = FontWeight.Bold

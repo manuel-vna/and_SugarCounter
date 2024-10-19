@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterCaloriesVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -34,8 +34,8 @@ fun RowScope.CounterCaloriesUI(
 ) {
 
     // States
-    val counterCaloriesVM: CounterCaloriesVM = koinViewModel()
-    val caloriesInput by counterCaloriesVM.caloriesInput.collectAsState()
+    val counterVM: CounterVM = koinViewModel()
+    val caloriesInput by counterVM.caloriesInput.collectAsState()
 
     if (caloriesCounterActivated) {
 
@@ -58,7 +58,7 @@ fun RowScope.CounterCaloriesUI(
                 value = caloriesInput,
                 onValueChange = {
                     if (it.isDigitsOnly() && it.count() <= 4) {
-                        counterCaloriesVM.actionPerPieceGramChange(it)
+                        counterVM.actionCaloriesChange(it)
                     }
                 },
                 textStyle = TextStyle(
@@ -66,7 +66,7 @@ fun RowScope.CounterCaloriesUI(
                 ),
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = { counterCaloriesVM.actionPerPieceGramChange("") }) {
+                    IconButton(onClick = { counterVM.actionCaloriesChange("") }) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
