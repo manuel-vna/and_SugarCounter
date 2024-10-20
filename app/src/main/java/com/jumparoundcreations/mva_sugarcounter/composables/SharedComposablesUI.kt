@@ -47,7 +47,7 @@ fun ShowSugarCountItemsShared(
     val counterVM: CounterVM = koinViewModel()
 
     val totalGramPerDayBlock =
-        HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList) //counterVM.calculateTotalGramPerDayBlock(entryGroup.entryList)
+        HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList)
     val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
 
     Card(

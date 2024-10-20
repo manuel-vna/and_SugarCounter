@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
@@ -32,53 +33,66 @@ class CounterVM : ViewModel(), KoinComponent {
     private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
     private val barcodeScanner by inject<GmsBarcodeScanner>(qualifier = named("barcodeScanner"))
 
+    // Timestamps: BEGIN
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
+    private val today = LocalDate.now()
+    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+    private val endOfToday =
+        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1
+    // Timestamps: END
 
     //StateFlow: START
 
-    val _datePickerShown = MutableStateFlow(false)
+    private val _savedEntriesToday = MutableStateFlow(
+        listOf(
+            EntryGroup("", "", listOf())
+        )
+    )
+    val savedEntriesToday = _savedEntriesToday.asStateFlow()
+
+    private val _datePickerShown = MutableStateFlow(false)
     val datePickerShown = _datePickerShown.asStateFlow()
 
-    val _dateOfEntryEpochSec = MutableStateFlow(epochTimestampSecondsNow)
+    private val _dateOfEntryEpochSec = MutableStateFlow(epochTimestampSecondsNow)
     val dateOfEntryEpochSec = _dateOfEntryEpochSec.asStateFlow()
 
-    val _categorySelected = MutableStateFlow("")
+    private val _categorySelected = MutableStateFlow("")
     val categorySelected = _categorySelected.asStateFlow()
 
-    val _categoryFieldExpanded = MutableStateFlow(false)
+    private val _categoryFieldExpanded = MutableStateFlow(false)
     val categoryFieldExpanded = _categoryFieldExpanded.asStateFlow()
 
-    val _categoryFieldSize = MutableStateFlow(Size.Zero)
+    private val _categoryFieldSize = MutableStateFlow(Size.Zero)
     val categoryFieldSize = _categoryFieldSize.asStateFlow()
 
-    val _categories = MutableStateFlow(listOf<String>())
+    private val _categories = MutableStateFlow(listOf<String>())
     val categories = _categories.asStateFlow()
 
-    val _isHundredTabIndex = MutableStateFlow(0)
+    private val _isHundredTabIndex = MutableStateFlow(0)
     val isHundredTabIndex = _isHundredTabIndex.asStateFlow()
 
-    var _gramCountMode = MutableStateFlow(GramCountMode.PerHundred)
+    private var _gramCountMode = MutableStateFlow(GramCountMode.PerHundred)
     var gramCountMode = _gramCountMode.asStateFlow()
 
-    var _perPieceGram = MutableStateFlow("")
+    private var _perPieceGram = MutableStateFlow("")
     val perPieceGram = _perPieceGram.asStateFlow()
 
-    var _perPieceAmount = MutableStateFlow("")
+    private var _perPieceAmount = MutableStateFlow("")
     val perPieceAmount = _perPieceAmount.asStateFlow()
 
-    var _perHundredGram = MutableStateFlow("")
+    private var _perHundredGram = MutableStateFlow("")
     val perHundredGram = _perHundredGram.asStateFlow()
 
-    var _perHundredQuantity = MutableStateFlow("")
+    private var _perHundredQuantity = MutableStateFlow("")
     val perHundredQuantity = _perHundredQuantity.asStateFlow()
 
-    val _alertDialog = MutableStateFlow(false)
+    private val _alertDialog = MutableStateFlow(false)
     val alertDialog = _alertDialog.asStateFlow()
 
-    val _categoryItemDeleteDialog = MutableStateFlow(false)
+    private val _categoryItemDeleteDialog = MutableStateFlow(false)
     val categoryItemDeleteDialog = _categoryItemDeleteDialog.asStateFlow()
 
-    val _categoryItemDeleteObject = MutableStateFlow(
+    private val _categoryItemDeleteObject = MutableStateFlow(
         Entry(
             0, 0, "", "", true,
             0, 0, 0, 0, 0
@@ -86,43 +100,38 @@ class CounterVM : ViewModel(), KoinComponent {
     )
     val categoryItemDeleteObject = _categoryItemDeleteObject.asStateFlow()
 
-    val _alertDialogGramThreshold = MutableStateFlow(false)
+    private val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
 
-    val _noBarcodeYetInfoTitle = MutableStateFlow(false)
+    private val _noBarcodeYetInfoTitle = MutableStateFlow(false)
     val noBarcodeYetInfoTitle = _noBarcodeYetInfoTitle.asStateFlow()
 
-    val _noBarcodeYetInfoDescription = MutableStateFlow(false)
+    private val _noBarcodeYetInfoDescription = MutableStateFlow(false)
     val noBarcodeYetInfoDescription = _noBarcodeYetInfoDescription.asStateFlow()
 
-    val _barcodeNumber = MutableStateFlow("")
+    private val _barcodeNumber = MutableStateFlow("")
     val barcodeNumber = _barcodeNumber.asStateFlow()
 
-    var _caloriesInput = MutableStateFlow("")
+    private var _caloriesInput = MutableStateFlow("")
     val caloriesInput = _caloriesInput.asStateFlow()
 
     //StateFlow: END
 
-    // Timestamps: BEGIN
-    private val today = LocalDate.now()
-    private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
-    private val endOfToday =
-        today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1
-    // Timestamps: END
 
-    // StateFlow that is observed by UI
-    private val _savedEntriesToday = MutableStateFlow(listOf(EntryGroup("", "", listOf())))
-    val savedEntriesToday = _savedEntriesToday.asStateFlow()
-
-    // Observer that is used to observe Dao of RoomDB
+    // Observer that is used to observe a method in the Dao which fetches a list of Category items
     private val categoryObserver = Observer<List<Category>> {
         _categories.value = it.map { it.category }
     }
 
-    // Observer that is used to observe Dao of RoomDB
+    // Observer that is used to observe a method in the Dao which fetches a list of Entry items
     private val todayObserverObject = Observer<List<Entry>> {
         val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
         _savedEntriesToday.value = savedSugarCountGrouped
+    }
+
+    //Observer that is used to observe a method in the Dao which fetches a list of EntryCalories
+    private val caloriesTodayObserverObject = Observer<List<EntryCalories>> {
+        //TBD
     }
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
@@ -131,6 +140,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
         database.appDao().getEntries(startOfToday, endOfToday)
             .observeForever(todayObserverObject)
+
+        database.appDao().getEntryCalories(startOfToday, endOfToday)
+            .observeForever(caloriesTodayObserverObject)
+
     }
 
     override fun onCleared() {
@@ -140,29 +153,36 @@ class CounterVM : ViewModel(), KoinComponent {
 
         database.appDao().getEntries(startOfToday, endOfToday)
             .removeObserver(todayObserverObject)
+
+        database.appDao().getEntryCalories(startOfToday, endOfToday)
+            .removeObserver(caloriesTodayObserverObject)
     }
 
     //Saving an Entry: Start
     fun saveEntry(category: String) {
 
-        CounterSugarHelper.checkModeForSugarSaving(
-            viewModelScope = viewModelScope,
-            counterVM = this,
-            category = category,
-            dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
-            gramCountModeValue = _gramCountMode.value,
-            perHundredGramValue = _perHundredGram.value,
-            perHundredQuantityValue = _perHundredQuantity.value,
-            perPieceGramValue = _perPieceGram.value,
-            perPieceAmountValue = _perPieceAmount.value
-        )
+        if (_perPieceGram.value.isNotEmpty() || _perHundredGram.value.isNotEmpty()) {
+            CounterSugarHelper.checkModeForSugarSaving(
+                viewModelScope = viewModelScope,
+                counterVM = this,
+                category = category,
+                dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
+                gramCountModeValue = _gramCountMode.value,
+                perHundredGramValue = _perHundredGram.value,
+                perHundredQuantityValue = _perHundredQuantity.value,
+                perPieceGramValue = _perPieceGram.value,
+                perPieceAmountValue = _perPieceAmount.value
+            )
+        }
 
-        CounterCaloriesHelper.saveCaloriesEntryInDatabase(
-            viewModelScope = viewModelScope,
-            category = category,
-            dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
-            caloriesInputValue = _caloriesInput.value
-        )
+        if (_caloriesInput.value.isNotEmpty()) {
+            CounterCaloriesHelper.saveCaloriesEntryInDatabase(
+                viewModelScope = viewModelScope,
+                category = category,
+                dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
+                caloriesInputValue = _caloriesInput.value
+            )
+        }
 
     }
 

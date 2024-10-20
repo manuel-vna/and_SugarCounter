@@ -96,5 +96,8 @@ interface DaoAppDatabase {
     @Insert
     fun insertEntryCalories(vararg caloriesEntry: EntryCalories)
 
+    //On the timeline startPoint is further to the left/in the past than endPoint
+    @Query("""SELECT * FROM calories_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
+    fun getEntryCalories(startPoint: Long, endPoint: Long): LiveData<List<EntryCalories>>
 
 }
