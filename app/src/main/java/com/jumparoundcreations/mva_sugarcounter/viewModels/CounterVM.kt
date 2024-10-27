@@ -45,7 +45,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val _savedEntriesToday = MutableStateFlow(
         listOf(
-            EntryGroup("", "", listOf())
+            EntryGroup<Entry>("", "", listOf())
         )
     )
     val savedEntriesToday = _savedEntriesToday.asStateFlow()

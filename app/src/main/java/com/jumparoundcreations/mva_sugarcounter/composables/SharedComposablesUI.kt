@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
@@ -39,7 +40,7 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun ShowSugarCountItemsShared(
-    entryGroup: EntryGroup,
+    entryGroup: EntryGroup<Entry>,
     backgroundColorPrimary: Boolean,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
