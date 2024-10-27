@@ -1,6 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
@@ -245,21 +246,40 @@ class CounterVM : ViewModel(), KoinComponent {
     }
 
     private fun getEntryByCategory(category: String) {
+
         viewModelScope.launch(Dispatchers.IO) {
             val entryReply =
                 database.appDao().checkIfGramValueExistsForCategory(category)
 
             withContext(Dispatchers.Main) {
-                if (entryReply?.perPieceGram != 0) {
-                    _perPieceGram.value = entryReply?.perPieceGram.toString()
-                    _perHundredGram.value = ""
-                    _isHundredTabIndex.value = 1
-                } else {
-                    _perHundredGram.value = entryReply.perHundredGram.toString()
-                    _perPieceGram.value = ""
-                    _isHundredTabIndex.value = 0
+
+                when {
+                    entryReply == null -> {
+                        _perPieceGram.value = ""
+                        _perHundredGram.value = ""
+                        _isHundredTabIndex.value = 0
+                    }
+
+                    entryReply.perPieceGram != 0 -> {
+                        _perPieceGram.value = entryReply?.perPieceGram.toString()
+                        _perHundredGram.value = ""
+                        _isHundredTabIndex.value = 1
+                    }
+
+                    entryReply.perHundredGram != 0 -> {
+                        _perHundredGram.value = entryReply.perHundredGram.toString()
+                        _perPieceGram.value = ""
+                        _isHundredTabIndex.value = 0
+                    }
+
+                    else -> Log.e(
+                        "CounterVM",
+                        "Loading entry from database by its category did not succeed"
+                    )
                 }
+
             }
+
         }
     }
     //Loading an Entry: End
