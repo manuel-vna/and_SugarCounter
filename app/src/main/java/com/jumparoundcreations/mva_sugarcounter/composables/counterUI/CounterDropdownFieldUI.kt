@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +48,7 @@ fun RowScope.CategoryDropdownField(
     context: Context,
     counterVM: CounterVM,
     caloriesCounterActivated: Boolean,
+    keyboardController: SoftwareKeyboardController?
 ) {
 
     val category by counterVM.categorySelected.collectAsState()
@@ -155,7 +157,7 @@ fun RowScope.CategoryDropdownField(
                             CategoryItems(title = it) { title ->
                                 counterVM.actionChangeSelectedCategory(title)
                                 counterVM.actionChangeCategoryFieldExpanded(false)
-                                counterVM.loadLastEntryForGivenCategory()
+                                counterVM.loadLastEntryForGivenCategory(keyboardController)
                             }
                         }
                     } else {
@@ -165,7 +167,7 @@ fun RowScope.CategoryDropdownField(
                             CategoryItems(title = it) { title ->
                                 counterVM.actionChangeSelectedCategory(title)
                                 counterVM.actionChangeCategoryFieldExpanded(false)
-                                counterVM.loadLastEntryForGivenCategory()
+                                counterVM.loadLastEntryForGivenCategory(keyboardController)
                             }
                         }
                     }

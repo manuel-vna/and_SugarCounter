@@ -15,8 +15,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,6 +39,7 @@ import org.koin.core.qualifier.named
 @Composable
 fun Counter(
     context: Context,
+    snackbarHostState: SnackbarHostState,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
     val counterVM: CounterVM = koinViewModel()
@@ -86,6 +90,7 @@ fun Counter(
                 context = context,
                 counterVM = counterVM,
                 caloriesCounterActivated = caloriesCounterActivated,
+                keyboardController = keyboardController
             )
 
             CounterCaloriesUI(
@@ -183,4 +188,17 @@ fun Counter(
             }
         )
     }
+
+    val noDataForChosenCategorySnackbarShown by counterVM.noDataForChosenCategorySnackbarShown.collectAsState()
+    if (noDataForChosenCategorySnackbarShown) {
+        // Launch a coroutine to show the Snackbar
+        LaunchedEffect(snackbarHostState) {
+            snackbarHostState.showSnackbar(
+                message = context.getString(R.string.no_entry_found_for_given_category_Snackbar_text),
+                duration = SnackbarDuration.Short
+            )
+            counterVM.actionNoDataForChosenCategorySnackbarShownChange(false)
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -89,6 +90,9 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val _alertDialog = MutableStateFlow(false)
     val alertDialog = _alertDialog.asStateFlow()
+
+    private val _noDataForChosenCategorySnackbarShown = MutableStateFlow(false)
+    val noDataForChosenCategorySnackbarShown = _noDataForChosenCategorySnackbarShown.asStateFlow()
 
     private val _categoryItemDeleteDialog = MutableStateFlow(false)
     val categoryItemDeleteDialog = _categoryItemDeleteDialog.asStateFlow()
@@ -241,7 +245,8 @@ class CounterVM : ViewModel(), KoinComponent {
 
 
     //Loading an Entry: Start
-    fun loadLastEntryForGivenCategory() {
+    fun loadLastEntryForGivenCategory(keyboardController: SoftwareKeyboardController?) {
+        keyboardController?.hide()
         getEntryByCategory(_categorySelected.value)
     }
 
@@ -258,10 +263,12 @@ class CounterVM : ViewModel(), KoinComponent {
                         _perPieceGram.value = ""
                         _perHundredGram.value = ""
                         _isHundredTabIndex.value = 0
+                        actionNoDataForChosenCategorySnackbarShownChange(true)
+
                     }
 
                     entryReply.perPieceGram != 0 -> {
-                        _perPieceGram.value = entryReply?.perPieceGram.toString()
+                        _perPieceGram.value = entryReply.perPieceGram.toString()
                         _perHundredGram.value = ""
                         _isHundredTabIndex.value = 1
                     }
@@ -323,6 +330,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
     fun actionChangeNOBarcodeInfoYetDescription(visibility: Boolean) {
         _noBarcodeYetInfoDescription.value = visibility
+    }
+
+    fun actionNoDataForChosenCategorySnackbarShownChange(isShown: Boolean) {
+        _noDataForChosenCategorySnackbarShown.value = isShown
     }
 
     fun actionShowDeleteAlertDialog(item: Entry) {

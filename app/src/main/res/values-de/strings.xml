@@ -79,5 +79,6 @@
     <string name="calories_activation_switch_title">Kalorienzähler zusätzlich aktivieren</string>
     <string name="calories_textfield_title">Kalorien</string>
     <string name="calories_textfield_placeholder">kcal</string>
+    <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
 
 </resources>
