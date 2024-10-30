@@ -101,11 +101,10 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
                 .weight(1f)
                 .padding(top = 12.dp, start = 20.dp, end = 20.dp),
             onClick = {
-                historyVM.actionHideHistoryCardsScreen()
-                historyVM.actionShowHistoryChartScreen()
-                historyVM.actionChangeHistoryCardSearchFieldText("")
+                historyVM.actionShowHistoryCardsScreen()
+                historyVM.actionHideHistoryChartScreen()
             }) {
-            Text(stringResource(id = R.string.historygraphBtn))
+            Text(stringResource(R.string.historyCardsBtn))
         }
 
         Button(
@@ -113,10 +112,11 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
                 .weight(1f)
                 .padding(top = 12.dp, start = 20.dp, end = 20.dp),
             onClick = {
-                historyVM.actionShowHistoryCardsScreen()
-                historyVM.actionHideHistoryChartScreen()
+                historyVM.actionHideHistoryCardsScreen()
+                historyVM.actionShowHistoryChartScreen()
+                historyVM.actionChangeHistoryCardSearchFieldText("")
             }) {
-            Text(stringResource(R.string.historyCardsBtn))
+            Text(stringResource(id = R.string.historygraphBtn))
         }
     }
 

@@ -37,11 +37,14 @@ fun CardsScreen(
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
     val historyCardSearchFieldText by historyVM.historyCardSearchFieldText.collectAsState()
 
+    //Do not show current day in History
+    val savedSugarCountGroupedMinusToday = savedSugarCountGrouped.drop(1)
+
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
         ) {
-            items(savedSugarCountGrouped) {
+            items(savedSugarCountGroupedMinusToday) {
                 ShowSugarCountItemsShared(
                     entryGroup = it,
                     backgroundColorPrimary = false

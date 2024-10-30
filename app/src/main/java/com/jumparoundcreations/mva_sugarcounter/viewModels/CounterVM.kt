@@ -39,6 +39,7 @@ class CounterVM : ViewModel(), KoinComponent {
     val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
     private val today = LocalDate.now()
     private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+    private val startOfYesterday = startOfToday - 86400 // 86400 = 1 day in seconds
     private val endOfToday =
         today.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond() - 1
     // Timestamps: END
@@ -143,10 +144,10 @@ class CounterVM : ViewModel(), KoinComponent {
     init {
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
-        database.appDao().getEntries(startOfToday, endOfToday)
+        database.appDao().getEntries(startOfYesterday, endOfToday)
             .observeForever(todayObserverObject)
 
-        database.appDao().getEntryCalories(startOfToday, endOfToday)
+        database.appDao().getEntryCalories(startOfYesterday, endOfToday)
             .observeForever(caloriesTodayObserverObject)
 
     }
@@ -156,10 +157,10 @@ class CounterVM : ViewModel(), KoinComponent {
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
         database.appDao().getAllCategories().removeObserver(categoryObserver)
 
-        database.appDao().getEntries(startOfToday, endOfToday)
+        database.appDao().getEntries(startOfYesterday, endOfToday)
             .removeObserver(todayObserverObject)
 
-        database.appDao().getEntryCalories(startOfToday, endOfToday)
+        database.appDao().getEntryCalories(startOfYesterday, endOfToday)
             .removeObserver(caloriesTodayObserverObject)
     }
 
