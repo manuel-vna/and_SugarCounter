@@ -138,7 +138,7 @@ dependencies {
     implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
 
     //Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.8.2")
+    implementation("androidx.navigation:navigation-compose:2.8.3")
 
     //MockK
     testImplementation("io.mockk:mockk:1.13.12")
@@ -155,13 +155,13 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.7.3")
+    implementation("androidx.compose.runtime:runtime:1.7.5")
 
     //Google Code Scanner
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
 
     //WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.9.1")
+    implementation("androidx.work:work-runtime-ktx:2.10.0")
 
     //Onboarding
     implementation("de.sldw:compose-onboarding:0.0.2-2")
