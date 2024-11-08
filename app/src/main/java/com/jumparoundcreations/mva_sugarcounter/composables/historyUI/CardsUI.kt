@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowSugarCountItemsShared
+import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 
@@ -31,7 +32,7 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 @Composable
 fun CardsScreen(
     historyVM: HistoryVM,
-    savedSugarCountGrouped: List<EntryGroup>
+    savedSugarCountGrouped: List<EntryGroup<Entry>>
 ) {
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
