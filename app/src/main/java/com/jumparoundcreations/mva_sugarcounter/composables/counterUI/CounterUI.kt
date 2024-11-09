@@ -130,7 +130,8 @@ fun Counter(
 
         }
 
-        val savedSugarCountGrouped by counterVM.savedEntriesToday.collectAsState()
+        val savedSugarCountGrouped by counterVM.sugarEntryDbRecent.collectAsState()
+        val savedCaloriesCountGrouped by counterVM.caloriesEntryDbRecent.collectAsState()
 
         LazyColumn {
             items(savedSugarCountGrouped) {
@@ -140,6 +141,7 @@ fun Counter(
                 )
             }
         }
+
     }
 
     val alertDialog by counterVM.alertDialog.collectAsState()

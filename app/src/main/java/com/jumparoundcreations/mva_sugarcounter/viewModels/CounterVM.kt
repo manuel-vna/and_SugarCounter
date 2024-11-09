@@ -46,12 +46,19 @@ class CounterVM : ViewModel(), KoinComponent {
 
     //StateFlow: START
 
-    private val _savedEntriesToday = MutableStateFlow(
+    private val _sugarEntryDbRecent = MutableStateFlow(
         listOf(
-            EntryGroup("", "", listOf())
+            EntryGroup<Entry>("", "", listOf())
         )
     )
-    val savedEntriesToday = _savedEntriesToday.asStateFlow()
+    val sugarEntryDbRecent = _sugarEntryDbRecent.asStateFlow()
+
+    private val _caloriesEntryDbRecent = MutableStateFlow(
+        listOf(
+            EntryGroup<EntryCalories>("", "", listOf())
+        )
+    )
+    val caloriesEntryDbRecent = _caloriesEntryDbRecent.asStateFlow()
 
     private val _datePickerShown = MutableStateFlow(false)
     val datePickerShown = _datePickerShown.asStateFlow()
@@ -132,12 +139,14 @@ class CounterVM : ViewModel(), KoinComponent {
     // Observer that is used to observe a method in the Dao which fetches a list of Entry items
     private val todayObserverObject = Observer<List<Entry>> {
         val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
-        _savedEntriesToday.value = savedSugarCountGrouped
+        _sugarEntryDbRecent.value = savedSugarCountGrouped
     }
 
     //Observer that is used to observe a method in the Dao which fetches a list of EntryCalories
     private val caloriesTodayObserverObject = Observer<List<EntryCalories>> {
-        //TBD
+        val caloriesTodayObserverObjectGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
+        _caloriesEntryDbRecent.value = caloriesTodayObserverObjectGrouped
+        print(caloriesTodayObserverObjectGrouped)
     }
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long

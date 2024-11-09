@@ -4,8 +4,10 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
+import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -21,12 +23,12 @@ class HelperMethods : KoinComponent {
 
     companion object {
 
-        fun groupCounterItemsInGroupsByDay(savedEntries: List<Entry>): List<EntryGroup> {
+        fun <T : IEntry> groupCounterItemsInGroupsByDay(savedEntries: List<T>): List<EntryGroup<T>> {
 
             lateinit var todayOrYesterday: TodayOrYesterday
             val tempGroupedEntriesByDay =
-                mutableMapOf<Pair<String, String>, MutableList<Entry>>()
-            val groupedEntriesByDay = mutableListOf<EntryGroup>()
+                mutableMapOf<Pair<String, String>, MutableList<T>>()
+            val groupedEntriesByDay = mutableListOf<EntryGroup<T>>()
 
             // This intermediate step prepares the data for further processing
             // It creates group entries within a map, grouped by day.
@@ -85,9 +87,17 @@ class HelperMethods : KoinComponent {
             return simpleDateFormat2.format(Date.from(instant))
         }
 
-        fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
+        fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
             if (valueList.isNotEmpty()) {
-                return valueList.map { it.gramTotal }.reduce { sum, element -> sum + element }
+                return valueList.map {
+                    if (it is Entry) {
+                        it.gramTotal
+                    } else if (it is EntryCalories) {
+                        it.caloriesTotal
+                    } else {
+                        return 0
+                    }
+                }.reduce { sum, element -> sum + element }
             } else {
                 return 0
             }
