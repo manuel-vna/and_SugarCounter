@@ -4,6 +4,7 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
@@ -86,9 +87,17 @@ class HelperMethods : KoinComponent {
             return simpleDateFormat2.format(Date.from(instant))
         }
 
-        fun calculateTotalGramPerDayBlock(valueList: List<Entry>): Int {
+        fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
             if (valueList.isNotEmpty()) {
-                return valueList.map { it.gramTotal }.reduce { sum, element -> sum + element }
+                return valueList.map {
+                    if (it is Entry) {
+                        it.gramTotal
+                    } else if (it is EntryCalories) {
+                        it.caloriesTotal
+                    } else {
+                        return 0
+                    }
+                }.reduce { sum, element -> sum + element }
             } else {
                 return 0
             }
