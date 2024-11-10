@@ -90,12 +90,10 @@ class HelperMethods : KoinComponent {
         fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
             if (valueList.isNotEmpty()) {
                 return valueList.map {
-                    if (it is Entry) {
-                        it.gramTotal
-                    } else if (it is EntryCalories) {
-                        it.caloriesTotal
-                    } else {
-                        return 0
+                    when (it) {
+                        is Entry -> it.gramTotal
+                        is EntryCalories -> it.caloriesTotal
+                        else -> return 0
                     }
                 }.reduce { sum, element -> sum + element }
             } else {
