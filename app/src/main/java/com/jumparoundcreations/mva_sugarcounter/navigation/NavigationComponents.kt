@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,6 +35,7 @@ fun MainScreenView(context: Context) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
+        modifier = Modifier.safeContentPadding(),
         bottomBar = { BottomNavigation(navController = navController) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
