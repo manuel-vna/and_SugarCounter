@@ -15,6 +15,6 @@ data class EntryCalories(
     override val date: String,
     @ColumnInfo(name = "category")
     val category: String,
-    @ColumnInfo(name = "total")
-    override val total: Int,
+    @ColumnInfo(name = "caloriesTotal")
+    val caloriesTotal: Int,
 ) : IEntry

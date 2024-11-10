@@ -24,6 +24,6 @@ data class Entry(
     val perPieceGram: Int,
     @ColumnInfo(name = "perPieceAmount")
     val perPieceAmount: Int,
-    @ColumnInfo(name = "total")
-    override val total: Int
+    @ColumnInfo(name = "gramTotal")
+    val gramTotal: Int
 ) : IEntry
