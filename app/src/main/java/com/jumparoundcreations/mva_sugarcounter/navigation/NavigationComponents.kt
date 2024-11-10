@@ -4,8 +4,8 @@ package com.jumparoundcreations.mva_sugarcounter.navigation
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -35,11 +35,14 @@ fun MainScreenView(context: Context) {
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
-        modifier = Modifier.safeContentPadding(),
         bottomBar = { BottomNavigation(navController = navController) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {
-        Box(modifier = Modifier.padding(bottom = it.calculateBottomPadding())) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
             NavigationGraph(
                 navController = navController,
                 snackbarHostState = snackbarHostState,
@@ -83,7 +86,6 @@ fun BottomNavigation(navController: NavController) {
         )
 
     NavigationBar {
-
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
 
