@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
+    id("androidx.room")
 }
 
 // retrieve versionCode and versionName from the last commit-TAG
@@ -28,12 +29,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
         }
 
     }
@@ -74,6 +69,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 }
 
