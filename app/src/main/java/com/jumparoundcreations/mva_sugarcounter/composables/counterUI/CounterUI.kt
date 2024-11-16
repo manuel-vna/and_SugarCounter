@@ -15,6 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -22,7 +25,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -58,7 +63,7 @@ fun Counter(
 
     Column(
         modifier = Modifier
-            .padding(start = 30.dp, end = 30.dp, bottom = 30.dp)
+            .padding(start = 30.dp, end = 30.dp)
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
@@ -130,8 +135,41 @@ fun Counter(
 
         }
 
+
         val savedSugarCountGrouped by counterVM.sugarEntryDbRecent.collectAsState()
         val savedCaloriesCountGrouped by counterVM.caloriesEntryDbRecent.collectAsState()
+
+        if (caloriesCounterActivated) {
+
+            val buttonOptions = listOf(
+                stringResource(id = R.string.general_sugar),
+                stringResource(id = R.string.general_calories)
+            )
+            var selectedIndex by remember { mutableIntStateOf(0) }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                Arrangement.SpaceEvenly
+            ) {
+                SingleChoiceSegmentedButtonRow {
+                    buttonOptions.forEachIndexed { index, option ->
+                        SegmentedButton(
+                            selected = selectedIndex == index,
+                            onClick = { selectedIndex = index },
+                            shape = SegmentedButtonDefaults.itemShape(index = index, count = 2)
+                        )
+                        {
+                            Text(
+                                text = option
+                            )
+                        }
+
+                    }
+                }
+            }
+        }
 
         LazyColumn {
             items(savedSugarCountGrouped) {
