@@ -128,6 +128,8 @@ class CounterVM : ViewModel(), KoinComponent {
     private var _caloriesInput = MutableStateFlow("")
     val caloriesInput = _caloriesInput.asStateFlow()
 
+    private var _segmentedButtonIndex = MutableStateFlow(0)
+    val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
     //StateFlow: END
 
 
@@ -422,6 +424,11 @@ class CounterVM : ViewModel(), KoinComponent {
 
     fun actionCaloriesChange(caloriesInKcal: String) {
         _caloriesInput.value = caloriesInKcal
+    }
+
+    fun actionChangeSegmentedButtonIndex(index: Int) {
+        _segmentedButtonIndex.value = index
+        println("Index: $index")
     }
 
     //Actions End

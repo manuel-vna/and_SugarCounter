@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -53,6 +55,10 @@ fun CounterPerPiece(counterVM: CounterVM) {
 
             val perPieceGram by counterVM.perPieceGram.collectAsState()
             TextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor =
+                    MaterialTheme.colorScheme.secondaryContainer
+                ),
                 value = perPieceGram,
                 onValueChange = {
                     if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerPieceGramChange(it)
