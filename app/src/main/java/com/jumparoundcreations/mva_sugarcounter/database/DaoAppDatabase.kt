@@ -100,4 +100,6 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM calories_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntryCalories(startPoint: Long, endPoint: Long): LiveData<List<EntryCalories>>
 
+    @Query("""DELETE FROM calories_table WHERE id = :id""")
+    fun deleteSpecificEntryCaloriesRow(id: Int)
 }

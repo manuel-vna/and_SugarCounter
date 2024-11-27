@@ -1,7 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.composables
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -124,7 +123,7 @@ fun <T : IEntry> ShowSharedCards(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        //counterVM.actionShowDeleteAlertDialog(it)
+                        counterVM.actionShowDeleteAlertDialog(it)
                     },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -190,36 +189,53 @@ fun <T : IEntry> ShowSharedCards(
 
     }
 
+    val showDeleteDialog by counterVM.showDeleteDialog.collectAsState()
+    val itemToDeleteEntrySugar by counterVM.itemToDeleteEntrySugar.collectAsState()
+    val itemToDeleteEntryCalories by counterVM.itemToDeleteEntryCalories.collectAsState()
+    val itemToDeleteIsEntrySugar by counterVM.itemToDeleteIsEntrySugar.collectAsState()
 
-    val categoryItemDeleteDialog by counterVM.categoryItemDeleteDialog.collectAsState()
-    val categoryItemDeleteObject by counterVM.categoryItemDeleteObject.collectAsState()
-    if (categoryItemDeleteDialog) {
-        AlertDialog(title = { Text(text = "Delete this item?") },
-            onDismissRequest = { },
-            confirmButton = {
-                Button(onClick = {
-                    Log.d("Tag", "Delete item: " + categoryItemDeleteObject.category)
-                    counterVM.actionDeleteSpecificEntryRow(categoryItemDeleteObject.id)
-                    counterVM.actionDismissDeleteAlertDialog()
-                }) {
-                    Text("Delete")
-                }
-            },
-            dismissButton = {
-                Button(onClick = {
-                    Log.d("Tag", "Cancel item: " + categoryItemDeleteObject.category)
-                    counterVM.actionDismissDeleteAlertDialog()
-                }) {
-                    Text("Cancel")
-                }
-
-            },
-            text = {
-                Text(categoryItemDeleteObject.gramTotal.toString() + "g " + categoryItemDeleteObject.category)
-            })
+    if (showDeleteDialog) {
+        ShowAlertDialog(
+            counterVM = counterVM,
+            itemToDelete = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar else itemToDeleteEntryCalories,
+            dialogTitle = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar.category else itemToDeleteEntryCalories.category
+        )
     }
-
 }
+
+
+@Composable
+fun ShowAlertDialog(
+    counterVM: CounterVM,
+    itemToDelete: IEntry,
+    dialogTitle: String
+) {
+
+    AlertDialog(
+        title = { Text(text = dialogTitle) },
+        onDismissRequest = { counterVM.actionDismissDeleteAlertDialog() },
+        confirmButton = {
+            Button(onClick = {
+                counterVM.actionDeleteSpecificEntryRow(itemToDelete.id)
+                counterVM.actionDismissDeleteAlertDialog()
+            }) {
+                Text(stringResource(id = R.string.general_delete))
+            }
+        },
+        dismissButton = {
+            Button(onClick = {
+                counterVM.actionDismissDeleteAlertDialog()
+            }) {
+                Text(stringResource(R.string.generalCancel))
+            }
+
+        },
+        text = {
+            Text(stringResource(id = R.string.general_delete_question))
+        })
+}
+
+
 
 
 

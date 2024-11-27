@@ -38,6 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
+@Deprecated("Deprecated with the introduction of CaloriesCounter")
 @Composable
 fun ShowSugarCountItemsShared(
     entryGroup: EntryGroup<Entry>,
@@ -172,7 +173,7 @@ fun ShowSugarCountItemsShared(
     }
 
 
-    val categoryItemDeleteDialog by counterVM.categoryItemDeleteDialog.collectAsState()
+    val categoryItemDeleteDialog by counterVM.showDeleteDialog.collectAsState()
     val categoryItemDeleteObject by counterVM.categoryItemDeleteObject.collectAsState()
     if (categoryItemDeleteDialog) {
         AlertDialog(

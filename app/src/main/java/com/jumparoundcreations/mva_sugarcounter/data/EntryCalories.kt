@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "calories_table")
 data class EntryCalories(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    override val id: Int = 0,
     @ColumnInfo(name = "currentTimestamp")
     override val currentTimestamp: Long,
     @ColumnInfo(name = "date")

@@ -27,6 +27,7 @@
     <string name="general_error">Error</string>
     <string name="general_sugar">Sugar</string>
     <string name="general_calories">Calories</string>
+    <string name="general_delete_question">Möchten Sie diesen Eintrag löschen?</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>

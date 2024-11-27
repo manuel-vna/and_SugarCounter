@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "entry_table")
 data class Entry(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    override val id: Int = 0,
     @ColumnInfo(name = "currentTimestamp")
     override val currentTimestamp: Long,
     @ColumnInfo(name = "date")
