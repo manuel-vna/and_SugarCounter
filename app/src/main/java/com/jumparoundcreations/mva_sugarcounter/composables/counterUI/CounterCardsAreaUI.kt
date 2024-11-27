@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.ShowSugarCountItemsShared
+import com.jumparoundcreations.mva_sugarcounter.composables.ShowSharedCards
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 
@@ -73,7 +73,7 @@ fun CounterCardsAreaUI(
         0 -> {
             LazyColumn {
                 items(savedSugarCountGrouped) {
-                    ShowSugarCountItemsShared(
+                    ShowSharedCards(
                         entryGroup = it,
                         backgroundColorPrimary = false
                     )
@@ -82,7 +82,14 @@ fun CounterCardsAreaUI(
         }
 
         1 -> {
-            Text("Test")
+            LazyColumn {
+                items(savedCaloriesCountGrouped) {
+                    ShowSharedCards(
+                        entryGroup = it,
+                        backgroundColorPrimary = false
+                    )
+                }
+            }
         }
 
         else -> Text("No index")

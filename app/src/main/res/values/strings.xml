@@ -40,6 +40,8 @@
     <string name="entryDateDescription">You can change the date of your sugar entry within the last 30 days</string>
     <string name="tabCounterPerHundred">sugar/100g</string>
     <string name="tabCounterPerPiece">sugar/piece</string>
+    <string name="gram_unit_short">g</string>
+    <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Frequently Asked Questions</string>
     <string name="faq_question_one">1</string>
@@ -81,5 +83,7 @@
     <string name="calories_textfield_title">Calories</string>
     <string name="calories_textfield_placeholder">kcal</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">No entry data found for the given category</string>
+    <string name="sugar_card_relation_expression">\u0020à\u0020</string>
+    <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
 
 </resources>

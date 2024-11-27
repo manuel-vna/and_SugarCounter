@@ -13,7 +13,7 @@ data class Entry(
     @ColumnInfo(name = "date")
     override val date: String,
     @ColumnInfo(name = "category")
-    val category: String,
+    override val category: String,
     @ColumnInfo(name = "isPerHundred")
     val isPerHundred: Boolean,
     @ColumnInfo(name = "perHundredGram")

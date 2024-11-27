@@ -41,6 +41,8 @@
     <string name="entryDateDescription">Der Tag des Zuckereintrags kann innerhalb der letztn 30 Tage gewählt werden.</string>
     <string name="tabCounterPerHundred">Zucker/100g</string>
     <string name="tabCounterPerPiece">Zucker/Stück</string>
+    <string name="gram_unit_short">g</string>
+    <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Häufige Fragen</string>
     <string name="faq_question_one">Wofür ist diese App gedacht?</string>
@@ -82,5 +84,7 @@
     <string name="calories_textfield_title">Kalorien</string>
     <string name="calories_textfield_placeholder">kcal</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
+    <string name="sugar_card_relation_expression">\u0020à\u0020</string>
+    <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
 
 </resources>
