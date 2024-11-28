@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.DialogDoubleButton
+import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -177,17 +177,19 @@ fun SettingsSliderGramThreshold(
 
     val gramThresholdDialogCheck by settingsVM.gramThresholdDialogCheck.collectAsState()
     if (gramThresholdDialogCheck) {
-        DialogDoubleButton(
+
+        ShowAlertDialogDoubleBtn(
             dialogTitle = sliderPosition.toInt()
                 .toString() + " " + stringResource(R.string.general_gram),
             dialogDescription = stringResource(id = R.string.gram_threshold_dialog_title),
-            buttonOnConfirmText = stringResource(id = R.string.generalConfirm),
-            buttonOnDismissText = stringResource(id = R.string.generalCancel),
-            buttonOnConfirm = {
+            confirmBtnText = stringResource(id = R.string.generalConfirm),
+            confirmBtnAction = {
                 settingsVM.actionGramThresholdDialogCheck(false)
                 settingsVM.actionUpdateGramThresholdSharedPref()
             },
-            buttonOnDismiss = { settingsVM.actionGramThresholdDialogCheck(false) }
+            dismissBtnText = stringResource(id = R.string.generalCancel),
+            dismissBtnAction = { settingsVM.actionGramThresholdDialogCheck(false) },
+            onDismissRequest = { settingsVM.actionGramThresholdDialogCheck(false) }
         )
     }
 }

@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -28,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogDoubleBtn
+import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogSingleBtn
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -136,49 +136,30 @@ fun Counter(
 
     val alertDialog by counterVM.alertDialog.collectAsState()
     if (alertDialog) {
-        AlertDialog(
-            title = { Text(text = stringResource(id = R.string.noGramValueInDatabaseYetTitle)) },
-            onDismissRequest = { },
-            confirmButton = {
-                Button(
 
-                    onClick = {
-                        counterVM.actionDismissAlertDialog()
-                    }) {
-                    Text("Okay")
-                }
-            },
-            text = {
-                Text(stringResource(id = R.string.noGramValueInDatabaseYetDescription))
-            }
+        ShowAlertDialogSingleBtn(
+            dialogTitle = stringResource(id = R.string.noGramValueInDatabaseYetTitle),
+            dialogDescription = stringResource(id = R.string.noGramValueInDatabaseYetDescription),
+            confirmBtnText = stringResource(id = R.string.generalClose),
+            confirmBtnAction = { counterVM.actionDismissAlertDialog() },
+            onDismissRequest = { counterVM.actionDismissAlertDialog() }
         )
+
     }
 
     val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
     if (alertDialogGramThreshold) {
-        AlertDialog(
-            title = { Text(text = stringResource(id = R.string.alertGramThresholdTitle)) },
-            onDismissRequest = { },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        counterVM.actionGramThresholdDeleteLastEntry()
-                    }) {
-                    Text(stringResource(id = R.string.alertGramThresholdConfirmBtn))
-                }
-            },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        counterVM.actionGramThresholdKeepLastEntry()
-                    }) {
-                    Text(stringResource(id = R.string.alertGramThresholdDismissBtn))
-                }
-            },
-            text = {
-                Text(stringResource(id = R.string.alertGramThresholdDescription))
-            }
+
+        ShowAlertDialogDoubleBtn(
+            dialogTitle = stringResource(id = R.string.alertGramThresholdTitle),
+            dialogDescription = stringResource(id = R.string.alertGramThresholdDescription),
+            confirmBtnText = stringResource(id = R.string.alertGramThresholdConfirmBtn),
+            confirmBtnAction = { counterVM.actionGramThresholdDeleteLastEntry() },
+            dismissBtnText = stringResource(id = R.string.alertGramThresholdDismissBtn),
+            dismissBtnAction = { counterVM.actionGramThresholdKeepLastEntry() },
+            onDismissRequest = { }
         )
+
     }
 
     val noDataForChosenCategorySnackbarShown by counterVM.noDataForChosenCategorySnackbarShown.collectAsState()

@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,15 +44,23 @@ fun <T : IEntry> ShowSharedCards(
 ) {
 
     val counterVM: CounterVM = koinViewModel()
-
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList)
-    val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
+    var thresholdValue = 0
+
+    if (entryGroup.entryList.isNotEmpty()) {
+        thresholdValue = when (entryGroup.entryList.first()) {
+            is Entry -> sharedPrefsMain.getInt("gramThresholdValue", 50)
+            is EntryCalories -> 2000
+            else -> 0
+        }
+    }
+
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 12.dp),
-        border = if (totalGramPerDayBlock > gramThresholdValue) {
+        border = if (totalGramPerDayBlock > thresholdValue) {
             BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
         } else if (backgroundColorPrimary) {
             BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
@@ -170,10 +176,10 @@ fun <T : IEntry> ShowSharedCards(
 
             Icon(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                painter = if (totalGramPerDayBlock <= gramThresholdValue) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
+                painter = if (totalGramPerDayBlock <= thresholdValue) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
-                tint = if (totalGramPerDayBlock > gramThresholdValue) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
+                tint = if (totalGramPerDayBlock > thresholdValue) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
                 contentDescription = "",
             )
 
@@ -195,45 +201,28 @@ fun <T : IEntry> ShowSharedCards(
     val itemToDeleteIsEntrySugar by counterVM.itemToDeleteIsEntrySugar.collectAsState()
 
     if (showDeleteDialog) {
-        ShowAlertDialog(
-            counterVM = counterVM,
-            itemToDelete = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar else itemToDeleteEntryCalories,
-            dialogTitle = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar.category else itemToDeleteEntryCalories.category
+
+        ShowAlertDialogDoubleBtn(
+            dialogTitle = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar.category else itemToDeleteEntryCalories.category,
+            dialogDescription = stringResource(id = R.string.general_delete_question),
+            confirmBtnText = stringResource(id = R.string.general_delete),
+            confirmBtnAction = {
+                val itemToDelete =
+                    if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar else itemToDeleteEntryCalories
+                counterVM.actionDeleteSpecificEntryRow(itemToDelete.id)
+                counterVM.actionDismissDeleteAlertDialog()
+            },
+            dismissBtnText = stringResource(R.string.generalCancel),
+            dismissBtnAction = {
+                counterVM.actionDismissDeleteAlertDialog()
+            },
+            onDismissRequest = { counterVM.actionDismissDeleteAlertDialog() }
         )
+
     }
 }
 
 
-@Composable
-fun ShowAlertDialog(
-    counterVM: CounterVM,
-    itemToDelete: IEntry,
-    dialogTitle: String
-) {
-
-    AlertDialog(
-        title = { Text(text = dialogTitle) },
-        onDismissRequest = { counterVM.actionDismissDeleteAlertDialog() },
-        confirmButton = {
-            Button(onClick = {
-                counterVM.actionDeleteSpecificEntryRow(itemToDelete.id)
-                counterVM.actionDismissDeleteAlertDialog()
-            }) {
-                Text(stringResource(id = R.string.general_delete))
-            }
-        },
-        dismissButton = {
-            Button(onClick = {
-                counterVM.actionDismissDeleteAlertDialog()
-            }) {
-                Text(stringResource(R.string.generalCancel))
-            }
-
-        },
-        text = {
-            Text(stringResource(id = R.string.general_delete_question))
-        })
-}
 
 
 
