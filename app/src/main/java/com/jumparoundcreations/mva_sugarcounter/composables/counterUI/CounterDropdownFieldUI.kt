@@ -22,6 +22,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -108,6 +110,11 @@ fun RowScope.CategoryDropdownField(
                         .show()
                 }
             },
+            colors = OutlinedTextFieldDefaults.colors(
+                unfocusedContainerColor =
+                MaterialTheme.colorScheme.secondaryContainer,
+                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+            ),
             textStyle = TextStyle(
                 fontSize = 16.sp
             ),
@@ -138,8 +145,9 @@ fun RowScope.CategoryDropdownField(
                         .padding(horizontal = 5.dp)
                         .fillMaxWidth()
                 },
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(10.dp),
             ) {
 
                 LazyColumn(

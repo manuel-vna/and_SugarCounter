@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -53,6 +55,11 @@ fun CounterPerHundred(counterVM: CounterVM) {
 
             val perHundredGram by counterVM.perHundredGram.collectAsState()
             TextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor =
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
                 value = perHundredGram,
                 onValueChange = {
                     if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerHundredChange(it)
@@ -89,6 +96,11 @@ fun CounterPerHundred(counterVM: CounterVM) {
             )
 
             TextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor =
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
                 value = amountValue,
                 onValueChange = {
                     if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerHundredQuantityChange(

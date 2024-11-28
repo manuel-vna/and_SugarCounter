@@ -61,14 +61,12 @@ fun <T : IEntry> ShowSharedCards(
             .fillMaxWidth()
             .padding(top = 12.dp, bottom = 12.dp),
         border = if (totalGramPerDayBlock > thresholdValue) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.tertiary)
-        } else if (backgroundColorPrimary) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+            BorderStroke(2.dp, MaterialTheme.colorScheme.error)
         } else {
-            null
+            BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         },
         colors = CardDefaults.cardColors(
-            containerColor = if (backgroundColorPrimary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = if (backgroundColorPrimary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surface,
         )
     ) {
 
@@ -179,7 +177,7 @@ fun <T : IEntry> ShowSharedCards(
                 painter = if (totalGramPerDayBlock <= thresholdValue) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
-                tint = if (totalGramPerDayBlock > thresholdValue) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
+                tint = if (totalGramPerDayBlock > thresholdValue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
                 contentDescription = "",
             )
 

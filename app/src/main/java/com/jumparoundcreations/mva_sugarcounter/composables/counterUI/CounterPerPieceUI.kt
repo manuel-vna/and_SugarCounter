@@ -57,7 +57,8 @@ fun CounterPerPiece(counterVM: CounterVM) {
             TextField(
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor =
-                    MaterialTheme.colorScheme.secondaryContainer
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 value = perPieceGram,
                 onValueChange = {
@@ -95,6 +96,11 @@ fun CounterPerPiece(counterVM: CounterVM) {
             )
 
             TextField(
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor =
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
                 value = perPieceAmount,
                 onValueChange = {
                     if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerPieceAmountChange(
