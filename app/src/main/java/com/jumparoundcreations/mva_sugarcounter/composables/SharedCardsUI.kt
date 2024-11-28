@@ -182,7 +182,7 @@ fun <T : IEntry> ShowSharedCards(
             )
 
             Text(
-                modifier = Modifier.padding(horizontal = 4.dp),
+                modifier = Modifier.padding(end = 8.dp),
                 text =
                 stringResource(id = R.string.totalAmountSugar) + ": " + HelperMethods.calculateTotalGramPerDayBlock(
                     entryGroup.entryList
