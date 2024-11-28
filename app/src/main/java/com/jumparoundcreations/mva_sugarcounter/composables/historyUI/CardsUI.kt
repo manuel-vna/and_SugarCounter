@@ -23,7 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.jumparoundcreations.mva_sugarcounter.composables.ShowSugarCountItemsShared
+import com.jumparoundcreations.mva_sugarcounter.composables.ShowSharedCards
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
@@ -46,10 +46,19 @@ fun CardsScreen(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
         ) {
             items(savedSugarCountGroupedMinusToday) {
+
+                ShowSharedCards(
+                    entryGroup = it,
+                    backgroundColorPrimary = false
+                )
+
+                /*
                 ShowSugarCountItemsShared(
                     entryGroup = it,
                     backgroundColorPrimary = false
                 )
+
+                 */
             }
         }
 
