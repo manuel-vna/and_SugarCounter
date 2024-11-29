@@ -67,7 +67,7 @@ fun SettingsScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        SettingsActivateCaloriesCounter(settingsVM)
+        SettingsActivateCaloriesCounter(settingsVM, sharedPrefsMain)
 
         HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
 
@@ -108,8 +108,18 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsActivateCaloriesCounter(
-    settingsVM: SettingsVM
+    settingsVM: SettingsVM,
+    sharedPrefsMain: SharedPreferences
 ) {
+
+    // START: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
+    val caloriesCounterSwitchActivated = sharedPrefsMain.getBoolean(
+        "caloriesCounterActivated",
+        false
+    )
+    settingsVM.actionChangeCaloriesCounterSwitch(caloriesCounterSwitchActivated)
+    // END: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
+
 
     val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
 
@@ -123,7 +133,7 @@ fun SettingsActivateCaloriesCounter(
         )
         Switch(
             checked = caloriesCounterActivated,
-            onCheckedChange = { settingsVM.actionChangeCaloriesCounterActivated(it) }
+            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) }
         )
     }
 
