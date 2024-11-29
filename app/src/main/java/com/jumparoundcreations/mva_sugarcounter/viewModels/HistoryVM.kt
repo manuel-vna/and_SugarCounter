@@ -33,14 +33,19 @@ class HistoryVM : ViewModel(), KoinComponent {
     //Timestamps: END
 
     //SateFlows: START
+
     val _historyChartScreenShown = MutableStateFlow(false)
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
+
     val _historyCardsScreenShown = MutableStateFlow(true)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
+
     val _historyCardSearchFieldShown = MutableStateFlow(false)
     val historyCardSearchFieldShown = _historyCardSearchFieldShown.asStateFlow()
+
     val _historyCardSearchFieldText = MutableStateFlow("")
     val historyCardSearchFieldText = _historyCardSearchFieldText.asStateFlow()
+
     val _savedHistory = MutableStateFlow(
         listOf(
             EntryGroup(
@@ -55,19 +60,24 @@ class HistoryVM : ViewModel(), KoinComponent {
         )
     )
     val savedHistory =
+    // fun <T1, T2, R> Flow<T1>.combine(flow: Flow<T2>, transform: suspend (a: T1, b: T2) -> R):
+    // Returns a Flow whose values are generated with transform function by combining the most
+        // recently emitted values by each flow.
         historyCardSearchFieldText.combine(_savedHistory) { searchField, entries ->
             entries.filter { entryGroup ->
                 entryGroup.entryList.any { entry ->
                     entry.category.contains(_historyCardSearchFieldText.value)
                 }
             }
-        }.stateIn(
+        }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             _savedHistory.value
         )
+
     private var _segmentedButtonIndex = MutableStateFlow(0)
     val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
+
     //SateFlows: END
 
     //Observer: START
@@ -117,6 +127,5 @@ class HistoryVM : ViewModel(), KoinComponent {
     fun actionChangeSegmentedButtonIndex(index: Int) {
         _segmentedButtonIndex.value = index
     }
-
     //Actions: END
 }
