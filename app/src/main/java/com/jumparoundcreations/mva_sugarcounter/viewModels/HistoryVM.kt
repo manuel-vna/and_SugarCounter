@@ -37,8 +37,6 @@ class HistoryVM : ViewModel(), KoinComponent {
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
     val _historyCardsScreenShown = MutableStateFlow(true)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
-    val _historyInfoDialogShown = MutableStateFlow(false)
-    val historyInfoDialogShown = _historyInfoDialogShown.asStateFlow()
     val _historyCardSearchFieldShown = MutableStateFlow(false)
     val historyCardSearchFieldShown = _historyCardSearchFieldShown.asStateFlow()
     val _historyCardSearchFieldText = MutableStateFlow("")
@@ -68,6 +66,8 @@ class HistoryVM : ViewModel(), KoinComponent {
             SharingStarted.WhileSubscribed(5000),
             _savedHistory.value
         )
+    private var _segmentedButtonIndex = MutableStateFlow(0)
+    val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
     //SateFlows: END
 
     //Observer: START
@@ -106,20 +106,16 @@ class HistoryVM : ViewModel(), KoinComponent {
         _historyCardsScreenShown.value = false
     }
 
-    fun actionShowInfoBoxForHistoryScreen() {
-        _historyInfoDialogShown.value = true
-    }
-
-    fun actionDismissInfoDialog() {
-        _historyInfoDialogShown.value = false
-    }
-
     fun actionChangeHistoryCardSearchFieldShown(isShown: Boolean) {
         _historyCardSearchFieldShown.value = isShown
     }
 
     fun actionChangeHistoryCardSearchFieldText(searchText: String) {
         _historyCardSearchFieldText.value = searchText
+    }
+
+    fun actionChangeSegmentedButtonIndex(index: Int) {
+        _segmentedButtonIndex.value = index
     }
 
     //Actions: END
