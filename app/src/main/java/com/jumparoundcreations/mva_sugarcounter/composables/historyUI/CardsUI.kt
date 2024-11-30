@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.historyUI
 
+import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -15,7 +16,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowSharedCards
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 
@@ -32,22 +36,44 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 @Composable
 fun CardsScreen(
     historyVM: HistoryVM,
-    savedSugarCountGrouped: List<EntryGroup<Entry>>
+    savedSugarCountGrouped: List<EntryGroup<Entry>>,
+    caloriesEntryDbHistory: List<EntryGroup<EntryCalories>>
 ) {
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
     val historyCardSearchFieldText by historyVM.historyCardSearchFieldText.collectAsState()
+    val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
         ) {
-            items(savedSugarCountGrouped) {
-                ShowSharedCards(
-                    entryGroup = it,
-                    backgroundColorPrimary = false
-                )
+
+            when (segmentedButtonIndex) {
+                0 -> {
+                    items(savedSugarCountGrouped) {
+                        ShowSharedCards(
+                            entryGroup = it,
+                            backgroundColorPrimary = false
+                        )
+                    }
+                }
+
+                1 -> {
+                    Log.d("CardsUI.kt", "Calories tab chosen")
+
+                    items(caloriesEntryDbHistory) {
+                        ShowSharedCards(
+                            entryGroup = it,
+                            backgroundColorPrimary = false
+                        )
+                    }
+
+                }
+
+                else -> Log.d("CardsUI.kt", "No index found")
             }
+
         }
 
         Row(
@@ -78,7 +104,10 @@ fun CardsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp),
-                    singleLine = true
+                    singleLine = true,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                    )
                 )
             }
         }

@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -75,6 +76,34 @@ class HistoryVM : ViewModel(), KoinComponent {
             _savedHistory.value
         )
 
+    val _caloriesEntryDbHistory = MutableStateFlow(
+        listOf(
+            EntryGroup(
+                "", "",
+                listOf(
+                    EntryCalories(
+                        0, 0, "", "", 0
+                    )
+                )
+            )
+        )
+    )
+    val caloriesEntryDbHistory =
+    // fun <T1, T2, R> Flow<T1>.combine(flow: Flow<T2>, transform: suspend (a: T1, b: T2) -> R):
+    // Returns a Flow whose values are generated with transform function by combining the most
+        // recently emitted values by each flow.
+        historyCardSearchFieldText.combine(_caloriesEntryDbHistory) { searchField, entries ->
+            entries.filter { entryGroup ->
+                entryGroup.entryList.any { entry ->
+                    entry.category.contains(_historyCardSearchFieldText.value)
+                }
+            }
+        }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            _caloriesEntryDbHistory.value
+        )
+
     private var _segmentedButtonIndex = MutableStateFlow(0)
     val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
 
@@ -86,15 +115,25 @@ class HistoryVM : ViewModel(), KoinComponent {
         _savedHistory.value = savedSugarCountGrouped
     }
 
+    private val caloriesHistoryObserver = Observer<List<EntryCalories>> {
+        val _caloriesEntryDbHistoryGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
+        _caloriesEntryDbHistory.value = _caloriesEntryDbHistoryGrouped
+    }
+
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
         database.appDao().getEntries(endOfXDaysAgo, endOfToday).observeForever(historyObserver)
+        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+            .observeForever(caloriesHistoryObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
         database.appDao().getEntries(endOfXDaysAgo, endOfToday).removeObserver(historyObserver)
+        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+            .removeObserver(caloriesHistoryObserver)
+
     }
     //Observer: END
 
