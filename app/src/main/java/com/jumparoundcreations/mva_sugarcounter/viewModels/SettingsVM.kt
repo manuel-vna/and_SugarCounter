@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
@@ -144,7 +145,7 @@ class SettingsVM : ViewModel(), KoinComponent {
         _exportSuccessfully.value = wasSuccessful
     }
 
-    fun actionChangeCaloriesCounterActivated(isActivated: Boolean) {
+    fun actionChangeCaloriesCounterGeneral(isActivated: Boolean) {
         _caloriesCounterActivated.value = isActivated
 
         //Save activation boolean in SharedPreferences
@@ -154,6 +155,11 @@ class SettingsVM : ViewModel(), KoinComponent {
             _caloriesCounterActivated.value
         )
         editorSharedPrefsMain.apply()
+    }
+
+    fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
+        Log.d("Switch", "isActivated: $isActivated")
+        _caloriesCounterActivated.value = isActivated
     }
 
     //Actions: END

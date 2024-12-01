@@ -1,99 +1,88 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.historyUI
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.GraphData
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 
 @Composable
-fun History(context: Context) {
+fun History(
+    context: Context,
+    sharedPrefsMain: SharedPreferences = koinInject(
+        qualifier = named("sharedPrefsMain")
+    )
+) {
 
     val historyVM: HistoryVM = koinViewModel()
+    val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
+    val caloriesEntryDbHistory by historyVM.caloriesEntryDbHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()
-    val historyInfoDialogShown by historyVM.historyInfoDialogShown.collectAsState()
-
-
-    if (historyInfoDialogShown) {
-        InfoDialog(historyVM, historyChartScreenShown)
-    }
+    val caloriesCounterActivated = sharedPrefsMain.getBoolean(
+        "caloriesCounterActivated",
+        false
+    )
 
     Column {
 
         // Area at the top: Buttons and info icon
-        HistoryScreenTopArea(historyVM)
+        HistoryScreenTopArea(historyVM, caloriesCounterActivated)
 
         //Card Screen
         if (historyCardsScreenShown) {
-            CardsScreen(historyVM = historyVM, savedSugarCountGrouped = savedSugarCountGrouped)
+            CardsScreen(
+                historyVM = historyVM,
+                savedSugarCountGrouped = savedSugarCountGrouped,
+                caloriesEntryDbHistory = caloriesEntryDbHistory
+            )
         }
 
         // Line Chart Screen
         if (historyChartScreenShown) {
-            val graphDataList =
-                savedSugarCountGrouped.take(60).mapIndexed { id, entryGroup ->
-                    GraphData(
-                        id = id,
-                        valueTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
-                        day = HelperMethods.formatDateToString(
-                            entryGroup.entryList.first().currentTimestamp,
-                            if (HelperMethods.getSystemLanguage() == "en") {
-                                "EEEE \n MM/dd"
-                            } else {
-                                "EEEE \n dd.MM"
-                            }
-                        ),
-                        date = entryGroup.date
-                    )
-                }
-
-            val graphDataListSorted = graphDataList.sortedByDescending { it.date }
-            // create array that tags the y axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
-            val lineGraphGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
-
-            //Testing Calories:
-            //val lineGraphCaloriesTags = (0..18).map { i -> "${1600+ (18 - i) * (100)}" }
-
             LineChart(
                 context = context,
-                countMode = HelperMethods.CountMode.SUGAR,
-                graphDataList = graphDataListSorted,
-                lineGraphYAxisTag = lineGraphGramTags
+                countMode = if (segmentedButtonIndex == 0) {
+                    HelperMethods.CountMode.SUGAR
+                } else {
+                    HelperMethods.CountMode.CALORIES
+                },
+                sugarEntryDbHistory = savedSugarCountGrouped,
+                caloriesEntryDbHistory = caloriesEntryDbHistory
             )
         }
     }
 }
 
 @Composable
-fun HistoryScreenTopArea(historyVM: HistoryVM) {
+fun HistoryScreenTopArea(
+    historyVM: HistoryVM,
+    caloriesCounterActivated: Boolean
+) {
 
     Row {
         Button(
@@ -120,71 +109,44 @@ fun HistoryScreenTopArea(historyVM: HistoryVM) {
         }
     }
 
-    // Info button for diagram and cards history screens
-    /*
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.End
+    if (caloriesCounterActivated) {
 
-    ) {
-        IconButton(onClick = { historyVM.actionShowInfoBoxForHistoryScreen() }) {
-            Icon(
-                imageVector = Icons.Default.Info,
-                contentDescription = "Info"
-            )
-        }
-    }
-     */
+        val buttonOptions = listOf(
+            stringResource(id = R.string.general_sugar),
+            stringResource(id = R.string.general_calories)
+        )
+        var selectedIndex by remember { mutableIntStateOf(0) }
 
-}
-
-
-@Composable
-fun InfoDialog(historyVM: HistoryVM, historyChartScreenShown: Boolean) {
-
-    Dialog(onDismissRequest = { historyVM.actionDismissInfoDialog() }) {
-        Card(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp)
-                .padding(8.dp),
-            shape = RoundedCornerShape(16.dp),
+                .padding(top = 8.dp),
+            Arrangement.SpaceEvenly
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .weight(1f),
-                    imageVector = Icons.Default.Info,
-                    contentDescription = "Info"
-                )
-                Text(
-                    modifier = Modifier
-                        .weight(5f)
-                        .padding(16.dp),
-                    fontSize = 14.sp,
-                    text = if (historyChartScreenShown) {
-                        stringResource(R.string.historyInfoDescriptionGraph)
-                    } else {
-                        stringResource(R.string.historyInfoDescriptionCards)
-                    },
-                )
-                TextButton(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
-                    onClick = { historyVM.actionDismissInfoDialog() },
-                ) {
-                    Text(stringResource(R.string.generalClose))
+            SingleChoiceSegmentedButtonRow {
+                buttonOptions.forEachIndexed { index, option ->
+                    SegmentedButton(
+                        selected = selectedIndex == index,
+                        onClick = {
+                            selectedIndex = index
+                            historyVM.actionChangeSegmentedButtonIndex(index)
+                        },
+                        shape = SegmentedButtonDefaults.itemShape(index = index, count = 2)
+                    )
+                    {
+                        Text(
+                            text = option
+                        )
+                    }
+
                 }
             }
         }
     }
+
 }
+
+
 
 
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -33,16 +34,19 @@ class HistoryVM : ViewModel(), KoinComponent {
     //Timestamps: END
 
     //SateFlows: START
+
     val _historyChartScreenShown = MutableStateFlow(false)
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
+
     val _historyCardsScreenShown = MutableStateFlow(true)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
-    val _historyInfoDialogShown = MutableStateFlow(false)
-    val historyInfoDialogShown = _historyInfoDialogShown.asStateFlow()
+
     val _historyCardSearchFieldShown = MutableStateFlow(false)
     val historyCardSearchFieldShown = _historyCardSearchFieldShown.asStateFlow()
+
     val _historyCardSearchFieldText = MutableStateFlow("")
     val historyCardSearchFieldText = _historyCardSearchFieldText.asStateFlow()
+
     val _savedHistory = MutableStateFlow(
         listOf(
             EntryGroup(
@@ -57,17 +61,52 @@ class HistoryVM : ViewModel(), KoinComponent {
         )
     )
     val savedHistory =
+    // fun <T1, T2, R> Flow<T1>.combine(flow: Flow<T2>, transform: suspend (a: T1, b: T2) -> R):
+    // Returns a Flow whose values are generated with transform function by combining the most
+        // recently emitted values by each flow.
         historyCardSearchFieldText.combine(_savedHistory) { searchField, entries ->
             entries.filter { entryGroup ->
                 entryGroup.entryList.any { entry ->
                     entry.category.contains(_historyCardSearchFieldText.value)
                 }
             }
-        }.stateIn(
+        }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             _savedHistory.value
         )
+
+    val _caloriesEntryDbHistory = MutableStateFlow(
+        listOf(
+            EntryGroup(
+                "", "",
+                listOf(
+                    EntryCalories(
+                        0, 0, "", "", 0
+                    )
+                )
+            )
+        )
+    )
+    val caloriesEntryDbHistory =
+    // fun <T1, T2, R> Flow<T1>.combine(flow: Flow<T2>, transform: suspend (a: T1, b: T2) -> R):
+    // Returns a Flow whose values are generated with transform function by combining the most
+        // recently emitted values by each flow.
+        historyCardSearchFieldText.combine(_caloriesEntryDbHistory) { searchField, entries ->
+            entries.filter { entryGroup ->
+                entryGroup.entryList.any { entry ->
+                    entry.category.contains(_historyCardSearchFieldText.value)
+                }
+            }
+        }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            _caloriesEntryDbHistory.value
+        )
+
+    private var _segmentedButtonIndex = MutableStateFlow(0)
+    val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
+
     //SateFlows: END
 
     //Observer: START
@@ -76,15 +115,25 @@ class HistoryVM : ViewModel(), KoinComponent {
         _savedHistory.value = savedSugarCountGrouped
     }
 
+    private val caloriesHistoryObserver = Observer<List<EntryCalories>> {
+        val _caloriesEntryDbHistoryGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
+        _caloriesEntryDbHistory.value = _caloriesEntryDbHistoryGrouped
+    }
+
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
         database.appDao().getEntries(endOfXDaysAgo, endOfToday).observeForever(historyObserver)
+        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+            .observeForever(caloriesHistoryObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
         database.appDao().getEntries(endOfXDaysAgo, endOfToday).removeObserver(historyObserver)
+        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+            .removeObserver(caloriesHistoryObserver)
+
     }
     //Observer: END
 
@@ -106,14 +155,6 @@ class HistoryVM : ViewModel(), KoinComponent {
         _historyCardsScreenShown.value = false
     }
 
-    fun actionShowInfoBoxForHistoryScreen() {
-        _historyInfoDialogShown.value = true
-    }
-
-    fun actionDismissInfoDialog() {
-        _historyInfoDialogShown.value = false
-    }
-
     fun actionChangeHistoryCardSearchFieldShown(isShown: Boolean) {
         _historyCardSearchFieldShown.value = isShown
     }
@@ -122,5 +163,8 @@ class HistoryVM : ViewModel(), KoinComponent {
         _historyCardSearchFieldText.value = searchText
     }
 
+    fun actionChangeSegmentedButtonIndex(index: Int) {
+        _segmentedButtonIndex.value = index
+    }
     //Actions: END
 }

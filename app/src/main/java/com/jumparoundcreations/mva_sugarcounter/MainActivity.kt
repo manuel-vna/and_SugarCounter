@@ -10,15 +10,14 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.jumparoundcreations.mva_sugarcounter.navigation.MainScreenView
 import com.jumparoundcreations.mva_sugarcounter.ui.theme.Mva_SugarCounterTheme
+import org.koin.core.component.KoinComponent
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(), KoinComponent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
-
-        //println("ShouldShowRationale: "+ ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE))
 
         setContent {
             Mva_SugarCounterTheme {
