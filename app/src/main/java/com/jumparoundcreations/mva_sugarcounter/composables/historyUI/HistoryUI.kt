@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.GraphData
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
@@ -39,6 +38,7 @@ fun History(
 ) {
 
     val historyVM: HistoryVM = koinViewModel()
+    val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
     val caloriesEntryDbHistory by historyVM.caloriesEntryDbHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
@@ -64,35 +64,15 @@ fun History(
 
         // Line Chart Screen
         if (historyChartScreenShown) {
-            val graphDataList =
-                savedSugarCountGrouped.take(60).mapIndexed { id, entryGroup ->
-                    GraphData(
-                        id = id,
-                        valueTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
-                        day = HelperMethods.formatDateToString(
-                            entryGroup.entryList.first().currentTimestamp,
-                            if (HelperMethods.getSystemLanguage() == "en") {
-                                "EEEE \n MM/dd"
-                            } else {
-                                "EEEE \n dd.MM"
-                            }
-                        ),
-                        date = entryGroup.date
-                    )
-                }
-
-            val graphDataListSorted = graphDataList.sortedByDescending { it.date }
-            // create array that tags the y axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
-            val lineGraphGramTags = (0..18).map { i -> "${(18 - i) * 5}g" }
-
-            //Testing Calories:
-            //val lineGraphCaloriesTags = (0..18).map { i -> "${1600+ (18 - i) * (100)}" }
-
             LineChart(
                 context = context,
-                countMode = HelperMethods.CountMode.SUGAR,
-                graphDataList = graphDataListSorted,
-                lineGraphYAxisTag = lineGraphGramTags
+                countMode = if (segmentedButtonIndex == 0) {
+                    HelperMethods.CountMode.SUGAR
+                } else {
+                    HelperMethods.CountMode.CALORIES
+                },
+                sugarEntryDbHistory = savedSugarCountGrouped,
+                caloriesEntryDbHistory = caloriesEntryDbHistory
             )
         }
     }

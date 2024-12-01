@@ -60,7 +60,7 @@ fun CardsScreen(
                 }
 
                 1 -> {
-                    Log.d("CardsUI.kt", "Calories tab chosen")
+                    Log.d("HistoryCardsUI.kt", "Calories tab chosen")
 
                     items(caloriesEntryDbHistory) {
                         ShowSharedCards(
@@ -71,7 +71,7 @@ fun CardsScreen(
 
                 }
 
-                else -> Log.d("CardsUI.kt", "No index found")
+                else -> Log.d("HistoryCardsUI.kt", "No index found")
             }
 
         }
