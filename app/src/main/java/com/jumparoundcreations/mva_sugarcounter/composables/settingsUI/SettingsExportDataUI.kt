@@ -56,7 +56,7 @@ fun SettingsButtonExportEntries(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp),
+            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {

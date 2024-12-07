@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -43,7 +41,7 @@ fun Settings(context: Context) {
     val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
     val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
 
-    settingsVM.actionResetGramThresholdSliderToSharedPref()
+    settingsVM.actionResetThresholdSliderValuesToSharedPref()
 
     if (settingsScreenShown) {
         SettingsScreen(context, settingsVM)
@@ -63,20 +61,16 @@ fun SettingsScreen(
 ) {
     Column(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
         SettingsActivateCaloriesCounter(settingsVM, sharedPrefsMain)
 
-        HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
-
-        SettingsSliderGramThreshold(
-            sharedPrefsMain,
-            settingsVM
+        SettingsSharedSliderThreshold(
+            settingsVM = settingsVM,
         )
 
-        HorizontalDivider(modifier = Modifier.padding(bottom = 32.dp))
+        HorizontalDivider(modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
 
         SettingsButtonExportEntries(
             context = context,
@@ -140,71 +134,6 @@ fun SettingsActivateCaloriesCounter(
 }
 
 @Composable
-fun SettingsSliderGramThreshold(
-    sharedPrefsMain: SharedPreferences,
-    settingsVM: SettingsVM
-) {
-
-    val sliderPosition by settingsVM.gramThresholdSlider.collectAsState()
-    Column(
-        modifier = Modifier.padding(top = 8.dp)
-    ) {
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(text = stringResource(id = R.string.gram_threshold_title))
-        }
-
-        Slider(
-            value = sliderPosition,
-            onValueChange = {
-                settingsVM.actionUpdateGramThresholdSlider(it)
-            },
-            valueRange = 0f..100f
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 12.dp),
-                text = sliderPosition.toInt()
-                    .toString() + " " + stringResource(id = R.string.general_gram)
-            )
-            Button(
-                modifier = Modifier.padding(start = 12.dp),
-                onClick = { settingsVM.actionGramThresholdDialogCheck(true) }
-            ) {
-                Text(text = stringResource(id = R.string.saveButton))
-            }
-
-        }
-    }
-
-    val gramThresholdDialogCheck by settingsVM.gramThresholdDialogCheck.collectAsState()
-    if (gramThresholdDialogCheck) {
-
-        ShowAlertDialogDoubleBtn(
-            dialogTitle = sliderPosition.toInt()
-                .toString() + " " + stringResource(R.string.general_gram),
-            dialogDescription = stringResource(id = R.string.gram_threshold_dialog_title),
-            confirmBtnText = stringResource(id = R.string.generalConfirm),
-            confirmBtnAction = {
-                settingsVM.actionGramThresholdDialogCheck(false)
-                settingsVM.actionUpdateGramThresholdSharedPref()
-            },
-            dismissBtnText = stringResource(id = R.string.generalCancel),
-            dismissBtnAction = { settingsVM.actionGramThresholdDialogCheck(false) },
-            onDismissRequest = { settingsVM.actionGramThresholdDialogCheck(false) }
-        )
-    }
-}
-
-@Composable
 fun SettingsButtonFAQs(
     context: Context,
     settingsVM: SettingsVM,
@@ -214,7 +143,7 @@ fun SettingsButtonFAQs(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp),
+            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
             settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
             settingsVM.actionChangeFaqScreenVisibility(isShown = true)
@@ -238,7 +167,7 @@ fun SettingsButtonThirdPartyLicenses(
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(2.dp),
+            .padding(start = 2.dp, end = 2.dp, bottom = 16.dp),
         onClick = {
             val intent = Intent(context, OssLicensesMenuActivity::class.java)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

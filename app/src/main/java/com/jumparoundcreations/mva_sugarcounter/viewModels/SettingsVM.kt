@@ -19,6 +19,7 @@ import org.koin.core.qualifier.named
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class SettingsVM : ViewModel(), KoinComponent {
 
@@ -37,6 +38,9 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
+
+    val _caloriesThresholdSlider = MutableStateFlow(0F)
+    val caloriesThresholdSlider = _caloriesThresholdSlider.asStateFlow()
 
     val _gramThresholDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
@@ -78,18 +82,36 @@ class SettingsVM : ViewModel(), KoinComponent {
         editorSharedPrefsMain.apply()
     }
 
+    fun actionUpdateCaloriesThresholdSharedPref() {
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putInt(
+            "caloriesThresholdValue",
+            _caloriesThresholdSlider.value.toInt()
+        )
+        editorSharedPrefsMain.apply()
+    }
+
     fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
         _gramThresholdSlider.value = sliderPosition
+    }
+
+    fun actionUpdateCaloriesThresholdSlider(sliderPosition: Float) {
+        val sliderPositionRoundedToTen = (sliderPosition / 10).roundToInt() * 10
+        _caloriesThresholdSlider.value = sliderPositionRoundedToTen.toFloat()
     }
 
     fun actionGramThresholdDialogCheck(isShown: Boolean) {
         _gramThresholDialogCheck.value = isShown
     }
 
-    fun actionResetGramThresholdSliderToSharedPref() {
+    fun actionResetThresholdSliderValuesToSharedPref() {
         _gramThresholdSlider.value = sharedPrefsMain.getInt(
             "gramThresholdValue",
             50
+        ).toFloat()
+        _caloriesThresholdSlider.value = sharedPrefsMain.getInt(
+            "caloriesThresholdValue",
+            2250
         ).toFloat()
     }
 

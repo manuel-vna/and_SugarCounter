@@ -23,11 +23,13 @@
     <string name="generalCancel">Abbrechen</string>
     <string name="generalClose">Schließen</string>
     <string name="general_gram">Gramm</string>
+    <string name="general_kcal">Kilokalorien</string>
     <string name="general_delete">Löschen</string>
     <string name="general_error">Error</string>
-    <string name="general_sugar">Sugar</string>
-    <string name="general_calories">Calories</string>
+    <string name="general_sugar">Zucker</string>
+    <string name="general_calories">Kalorien</string>
     <string name="general_delete_question">Möchten Sie diesen Eintrag löschen?</string>
+    <string name="general_conjunction">\u0020und\u0020</string>
     <string name="alertGramThresholdTitle">Warnung</string>
     <string name="alertGramThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
     <string name="alertGramThresholdConfirmBtn">Löschen</string>
@@ -66,8 +68,8 @@
     <string name="faq_answer_nine">9</string>
     <string name="faq_question_ten">10</string>
     <string name="faq_answer_ten">10</string>
-    <string name="gram_threshold_title">Ihre tägliche Zucker-Obergrenze</string>
-    <string name="gram_threshold_dialog_title">Diesen Wert als neue Zucker-Obergrenze g´festlegen?</string>
+    <string name="settings_threshold_title">Tagesobergrenze</string>
+    <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
     <string name="scan_barcode_button">Barcode scannen</string>
     <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
     <string name="no_barcode_yet_info_description">Diesem Barcode ist noch keine Kategorie eines Produkts zugeordnet.\n\nWenn du die weiteren Felder ausfüllst und den Eintrag speicherst, wird der im Feld \'<i>Kategorie</i>\' eingetragene Produktname automatisch dem oben aufgeführten Barcode <i>%1$s</i> zugeordnet.</string>

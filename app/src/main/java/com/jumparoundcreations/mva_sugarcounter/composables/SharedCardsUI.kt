@@ -50,7 +50,7 @@ fun <T : IEntry> ShowSharedCards(
     if (entryGroup.entryList.isNotEmpty()) {
         thresholdValue = when (entryGroup.entryList.first()) {
             is Entry -> sharedPrefsMain.getInt("gramThresholdValue", 50)
-            is EntryCalories -> 2000
+            is EntryCalories -> sharedPrefsMain.getInt("caloriesThresholdValue", 2250)
             else -> 0
         }
     }
