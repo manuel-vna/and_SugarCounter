@@ -111,12 +111,13 @@ fun LineChart(
                 val path = Path()
 
                 drawThresholdLine(
-                    sharedPrefsMain,
-                    onePercentHeight,
-                    thresholdLineColor,
-                    oneWidthSection,
-                    sizeGraphDataList,
-                    barWidthPix
+                    sharedPrefsMain = sharedPrefsMain,
+                    countMode = countMode,
+                    onePercentHeight = onePercentHeight,
+                    thresholdLineColor = thresholdLineColor,
+                    oneWidthSection = oneWidthSection,
+                    sizeGraphDataList = sizeGraphDataList,
+                    barWidthPix = barWidthPix
                 )
 
                 //Start: Vertical Drawing
@@ -232,17 +233,21 @@ fun LineChart(
  */
 fun DrawScope.drawThresholdLine(
     sharedPrefsMain: SharedPreferences,
+    countMode: HelperMethods.CountMode,
     onePercentHeight: Float,
     thresholdLineColor: Color,
     oneWidthSection: Float,
     sizeGraphDataList: Int,
     barWidthPix: Float
 ) {
-    val thresholdLineHeight =
-        onePercentHeight * (90 - sharedPrefsMain.getInt(
-            "gramThresholdValue",
-            50
-        ))
+
+    val thresholdLineHeight: Float = if (countMode == HelperMethods.CountMode.SUGAR) {
+        onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 70))
+    } else {
+        // dividing the kcal value by 50 brings ito the the scale of 100
+        onePercentHeight * (90 - sharedPrefsMain.getInt("caloriesThresholdValue", 50) / 50)
+    }
+
     drawLine(
         color = thresholdLineColor,
         start = Offset(oneWidthSection, thresholdLineHeight),

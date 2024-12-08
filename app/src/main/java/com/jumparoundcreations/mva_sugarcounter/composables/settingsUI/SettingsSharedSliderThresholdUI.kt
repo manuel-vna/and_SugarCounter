@@ -56,9 +56,13 @@ fun SettingsSharedSliderThreshold(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(text = titleSugar)
+            Text(
+                modifier = Modifier.padding(end = 6.dp),
+                text = "${gramThresholdSlider.toInt()} $unitOfMeasureGram"
+            )
         }
 
         Slider(
@@ -69,9 +73,13 @@ fun SettingsSharedSliderThreshold(
         if (caloriesCounterActivated) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(text = titleCalories)
+                Text(
+                    modifier = Modifier.padding(end = 6.dp),
+                    text = "${caloriesThresholdSlider.toInt()} $unitOfMeasureKcal"
+                )
             }
             Slider(
                 value = caloriesThresholdSlider,
@@ -85,16 +93,6 @@ fun SettingsSharedSliderThreshold(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                modifier = Modifier.padding(end = 6.dp),
-                text = "${gramThresholdSlider.toInt()} $unitOfMeasureGram"
-            )
-            if (caloriesCounterActivated) {
-                Text(
-                    modifier = Modifier.padding(end = 6.dp),
-                    text = "${caloriesThresholdSlider.toInt()} $unitOfMeasureKcal"
-                )
-            }
             Button(
                 modifier = Modifier.padding(start = 6.dp),
                 onClick = { settingsVM.actionGramThresholdDialogCheck(true) }
