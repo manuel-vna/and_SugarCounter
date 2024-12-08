@@ -89,7 +89,7 @@ fun LineChart(
     if (graphDataList.isNotEmpty()) {
         Box(
             modifier = Modifier
-                .padding(top = 28.dp, end = 4.dp)
+                .padding(top = 32.dp, end = 4.dp)
                 .background(backgroundColor)
                 .horizontalScroll(scrollState)
         ) {
@@ -97,7 +97,6 @@ fun LineChart(
             Canvas(
                 modifier = Modifier
                     .aspectRatio(6 / 1f)
-                    .padding(top = 42.dp, bottom = 42.dp)
             ) {
 
                 //DrawScope variables
@@ -242,10 +241,10 @@ fun DrawScope.drawThresholdLine(
 ) {
 
     val thresholdLineHeight: Float = if (countMode == HelperMethods.CountMode.SUGAR) {
-        onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 70))
+        onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 50))
     } else {
         // dividing the kcal value by 50 brings ito the the scale of 100
-        onePercentHeight * (90 - sharedPrefsMain.getInt("caloriesThresholdValue", 50) / 50)
+        onePercentHeight * (90 - sharedPrefsMain.getInt("caloriesThresholdValue", 1500) / 50)
     }
 
     drawLine(
