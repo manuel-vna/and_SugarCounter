@@ -1,25 +1,25 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
+import android.content.SharedPreferences
+import android.util.Log
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import kotlin.math.roundToInt
 
 class CounterSugarHelper : KoinComponent {
 
-    private val database by inject<AppDatabase>()
-
     companion object {
 
-        fun checkModeForSugarSaving(
+        fun saveSugarEntryInDatabase(
             viewModelScope: CoroutineScope,
+            sharedPrefsMain: SharedPreferences,
             counterVM: CounterVM,
             category: String,
             dateOfEntryEpochSecValue: Long,
@@ -42,11 +42,11 @@ class CounterSugarHelper : KoinComponent {
                     perHundredQuantityValue.toDouble()
 
                 if (perHundredGramValue.isEmpty()) {
-                    //_alertDialog.value = true
                     counterVM.actionChangeAlertDialogValue(true)
                 } else {
                     saveEntryInDatabase(
-                        viewModelScope,
+                        viewModelScope = viewModelScope,
+                        sharedPrefsMain = sharedPrefsMain,
                         counterVM = counterVM,
                         category = category,
                         dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
@@ -64,11 +64,11 @@ class CounterSugarHelper : KoinComponent {
                     perPieceAmountValue.toInt()
 
                 if (perPieceGramValue.isEmpty()) {
-                    //_alertDialogValue = true
                     counterVM.actionChangeAlertDialogValue(true)
                 } else {
                     saveEntryInDatabase(
-                        viewModelScope,
+                        viewModelScope = viewModelScope,
+                        sharedPrefsMain = sharedPrefsMain,
                         counterVM = counterVM,
                         category = category,
                         dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
@@ -83,9 +83,9 @@ class CounterSugarHelper : KoinComponent {
             }
         }
 
-
         private fun saveEntryInDatabase(
             viewModelScope: CoroutineScope,
+            sharedPrefsMain: SharedPreferences,
             counterVM: CounterVM,
             category: String,
             dateOfEntryEpochSecValue: Long,
@@ -114,8 +114,41 @@ class CounterSugarHelper : KoinComponent {
                     )
                 )
 
-                counterVM.checkGramThreshold()
+                checkThresholdForSugarInput(
+                    sharedPrefsMain = sharedPrefsMain,
+                    counterVM = counterVM,
+                    viewModelScope = viewModelScope,
+                    dateOfEntryEpochSec = dateOfEntryEpochSecValue
+                )
 
+            }
+        }
+
+        /**
+         * This check method needs to be called within the IO thread of saving an entry.
+         * Because the last entered gram data first needs to be added to the database and only then the check can
+         * be done
+         * @return Unit
+         */
+        fun checkThresholdForSugarInput(
+            sharedPrefsMain: SharedPreferences,
+            counterVM: CounterVM,
+            viewModelScope: CoroutineScope,
+            dateOfEntryEpochSec: Long
+        ) {
+            viewModelScope.launch(Dispatchers.IO) {
+                val dateString = HelperMethods.formatDateToString(
+                    dateOfEntryEpochSec,
+                    "YYYY-MM-dd"
+                )
+                val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString) ?: 0
+                Log.d("checkThresholdForSugarInput", "DatabaseSumSugar: $databaseSum")
+
+                withContext(Dispatchers.Main) {
+                    if (databaseSum > sharedPrefsMain.getInt("gramThresholdValue", 50)) {
+                        counterVM._alertDialogGramThreshold.value = true
+                    }
+                }
             }
         }
 

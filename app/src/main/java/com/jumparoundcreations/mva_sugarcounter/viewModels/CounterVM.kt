@@ -37,7 +37,7 @@ class CounterVM : ViewModel(), KoinComponent {
     private val barcodeScanner by inject<GmsBarcodeScanner>(qualifier = named("barcodeScanner"))
 
     // Timestamps: BEGIN
-    val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
+    private val epochTimestampSecondsNow = System.currentTimeMillis() / 1000
     private val today = LocalDate.now()
     private val startOfToday = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
     private val startOfYesterday = startOfToday - 86400 // 86400 = 1 day in seconds
@@ -133,8 +133,11 @@ class CounterVM : ViewModel(), KoinComponent {
     )
     val itemToDeleteEntryCalories = _itemToDeleteEntryCalories.asStateFlow()
 
-    private val _alertDialogGramThreshold = MutableStateFlow(false)
+    val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
+
+    val _alertCaloriesThreshold = MutableStateFlow(false)
+    val alertCaloriesThreshold = _alertCaloriesThreshold.asStateFlow()
 
     private val _noBarcodeYetInfoTitle = MutableStateFlow(false)
     val noBarcodeYetInfoTitle = _noBarcodeYetInfoTitle.asStateFlow()
@@ -197,10 +200,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
     //Saving an Entry: Start
     fun saveEntry(category: String) {
-
         if (_perPieceGram.value.isNotEmpty() || _perHundredGram.value.isNotEmpty()) {
-            CounterSugarHelper.checkModeForSugarSaving(
+            CounterSugarHelper.saveSugarEntryInDatabase(
                 viewModelScope = viewModelScope,
+                sharedPrefsMain,
                 counterVM = this,
                 category = category,
                 dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
@@ -214,17 +217,17 @@ class CounterVM : ViewModel(), KoinComponent {
 
         if (_caloriesInput.value.isNotEmpty()) {
             CounterCaloriesHelper.saveCaloriesEntryInDatabase(
+                sharedPreferences = sharedPrefsMain,
                 viewModelScope = viewModelScope,
+                counterVM = this,
                 category = category,
                 dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
                 caloriesInputValue = _caloriesInput.value
             )
         }
-
     }
 
     fun categoryHandling(category: String) {
-
         viewModelScope.launch(Dispatchers.IO) {
 
             // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
@@ -251,29 +254,29 @@ class CounterVM : ViewModel(), KoinComponent {
                 removeLastBarcodeInput()
             }
         }
-
     }
 
 
-    //Checking an Entry: Start
-    fun checkGramThreshold() {
+    //Check Calories Threshold: START
+    fun checkThresholdForCaloriesInput() {
         viewModelScope.launch(Dispatchers.IO) {
             val dateString = HelperMethods.formatDateToString(
                 dateOfEntryEpochSec.value,
                 "YYYY-MM-dd"
             )
-            val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString)
+            val databaseSumCalories =
+                database.appDao().checkIfCaloriesThresholdIsBreached(dateString) ?: 0
+            Log.d("tag", "DatabaseSumCalories: " + databaseSumCalories)
+
 
             withContext(Dispatchers.Main) {
-                databaseSum?.let {
-                    if (databaseSum > sharedPrefsMain.getInt("gramThresholdValue", 50)) {
-                        _alertDialogGramThreshold.value = true
+                if (databaseSumCalories > sharedPrefsMain.getInt("caloriesThresholdValue", 0)) {
+                    _alertCaloriesThreshold.value = true
                     }
-                }
             }
         }
     }
-    //Checking an Entry: End
+    //Check Calories Threshold: END
 
 
     //Loading an Entry: Start
@@ -452,6 +455,17 @@ class CounterVM : ViewModel(), KoinComponent {
         _alertDialogGramThreshold.value = false
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().deleteLastEntry()
+        }
+    }
+
+    fun actionCaloriesThresholdKeepLastEntry() {
+        _alertCaloriesThreshold.value = false
+    }
+
+    fun actionCaloriesThresholdDeleteLastEntry() {
+        _alertCaloriesThreshold.value = false
+        viewModelScope.launch(Dispatchers.IO) {
+            database.appDao().deleteLastEntryCalories()
         }
     }
 
