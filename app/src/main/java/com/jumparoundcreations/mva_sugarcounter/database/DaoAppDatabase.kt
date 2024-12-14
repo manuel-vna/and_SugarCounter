@@ -102,4 +102,10 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM calories_table WHERE id = :id""")
     fun deleteSpecificEntryCaloriesRow(id: Int)
+
+    @Query("""SELECT SUM(caloriesTotal) FROM calories_table WHERE date = :dateString""")
+    fun checkIfCaloriesThresholdIsBreached(dateString: String): Int?
+
+    @Query("""DELETE FROM calories_table WHERE id = (SELECT MAX(id) FROM calories_table)""")
+    fun deleteLastEntryCalories()
 }

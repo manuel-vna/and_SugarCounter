@@ -33,6 +33,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.core.qualifier.named
 
+
 @Composable
 fun Counter(
     context: Context,
@@ -108,6 +109,7 @@ fun Counter(
                 onClick = {
                     counterVM.saveEntry(category)
                     counterVM.categoryHandling(category)
+                    // clearing fields by an empty value / setting fields back to default
                     counterVM.actionChangeSelectedCategory("")
                     counterVM.actionPerPieceGramChange("")
                     counterVM.actionPerPieceAmountChange("")
@@ -149,17 +151,28 @@ fun Counter(
 
     val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
     if (alertDialogGramThreshold) {
-
         ShowAlertDialogDoubleBtn(
-            dialogTitle = stringResource(id = R.string.alertGramThresholdTitle),
-            dialogDescription = stringResource(id = R.string.alertGramThresholdDescription),
-            confirmBtnText = stringResource(id = R.string.alertGramThresholdConfirmBtn),
+            dialogTitle = stringResource(id = R.string.alertSugarThresholdTitle),
+            dialogDescription = stringResource(id = R.string.alertSugarThresholdDescription),
+            confirmBtnText = stringResource(id = R.string.alertThresholdConfirmBtn),
             confirmBtnAction = { counterVM.actionGramThresholdDeleteLastEntry() },
-            dismissBtnText = stringResource(id = R.string.alertGramThresholdDismissBtn),
+            dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = { counterVM.actionGramThresholdKeepLastEntry() },
             onDismissRequest = { }
         )
+    }
 
+    val alertCaloriesThreshold by counterVM.alertCaloriesThreshold.collectAsState()
+    if (alertCaloriesThreshold) {
+        ShowAlertDialogDoubleBtn(
+            dialogTitle = stringResource(id = R.string.alertCaloriesThresholdTitle),
+            dialogDescription = stringResource(id = R.string.alertCaloriesThresholdDescription),
+            confirmBtnText = stringResource(id = R.string.alertThresholdConfirmBtn),
+            confirmBtnAction = { counterVM.actionCaloriesThresholdDeleteLastEntry() },
+            dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
+            dismissBtnAction = { counterVM.actionCaloriesThresholdKeepLastEntry() },
+            onDismissRequest = { counterVM.actionCaloriesThresholdKeepLastEntry() }
+        )
     }
 
     val noDataForChosenCategorySnackbarShown by counterVM.noDataForChosenCategorySnackbarShown.collectAsState()
