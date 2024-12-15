@@ -20,14 +20,12 @@ object ExportData : KoinComponent {
     val database by inject<AppDatabase>()
     lateinit var csvFile: File
     var uri: Uri? = null
-    private const val HeaderString =
-        "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
 
-
-    fun exportEntriesViaFileWriter(
-        allEntries: List<Entry>,
+    fun <T : IEntry> exportEntriesViaFileWriter(
+        allEntries: List<T>,
         fileName: String,
-        settingsVM: SettingsVM
+        settingsVM: SettingsVM,
+        header: String
     ) {
 
         val downloadsDir =
@@ -38,7 +36,7 @@ object ExportData : KoinComponent {
         try {
             val writer = FileWriter(csvFile)
             //Header
-            writer.append(HeaderString)
+            writer.append(header)
 
             settingsVM.actionChangExportProgressIndicatorVisibility(isShown = true)
 
@@ -50,10 +48,21 @@ object ExportData : KoinComponent {
             //END: Variables for ProgressIndicator
 
             for (entry in allEntries) {
-                if (entry.isPerHundred) {
-                    writer.append("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n")
-                } else {
-                    writer.append("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n")
+
+                when (entry) {
+                    is Entry -> {
+                        if (entry.isPerHundred) {
+                            writer.append("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n")
+                        } else {
+                            writer.append("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n")
+                        }
+                    }
+
+                    is EntryCalories -> {
+                        writer.append("${entry.date},${entry.category},${entry.caloriesTotal}\n")
+                    }
+
+                    else -> writer.append("")
                 }
 
                 //progress indicator
@@ -81,11 +90,12 @@ object ExportData : KoinComponent {
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun exportEntriesViaMediaStore(
+    fun <T : IEntry> exportEntriesViaMediaStore(
         context: Context,
-        allEntries: List<Entry>,
+        allEntries: List<T>,
         fileName: String,
-        settingsVM: SettingsVM
+        settingsVM: SettingsVM,
+        header: String
     ) {
 
         try {
@@ -105,7 +115,7 @@ object ExportData : KoinComponent {
                 context.contentResolver.openOutputStream(it)?.use { outputStream ->
 
                     // Header
-                    outputStream.write(HeaderString.toByteArray())
+                    outputStream.write(header.toByteArray())
 
                     //START: Variables for ProgressIndicator
                     var count = 0
@@ -115,10 +125,21 @@ object ExportData : KoinComponent {
                     //END: Variables for ProgressIndicator
 
                     for (entry in allEntries) {
-                        if (entry.isPerHundred) {
-                            outputStream.write("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n".toByteArray())
-                        } else {
-                            outputStream.write("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n".toByteArray())
+
+                        when (entry) {
+                            is Entry -> {
+                                if (entry.isPerHundred) {
+                                    outputStream.write("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n".toByteArray())
+                                } else {
+                                    outputStream.write("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n".toByteArray())
+                                }
+                            }
+
+                            is EntryCalories -> {
+                                outputStream.write("${entry.date},${entry.category},${entry.caloriesTotal}\n".toByteArray())
+                            }
+
+                            else -> outputStream.write("".toByteArray())
                         }
 
                         //progress indicator

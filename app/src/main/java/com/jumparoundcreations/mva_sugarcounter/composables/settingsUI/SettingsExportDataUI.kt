@@ -50,8 +50,8 @@ fun SettingsButtonExportEntries(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted: Boolean ->
             settingsVM.actionExportEntries(context = context, false, settingsVM)
-            println("Permission 'Write External Storage' granted!")
-        })
+        }
+    )
 
     Button(
         modifier = Modifier
