@@ -126,24 +126,50 @@ class SettingsVM : ViewModel(), KoinComponent {
         val date = Date(timestamp)
         val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm", Locale.getDefault())
         val timestampString = sdf.format(date)
-        val fileName = "sugarCounter-$timestampString"
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            val allEntries = database.appDao().getAllEntries()
+            val allEntriesSugar = database.appDao().getAllEntries()
+            val allEntriesCalories = database.appDao().getAllEntriesCalories()
 
             if (osVersionHigherOrEqualsR) {
+
+                // export sugar entries for OS versions higher R
+                val fileNameSugar = "sugarCounter-$timestampString"
                 ExportData.exportEntriesViaMediaStore(
                     context = context,
-                    allEntries = allEntries,
-                    fileName = fileName,
-                    settingsVM = settingsVM
+                    allEntries = allEntriesSugar,
+                    fileName = fileNameSugar,
+                    settingsVM = settingsVM,
+                    header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
                 )
+                // export calories entries for OS versions higher R
+                val fileNameCalories = "caloriesCounter-$timestampString"
+                ExportData.exportEntriesViaMediaStore(
+                    context = context,
+                    allEntries = allEntriesCalories,
+                    fileName = fileNameCalories,
+                    settingsVM = settingsVM,
+                    header = "Date,Name,kcalTotal\n"
+                )
+
             } else {
+
+                // export sugar entries
+                val fileNameSugar = "sugarCounter-$timestampString"
                 ExportData.exportEntriesViaFileWriter(
-                    allEntries = allEntries,
-                    fileName = fileName,
-                    settingsVM = settingsVM
+                    allEntries = allEntriesSugar,
+                    fileName = fileNameSugar,
+                    settingsVM = settingsVM,
+                    header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
+                )
+                // export calories entries
+                val fileNameCalories = "caloriesCounter-$timestampString"
+                ExportData.exportEntriesViaFileWriter(
+                    allEntries = allEntriesCalories,
+                    fileName = fileNameCalories,
+                    settingsVM = settingsVM,
+                    header = "Date,Name,kcalTotal\n"
                 )
             }
             println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")

@@ -110,37 +110,66 @@ class HelperMethods : KoinComponent {
             return context.resources.configuration.uiMode
         }
 
-        //Testing Purposes: START
-        fun actionAddTestData() {
+
+        /**
+         * This method creates test data and is only called for that purpose
+         * The timestampInSeconds marks the start date and has to be in accordance to the chosen yearsTimespan
+         * @param Takes timestampInSeconds that is used as the start date
+         * @param Takes a number of years that define how many years are filled with data beginning at the start date
+         * @return Unit
+         */
+        fun actionAddTestData(
+            timestampInSeconds: Int,
+            yearsTimespan: Int,
+            sugarTestData: Boolean,
+            caloriesTestData: Boolean
+        ) {
             GlobalScope.launch(Dispatchers.IO) {
-                var timestamp = 1600617740.toLong()
-                repeat((365 * 4)) {
+                var timestamp = timestampInSeconds.toLong() //1600617740.toLong()
+                repeat((365 * yearsTimespan)) {
                     timestamp += 86400
 
                     repeat((1..4).random()) {
-                        var gramValue = Random.nextInt(from = 1, until = 20)
+                        val gramValue = Random.nextInt(from = 1, until = 20)
+                        val caloriesValue = Random.nextInt(from = 200, until = 1200)
 
-                        database.appDao().insertEntry(
-                            Entry(
-                                currentTimestamp = timestamp,
-                                date = HelperMethods.formatDateToString(
-                                    timestamp,
-                                    "YYYY-MM-dd"
-                                ),
-                                category = "Test",
-                                isPerHundred = true,
-                                perPieceGram = gramValue,
-                                perPieceAmount = 1,
-                                perHundredGram = 0,
-                                perHundredQuantity = 0,
-                                gramTotal = gramValue
+                        if (sugarTestData) {
+                            database.appDao().insertEntry(
+                                Entry(
+                                    currentTimestamp = timestamp,
+                                    date = formatDateToString(
+                                        timestamp,
+                                        "YYYY-MM-dd"
+                                    ),
+                                    category = "TestSugar",
+                                    isPerHundred = true,
+                                    perPieceGram = gramValue,
+                                    perPieceAmount = 1,
+                                    perHundredGram = 0,
+                                    perHundredQuantity = 0,
+                                    gramTotal = gramValue
+                                )
                             )
-                        )
+                        }
+
+                        if (caloriesTestData) {
+                            database.appDao().insertEntryCalories(
+                                EntryCalories(
+                                    currentTimestamp = timestamp,
+                                    date = formatDateToString(
+                                        timestamp,
+                                        "YYYY-MM-dd"
+                                    ),
+                                    category = "TestCalories",
+                                    caloriesTotal = caloriesValue
+                                )
+                            )
+                        }
                     }
+
                 }
             }
         }
-        //Testing Purposes: END
 
     }
 
