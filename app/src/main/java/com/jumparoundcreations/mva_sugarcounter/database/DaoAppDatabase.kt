@@ -111,4 +111,7 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM calories_table WHERE id = (SELECT MAX(id) FROM calories_table)""")
     fun deleteLastEntryCalories()
+
+    @Query("""SELECT * FROM calories_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
+    suspend fun checkIfCaloriesValueExistsForCategory(category: String): EntryCalories?
 }

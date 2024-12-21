@@ -16,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -100,13 +100,13 @@ fun CategoryList(
                     Icon(
                         modifier = Modifier.size(28.dp),
                         imageVector = Icons.Rounded.Delete,
-                        contentDescription = "arrow",
+                        contentDescription = "Delete selected categories",
                     )
                 }
             }
         }
 
-        Divider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
+        HorizontalDivider(modifier = Modifier.padding(8.dp), thickness = 3.dp)
 
         if (deletionCheckboxes.deletionCheckboxesDisplayed) {
             Row(

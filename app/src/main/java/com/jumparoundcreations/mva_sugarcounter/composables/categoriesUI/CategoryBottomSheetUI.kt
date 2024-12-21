@@ -29,7 +29,8 @@ fun CategoryBottomSheet() {
     val categoryVM: CategoryVM = koinViewModel()
     val categoryBottomSheet by categoryVM.categoryBottomSheetShown.collectAsState()
     val clickedCategory by categoryVM.clickedCategory.collectAsState()
-    val entryForClickedCategory by categoryVM.entryForClickedCategory.collectAsState()
+    val entrySugarForClickedCategory by categoryVM.entrySugarForClickedCategory.collectAsState()
+    val entryCaloriesForClickedCategory by categoryVM.entryCaloriesForClickedCategory.collectAsState()
 
     if (categoryBottomSheet) {
         ModalBottomSheet(
@@ -52,7 +53,7 @@ fun CategoryBottomSheet() {
                     fontSize = 18.sp
                 )
 
-                if (entryForClickedCategory.category.isNotEmpty()) {
+                if (entrySugarForClickedCategory.category.isNotEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -64,17 +65,39 @@ fun CategoryBottomSheet() {
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
                             text =
-                            if (entryForClickedCategory.isPerHundred) stringResource(
+                            if (entrySugarForClickedCategory.isPerHundred) stringResource(
                                 R.string.category_bottom_sheet_per_hundred_gram,
-                                entryForClickedCategory.perHundredGram
+                                entrySugarForClickedCategory.perHundredGram
                             )
                             else stringResource(
                                 R.string.category_bottom_sheet_per_piece_gram,
-                                entryForClickedCategory.perPieceGram
+                                entrySugarForClickedCategory.perPieceGram
                             )
                         )
                     }
                 }
+
+                if (entryCaloriesForClickedCategory.category.isNotEmpty()) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
+                            text = stringResource(
+                                R.string.calories_textfield_title
+                            )
+                        )
+                        Text(
+                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
+                            text = stringResource(
+                                id = R.string.category_bottom_sheet_calories,
+                                entryCaloriesForClickedCategory.caloriesTotal.toString()
+                            )
+                        )
+                    }
+                }
+
 
                 if (clickedCategory.barcodeNumber.isNotEmpty()) {
                     Row(
@@ -94,7 +117,10 @@ fun CategoryBottomSheet() {
                     }
                 }
 
-                if (entryForClickedCategory.category.isNotEmpty()) {
+                if (
+                    entrySugarForClickedCategory.category.isNotEmpty() ||
+                    entryCaloriesForClickedCategory.category.isNotEmpty()
+                ) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -106,7 +132,9 @@ fun CategoryBottomSheet() {
 
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                            text = entryForClickedCategory.date
+                            text =
+                            if (entrySugarForClickedCategory.currentTimestamp > entryCaloriesForClickedCategory.currentTimestamp)
+                                entrySugarForClickedCategory.date else entryCaloriesForClickedCategory.date
                         )
                     }
                 } else {

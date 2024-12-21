@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +69,7 @@ class CategoryVM : ViewModel(), KoinComponent {
         MutableStateFlow(Category(category = "", deletionCheckbox = false, barcodeNumber = ""))
     val clickedCategory = _clickedCategory.asStateFlow()
 
-    val _entryForClickedCategory = MutableStateFlow(
+    val _entrySugarForClickedCategory = MutableStateFlow(
         Entry(
             id = 0,
             currentTimestamp = 1L,
@@ -82,7 +83,18 @@ class CategoryVM : ViewModel(), KoinComponent {
             gramTotal = 0
         )
     )
-    val entryForClickedCategory = _entryForClickedCategory.asStateFlow()
+    val entrySugarForClickedCategory = _entrySugarForClickedCategory.asStateFlow()
+
+    val _entryCaloriesForClickedCategory = MutableStateFlow(
+        EntryCalories(
+            id = 0,
+            currentTimestamp = 1L,
+            date = "",
+            category = "",
+            caloriesTotal = 0
+        )
+    )
+    val entryCaloriesForClickedCategory = _entryCaloriesForClickedCategory.asStateFlow()
 
     //SateFlows: END
 
@@ -172,16 +184,38 @@ class CategoryVM : ViewModel(), KoinComponent {
         _categoryBottomSheetShown.value = categoryBottomSheet
         clickedCategory?.let {
             _clickedCategory.value = it
-            retrieveLastEntryForClickedCategory(clickedCategory = it)
+            retrieveLastEntriesForClickedCategory(clickedCategory = it)
         }
     }
     //Actions: END
 
-    private fun retrieveLastEntryForClickedCategory(clickedCategory: Category) {
+    private fun retrieveLastEntriesForClickedCategory(clickedCategory: Category) {
         viewModelScope.launch(Dispatchers.IO) {
-            val lastEntry: Entry? =
+
+            val lastEntrySugar: Entry? =
                 database.appDao().checkIfGramValueExistsForCategory(clickedCategory.category)
-            lastEntry?.let { _entryForClickedCategory.value = it }
+            _entrySugarForClickedCategory.value = lastEntrySugar ?: Entry(
+                id = 0,
+                currentTimestamp = 0L,
+                date = "",
+                category = "",
+                isPerHundred = false,
+                perHundredGram = 0,
+                perHundredQuantity = 0,
+                perPieceGram = 0,
+                perPieceAmount = 0,
+                gramTotal = 0
+            )
+
+            val lastEntryCalories: EntryCalories? =
+                database.appDao().checkIfCaloriesValueExistsForCategory(clickedCategory.category)
+            _entryCaloriesForClickedCategory.value = lastEntryCalories ?: EntryCalories(
+                id = 0,
+                currentTimestamp = 0L,
+                date = "",
+                category = "",
+                caloriesTotal = 0
+            )
         }
     }
 
