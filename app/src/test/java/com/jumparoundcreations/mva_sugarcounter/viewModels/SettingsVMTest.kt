@@ -25,7 +25,7 @@ class SettingsVMTest {
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
         assertTrue(settingsVM.exportProgressIndicator.value == 0.1f)
         assertTrue(settingsVM.exportProgressIndicatorShown.value == false)
-        assertTrue(settingsVM.dataSuccesfullyExportedShown.value == false)
+        assertTrue(settingsVM.dataSuccessfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
     }
 
@@ -166,7 +166,7 @@ class SettingsVMTest {
             //Arrange
             val settingsVM = SettingsVM()
 
-            settingsVM.dataSuccesfullyExportedShown.test {
+            settingsVM.dataSuccessfullyExportedShown.test {
                 //Check for Initial value
                 assertEquals(false, awaitItem())
                 //Action

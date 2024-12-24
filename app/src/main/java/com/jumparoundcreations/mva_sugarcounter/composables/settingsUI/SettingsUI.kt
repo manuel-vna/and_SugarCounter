@@ -72,6 +72,13 @@ fun SettingsScreen(
 
         HorizontalDivider(modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
 
+        SettingsButtonEntriesDeletion(
+            context = context,
+            settingsVM = settingsVM,
+            descriptionText = stringResource(R.string.settings_entires_deletion_button_title),
+            buttonIcon = R.drawable.baseline_read_more_24
+        )
+
         SettingsButtonExportEntries(
             context = context,
             settingsVM = settingsVM,

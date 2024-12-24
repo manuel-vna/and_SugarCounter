@@ -14,7 +14,9 @@ class EntryDeletionWorker(context: Context, params: WorkerParameters) :
 
     private val appDatabase = AppDatabase.getInstance(context)
     private val MAXIMUM_AMOUNT_ENTRIES = 9999
-    private val AMOUNT_OF_ENTRIES_TO_DELETE = 100
+
+    //private val AMOUNT_OF_ENTRIES_TO_DELETE = 100
+    private val chosenDeletionPeriod = WorkerDeletionPeriods.AfterOneYear
 
     companion object {
         private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
@@ -37,7 +39,14 @@ class EntryDeletionWorker(context: Context, params: WorkerParameters) :
     override suspend fun doWork(): Result {
         val entryTableRowCount = appDatabase.appDao().getEntryTableRowCount()
         if (entryTableRowCount > MAXIMUM_AMOUNT_ENTRIES) {
-            appDatabase.appDao().deleteOldestNEntries(AMOUNT_OF_ENTRIES_TO_DELETE)
+
+            //appDatabase.appDao().deleteOldestNEntries(AMOUNT_OF_ENTRIES_TO_DELETE)
+
+            val deletionPointInTime =
+                (System.currentTimeMillis() / 1000) - chosenDeletionPeriod.deletionPeriods
+            appDatabase.appDao().deleteEntriesSugarOlderThanN(deletionPointInTime)
+            appDatabase.appDao().deleteEntriesCaloriesOlderThanN(deletionPointInTime)
+
         }
         return Result.success()
     }

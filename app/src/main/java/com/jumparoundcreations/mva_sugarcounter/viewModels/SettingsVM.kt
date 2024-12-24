@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.worker.WorkerDeletionPeriods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,14 +52,23 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportProgressIndicatorShown = MutableStateFlow(false)
     val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
 
-    val _dataSuccesfullyExportedShown = MutableStateFlow(false)
-    val dataSuccesfullyExportedShown = _dataSuccesfullyExportedShown.asStateFlow()
+    val _dataSuccessfullyExportedShown = MutableStateFlow(false)
+    val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
 
     val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
     val _caloriesCounterActivated = MutableStateFlow(false)
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
+
+    val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
+    val entriesDeletionBottomSheetShown = _entriesDeletionBottomSheetShown.asStateFlow()
+
+    val _entriesDeletionActivated = MutableStateFlow(false)
+    val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
+
+    val _entriesDeletionPeriodSelected = MutableStateFlow(WorkerDeletionPeriods.AfterOneYear)
+    val entriesDeletionPeriodSelected = _entriesDeletionPeriodSelected.asStateFlow()
 
     //SateFlows: END
 
@@ -186,7 +196,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
-        _dataSuccesfullyExportedShown.value = isShown
+        _dataSuccessfullyExportedShown.value = isShown
     }
 
     fun actionChangeExportSuccessfully(wasSuccessful: Boolean) {
@@ -208,6 +218,18 @@ class SettingsVM : ViewModel(), KoinComponent {
     fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
         Log.d("Switch", "isActivated: $isActivated")
         _caloriesCounterActivated.value = isActivated
+    }
+
+    fun actionChangeEntriesDeletionBottomSheetShown(isShown: Boolean) {
+        _entriesDeletionBottomSheetShown.value = isShown
+    }
+
+    fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
+        _entriesDeletionActivated.value = isActivated
+    }
+
+    fun actionChangeEntriesDeletionPeriodSelected(selectedPeriod: WorkerDeletionPeriods) {
+        _entriesDeletionPeriodSelected.value = selectedPeriod
     }
 
     //Actions: END
