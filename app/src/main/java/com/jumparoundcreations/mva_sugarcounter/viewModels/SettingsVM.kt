@@ -229,7 +229,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     //Actions: END
 
     // Loading Shared Preferences: START
-    private fun loadShaPrefCaloriesCounterSwitch(): Boolean {
+    fun loadShaPrefCaloriesCounterSwitch(): Boolean {
         return sharedPrefsMain.getBoolean(
             "caloriesCounterActivated",
             false

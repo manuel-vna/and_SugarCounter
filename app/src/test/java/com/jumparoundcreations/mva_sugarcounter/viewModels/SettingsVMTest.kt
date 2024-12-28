@@ -21,7 +21,7 @@ import kotlin.test.assertNotEquals
 @RunWith(JUnit4::class)
 class SettingsVMTest : KoinTest {
 
-    private val mockSharedPrefsMain: SharedPreferences = mockk(relaxed = true)
+    private val mockkSharedPrefsMain: SharedPreferences = mockk(relaxed = true)
 
     @Before
     fun setup() {
@@ -29,7 +29,7 @@ class SettingsVMTest : KoinTest {
             modules(
                 module {
                     single<SharedPreferences>(qualifier = named("sharedPrefsMain")) {
-                        mockSharedPrefsMain
+                        mockkSharedPrefsMain
                     }
                 }
             )
@@ -51,11 +51,15 @@ class SettingsVMTest : KoinTest {
         assertTrue(settingsVM.faqScreenShown.value == false)
         assertTrue(settingsVM._faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
+        assertTrue(settingsVM.caloriesThresholdSlider.value == 0F)
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
         assertTrue(settingsVM.exportProgressIndicator.value == 0.1f)
         assertTrue(settingsVM.exportProgressIndicatorShown.value == false)
         assertTrue(settingsVM.dataSuccessfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
+        assertTrue(settingsVM.caloriesCounterActivated.value == false)
+        assertTrue(settingsVM.entriesDeletionBottomSheetShown.value == false)
+        assertTrue(settingsVM.entriesDeletionActivated.value == false)
     }
 
     @Test
@@ -122,6 +126,22 @@ class SettingsVMTest : KoinTest {
                 settingsVM.actionUpdateGramThresholdSlider(48F)
                 //Check
                 assertEquals(48F, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_caloriesThresholdSlider() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+            settingsVM.caloriesThresholdSlider.test {
+                //Check
+                assertEquals(0F, awaitItem())
+                //Action
+                settingsVM.actionUpdateCaloriesThresholdSlider(800F)
+                //Check
+                assertEquals(800F, awaitItem())
             }
         }
     }
@@ -219,6 +239,61 @@ class SettingsVMTest : KoinTest {
                 settingsVM.actionChangeExportSuccessfully(false)
                 //Check
                 assertEquals(false, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_caloriesCounterActivated() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.caloriesCounterActivated.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeCaloriesCounterGeneral(true)
+                //Check
+                assertEquals(true, awaitItem())
+                //Action
+                settingsVM.actionChangeCaloriesCounterGeneral(false)
+                //Check
+                assertEquals(false, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_entriesDeletionBottomSheetShown() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.entriesDeletionBottomSheetShown.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeEntriesDeletionBottomSheetShown(true)
+                //Check
+                assertEquals(true, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_entriesDeletionActivated() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.entriesDeletionActivated.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeEntriesDeletionActivated(true)
+                //Check
+                assertEquals(true, awaitItem())
             }
         }
     }
