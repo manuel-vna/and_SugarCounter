@@ -91,10 +91,10 @@
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
     <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
-    <string name="settings_entires_deletion_button_title">Speicherdauer der Einträge</string>
-    <string name="settings_entires_deletion_bottom_sheet_description_switch">Automatische Löschung\nder Einträge</string>
-    <string name="settings_entires_deletion_bottom_sheet_description_period_choice_top">Einträge automatisiert vom Gerät entfernen, die älter sind als</string>
-    <string name="settings_entires_deletion_bottom_sheet_description_period_choice_bottom">Jahr/e</string>
+    <string name="settings_entries_deletion_button_title">Datenbereinigung</string>
+    <string name="settings_entries_deletion_bottom_sheet_description_switch">Automatische Löschung von\nEinträgen älter als 3 Jahre</string>
+    <string name="settings_entries_deletion_bottom_sheet_description_top">Diese Einstellung dient der automatisierten Löschung der Einträge aus dem Gerätespeicher. Bei Aktivierung werden monatlich jeweils all jene Einträge gelöscht, die zu diesem Zeitpunkt älter als 3 Jahre sind.</string>
+    <string name="settings_entries_deletion_bottom_sheet_description_bottom">Eine häufigere Löschung ist selbst bei älteren Geräten mit weniger Speicherkapazität nicht erforderlich, da die Speichermengen dieser App vergleichsweise sehr gering sind.</string>
 
 
 </resources>

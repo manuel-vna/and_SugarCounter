@@ -3,7 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,8 +27,6 @@ import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 
 @Composable
@@ -56,15 +54,14 @@ fun Settings(context: Context) {
 @Composable
 fun SettingsScreen(
     context: Context,
-    settingsVM: SettingsVM,
-    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+    settingsVM: SettingsVM
 ) {
     Column(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        SettingsActivateCaloriesCounter(settingsVM, sharedPrefsMain)
+        SettingsActivateCaloriesCounter(settingsVM)
 
         SettingsSharedSliderThreshold(
             settingsVM = settingsVM,
@@ -73,9 +70,8 @@ fun SettingsScreen(
         HorizontalDivider(modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
 
         SettingsButtonEntriesDeletion(
-            context = context,
             settingsVM = settingsVM,
-            descriptionText = stringResource(R.string.settings_entires_deletion_button_title),
+            descriptionText = stringResource(R.string.settings_entries_deletion_button_title),
             buttonIcon = R.drawable.baseline_read_more_24
         )
 
@@ -87,7 +83,6 @@ fun SettingsScreen(
         )
 
         SettingsButtonFAQs(
-            context,
             settingsVM,
             stringResource(id = R.string.settings_button_faq_text),
             R.drawable.baseline_read_more_24,
@@ -109,18 +104,8 @@ fun SettingsScreen(
 
 @Composable
 fun SettingsActivateCaloriesCounter(
-    settingsVM: SettingsVM,
-    sharedPrefsMain: SharedPreferences
+    settingsVM: SettingsVM
 ) {
-
-    // START: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
-    val caloriesCounterSwitchActivated = sharedPrefsMain.getBoolean(
-        "caloriesCounterActivated",
-        false
-    )
-    settingsVM.actionChangeCaloriesCounterSwitch(caloriesCounterSwitchActivated)
-    // END: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
-
 
     val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
 
@@ -132,17 +117,17 @@ fun SettingsActivateCaloriesCounter(
         Text(
             text = stringResource(id = R.string.calories_activation_switch_title)
         )
-        Switch(
-            checked = caloriesCounterActivated,
-            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) }
-        )
+        Switch(checked = caloriesCounterActivated,
+            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) })
+        Log.d("Switch_View_CaS", "isActivated: $caloriesCounterActivated")
+        //Log.d("Switch_View_SP", "isActivated: $caloriesCounterSwitchActivated")
+
     }
 
 }
 
 @Composable
 fun SettingsButtonFAQs(
-    context: Context,
     settingsVM: SettingsVM,
     descriptionText: String,
     buttonIcon: Int,

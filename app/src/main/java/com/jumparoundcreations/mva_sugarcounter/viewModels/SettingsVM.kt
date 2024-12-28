@@ -4,12 +4,10 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
-import com.jumparoundcreations.mva_sugarcounter.worker.WorkerDeletionPeriods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -58,17 +56,14 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
-    val _caloriesCounterActivated = MutableStateFlow(false)
+    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())//false)
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
 
     val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
     val entriesDeletionBottomSheetShown = _entriesDeletionBottomSheetShown.asStateFlow()
 
-    val _entriesDeletionActivated = MutableStateFlow(false)
+    val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
     val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
-
-    val _entriesDeletionPeriodSelected = MutableStateFlow(WorkerDeletionPeriods.AfterOneYear)
-    val entriesDeletionPeriodSelected = _entriesDeletionPeriodSelected.asStateFlow()
 
     //SateFlows: END
 
@@ -216,7 +211,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
-        Log.d("Switch", "isActivated: $isActivated")
         _caloriesCounterActivated.value = isActivated
     }
 
@@ -226,12 +220,29 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
         _entriesDeletionActivated.value = isActivated
-    }
 
-    fun actionChangeEntriesDeletionPeriodSelected(selectedPeriod: WorkerDeletionPeriods) {
-        _entriesDeletionPeriodSelected.value = selectedPeriod
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putBoolean("entriesDeletionActivated", isActivated)
+        editorSharedPrefsMain.apply()
     }
 
     //Actions: END
+
+    // Loading Shared Preferences: START
+    private fun loadShaPrefCaloriesCounterSwitch(): Boolean {
+        return sharedPrefsMain.getBoolean(
+            "caloriesCounterActivated",
+            false
+        )
+    }
+
+    private fun loadShaPrefEntriesDeletionSwitch(): Boolean {
+        return sharedPrefsMain.getBoolean(
+            "entriesDeletionActivated",
+            false
+        )
+    }
+    // Loading Shared Preferences: END
+
 
 }
