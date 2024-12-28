@@ -56,7 +56,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
-    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())//false)
+    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
 
     val _entriesDeletionBottomSheetShown = MutableStateFlow(false)

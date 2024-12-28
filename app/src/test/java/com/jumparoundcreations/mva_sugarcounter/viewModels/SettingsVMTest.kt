@@ -1,16 +1,45 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import android.content.SharedPreferences
 import app.cash.turbine.test
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.test.KoinTest
 import kotlin.test.assertNotEquals
 
 @RunWith(JUnit4::class)
-class SettingsVMTest {
+class SettingsVMTest : KoinTest {
+
+    private val mockSharedPrefsMain: SharedPreferences = mockk(relaxed = true)
+
+    @Before
+    fun setup() {
+        startKoin {
+            modules(
+                module {
+                    single<SharedPreferences>(qualifier = named("sharedPrefsMain")) {
+                        mockSharedPrefsMain
+                    }
+                }
+            )
+        }
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
+    }
 
     @Test
     fun check_initialisations_of_state_flows() {
