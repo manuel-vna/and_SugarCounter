@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
     id("androidx.room")
@@ -143,12 +144,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.sldw.onboarding)
     implementation(platform(libs.androidx.compose.bom))
+    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit4)
-
-    kapt("androidx.room:room-compiler:2.6.1") // kapt needs to be replaced with ksp
-
     //implementation(libs.mockk) // activating this versionCatalog reference leads to a build error
-    testImplementation("io.mockk:mockk:1.13.12") // so the old way is still used here
+    testImplementation("io.mockk:mockk:1.13.12") // so the old way is still used for this dependency
 
 }
