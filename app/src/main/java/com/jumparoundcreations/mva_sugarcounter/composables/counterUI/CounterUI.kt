@@ -140,8 +140,8 @@ fun Counter(
     if (alertDialog) {
 
         ShowAlertDialogSingleBtn(
-            dialogTitle = stringResource(id = R.string.noGramValueInDatabaseYetTitle),
-            dialogDescription = stringResource(id = R.string.noGramValueInDatabaseYetDescription),
+            dialogTitle = stringResource(id = R.string.categoryInputOnlyTitle),
+            dialogDescription = stringResource(id = R.string.categoryInputOnlyDescription),
             confirmBtnText = stringResource(id = R.string.generalClose),
             confirmBtnAction = { counterVM.actionDismissAlertDialog() },
             onDismissRequest = { counterVM.actionDismissAlertDialog() }

@@ -41,45 +41,39 @@ class CounterSugarHelper : KoinComponent {
                 if (perHundredQuantityValue.isNotEmpty()) perHundredQuantityDouble =
                     perHundredQuantityValue.toDouble()
 
-                if (perHundredGramValue.isEmpty()) {
-                    counterVM.actionChangeAlertDialogValue(true)
-                } else {
-                    saveEntryInDatabase(
-                        viewModelScope = viewModelScope,
-                        sharedPrefsMain = sharedPrefsMain,
-                        counterVM = counterVM,
-                        category = category,
-                        dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
-                        isPerHundred = true,
-                        perHundredGramInt = perHundredGramDouble.toInt(),
-                        perHundredQuantityInt = perHundredQuantityDouble.toInt(),
-                        perPieceGramInt = 0,
-                        perPieceAmountInt = 0,
-                        gramTotalInt = ((perHundredGramDouble / 100) * perHundredQuantityDouble).roundToInt()  // rule of three: Calculate sugar on basis of the quantity eaten
-                    )
-                }
+                saveEntryInDatabase(
+                    viewModelScope = viewModelScope,
+                    sharedPrefsMain = sharedPrefsMain,
+                    counterVM = counterVM,
+                    category = category,
+                    dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
+                    isPerHundred = true,
+                    perHundredGramInt = perHundredGramDouble.toInt(),
+                    perHundredQuantityInt = perHundredQuantityDouble.toInt(),
+                    perPieceGramInt = 0,
+                    perPieceAmountInt = 0,
+                    gramTotalInt = ((perHundredGramDouble / 100) * perHundredQuantityDouble).roundToInt()  // rule of three: Calculate sugar on basis of the quantity eaten
+                )
+
             } else {
                 if (perPieceGramValue.isNotEmpty()) perPieceGramInt = perPieceGramValue.toInt()
                 if (perPieceAmountValue.isNotEmpty()) perPieceAmountInt =
                     perPieceAmountValue.toInt()
 
-                if (perPieceGramValue.isEmpty()) {
-                    counterVM.actionChangeAlertDialogValue(true)
-                } else {
-                    saveEntryInDatabase(
-                        viewModelScope = viewModelScope,
-                        sharedPrefsMain = sharedPrefsMain,
-                        counterVM = counterVM,
-                        category = category,
-                        dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
-                        isPerHundred = false,
-                        perHundredGramInt = 0,
-                        perHundredQuantityInt = 0,
-                        perPieceGramInt = perPieceGramInt,
-                        perPieceAmountInt = perPieceAmountInt,
-                        gramTotalInt = perPieceGramInt * perPieceAmountInt // multiplying gram per piece value with amount of itmes eaten
-                    )
-                }
+                saveEntryInDatabase(
+                    viewModelScope = viewModelScope,
+                    sharedPrefsMain = sharedPrefsMain,
+                    counterVM = counterVM,
+                    category = category,
+                    dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
+                    isPerHundred = false,
+                    perHundredGramInt = 0,
+                    perHundredQuantityInt = 0,
+                    perPieceGramInt = perPieceGramInt,
+                    perPieceAmountInt = perPieceAmountInt,
+                    gramTotalInt = perPieceGramInt * perPieceAmountInt // multiplying gram per piece value with amount of itmes eaten
+                )
+
             }
         }
 

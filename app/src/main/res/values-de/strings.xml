@@ -15,8 +15,8 @@
     <string name="categoryTitle">Kategorien</string>
     <string name="settingsTitle">Einstellungen</string>
     <string name="categoryMaxInput">Eingabebegrenzung: 40 Zeichen</string>
-    <string name="noGramValueInDatabaseYetTitle">Gramm fehlt</string>
-    <string name="noGramValueInDatabaseYetDescription">Hierzu liegt noch keine Grammangabe vor. Bitte fülle das Feld \'Gramm Zucker\' aus.</string>
+    <string name="categoryInputOnlyTitle">Kategorie</string>
+    <string name="categoryInputOnlyDescription">Es wurde nur eine Kategorie ohne Zucker- oder Kalorieneintrag hinzugefügt, da diese nicht angegeben wurden.</string>
     <string name="categoriesScreenDescription">Kategorien</string>
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>

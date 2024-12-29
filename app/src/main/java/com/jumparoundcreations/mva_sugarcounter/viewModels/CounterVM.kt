@@ -225,6 +225,14 @@ class CounterVM : ViewModel(), KoinComponent {
                 caloriesInputValue = _caloriesInput.value
             )
         }
+
+        if (
+            _perPieceGram.value.isEmpty() &&
+            _perHundredGram.value.isEmpty() &&
+            _caloriesInput.value.isEmpty()
+        ) {
+            actionChangeAlertDialogValue(true)
+        }
     }
 
     fun categoryHandling(category: String) {
@@ -272,7 +280,7 @@ class CounterVM : ViewModel(), KoinComponent {
             withContext(Dispatchers.Main) {
                 if (databaseSumCalories > sharedPrefsMain.getInt("caloriesThresholdValue", 0)) {
                     _alertCaloriesThreshold.value = true
-                    }
+                }
             }
         }
     }
