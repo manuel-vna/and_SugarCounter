@@ -75,8 +75,9 @@
     <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
     <string name="no_barcode_yet_info_description">No product category has yet been assigned to this barcode.\n\nIf you fill in the other fields and save the entry, the product name entered in the \'<i>Category</i>\' field is automatically assigned to the barcode <i>%1$s</i> listed above.</string>
     <string name="category_bottom_sheet_barcode">Barcode (EAN)</string>
-    <string name="category_bottom_sheet_per_piece_gram"> %1$sg sugar per piece</string>
-    <string name="category_bottom_sheet_per_hundred_gram"> %1$sg sugar per 100 gram</string>
+    <string name="category_bottom_sheet_per_piece_gram"> %1$s g sugar per piece</string>
+    <string name="category_bottom_sheet_per_hundred_gram"> %1$s g sugar per 100 gram</string>
+    <string name="category_bottom_sheet_calories"> %1$s kcal</string>
     <string name="category_bottom_sheet_no_entry_yet">There is no entry for this category yet</string>
     <string name="category_bottom_sheet_date">Last usage</string>
     <string name="category_bottom_sheet_sugar_value">Sugar value</string>

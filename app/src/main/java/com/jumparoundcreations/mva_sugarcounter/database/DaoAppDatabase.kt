@@ -114,4 +114,7 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM calories_table WHERE currentTimestamp < :deletionPointintime""")
     fun deleteEntriesCaloriesOlderThanN(deletionPointintime: Long)
+
+    @Query("""SELECT * FROM calories_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
+    suspend fun checkIfCaloriesValueExistsForCategory(category: String): EntryCalories?
 }
