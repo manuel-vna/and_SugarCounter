@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
     id("androidx.room")
@@ -111,68 +112,42 @@ fun getAppVersionNameValue(gitVersion: String): String {
 //noinspection UseTomlInstead
 dependencies {
 
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.android.gms)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.compose.icons)
+    implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.navigation)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.material)
-    implementation(libs.androidx.material3.android)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    androidTestImplementation(libs.truth)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
-
-    //Material Icons
-    implementation("androidx.compose.material:material-icons-extended")
-
-    //Room
-
-    implementation("androidx.room:room-common:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    androidTestImplementation("androidx.room:room-testing:2.6.1")
-
-    //ThirdParty Libraries
-    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.9.0")
-
-    //Navigation Compose
-    implementation("androidx.navigation:navigation-compose:2.8.3")
-
-    //MockK
-    testImplementation("io.mockk:mockk:1.13.12")
-    //Turbine for testing the flows
-    testImplementation("app.cash.turbine:turbine:1.1.0")
-    // Coroutines testing
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
-
-    //Third-Party Licenses
-    implementation("com.google.android.gms:play-services-oss-licenses:17.1.0")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-
-    //DI
+    implementation(libs.androidx.work)
+    implementation(libs.app.cash.turbine)
+    implementation(libs.bundles.room)
+    implementation(libs.github.vanpra.datetime)
+    implementation(libs.gms.scanner)
+    implementation(libs.google.accompanist)
+    implementation(libs.jetbrans.kotlinx)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.material)
+    implementation(libs.sldw.onboarding)
+    implementation(platform(libs.androidx.compose.bom))
+    ksp(libs.androidx.room.compiler)
+    testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit4)
-    implementation("androidx.compose.runtime:runtime:1.7.5")
+    //implementation(libs.mockk) // activating this versionCatalog reference leads to a build error
+    testImplementation("io.mockk:mockk:1.13.12") // so the old way is still used for this dependency
 
-    //Google Code Scanner
-    implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
-
-    //WorkManager
-    implementation("androidx.work:work-runtime-ktx:2.10.0")
-
-    //Onboarding
-    implementation("de.sldw:compose-onboarding:0.0.2-2")
-
-    //Compose Permission Accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.36.0")
 }
