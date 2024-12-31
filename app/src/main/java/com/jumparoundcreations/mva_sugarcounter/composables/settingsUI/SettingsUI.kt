@@ -92,6 +92,13 @@ fun SettingsScreen(
             R.drawable.baseline_read_more_24,
         )
 
+        SettingsButtonAbout(
+            context,
+            settingsVM,
+            stringResource(id = R.string.settings_button_about_text),
+            R.drawable.baseline_read_more_24,
+        )
+
         SettingsVersionCode()
 
         ExportProgressIndicator(settingsVM = settingsVM)
@@ -148,6 +155,32 @@ fun SettingsButtonFAQs(
             settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
             settingsVM.actionChangeFaqScreenVisibility(isShown = true)
         }) {
+        Text(
+            text = "$descriptionText   "
+        )
+        Icon(
+            painter = painterResource(id = buttonIcon),
+            contentDescription = "",
+        )
+    }
+}
+
+@Composable
+fun SettingsButtonAbout(
+    context: Context,
+    settingsVM: SettingsVM,
+    descriptionText: String,
+    buttonIcon: Int,
+) {
+    Button(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
+        onClick = {
+            //TBD navigation to SettingsAboutUI.kt
+
+        }
+    ) {
         Text(
             text = "$descriptionText   "
         )
