@@ -22,9 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -32,7 +34,7 @@ import org.koin.core.qualifier.named
 
 
 @Composable
-fun Settings(context: Context) {
+fun Settings(context: Context, navController: NavController) {
 
     //get an instance of the ViewModel
     val settingsVM: SettingsVM = koinViewModel()
@@ -44,7 +46,7 @@ fun Settings(context: Context) {
     settingsVM.actionResetThresholdSliderValuesToSharedPref()
 
     if (settingsScreenShown) {
-        SettingsScreen(context, settingsVM)
+        SettingsScreen(context, settingsVM, navController)
     }
 
     if (faqScreenShown) {
@@ -57,6 +59,7 @@ fun Settings(context: Context) {
 fun SettingsScreen(
     context: Context,
     settingsVM: SettingsVM,
+    navController: NavController,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
     Column(
@@ -95,6 +98,7 @@ fun SettingsScreen(
         SettingsButtonAbout(
             context,
             settingsVM,
+            navController,
             stringResource(id = R.string.settings_button_about_text),
             R.drawable.baseline_read_more_24,
         )
@@ -169,6 +173,7 @@ fun SettingsButtonFAQs(
 fun SettingsButtonAbout(
     context: Context,
     settingsVM: SettingsVM,
+    navController: NavController,
     descriptionText: String,
     buttonIcon: Int,
 ) {
@@ -177,8 +182,7 @@ fun SettingsButtonAbout(
             .fillMaxWidth()
             .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
-            //TBD navigation to SettingsAboutUI.kt
-
+            navController.navigate(NavItem.About.screenRoute)
         }
     ) {
         Text(

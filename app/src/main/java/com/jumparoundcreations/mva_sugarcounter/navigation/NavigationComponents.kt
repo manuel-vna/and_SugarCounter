@@ -28,6 +28,7 @@ import com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI.Categor
 import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsAboutUI
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -58,18 +59,27 @@ fun NavigationGraph(
     snackbarHostState: SnackbarHostState,
     context: Context
 ) {
-    NavHost(navController, startDestination = BottomNavItem.SugarCounter.screenRoute) {
-        composable(BottomNavItem.SugarCounter.screenRoute) {
+    NavHost(
+        navController = navController,
+        startDestination = BottomNavItem.SugarCounter.screenRoute
+    ) {
+        composable(route = BottomNavItem.SugarCounter.screenRoute) {
             Counter(context, snackbarHostState)
         }
-        composable(BottomNavItem.SugarHistory.screenRoute) {
+        composable(route = BottomNavItem.SugarHistory.screenRoute) {
             History(context)
         }
-        composable(BottomNavItem.CategoryTitle.screenRoute) {
+        composable(route = BottomNavItem.CategoryTitle.screenRoute) {
             Categories(context)
         }
-        composable(BottomNavItem.Settings.screenRoute) {
-            Settings(context)
+        composable(route = BottomNavItem.Settings.screenRoute) {
+            Settings(context, navController)
+        }
+        composable(route = NavItem.FAQ.screenRoute) {
+            SettingsAboutUI()
+        }
+        composable(route = NavItem.About.screenRoute) {
+            SettingsAboutUI()
         }
     }
 }
