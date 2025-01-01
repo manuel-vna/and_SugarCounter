@@ -27,12 +27,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
 
     //SateFlows: START
-    val _settingsScreenShown = MutableStateFlow(true)
-    val settingsScreenShown = _settingsScreenShown.asStateFlow()
-
-    val _faqScreenShown = MutableStateFlow(false)
-    val faqScreenShown = _faqScreenShown.asStateFlow()
-
     val _faqExpandedId = MutableStateFlow(-1L)
     var faqSingleSelectMode = _faqExpandedId.asStateFlow()
 
@@ -63,14 +57,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     //SateFlows: END
 
     //Actions: START
-
-    fun actionChangeSettingsScreenVisibility(isShown: Boolean) {
-        _settingsScreenShown.value = isShown
-    }
-
-    fun actionChangeFaqScreenVisibility(isShown: Boolean) {
-        _faqScreenShown.value = isShown
-    }
 
     fun actionChangeExpandedId(id: Long) {
         _faqExpandedId.value = id

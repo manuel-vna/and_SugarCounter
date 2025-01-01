@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.FAQScreen
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsAboutUI
 
@@ -76,7 +77,7 @@ fun NavigationGraph(
             Settings(context, navController)
         }
         composable(route = NavItem.FAQ.screenRoute) {
-            SettingsAboutUI()
+            FAQScreen()
         }
         composable(route = NavItem.About.screenRoute) {
             SettingsAboutUI()

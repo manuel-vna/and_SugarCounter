@@ -34,34 +34,15 @@ import org.koin.core.qualifier.named
 
 
 @Composable
-fun Settings(context: Context, navController: NavController) {
-
-    //get an instance of the ViewModel
-    val settingsVM: SettingsVM = koinViewModel()
-
-    //collecting states
-    val settingsScreenShown by settingsVM.settingsScreenShown.collectAsState()
-    val faqScreenShown by settingsVM.faqScreenShown.collectAsState()
-
-    settingsVM.actionResetThresholdSliderValuesToSharedPref()
-
-    if (settingsScreenShown) {
-        SettingsScreen(context, settingsVM, navController)
-    }
-
-    if (faqScreenShown) {
-        FAQScreen(context)
-    }
-
-}
-
-@Composable
-fun SettingsScreen(
+fun Settings(
     context: Context,
-    settingsVM: SettingsVM,
     navController: NavController,
     sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
 ) {
+
+    val settingsVM: SettingsVM = koinViewModel()
+    settingsVM.actionResetThresholdSliderValuesToSharedPref()
+
     Column(
         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -85,6 +66,7 @@ fun SettingsScreen(
         SettingsButtonFAQs(
             context,
             settingsVM,
+            navController,
             stringResource(id = R.string.settings_button_faq_text),
             R.drawable.baseline_read_more_24,
         )
@@ -96,8 +78,6 @@ fun SettingsScreen(
         )
 
         SettingsButtonAbout(
-            context,
-            settingsVM,
             navController,
             stringResource(id = R.string.settings_button_about_text),
             R.drawable.baseline_read_more_24,
@@ -109,6 +89,7 @@ fun SettingsScreen(
 
         ExportBottomSheet(context)
     }
+
 }
 
 @Composable
@@ -148,6 +129,7 @@ fun SettingsActivateCaloriesCounter(
 fun SettingsButtonFAQs(
     context: Context,
     settingsVM: SettingsVM,
+    navController: NavController,
     descriptionText: String,
     buttonIcon: Int,
 ) {
@@ -156,8 +138,9 @@ fun SettingsButtonFAQs(
             .fillMaxWidth()
             .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
-            settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
-            settingsVM.actionChangeFaqScreenVisibility(isShown = true)
+            //settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
+            //settingsVM.actionChangeFaqScreenVisibility(isShown = true)
+            navController.navigate(NavItem.FAQ.screenRoute)
         }) {
         Text(
             text = "$descriptionText   "
@@ -171,8 +154,6 @@ fun SettingsButtonFAQs(
 
 @Composable
 fun SettingsButtonAbout(
-    context: Context,
-    settingsVM: SettingsVM,
     navController: NavController,
     descriptionText: String,
     buttonIcon: Int,

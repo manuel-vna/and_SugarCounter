@@ -18,8 +18,6 @@ class SettingsVMTest {
         val settingsVM = SettingsVM()
 
         //Check
-        assertTrue(settingsVM.settingsScreenShown.value == true)
-        assertTrue(settingsVM.faqScreenShown.value == false)
         assertTrue(settingsVM._faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
@@ -27,38 +25,6 @@ class SettingsVMTest {
         assertTrue(settingsVM.exportProgressIndicatorShown.value == false)
         assertTrue(settingsVM.dataSuccesfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
-    }
-
-    @Test
-    fun check_state_settingsScreenShown() {
-        runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-            settingsVM.settingsScreenShown.test {
-                //Check
-                assertEquals(true, awaitItem())
-                //Action
-                settingsVM.actionChangeSettingsScreenVisibility(false)
-                //Check
-                assertEquals(false, awaitItem())
-            }
-        }
-    }
-
-    @Test
-    fun check_state_faqScreenShown() {
-        runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-            settingsVM.faqScreenShown.test {
-                //Check
-                assertEquals(false, awaitItem())
-                //Action
-                settingsVM.actionChangeFaqScreenVisibility(true)
-                //Check
-                assertEquals(true, awaitItem())
-            }
-        }
     }
 
     @Test

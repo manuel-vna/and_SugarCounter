@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,10 +20,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.composables.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.data.Faq
 import com.jumparoundcreations.mva_sugarcounter.data.faqDataList
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -34,11 +31,11 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun FAQScreen(context: Context) {
+fun FAQScreen() {
 
+    val context = LocalContext.current
     val settingsVM: SettingsVM = koinViewModel()
     val expandedId by settingsVM.faqSingleSelectMode.collectAsState()
-
 
     val darkMode = HelperMethods.checkForUIMode(context)
     var fontColor = Color.Black
@@ -55,15 +52,15 @@ fun FAQScreen(context: Context) {
             .padding(10.dp)
     ) {
 
-
+        //In case the top app bar for this screen ought to be re-activated
+        /*
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_title_faq_text),
             onBackClickAction = {
-                settingsVM.actionChangeFaqScreenVisibility(isShown = false)
-                settingsVM.actionChangeSettingsScreenVisibility(isShown = true)
+                // navController.navigate()
             }
         )
-
+        */
 
         LazyColumn {
             items(items = faqDataList.faqs, key = { it.id }) { faq ->
@@ -80,7 +77,6 @@ fun FAQScreen(context: Context) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FaqItem(
     isExpanded: Boolean,
