@@ -7,7 +7,7 @@
         android:maxSdkVersion="28" />
 
     <application
-        android:name="com.jumparoundcreations.mva_sugarcounter.MainApplication"
+        android:name="com.jumparoundcreations.mva_sugarcounter.main.MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Mva_SugarCounter"
         tools:targetApi="31">
         <activity
-            android:name="com.jumparoundcreations.mva_sugarcounter.MainActivity"
+            android:name="com.jumparoundcreations.mva_sugarcounter.main.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Mva_SugarCounter">

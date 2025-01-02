@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter
+package com.jumparoundcreations.mva_sugarcounter.main
 
 import android.app.Application
 import com.jumparoundcreations.mva_sugarcounter.di.appModule

@@ -1,29 +1,20 @@
 package com.jumparoundcreations.mva_sugarcounter.navigation
 
 
-import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
@@ -34,29 +25,6 @@ import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsAboutUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun MainScreenView(context: Context) {
-
-    val navController = rememberNavController()
-    val snackbarHostState = remember { SnackbarHostState() }
-    Scaffold(
-        bottomBar = { BottomNavigation(navController = navController) },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-        ) {
-            NavigationGraph(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                context = context
-            )
-        }
-    }
-}
 
 @Composable
 fun NavigationGraph(

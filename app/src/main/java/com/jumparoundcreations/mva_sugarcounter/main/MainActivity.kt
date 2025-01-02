@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter
+package com.jumparoundcreations.mva_sugarcounter.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.jumparoundcreations.mva_sugarcounter.navigation.MainScreenView
 import com.jumparoundcreations.mva_sugarcounter.ui.theme.Mva_SugarCounterTheme
 import org.koin.core.component.KoinComponent
 
