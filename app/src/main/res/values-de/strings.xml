@@ -50,6 +50,7 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Häufige Fragen</string>
+    <string name="settings_button_donation_text">Spende</string>
     <string name="faq_question_one">Wofür ist diese App gedacht?</string>
     <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch das Erfassen des konsumierten Zuckers in Gramm.</string>
     <string name="faq_question_two">Wie kann ich meinen Zuckerkonsum festhalten?</string>
@@ -93,5 +94,9 @@
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
     <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
+    <string name="about_title_terms_and_conditions">Geschäftsbedingungen</string>
+    <string name="about_title_privacy_policy">Datenschutzerklärung</string>
+    <string name="about_title_imprint">Impressum</string>
+    <string name="about_concluding_part">from JumpAroundCreations\nApp version: %1$s\nMake pace not war 🏃 🏃‍♀</string>
 
 </resources>

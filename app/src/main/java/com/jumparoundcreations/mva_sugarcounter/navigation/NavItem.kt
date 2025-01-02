@@ -9,4 +9,13 @@ sealed class NavItem(var title: Int, var screenRoute: String) {
 
     data object About :
         NavItem(R.string.settings_button_about_text, "about")
+
+    data object TermsAndConditions :
+        NavItem(R.string.about_title_terms_and_conditions, "termsAndConditions")
+
+    data object PrivacyPolicy :
+        NavItem(R.string.about_title_privacy_policy, "privacyPolicy")
+
+    data object Imprint :
+        NavItem(R.string.about_title_imprint, "imprint")
 }

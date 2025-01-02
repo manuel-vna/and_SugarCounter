@@ -2,7 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
@@ -71,11 +69,12 @@ fun Settings(
             R.drawable.baseline_read_more_24,
         )
 
-        SettingsButtonThirdPartyLicenses(
-            context,
-            stringResource(id = R.string.settings_third_party_licenses_text),
+        SettingsButtonDonation(
+            navController,
+            stringResource(id = R.string.settings_button_donation_text),
             R.drawable.baseline_read_more_24,
         )
+
 
         SettingsButtonAbout(
             navController,
@@ -138,8 +137,6 @@ fun SettingsButtonFAQs(
             .fillMaxWidth()
             .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
-            //settingsVM.actionChangeSettingsScreenVisibility(isShown = false)
-            //settingsVM.actionChangeFaqScreenVisibility(isShown = true)
             navController.navigate(NavItem.FAQ.screenRoute)
         }) {
         Text(
@@ -177,21 +174,19 @@ fun SettingsButtonAbout(
 }
 
 @Composable
-fun SettingsButtonThirdPartyLicenses(
-    context: Context,
+fun SettingsButtonDonation(
+    navController: NavController,
     descriptionText: String,
     buttonIcon: Int,
 ) {
     Button(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 2.dp, end = 2.dp, bottom = 16.dp),
+            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
         onClick = {
-            val intent = Intent(context, OssLicensesMenuActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(intent)
 
-        }) {
+        }
+    ) {
         Text(
             text = "$descriptionText   "
         )
@@ -199,10 +194,8 @@ fun SettingsButtonThirdPartyLicenses(
             painter = painterResource(id = buttonIcon),
             contentDescription = "",
         )
-
     }
 }
-
 
 @Composable
 fun SettingsVersionCode() {

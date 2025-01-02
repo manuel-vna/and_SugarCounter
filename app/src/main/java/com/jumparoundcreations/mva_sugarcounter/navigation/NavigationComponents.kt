@@ -28,12 +28,16 @@ import com.jumparoundcreations.mva_sugarcounter.composables.categoriesUI.Categor
 import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.FAQScreen
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.ImprintUI
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.PrivacyPolicyUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsAboutUI
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreenView(context: Context) {
+
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -80,8 +84,18 @@ fun NavigationGraph(
             FAQScreen()
         }
         composable(route = NavItem.About.screenRoute) {
-            SettingsAboutUI()
+            SettingsAboutUI(navController)
         }
+        composable(route = NavItem.TermsAndConditions.screenRoute) {
+            TermsAndConditionsUI()
+        }
+        composable(route = NavItem.PrivacyPolicy.screenRoute) {
+            PrivacyPolicyUI()
+        }
+        composable(route = NavItem.Imprint.screenRoute) {
+            ImprintUI()
+        }
+
     }
 }
 

@@ -49,6 +49,7 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Frequently Asked Questions</string>
+    <string name="settings_button_donation_text">Donation</string>
     <string name="faq_question_one">1</string>
     <string name="faq_answer_one">1</string>
     <string name="faq_question_two">2</string>
@@ -92,5 +93,9 @@
     <string name="no_entry_found_for_given_category_Snackbar_text">No entry data found for the given category</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
     <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
+    <string name="about_title_terms_and_conditions">Terms and conditions</string>
+    <string name="about_title_privacy_policy">Privacy policy</string>
+    <string name="about_title_imprint">Imprint</string>
+    <string name="about_concluding_part">from JumpAroundCreations\nApp version: %1$s\nMake pace not war 🏃 🏃‍♀</string>
 
 </resources>
