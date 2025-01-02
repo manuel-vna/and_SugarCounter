@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
@@ -25,6 +26,9 @@ val appModule = module {
     viewModel { CategoryVM() }
     single(named("sharedPrefsMain")) { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
+    single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
+    single(named("privacyPolicy")) { provideHtmlContent(get(), R.raw.privacy_policy) }
+    single(named("imprint")) { provideHtmlContent(get(), R.raw.imprint) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =
@@ -40,4 +44,9 @@ fun provideBarcodeScanner(application: Application): GmsBarcodeScanner {
         .build()
     val scanner = GmsBarcodeScanning.getClient(application, options)
     return scanner
+}
+
+private fun provideHtmlContent(context: Context, resourceId: Int): String {
+    return context.resources.openRawResource(resourceId)
+        .bufferedReader().use { it.readText() }
 }
