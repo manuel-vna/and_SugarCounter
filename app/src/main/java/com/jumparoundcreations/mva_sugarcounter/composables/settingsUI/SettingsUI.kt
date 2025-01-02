@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,13 +47,19 @@ fun Settings(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        SettingsActivateCaloriesCounter(settingsVM, sharedPrefsMain)
+        SettingsActivateCaloriesCounter(settingsVM)
 
         SettingsSharedSliderThreshold(
             settingsVM = settingsVM,
         )
 
         HorizontalDivider(modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
+
+        SettingsButtonEntriesDeletion(
+            settingsVM = settingsVM,
+            descriptionText = stringResource(R.string.settings_entries_deletion_button_title),
+            buttonIcon = R.drawable.baseline_read_more_24
+        )
 
         SettingsButtonExportEntries(
             context = context,
@@ -62,7 +69,6 @@ fun Settings(
         )
 
         SettingsButtonFAQs(
-            context,
             settingsVM,
             navController,
             stringResource(id = R.string.settings_button_faq_text),
@@ -93,18 +99,8 @@ fun Settings(
 
 @Composable
 fun SettingsActivateCaloriesCounter(
-    settingsVM: SettingsVM,
-    sharedPrefsMain: SharedPreferences
+    settingsVM: SettingsVM
 ) {
-
-    // START: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
-    val caloriesCounterSwitchActivated = sharedPrefsMain.getBoolean(
-        "caloriesCounterActivated",
-        false
-    )
-    settingsVM.actionChangeCaloriesCounterSwitch(caloriesCounterSwitchActivated)
-    // END: get status of switch in case the app was closed in the meantime and set the state of the switch accordingly
-
 
     val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
 
@@ -116,17 +112,17 @@ fun SettingsActivateCaloriesCounter(
         Text(
             text = stringResource(id = R.string.calories_activation_switch_title)
         )
-        Switch(
-            checked = caloriesCounterActivated,
-            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) }
-        )
+        Switch(checked = caloriesCounterActivated,
+            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) })
+        Log.d("Switch_View_CaS", "isActivated: $caloriesCounterActivated")
+        //Log.d("Switch_View_SP", "isActivated: $caloriesCounterSwitchActivated")
+
     }
 
 }
 
 @Composable
 fun SettingsButtonFAQs(
-    context: Context,
     settingsVM: SettingsVM,
     navController: NavController,
     descriptionText: String,

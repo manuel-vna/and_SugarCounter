@@ -27,8 +27,8 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM entry_table WHERE id = :id""")
     fun deleteSpecificEntryRow(id: Int)
 
-    @Query("""DELETE FROM entry_table WHERE currentTimestamp < :nowMinusTimeframe""")
-    fun deleteEntriesOlderThanOneWeek(nowMinusTimeframe: Long)
+    @Query("""DELETE FROM entry_table WHERE currentTimestamp < :deletionPointintime""")
+    fun deleteEntriesSugarOlderThanN(deletionPointintime: Long)
 
     @Query("""DELETE FROM entry_table WHERE id = (SELECT MAX(id) FROM entry_table)""")
     fun deleteLastEntry()
@@ -111,6 +111,9 @@ interface DaoAppDatabase {
 
     @Query("""DELETE FROM calories_table WHERE id = (SELECT MAX(id) FROM calories_table)""")
     fun deleteLastEntryCalories()
+
+    @Query("""DELETE FROM calories_table WHERE currentTimestamp < :deletionPointintime""")
+    fun deleteEntriesCaloriesOlderThanN(deletionPointintime: Long)
 
     @Query("""SELECT * FROM calories_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
     suspend fun checkIfCaloriesValueExistsForCategory(category: String): EntryCalories?

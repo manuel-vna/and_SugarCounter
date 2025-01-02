@@ -4,7 +4,6 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
@@ -45,14 +44,20 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportProgressIndicatorShown = MutableStateFlow(false)
     val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
 
-    val _dataSuccesfullyExportedShown = MutableStateFlow(false)
-    val dataSuccesfullyExportedShown = _dataSuccesfullyExportedShown.asStateFlow()
+    val _dataSuccessfullyExportedShown = MutableStateFlow(false)
+    val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
 
     val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
-    val _caloriesCounterActivated = MutableStateFlow(false)
+    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
+
+    val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
+    val entriesDeletionBottomSheetShown = _entriesDeletionBottomSheetShown.asStateFlow()
+
+    val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
+    val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
 
     //SateFlows: END
 
@@ -172,7 +177,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
-        _dataSuccesfullyExportedShown.value = isShown
+        _dataSuccessfullyExportedShown.value = isShown
     }
 
     fun actionChangeExportSuccessfully(wasSuccessful: Boolean) {
@@ -192,10 +197,38 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
-        Log.d("Switch", "isActivated: $isActivated")
         _caloriesCounterActivated.value = isActivated
     }
 
+    fun actionChangeEntriesDeletionBottomSheetShown(isShown: Boolean) {
+        _entriesDeletionBottomSheetShown.value = isShown
+    }
+
+    fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
+        _entriesDeletionActivated.value = isActivated
+
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putBoolean("entriesDeletionActivated", isActivated)
+        editorSharedPrefsMain.apply()
+    }
+
     //Actions: END
+
+    // Loading Shared Preferences: START
+    fun loadShaPrefCaloriesCounterSwitch(): Boolean {
+        return sharedPrefsMain.getBoolean(
+            "caloriesCounterActivated",
+            false
+        )
+    }
+
+    private fun loadShaPrefEntriesDeletionSwitch(): Boolean {
+        return sharedPrefsMain.getBoolean(
+            "entriesDeletionActivated",
+            false
+        )
+    }
+    // Loading Shared Preferences: END
+
 
 }

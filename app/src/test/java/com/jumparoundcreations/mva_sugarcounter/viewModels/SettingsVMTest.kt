@@ -1,16 +1,45 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import android.content.SharedPreferences
 import app.cash.turbine.test
+import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.koin.test.KoinTest
 import kotlin.test.assertNotEquals
 
 @RunWith(JUnit4::class)
-class SettingsVMTest {
+class SettingsVMTest : KoinTest {
+
+    private val mockkSharedPrefsMain: SharedPreferences = mockk(relaxed = true)
+
+    @Before
+    fun setup() {
+        startKoin {
+            modules(
+                module {
+                    single<SharedPreferences>(qualifier = named("sharedPrefsMain")) {
+                        mockkSharedPrefsMain
+                    }
+                }
+            )
+        }
+    }
+
+    @After
+    fun tearDown() {
+        stopKoin()
+    }
 
     @Test
     fun check_initialisations_of_state_flows() {
@@ -20,11 +49,15 @@ class SettingsVMTest {
         //Check
         assertTrue(settingsVM._faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
+        assertTrue(settingsVM.caloriesThresholdSlider.value == 0F)
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
         assertTrue(settingsVM.exportProgressIndicator.value == 0.1f)
         assertTrue(settingsVM.exportProgressIndicatorShown.value == false)
-        assertTrue(settingsVM.dataSuccesfullyExportedShown.value == false)
+        assertTrue(settingsVM.dataSuccessfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
+        assertTrue(settingsVM.caloriesCounterActivated.value == false)
+        assertTrue(settingsVM.entriesDeletionBottomSheetShown.value == false)
+        assertTrue(settingsVM.entriesDeletionActivated.value == false)
     }
 
     @Test
@@ -59,6 +92,22 @@ class SettingsVMTest {
                 settingsVM.actionUpdateGramThresholdSlider(48F)
                 //Check
                 assertEquals(48F, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_caloriesThresholdSlider() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+            settingsVM.caloriesThresholdSlider.test {
+                //Check
+                assertEquals(0F, awaitItem())
+                //Action
+                settingsVM.actionUpdateCaloriesThresholdSlider(800F)
+                //Check
+                assertEquals(800F, awaitItem())
             }
         }
     }
@@ -132,7 +181,7 @@ class SettingsVMTest {
             //Arrange
             val settingsVM = SettingsVM()
 
-            settingsVM.dataSuccesfullyExportedShown.test {
+            settingsVM.dataSuccessfullyExportedShown.test {
                 //Check for Initial value
                 assertEquals(false, awaitItem())
                 //Action
@@ -156,6 +205,61 @@ class SettingsVMTest {
                 settingsVM.actionChangeExportSuccessfully(false)
                 //Check
                 assertEquals(false, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_caloriesCounterActivated() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.caloriesCounterActivated.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeCaloriesCounterGeneral(true)
+                //Check
+                assertEquals(true, awaitItem())
+                //Action
+                settingsVM.actionChangeCaloriesCounterGeneral(false)
+                //Check
+                assertEquals(false, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_entriesDeletionBottomSheetShown() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.entriesDeletionBottomSheetShown.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeEntriesDeletionBottomSheetShown(true)
+                //Check
+                assertEquals(true, awaitItem())
+            }
+        }
+    }
+
+    @Test
+    fun check_state_entriesDeletionActivated() {
+        runTest {
+            //Arrange
+            val settingsVM = SettingsVM()
+
+            settingsVM.entriesDeletionActivated.test {
+                //Check for Initial value
+                assertEquals(false, awaitItem())
+                //Action
+                settingsVM.actionChangeEntriesDeletionActivated(true)
+                //Check
+                assertEquals(true, awaitItem())
             }
         }
     }

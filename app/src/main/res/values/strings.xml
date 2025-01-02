@@ -93,6 +93,10 @@
     <string name="no_entry_found_for_given_category_Snackbar_text">No entry data found for the given category</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
     <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
+    <string name="settings_entries_deletion_button_title">Data Cleaning</string>
+    <string name="settings_entries_deletion_bottom_sheet_description_switch"></string>
+    <string name="settings_entries_deletion_bottom_sheet_description_top"></string>
+    <string name="settings_entries_deletion_bottom_sheet_description_bottom"></string>
     <string name="about_title_terms_and_conditions">Terms and conditions</string>
     <string name="about_title_privacy_policy">Privacy policy</string>
     <string name="about_title_imprint">Imprint</string>

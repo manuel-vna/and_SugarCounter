@@ -108,7 +108,7 @@ fun ExportProgressIndicator(settingsVM: SettingsVM) {
 @Composable
 fun ExportBottomSheet(context: Context) {
     val settingsVM: SettingsVM = koinViewModel()
-    val dataSuccessfullyExportedShown by settingsVM.dataSuccesfullyExportedShown.collectAsState()
+    val dataSuccessfullyExportedShown by settingsVM.dataSuccessfullyExportedShown.collectAsState()
     val exportSuccessful by settingsVM.exportSuccessfully.collectAsState()
 
     if (dataSuccessfullyExportedShown) {
