@@ -268,9 +268,9 @@ class CounterVM : ViewModel(), KoinComponent {
     //Check Calories Threshold: START
     fun checkThresholdForCaloriesInput() {
         viewModelScope.launch(Dispatchers.IO) {
-            val dateString = HelperMethods.formatDateToString(
+            val dateString = HelperMethods.convertTimestampToDateString(
                 dateOfEntryEpochSec.value,
-                "YYYY-MM-dd"
+                "yyyy-MM-dd"
             )
             val databaseSumCalories =
                 database.appDao().checkIfCaloriesThresholdIsBreached(dateString) ?: 0

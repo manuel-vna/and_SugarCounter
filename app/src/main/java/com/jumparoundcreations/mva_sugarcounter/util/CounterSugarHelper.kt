@@ -94,9 +94,9 @@ class CounterSugarHelper : KoinComponent {
                 database.appDao().insertEntry(
                     Entry(
                         currentTimestamp = dateOfEntryEpochSecValue,
-                        date = HelperMethods.formatDateToString(
+                        date = HelperMethods.convertTimestampToDateString(
                             dateOfEntryEpochSecValue,
-                            "YYYY-MM-dd"
+                            "yyyy-MM-dd"
                         ),
                         category = category,
                         isPerHundred = isPerHundred,
@@ -131,9 +131,9 @@ class CounterSugarHelper : KoinComponent {
             dateOfEntryEpochSec: Long
         ) {
             viewModelScope.launch(Dispatchers.IO) {
-                val dateString = HelperMethods.formatDateToString(
+                val dateString = HelperMethods.convertTimestampToDateString(
                     dateOfEntryEpochSec,
-                    "YYYY-MM-dd"
+                    "yyyy-MM-dd"
                 )
                 val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString) ?: 0
                 Log.d("checkThresholdForSugarInput", "DatabaseSumSugar: $databaseSum")

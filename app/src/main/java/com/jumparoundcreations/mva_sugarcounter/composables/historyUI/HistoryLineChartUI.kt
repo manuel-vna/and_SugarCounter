@@ -456,7 +456,7 @@ fun <T : IEntry> getGraphDataList(entryList: List<EntryGroup<T>>): List<GraphDat
         GraphData(
             id = id,
             valueTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
-            day = HelperMethods.formatDateToString(
+            day = HelperMethods.convertTimestampToDateString(
                 entryGroup.entryList.first().currentTimestamp,
                 if (HelperMethods.getSystemLanguage() == "en") {
                     "EEEE \n MM/dd"

@@ -29,9 +29,9 @@ class CounterCaloriesHelper : KoinComponent {
                     database.appDao().insertEntryCalories(
                         EntryCalories(
                             currentTimestamp = dateOfEntryEpochSecValue,
-                            date = HelperMethods.formatDateToString(
+                            date = HelperMethods.convertTimestampToDateString(
                                 dateOfEntryEpochSecValue,
-                                "YYYY-MM-dd"
+                                "yyyy-MM-dd"
                             ),
                             category = category,
                             caloriesTotal = caloriesInputValue.toInt()
@@ -64,9 +64,9 @@ class CounterCaloriesHelper : KoinComponent {
         ) {
             viewModelScope.launch(Dispatchers.IO) {
 
-                val dateString = HelperMethods.formatDateToString(
+                val dateString = HelperMethods.convertTimestampToDateString(
                     dateOfEntryEpochSec,
-                    "YYYY-MM-dd"
+                    "yyyy-MM-dd"
                 )
                 val databaseSumCalories =
                     database.appDao().checkIfCaloriesThresholdIsBreached(dateString) ?: 0

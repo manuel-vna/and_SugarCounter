@@ -49,7 +49,7 @@ fun DatePicker(
             onClick = {
                 counterVM.actionChangeDatePickerVisibility(!datePickerShown)
             }) {
-            Text(HelperMethods.formatDateToString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
+            Text(HelperMethods.convertTimestampToDateString(dateOfEntryEpochSec, "EEEE dd.MM.yy"))
         }
     }
 

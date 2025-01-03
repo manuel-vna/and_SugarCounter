@@ -136,7 +136,7 @@ class HelperMethodsTest {
 
     @Test
     fun formatDateToString() {
-        val dateString = HelperMethods.formatDateToString(1716152163, "YYYY-MM-dd")
+        val dateString = HelperMethods.convertTimestampToDateString(1716152163, "YYYY-MM-dd")
         assertEquals(dateString, "2024-05-19")
     }
 

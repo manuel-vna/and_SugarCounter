@@ -12,10 +12,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
-import java.util.Date
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.random.Random
 
@@ -36,7 +35,7 @@ class HelperMethods : KoinComponent {
                 todayOrYesterday = timestampIsTodayOrYesterday(item.currentTimestamp)
                 val date = item.date
                 val dayDisplayFormat =
-                    if (todayOrYesterday == TodayOrYesterday.LATER) formatDateToString(
+                    if (todayOrYesterday == TodayOrYesterday.LATER) convertTimestampToDateString(
                         item.currentTimestamp,
                         "EEEE (dd.MM.)"
                     ) else todayOrYesterday.name
@@ -76,16 +75,16 @@ class HelperMethods : KoinComponent {
             }
         }
 
-        fun formatDateToString(currentTimestamp: Long, format: String): String {
+        fun convertTimestampToDateString(timestamp: Long, format: String): String {
 
-            val simpleDateFormat2 = SimpleDateFormat(format)
-            val localDate =
-                Instant.ofEpochSecond(currentTimestamp).atZone(ZoneId.systemDefault()).toLocalDate()
-            val zoneId: ZoneId = ZoneId.systemDefault()
-            val instant = localDate.atStartOfDay(zoneId).toInstant()
+            val formatter = DateTimeFormatter
+                .ofPattern(format)
+                .withZone(ZoneId.systemDefault()) //system's default timezone
+            val instant = Instant.ofEpochSecond(timestamp)
 
-            return simpleDateFormat2.format(Date.from(instant))
+            return formatter.format(instant)
         }
+
 
         fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
             if (valueList.isNotEmpty()) {
@@ -137,9 +136,9 @@ class HelperMethods : KoinComponent {
                             database.appDao().insertEntry(
                                 Entry(
                                     currentTimestamp = timestamp,
-                                    date = formatDateToString(
+                                    date = convertTimestampToDateString(
                                         timestamp,
-                                        "YYYY-MM-dd"
+                                        "yyyy-MM-dd"
                                     ),
                                     category = "TestSugar",
                                     isPerHundred = true,
@@ -156,9 +155,9 @@ class HelperMethods : KoinComponent {
                             database.appDao().insertEntryCalories(
                                 EntryCalories(
                                     currentTimestamp = timestamp,
-                                    date = formatDateToString(
+                                    date = convertTimestampToDateString(
                                         timestamp,
-                                        "YYYY-MM-dd"
+                                        "yyyy-MM-dd"
                                     ),
                                     category = "TestCalories",
                                     caloriesTotal = caloriesValue
