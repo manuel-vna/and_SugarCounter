@@ -136,8 +136,15 @@ class HelperMethodsTest {
 
     @Test
     fun formatDateToString() {
-        val dateString = HelperMethods.convertTimestampToDateString(1716152163, "YYYY-MM-dd")
-        assertEquals(dateString, "2024-05-19")
+        val timestamp: Long = 1735495200 //= GMT: Sunday, December 29, 2024 18:00:00
+
+        val dateString = HelperMethods.convertTimestampToDateString(timestamp, "yyyy-MM-dd")
+        assertEquals(dateString, "2024-12-29")
+        // "yyyy" represents the calendar year.
+
+        val dateString2 = HelperMethods.convertTimestampToDateString(timestamp, "YYYY-MM-dd")
+        assertNotEquals(dateString2, "2024-12-29")
+        // not equal because it returns 2025-12-29 since "YYYY" represents the year associated with the ISO week date system.
     }
 
     @Test
