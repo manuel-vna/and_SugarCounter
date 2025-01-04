@@ -19,8 +19,9 @@ class EntryDeletionWorker(context: Context, params: WorkerParameters) :
 
     private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
     private val appDatabase = AppDatabase.getInstance(context)
-    private val deletionPeriod =
-        259200 // = 3 days  # //63113852 //  63113852 seconds = two years in seconds
+
+    //private val deletionPeriod = 94670778 // = three years in seconds
+    private val deletionPeriod = 604800 // = 7 days
 
     companion object {
         //private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
