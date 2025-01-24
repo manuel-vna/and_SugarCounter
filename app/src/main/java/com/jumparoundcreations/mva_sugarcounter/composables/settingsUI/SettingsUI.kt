@@ -4,10 +4,12 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -84,7 +86,15 @@ fun Settings(
                 sectionRows = listOf(
                     Pair("FAQs", { navController.navigate(NavItem.FAQ.screenRoute) }),
                     Pair("Introduction", { println("Onboarding field clicked") }),
-                    Pair("Donation", { println("Donation field clicked") })
+                    Pair("Donation", {
+                        val webPageIntent = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG")
+                        )
+                        webPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(webPageIntent)
+                    }
+                    )
                 )
             )
         }
@@ -115,6 +125,22 @@ fun Settings(
 
         item { SettingsVersionCode() }
 
+    }
+}
+
+@Composable
+fun OpenWebPageButton(context: Context) {
+    //val context = LocalContext.current
+
+    Button(onClick = {
+        // Create an intent to open a web page
+        val webPageIntent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG")
+        )
+        context.startActivity(webPageIntent)
+    }) {
+        Text("Open Web Page")
     }
 }
 
