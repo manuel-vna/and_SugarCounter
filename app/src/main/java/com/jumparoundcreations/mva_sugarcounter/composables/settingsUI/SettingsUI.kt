@@ -2,27 +2,21 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Switch
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
@@ -42,161 +36,101 @@ fun Settings(
     val settingsVM: SettingsVM = koinViewModel()
     settingsVM.actionResetThresholdSliderValuesToSharedPref()
 
-    Column(
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp),
+
+    LazyColumn(
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        SettingsActivateCaloriesCounter(settingsVM)
+        item { SettingsActivateCaloriesCounter(settingsVM) }
 
-        SettingsSharedSliderThreshold(
-            settingsVM = settingsVM,
-        )
+        item { Spacer(modifier = Modifier.height(16.dp)) }
 
-        HorizontalDivider(modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
+        item { SettingsSharedSliderThreshold(settingsVM = settingsVM) }
 
-        SettingsButtonEntriesDeletion(
-            settingsVM = settingsVM,
-            descriptionText = stringResource(R.string.settings_entries_deletion_button_title),
-            buttonIcon = R.drawable.baseline_read_more_24
-        )
+        item { Spacer(modifier = Modifier.height(16.dp)) }
 
-        SettingsButtonExportEntries(
-            context = context,
-            settingsVM = settingsVM,
-            descriptionText = stringResource(R.string.export_settings_button),
-            buttonIcon = R.drawable.baseline_read_more_24
-        )
+        item {
+            SettingsPostExportBottomSheet(
+                context = context,
+                settingsVM = settingsVM,
+                descriptionText = stringResource(R.string.export_settings_button),
+                buttonIcon = R.drawable.baseline_read_more_24
+            )
 
-        SettingsButtonFAQs(
-            settingsVM,
-            navController,
-            stringResource(id = R.string.settings_button_faq_text),
-            R.drawable.baseline_read_more_24,
-        )
+            SettingsSectionBoxUI(
+                title = "Funktionen",
+                sectionRows = listOf(
+                    Pair(
+                        stringResource(R.string.export_settings_button),
+                        { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
+                    Pair("Automatische Löschung",
+                        { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) })
+                )
+            )
 
-        SettingsButtonDonation(
-            navController,
-            stringResource(id = R.string.settings_button_donation_text),
-            R.drawable.baseline_read_more_24,
-        )
+            SettingsEntriesDeletion(settingsVM = settingsVM)
 
+            ExportProgressIndicator(settingsVM = settingsVM)
 
-        SettingsButtonAbout(
-            navController,
-            stringResource(id = R.string.settings_button_about_text),
-            R.drawable.baseline_read_more_24,
-        )
-
-        SettingsVersionCode()
-
-        ExportProgressIndicator(settingsVM = settingsVM)
-
-        ExportBottomSheet(context)
-    }
-
-}
-
-@Composable
-fun SettingsActivateCaloriesCounter(
-    settingsVM: SettingsVM
-) {
-
-    val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = stringResource(id = R.string.calories_activation_switch_title)
-        )
-        Switch(checked = caloriesCounterActivated,
-            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) })
-        Log.d("Switch_View_CaS", "isActivated: $caloriesCounterActivated")
-        //Log.d("Switch_View_SP", "isActivated: $caloriesCounterSwitchActivated")
-
-    }
-
-}
-
-@Composable
-fun SettingsButtonFAQs(
-    settingsVM: SettingsVM,
-    navController: NavController,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
-        onClick = {
-            navController.navigate(NavItem.FAQ.screenRoute)
-        }) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
-    }
-}
-
-@Composable
-fun SettingsButtonAbout(
-    navController: NavController,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
-        onClick = {
-            navController.navigate(NavItem.About.screenRoute)
+            SettingsPostExportBottomSheet(context)
         }
-    ) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
-    }
-}
 
-@Composable
-fun SettingsButtonDonation(
-    navController: NavController,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
-        onClick = {
+        item { Spacer(modifier = Modifier.height(32.dp)) }
 
+        item {
+            SettingsSectionBoxUI(
+                title = "Hilfe",
+                sectionRows = listOf(
+                    Pair("FAQs", { navController.navigate(NavItem.FAQ.screenRoute) }),
+                    Pair("Introduction", { println("Onboarding field clicked") }),
+                    Pair("Donation", { println("Donation field clicked") })
+                )
+            )
         }
-    ) {
-        Text(
-            text = "$descriptionText   "
-        )
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
+
+        item { Spacer(modifier = Modifier.height(32.dp)) }
+
+        item {
+            SettingsSectionBoxUI(
+                title = "Über die App",
+                sectionRows = listOf(
+                    Pair(
+                        "Terms and Conditions",
+                        { navController.navigate(NavItem.TermsAndConditions.screenRoute) }),
+                    Pair(
+                        "Privacy Policy",
+                        { navController.navigate(NavItem.PrivacyPolicy.screenRoute) }),
+                    Pair("Third Party Licenses", {
+                        val intent = Intent(context, OssLicensesMenuActivity::class.java)
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(intent)
+                    }),
+                    Pair("Imprint", { navController.navigate(NavItem.Imprint.screenRoute) })
+                )
+            )
+        }
+
+        item { Spacer(modifier = Modifier.height(32.dp)) }
+
+        item { SettingsVersionCode() }
+
     }
 }
+
 
 @Composable
 fun SettingsVersionCode() {
+
+    Spacer(modifier = Modifier.height(16.dp))
+
     Text(
-        text = "SugarCounter " + BuildConfig.VERSION_NAME
+        text = stringResource(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
+        fontWeight = FontWeight.Bold
+    )
+
+    Text(
+        text = stringResource(R.string.about_concluding_part)
     )
 }
 

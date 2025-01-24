@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -17,38 +16,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsButtonEntriesDeletion(
-    settingsVM: SettingsVM,
-    descriptionText: String,
-    buttonIcon: Int,
-) {
+fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
 
     val entriesDeletionBottomSheetShown by settingsVM.entriesDeletionBottomSheetShown.collectAsState()
     val entriesDeletionActivated by settingsVM.entriesDeletionActivated.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp),
-        onClick = {
-            settingsVM.actionChangeEntriesDeletionBottomSheetShown(true)
-        }) {
-        Text(text = "$descriptionText   ")
-        Icon(
-            painter = painterResource(id = buttonIcon),
-            contentDescription = "",
-        )
-    }
 
     if (entriesDeletionBottomSheetShown) {
 
@@ -66,9 +47,18 @@ fun SettingsButtonEntriesDeletion(
             ) {
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    Text(
+                        text = stringResource(R.string.settings_entries_deletion_button_title),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -79,6 +69,7 @@ fun SettingsButtonEntriesDeletion(
                         onCheckedChange = { settingsVM.actionChangeEntriesDeletionActivated(it) }
                     )
                 }
+
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),

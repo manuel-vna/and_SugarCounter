@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
@@ -29,7 +30,7 @@ fun ShowAlertDialogDoubleBtn(
             }
         },
         dismissButton = {
-            Button(onClick = { dismissBtnAction.invoke() }) {
+            OutlinedButton(onClick = { dismissBtnAction.invoke() }) {
                 Text(dismissBtnText)
             }
 

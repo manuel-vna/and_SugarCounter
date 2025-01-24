@@ -5,9 +5,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,22 +38,20 @@ fun SettingsSharedSliderThreshold(
     val unitOfMeasureGram = stringResource(id = R.string.general_gram)
     val unitOfMeasureKcal = stringResource(id = R.string.general_kcal)
 
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Text(
+            text = title,
+            fontWeight = FontWeight.Bold
+        )
+    }
+    HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
 
     Column(
         modifier = Modifier.padding(top = 8.dp)
     ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 12.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = title,
-                fontWeight = FontWeight.Bold
-            )
-        }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -93,7 +92,7 @@ fun SettingsSharedSliderThreshold(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            Button(
+            TextButton(
                 modifier = Modifier.padding(start = 6.dp),
                 onClick = { settingsVM.actionGramThresholdDialogCheck(true) }
             ) {

@@ -22,7 +22,6 @@ import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.FAQScreen
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.ImprintUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.PrivacyPolicyUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
-import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsAboutUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
 
 
@@ -51,9 +50,11 @@ fun NavigationGraph(
         composable(route = NavItem.FAQ.screenRoute) {
             FAQScreen()
         }
+        /*
         composable(route = NavItem.About.screenRoute) {
             SettingsAboutUI(navController)
         }
+        */
         composable(route = NavItem.TermsAndConditions.screenRoute) {
             TermsAndConditionsUI()
         }

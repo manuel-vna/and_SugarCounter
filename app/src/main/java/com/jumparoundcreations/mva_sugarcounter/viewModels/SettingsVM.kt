@@ -44,6 +44,9 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _exportProgressIndicatorShown = MutableStateFlow(false)
     val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
 
+    val _dataPreExportBottomSheetShown = MutableStateFlow(false)
+    val dataPreExportBottomSheetShown = _dataPreExportBottomSheetShown.asStateFlow()
+
     val _dataSuccessfullyExportedShown = MutableStateFlow(false)
     val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
 
@@ -174,6 +177,10 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     fun actionChangExportProgressIndicatorVisibility(isShown: Boolean) {
         _exportProgressIndicatorShown.value = isShown
+    }
+
+    fun actionChangeDataPreExportBottomSheetShown(isShown: Boolean) {
+        _dataPreExportBottomSheetShown.value = isShown
     }
 
     fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
