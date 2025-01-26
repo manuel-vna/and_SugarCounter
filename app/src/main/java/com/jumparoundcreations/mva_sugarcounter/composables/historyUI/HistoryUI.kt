@@ -88,7 +88,7 @@ fun HistoryScreenTopArea(
         Button(
             modifier = Modifier
                 .weight(1f)
-                .padding(top = 12.dp, start = 20.dp, end = 20.dp),
+                .padding(start = 20.dp, end = 20.dp),
             onClick = {
                 historyVM.actionShowHistoryCardsScreen()
                 historyVM.actionHideHistoryChartScreen()
@@ -99,7 +99,7 @@ fun HistoryScreenTopArea(
         Button(
             modifier = Modifier
                 .weight(1f)
-                .padding(top = 12.dp, start = 20.dp, end = 20.dp),
+                .padding(start = 20.dp, end = 20.dp),
             onClick = {
                 historyVM.actionHideHistoryCardsScreen()
                 historyVM.actionShowHistoryChartScreen()

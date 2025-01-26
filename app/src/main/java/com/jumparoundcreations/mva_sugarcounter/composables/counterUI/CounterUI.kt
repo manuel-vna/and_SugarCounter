@@ -56,7 +56,6 @@ fun Counter(
 
     Column(
         modifier = Modifier
-            .padding(start = 30.dp, end = 30.dp)
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
@@ -70,7 +69,7 @@ fun Counter(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 6.dp),
+                .padding(bottom = 6.dp),
             Arrangement.Absolute.SpaceAround
         ) {
             DatePicker(counterVM = counterVM)
