@@ -7,9 +7,7 @@ import android.content.SharedPreferences
 import android.net.Uri
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,7 +38,6 @@ fun Settings(
 
 
     LazyColumn(
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
@@ -66,7 +63,8 @@ fun Settings(
                     Pair(
                         stringResource(R.string.export_settings_button),
                         { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
-                    Pair("Automatische Löschung",
+                    Pair(
+                        stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
                         { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) })
                 )
             )
@@ -84,9 +82,11 @@ fun Settings(
             SettingsSectionBoxUI(
                 title = "Hilfe",
                 sectionRows = listOf(
-                    Pair("FAQs", { navController.navigate(NavItem.FAQ.screenRoute) }),
+                    Pair(
+                        stringResource(R.string.settings_button_faq_text),
+                        { navController.navigate(NavItem.FAQ.screenRoute) }),
                     Pair("Introduction", { println("Onboarding field clicked") }),
-                    Pair("Donation", {
+                    Pair(stringResource(R.string.settings_donation_title), {
                         val webPageIntent = Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse("https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG")
@@ -103,20 +103,24 @@ fun Settings(
 
         item {
             SettingsSectionBoxUI(
-                title = "Über die App",
+                title = stringResource(R.string.settings_button_about_text),
                 sectionRows = listOf(
                     Pair(
-                        "Terms and Conditions",
+                        stringResource(R.string.about_title_terms_and_conditions),
                         { navController.navigate(NavItem.TermsAndConditions.screenRoute) }),
                     Pair(
-                        "Privacy Policy",
+                        stringResource(R.string.about_title_privacy_policy),
                         { navController.navigate(NavItem.PrivacyPolicy.screenRoute) }),
-                    Pair("Third Party Licenses", {
-                        val intent = Intent(context, OssLicensesMenuActivity::class.java)
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(intent)
-                    }),
-                    Pair("Imprint", { navController.navigate(NavItem.Imprint.screenRoute) })
+                    Pair(
+                        stringResource(R.string.settings_third_party_licenses_text),
+                        {
+                            val intent = Intent(context, OssLicensesMenuActivity::class.java)
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
+                        }),
+                    Pair(
+                        stringResource(R.string.about_title_imprint),
+                        { navController.navigate(NavItem.Imprint.screenRoute) })
                 )
             )
         }
@@ -127,23 +131,6 @@ fun Settings(
 
     }
 }
-
-@Composable
-fun OpenWebPageButton(context: Context) {
-    //val context = LocalContext.current
-
-    Button(onClick = {
-        // Create an intent to open a web page
-        val webPageIntent = Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG")
-        )
-        context.startActivity(webPageIntent)
-    }) {
-        Text("Open Web Page")
-    }
-}
-
 
 @Composable
 fun SettingsVersionCode() {

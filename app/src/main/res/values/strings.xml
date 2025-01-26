@@ -103,5 +103,7 @@
     <string name="about_title_privacy_policy">Privacy policy</string>
     <string name="about_title_imprint">Imprint</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
+    <string name="settings_donation_title">Donation</string>
+    <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
 
 </resources>

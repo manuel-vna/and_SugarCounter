@@ -73,7 +73,7 @@
     <string name="faq_answer_ten">10</string>
     <string name="settings_threshold_title">Tagesobergrenze</string>
     <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
-    <string name="settings_button_about_text">About</string>
+    <string name="settings_button_about_text">Über die App</string>
     <string name="scan_barcode_button">Barcode scannen</string>
     <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
     <string name="no_barcode_yet_info_description">Diesem Barcode ist noch keine Kategorie eines Produkts zugeordnet.\n\nWenn du die weiteren Felder ausfüllst und den Eintrag speicherst, wird der im Feld \'<i>Kategorie</i>\' eingetragene Produktname automatisch dem oben aufgeführten Barcode <i>%1$s</i> zugeordnet.</string>
@@ -100,10 +100,11 @@
     <string name="settings_entries_deletion_bottom_sheet_description_switch">Automatische Löschung</string>
     <string name="settings_entries_deletion_bottom_sheet_description_top">Diese Einstellung dient der automatisierten Löschung der Einträge aus dem Gerätespeicher. Bei Aktivierung werden monatlich jeweils all jene Einträge gelöscht, die zu diesem Zeitpunkt älter als 3 Jahre sind.</string>
     <string name="settings_entries_deletion_bottom_sheet_description_bottom">Eine häufigere Löschung ist selbst bei älteren Geräten mit weniger Speicherkapazität nicht erforderlich, da die Speichermengen dieser App vergleichsweise sehr gering sind.</string>
-
     <string name="about_title_terms_and_conditions">Geschäftsbedingungen</string>
     <string name="about_title_privacy_policy">Datenschutzerklärung</string>
     <string name="about_title_imprint">Impressum</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
+    <string name="settings_donation_title">Spende</string>
+    <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
 
 </resources>
