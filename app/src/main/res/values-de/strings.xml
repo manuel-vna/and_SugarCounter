@@ -30,6 +30,7 @@
     <string name="general_calories">Kalorien</string>
     <string name="general_delete_question">Möchten Sie diesen Eintrag löschen?</string>
     <string name="general_conjunction">\u0020und\u0020</string>
+    <string name="general_help">Hilfe</string>
     <string name="alertSugarThresholdTitle">Warnung: Zucker</string>
     <string name="alertCaloriesThresholdTitle">Warnung: Kalorien</string>
     <string name="alertSugarThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
@@ -50,7 +51,7 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Häufige Fragen</string>
-    <string name="settings_button_donation_text">Spende</string>
+    <string name="settings_button_donation_text">Entwicklerteam unterstützen</string>
     <string name="faq_question_one">Wofür ist diese App gedacht?</string>
     <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch das Erfassen des konsumierten Zuckers in Gramm.</string>
     <string name="faq_question_two">Wie kann ich meinen Zuckerkonsum festhalten?</string>
@@ -104,7 +105,10 @@
     <string name="about_title_privacy_policy">Datenschutzerklärung</string>
     <string name="about_title_imprint">Impressum</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
-    <string name="settings_donation_title">Spende</string>
+    <string name="settings_donation_title">Entwicklerteam unterstützen</string>
+    <string name="settings_donation_description">Falls Ihnen diese App gefällt, können Sie dem Entwicklerteam eine Kleinigkeit zukommen lassen. Damit unterstützen Sie unser Team, auch zukünftig an dieser und ähnlichen Apps zu arbeiten.</string>
+    <string name="settings_donation_paypal">Paypal</string>
+    <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
     <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
 
 </resources>

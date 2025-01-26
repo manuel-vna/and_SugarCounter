@@ -30,5 +30,7 @@ fun SharedTopAppBar(
                     contentDescription = "Back"
                 )
             }
-        })
+        },
+        //colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Cyan)
+    )
 }

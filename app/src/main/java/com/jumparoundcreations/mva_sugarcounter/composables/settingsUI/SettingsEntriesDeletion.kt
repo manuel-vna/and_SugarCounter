@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -89,6 +90,21 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                         modifier = Modifier.padding(top = 16.dp),
                         text = stringResource(id = R.string.settings_entries_deletion_bottom_sheet_description_bottom)
                     )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    OutlinedButton(
+                        onClick = { settingsVM.actionChangeEntriesDeletionBottomSheetShown(false) }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.generalClose)
+                        )
+                    }
                 }
 
             }
