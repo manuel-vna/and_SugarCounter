@@ -23,6 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.composables.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.data.Faq
 import com.jumparoundcreations.mva_sugarcounter.data.faqDataList
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -31,7 +34,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun FAQScreen() {
+fun FAQScreen(navController: NavController) {
 
     val context = LocalContext.current
     val settingsVM: SettingsVM = koinViewModel()
@@ -47,20 +50,14 @@ fun FAQScreen() {
 
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(10.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
-
-        //In case the top app bar for this screen ought to be re-activated
-        /*
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_title_faq_text),
             onBackClickAction = {
-                // navController.navigate()
+                navController.popBackStack()
             }
         )
-        */
 
         LazyColumn {
             items(items = faqDataList.faqs, key = { it.id }) { faq ->

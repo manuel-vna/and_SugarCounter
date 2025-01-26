@@ -45,9 +45,7 @@ fun CardsScreen(
     val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 32.dp)
-        ) {
+        LazyColumn {
 
             when (segmentedButtonIndex) {
                 0 -> {

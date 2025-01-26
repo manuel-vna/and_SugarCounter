@@ -48,7 +48,7 @@ fun NavigationGraph(
             Settings(context, navController)
         }
         composable(route = NavItem.FAQ.screenRoute) {
-            FAQScreen()
+            FAQScreen(navController)
         }
         /*
         composable(route = NavItem.About.screenRoute) {
@@ -56,13 +56,13 @@ fun NavigationGraph(
         }
         */
         composable(route = NavItem.TermsAndConditions.screenRoute) {
-            TermsAndConditionsUI()
+            TermsAndConditionsUI(navController)
         }
         composable(route = NavItem.PrivacyPolicy.screenRoute) {
-            PrivacyPolicyUI()
+            PrivacyPolicyUI(navController)
         }
         composable(route = NavItem.Imprint.screenRoute) {
-            ImprintUI()
+            ImprintUI(navController)
         }
 
     }

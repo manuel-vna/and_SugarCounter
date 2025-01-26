@@ -62,6 +62,9 @@ class SettingsVM : ViewModel(), KoinComponent {
     val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
     val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
 
+    private val _donationBottomSheetShown = MutableStateFlow(false)
+    val donationBottomSheetShown = _donationBottomSheetShown.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -217,6 +220,10 @@ class SettingsVM : ViewModel(), KoinComponent {
         val editorSharedPrefsMain = sharedPrefsMain.edit()
         editorSharedPrefsMain.putBoolean("entriesDeletionActivated", isActivated)
         editorSharedPrefsMain.apply()
+    }
+
+    fun actionChangeDonationBottomSheetShown(isShown: Boolean) {
+        _donationBottomSheetShown.value = isShown
     }
 
     //Actions: END

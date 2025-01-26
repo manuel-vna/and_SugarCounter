@@ -29,6 +29,7 @@
     <string name="general_calories">Calories</string>
     <string name="general_delete_question">Do you want to delete this item?</string>
     <string name="general_conjunction">\sand\s</string>
+    <string name="general_help">Help</string>
     <string name="alertSugarThresholdTitle">Warning: Sugar</string>
     <string name="alertCaloriesThresholdTitle">Warning: Calories</string>
     <string name="alertSugarThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
@@ -49,7 +50,7 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Frequently Asked Questions</string>
-    <string name="settings_button_donation_text">Donation</string>
+    <string name="settings_button_donation_text">Support developers</string>
     <string name="faq_question_one">1</string>
     <string name="faq_answer_one">1</string>
     <string name="faq_question_two">2</string>
@@ -103,5 +104,10 @@
     <string name="about_title_privacy_policy">Privacy policy</string>
     <string name="about_title_imprint">Imprint</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
+    <string name="settings_donation_title">Support developers</string>
+    <string name="settings_donation_description">If you like this app, you can send a small donation to the development team. This will help our team to continue working on this and similar apps in the future.</string>
+    <string name="settings_donation_paypal">Paypal</string>
+    <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
+    <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
 
 </resources>
