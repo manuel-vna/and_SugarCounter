@@ -85,7 +85,8 @@ fun Settings(
                         stringResource(R.string.settings_button_faq_text),
                         { navController.navigate(NavItem.FAQ.screenRoute) }
                     ),
-                    Pair("Introduction",
+                    Pair(
+                        stringResource(R.string.settings_introduction_title),
                         { println("Onboarding field clicked") }
                     ),
                     Pair(

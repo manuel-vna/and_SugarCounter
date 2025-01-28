@@ -87,8 +87,7 @@ fun SettingsSharedSliderThreshold(
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -98,7 +97,6 @@ fun SettingsSharedSliderThreshold(
             ) {
                 Text(text = stringResource(id = R.string.saveButton))
             }
-
         }
     }
 

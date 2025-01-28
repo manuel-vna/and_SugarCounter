@@ -109,5 +109,6 @@
     <string name="settings_donation_paypal">Paypal</string>
     <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
     <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
+    <string name="settings_introduction_title">Introduction</string>
 
 </resources>
