@@ -5,9 +5,10 @@ import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -15,9 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -50,8 +48,9 @@ fun History(
 
     Column {
 
-        // Area at the top: Buttons and info icon
         HistoryScreenTopArea(historyVM, caloriesCounterActivated)
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         //Card Screen
         if (historyCardsScreenShown) {
@@ -84,30 +83,7 @@ fun HistoryScreenTopArea(
     caloriesCounterActivated: Boolean
 ) {
 
-    Row {
-        Button(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 20.dp, end = 20.dp),
-            onClick = {
-                historyVM.actionShowHistoryCardsScreen()
-                historyVM.actionHideHistoryChartScreen()
-            }) {
-            Text(stringResource(R.string.historyCardsBtn))
-        }
-
-        Button(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 20.dp, end = 20.dp),
-            onClick = {
-                historyVM.actionHideHistoryCardsScreen()
-                historyVM.actionShowHistoryChartScreen()
-                historyVM.actionChangeHistoryCardSearchFieldText("")
-            }) {
-            Text(stringResource(id = R.string.historygraphBtn))
-        }
-    }
+    HistoryTabRowUI(historyVM)
 
     if (caloriesCounterActivated) {
 
@@ -115,7 +91,8 @@ fun HistoryScreenTopArea(
             stringResource(id = R.string.general_sugar),
             stringResource(id = R.string.general_calories)
         )
-        var selectedIndex by remember { mutableIntStateOf(0) }
+
+        val selectedIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
 
         Row(
             modifier = Modifier
@@ -128,7 +105,7 @@ fun HistoryScreenTopArea(
                     SegmentedButton(
                         selected = selectedIndex == index,
                         onClick = {
-                            selectedIndex = index
+                            historyVM.actionChangeSegmentedButtonSugarOrCaloriesIndex(index)
                             historyVM.actionChangeSegmentedButtonIndex(index)
                         },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = 2)

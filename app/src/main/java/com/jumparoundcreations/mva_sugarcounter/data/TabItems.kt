@@ -2,7 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
-data class TabItem(
+data class CounterTabItem(
     val gramCountMode: GramCountMode,
     val title: String,
     val unselectedIcon: ImageVector,
@@ -13,3 +13,10 @@ enum class GramCountMode {
     PerHundred,
     PerPiece
 }
+
+data class HistoryTabItem(
+    val index: Int,
+    val title: String,
+    val unselectedIcon: ImageVector,
+    val selectedIcon: ImageVector
+)

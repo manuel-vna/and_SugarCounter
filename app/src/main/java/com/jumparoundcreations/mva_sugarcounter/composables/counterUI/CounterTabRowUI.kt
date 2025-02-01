@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.CounterTabItem
 import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.data.TabItem
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 
@@ -30,13 +30,13 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 fun TabRow(counterVM: CounterVM) {
 
     val tabItems = listOf(
-        TabItem(
+        CounterTabItem(
             gramCountMode = GramCountMode.PerHundred,
             title = stringResource(id = R.string.tabCounterPerHundred),
             unselectedIcon = Icons.Outlined.BarChart,
             selectedIcon = Icons.Outlined.BarChart
         ),
-        TabItem(
+        CounterTabItem(
             gramCountMode = GramCountMode.PerPiece,
             title = stringResource(id = R.string.tabCounterPerPiece),
             unselectedIcon = Icons.Outlined.Dialpad,

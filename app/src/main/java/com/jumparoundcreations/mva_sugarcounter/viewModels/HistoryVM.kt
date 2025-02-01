@@ -35,19 +35,25 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     //SateFlows: START
 
-    val _historyChartScreenShown = MutableStateFlow(false)
+    private val _isCardTabIndex = MutableStateFlow(0)
+    val isCardTabIndex = _isCardTabIndex.asStateFlow()
+
+    private val _segmentedButtonSugarOrCaloriesIndex = MutableStateFlow(0)
+    val segmentedButtonSugarOrCaloriesIndex = _segmentedButtonSugarOrCaloriesIndex.asStateFlow()
+
+    private val _historyChartScreenShown = MutableStateFlow(false)
     val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
 
-    val _historyCardsScreenShown = MutableStateFlow(true)
+    private val _historyCardsScreenShown = MutableStateFlow(true)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
 
-    val _historyCardSearchFieldShown = MutableStateFlow(false)
+    private val _historyCardSearchFieldShown = MutableStateFlow(false)
     val historyCardSearchFieldShown = _historyCardSearchFieldShown.asStateFlow()
 
-    val _historyCardSearchFieldText = MutableStateFlow("")
+    private val _historyCardSearchFieldText = MutableStateFlow("")
     val historyCardSearchFieldText = _historyCardSearchFieldText.asStateFlow()
 
-    val _savedHistory = MutableStateFlow(
+    private val _savedHistory = MutableStateFlow(
         listOf(
             EntryGroup(
                 "", "",
@@ -76,7 +82,7 @@ class HistoryVM : ViewModel(), KoinComponent {
             _savedHistory.value
         )
 
-    val _caloriesEntryDbHistory = MutableStateFlow(
+    private val _caloriesEntryDbHistory = MutableStateFlow(
         listOf(
             EntryGroup(
                 "", "",
@@ -153,6 +159,14 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     fun actionHideHistoryCardsScreen() {
         _historyCardsScreenShown.value = false
+    }
+
+    fun actionSetIsCardTabIndex(tabIndex: Int) {
+        _isCardTabIndex.value = tabIndex
+    }
+
+    fun actionChangeSegmentedButtonSugarOrCaloriesIndex(index: Int) {
+        _segmentedButtonSugarOrCaloriesIndex.value = index
     }
 
     fun actionChangeHistoryCardSearchFieldShown(isShown: Boolean) {
