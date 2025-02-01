@@ -20,6 +20,7 @@ import com.jumparoundcreations.mva_sugarcounter.composables.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.composables.historyUI.History
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.FAQScreen
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.ImprintUI
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.OnboardingUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.PrivacyPolicyUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
@@ -50,11 +51,6 @@ fun NavigationGraph(
         composable(route = NavItem.FAQ.screenRoute) {
             FAQScreen(navController)
         }
-        /*
-        composable(route = NavItem.About.screenRoute) {
-            SettingsAboutUI(navController)
-        }
-        */
         composable(route = NavItem.TermsAndConditions.screenRoute) {
             TermsAndConditionsUI(navController)
         }
@@ -63,6 +59,9 @@ fun NavigationGraph(
         }
         composable(route = NavItem.Imprint.screenRoute) {
             ImprintUI(navController)
+        }
+        composable(route = NavItem.Onboarding.screenRoute) {
+            OnboardingUI(navController)
         }
 
     }

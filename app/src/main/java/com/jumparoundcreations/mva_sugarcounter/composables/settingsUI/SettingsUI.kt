@@ -87,7 +87,7 @@ fun Settings(
                     ),
                     Pair(
                         stringResource(R.string.settings_introduction_title),
-                        { println("Onboarding field clicked") }
+                        { navController.navigate(NavItem.Onboarding.screenRoute) }
                     ),
                     Pair(
                         stringResource(R.string.settings_donation_title),
