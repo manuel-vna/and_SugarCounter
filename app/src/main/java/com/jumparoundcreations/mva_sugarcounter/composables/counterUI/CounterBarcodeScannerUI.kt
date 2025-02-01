@@ -1,17 +1,20 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults.elevatedButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -31,7 +35,10 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 
 @Composable
-fun Barcode(counterVM: CounterVM) {
+fun RowScope.Barcode(
+    counterVM: CounterVM,
+    textColor: Color
+) {
 
     val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
     val barcodeNumber by counterVM.barcodeNumber.collectAsState()
@@ -40,8 +47,17 @@ fun Barcode(counterVM: CounterVM) {
         NoBarcodeYetInfo(counterVM, barcodeNumber)
     }
 
-    Button(
-        onClick = { counterVM.scanBarcode() }) {
+
+    ElevatedButton(
+        modifier = Modifier
+            .weight(1f)
+            .padding(horizontal = 8.dp),
+        onClick = { counterVM.scanBarcode() },
+        colors = elevatedButtonColors(
+            contentColor = textColor
+        ),
+        border = BorderStroke(width = 1.dp, color = textColor)
+    ) {
         Text(
             text = stringResource(id = R.string.scan_barcode_button),
             overflow = TextOverflow.Ellipsis,

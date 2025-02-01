@@ -20,6 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogSingleBtn
+import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
@@ -53,6 +55,10 @@ fun Counter(
     //Keyboard
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    // Style
+    val darkMode = HelperMethods.checkForUIMode(context)
+    val textColor = if (darkMode == 33) Color.White else Color.Black
+
 
     Column(
         modifier = Modifier
@@ -72,9 +78,9 @@ fun Counter(
                 .padding(bottom = 6.dp),
             Arrangement.Absolute.SpaceAround
         ) {
-            DatePicker(counterVM = counterVM)
+            DatePicker(counterVM = counterVM, textColor = textColor)
 
-            Barcode(counterVM)
+            Barcode(counterVM = counterVM, textColor = textColor)
         }
 
         Row(
