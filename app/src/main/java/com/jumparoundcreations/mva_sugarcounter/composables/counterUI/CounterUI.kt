@@ -52,6 +52,9 @@ fun Counter(
         "caloriesCounterActivated",
         false
     )
+    val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
+    val barcodeNumber by counterVM.barcodeNumber.collectAsState()
+
     //Keyboard
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -81,6 +84,17 @@ fun Counter(
             DatePicker(counterVM = counterVM, textColor = textColor)
 
             Barcode(counterVM = counterVM, textColor = textColor)
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            if (noBarcodeYetInfo) {
+                NoBarcodeYetInfo(counterVM, barcodeNumber)
+            }
         }
 
         Row(

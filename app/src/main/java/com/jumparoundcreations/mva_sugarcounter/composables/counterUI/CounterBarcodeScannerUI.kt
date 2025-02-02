@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
@@ -39,14 +41,6 @@ fun RowScope.Barcode(
     counterVM: CounterVM,
     textColor: Color
 ) {
-
-    val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
-    val barcodeNumber by counterVM.barcodeNumber.collectAsState()
-
-    if (noBarcodeYetInfo) {
-        NoBarcodeYetInfo(counterVM, barcodeNumber)
-    }
-
 
     ElevatedButton(
         modifier = Modifier
@@ -71,17 +65,11 @@ fun RowScope.Barcode(
 fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
 
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 6.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         )
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -98,7 +86,7 @@ fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
             Text(
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
-                text = stringResource(id = R.string.no_barcode_yet_info_title, barcodeNumber)
+                text = stringResource(id = R.string.no_barcode_yet_info_card, barcodeNumber)
             )
 
             IconButton(
@@ -130,13 +118,20 @@ fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
                         bottom = 120.dp
                     )
             ) {
-                Icon(
-                    modifier = Modifier
-                        .padding(bottom = 12.dp)
-                        .align(Alignment.CenterHorizontally),
-                    imageVector = Icons.Rounded.Info,
-                    contentDescription = "info",
+
+                Text(
+                    text = stringResource(R.string.no_barcode_yet_info_title),
+                    fontWeight = FontWeight.Bold
                 )
+
+                HorizontalDivider(
+                    modifier = Modifier.padding(
+                        start = 4.dp,
+                        end = 4.dp,
+                        bottom = 16.dp
+                    )
+                )
+
                 Text(
                     modifier = Modifier
                         .padding(top = 12.dp)

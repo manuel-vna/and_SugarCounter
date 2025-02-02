@@ -76,8 +76,9 @@
     <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
     <string name="settings_button_about_text">Über die App</string>
     <string name="scan_barcode_button">Barcode scannen</string>
-    <string name="no_barcode_yet_info_title">Barcode: %1$s</string>
-    <string name="no_barcode_yet_info_description">Diesem Barcode ist noch keine Kategorie eines Produkts zugeordnet.\n\nWenn du die weiteren Felder ausfüllst und den Eintrag speicherst, wird der im Feld \'<i>Kategorie</i>\' eingetragene Produktname automatisch dem oben aufgeführten Barcode <i>%1$s</i> zugeordnet.</string>
+    <string name="no_barcode_yet_info_card">Barcode: %1$s</string>
+    <string name="no_barcode_yet_info_title">Barcode noch nicht vorhanden</string>
+    <string name="no_barcode_yet_info_description">Diesem Barcode ist noch keine Kategorie eines Produkts zugeordnet. Wenn du die weiteren Felder ausfüllst und den Eintrag speicherst, wird der im Feld \'<i>Kategorie</i>\' eingetragene Produktname automatisch dem oben aufgeführten Barcode \'<i>%1$s</i>\' zugeordnet.</string>
     <string name="category_bottom_sheet_barcode">Barcode (EAN)</string>
     <string name="category_bottom_sheet_per_piece_gram"> %1$s g Zucker pro Stück</string>
     <string name="category_bottom_sheet_per_hundred_gram"> %1$s g Zucker pro 100 Gramm</string>
