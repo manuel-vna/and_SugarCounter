@@ -128,6 +128,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.android)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)

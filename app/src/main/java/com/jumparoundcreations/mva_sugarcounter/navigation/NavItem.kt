@@ -21,4 +21,7 @@ sealed class NavItem(var title: Int, var screenRoute: String) {
 
     data object Onboarding :
         NavItem(R.string.settings_donation_title, "onboarding")
+
+    data object VideoPlayerFullScreen :
+        NavItem(R.string.settings_donation_title, "videoPlayerFullScreen")
 }
