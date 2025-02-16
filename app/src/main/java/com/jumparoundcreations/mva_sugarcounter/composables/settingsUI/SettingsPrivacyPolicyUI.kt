@@ -1,15 +1,15 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.core.text.HtmlCompat
 import androidx.navigation.NavController
+import com.google.accompanist.web.WebView
+import com.google.accompanist.web.rememberWebViewStateWithHTMLData
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.SharedTopAppBar
 import org.koin.compose.getKoin
@@ -32,11 +32,11 @@ fun PrivacyPolicyUI(navController: NavController) {
             }
         )
 
-        val spannedText = HtmlCompat.fromHtml(termsHtml, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        Text(
-            text = spannedText.toString(),
-            style = MaterialTheme.typography.bodyLarge,
+        WebView(
+            state = rememberWebViewStateWithHTMLData(termsHtml),
+            modifier = Modifier.fillMaxSize()
         )
+
     }
 
 }

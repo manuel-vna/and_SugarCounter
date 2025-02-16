@@ -119,6 +119,7 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation(libs.accompanist.webview)
     implementation(libs.android.gms)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
