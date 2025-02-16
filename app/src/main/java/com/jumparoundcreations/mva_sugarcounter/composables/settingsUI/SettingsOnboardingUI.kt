@@ -24,7 +24,7 @@ fun OnboardingUI(navController: NavController) {
         )
 
         ComposeOnboarding(
-            pages = listOf(OnboardingPage1(), OnboardingPage2()),
+            pages = listOf(OnboardingPage1(navController), OnboardingPage2()),
             indicatorType = ProgressIndicator,
             onFinishPressed = { navController.popBackStack() }
         )
