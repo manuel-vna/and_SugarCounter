@@ -1,9 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
 import android.content.Context
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
@@ -31,6 +29,7 @@ fun VideoPlayerFullScreen(context: Context, navController: NavController) {
             )
         }
 
+        /*
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -41,6 +40,7 @@ fun VideoPlayerFullScreen(context: Context, navController: NavController) {
                 videoResId = R.raw.counter
             )
         }
+         */
     }
 
 
