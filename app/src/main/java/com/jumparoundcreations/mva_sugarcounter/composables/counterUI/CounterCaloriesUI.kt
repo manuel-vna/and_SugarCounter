@@ -1,12 +1,13 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +31,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun RowScope.CounterCaloriesUI(
+fun CounterCaloriesUI(
     caloriesCounterActivated: Boolean,
     //modifier: Modifier = Modifier
 ) {
@@ -38,52 +39,99 @@ fun RowScope.CounterCaloriesUI(
     // States
     val counterVM: CounterVM = koinViewModel()
     val caloriesInput by counterVM.caloriesInput.collectAsState()
+    val caloriesAmount by counterVM.caloriesAmount.collectAsState()
 
     if (caloriesCounterActivated) {
 
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(2.dp)
-        ) {
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
 
-            Text(
-                modifier = Modifier.padding(start = 3.dp, bottom = 2.dp),
-                text = stringResource(id = R.string.calories_textfield_title),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
-            )
+        Row {
 
-            TextField(
+            Column(
                 modifier = Modifier
-                    .padding(start = 2.dp, end = 2.dp),
-                value = caloriesInput,
-                onValueChange = {
-                    if (it.isDigitsOnly() && it.count() <= 4) {
-                        counterVM.actionCaloriesChange(it)
-                    }
-                },
-                textStyle = TextStyle(
-                    fontSize = 16.sp
-                ),
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor =
-                    MaterialTheme.colorScheme.secondaryContainer,
-                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
-                singleLine = true,
-                trailingIcon = {
-                    IconButton(onClick = { counterVM.actionCaloriesChange("") }) {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = Icons.Rounded.Clear,
-                            contentDescription = "arrow",
+                    .padding(16.dp)
+                    .weight(1f)
+            ) {
+
+                Text(
+                    modifier = Modifier.padding(4.dp),
+                    text = stringResource(id = R.string.calories_textfield_title),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    value = caloriesInput,
+                    onValueChange = {
+                        if (it.isDigitsOnly() && it.count() <= 4) {
+                            counterVM.actionCaloriesChange(it)
+                        }
+                    },
+                    textStyle = TextStyle(
+                        fontSize = 14.sp
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor =
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                    ),
+                    singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { counterVM.actionCaloriesChange("") }) {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "arrow",
+                            )
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    placeholder = { Text(stringResource(id = R.string.calories_textfield_placeholder)) }
+                )
+            }
+
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .weight(1f)
+            ) {
+
+                val perPieceAmount by counterVM.perPieceAmount.collectAsState()
+                Text(
+                    modifier = Modifier.padding(4.dp),
+                    text = stringResource(R.string.quantitySugar),
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Medium
+                )
+
+                TextField(
+                    colors = OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor =
+                        MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                    ),
+                    value = caloriesAmount,
+                    onValueChange = {
+                        if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionCaloriesAmountChange(
+                            it
                         )
-                    }
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                placeholder = { Text(stringResource(id = R.string.calories_textfield_placeholder)) }
-            )
+                    },
+                    singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { counterVM.actionCaloriesAmountChange("") }) {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = Icons.Rounded.Clear,
+                                contentDescription = "arrow",
+                            )
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    placeholder = { Text("1") }
+                )
+            }
+
         }
+
     }
 }

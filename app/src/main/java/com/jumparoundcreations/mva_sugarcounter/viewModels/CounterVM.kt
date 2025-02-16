@@ -151,6 +151,8 @@ class CounterVM : ViewModel(), KoinComponent {
     private var _caloriesInput = MutableStateFlow("")
     val caloriesInput = _caloriesInput.asStateFlow()
 
+    private var _caloriesAmount = MutableStateFlow("")
+    val caloriesAmount = _caloriesAmount
     private var _segmentedButtonIndex = MutableStateFlow(0)
     val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
     //StateFlow: END
@@ -222,7 +224,8 @@ class CounterVM : ViewModel(), KoinComponent {
                 counterVM = this,
                 category = category,
                 dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
-                caloriesInputValue = _caloriesInput.value
+                caloriesInputValue = _caloriesInput.value,
+                caloriesAmountValue = _caloriesAmount.value
             )
         }
 
@@ -296,35 +299,59 @@ class CounterVM : ViewModel(), KoinComponent {
     private fun getEntryByCategory(category: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
-            val entryReply =
+
+            val entrySugarReply =
                 database.appDao().checkIfGramValueExistsForCategory(category)
+
+            val entryCaloriesReply =
+                database.appDao().checkIfCaloriesValueExistsForCategory(category)
 
             withContext(Dispatchers.Main) {
 
+                // if no sugar AND no calories entry was found, tell the user about it
+                if (entrySugarReply == null && entryCaloriesReply == null) {
+                    actionNoDataForChosenCategorySnackbarShownChange(true)
+                }
+
+                // Sugar
                 when {
-                    entryReply == null -> {
+                    entrySugarReply == null -> {
                         _perPieceGram.value = ""
                         _perHundredGram.value = ""
                         _isHundredTabIndex.value = 0
-                        actionNoDataForChosenCategorySnackbarShownChange(true)
-
                     }
 
-                    entryReply.perPieceGram != 0 -> {
-                        _perPieceGram.value = entryReply.perPieceGram.toString()
+                    entrySugarReply.perPieceGram != 0 -> {
+                        _perPieceGram.value = entrySugarReply.perPieceGram.toString()
                         _perHundredGram.value = ""
                         _isHundredTabIndex.value = 1
                     }
 
-                    entryReply.perHundredGram != 0 -> {
-                        _perHundredGram.value = entryReply.perHundredGram.toString()
+                    entrySugarReply.perHundredGram != 0 -> {
+                        _perHundredGram.value = entrySugarReply.perHundredGram.toString()
                         _perPieceGram.value = ""
                         _isHundredTabIndex.value = 0
                     }
 
                     else -> Log.e(
                         "CounterVM",
-                        "Loading entry from database by its category did not succeed"
+                        "Loading sugar entry from database by its category did not succeed"
+                    )
+                }
+
+                // Calories
+                when {
+                    entryCaloriesReply == null -> {
+                        _caloriesInput.value = ""
+                    }
+
+                    entryCaloriesReply.caloriesTotal != 0 -> {
+                        _caloriesInput.value = entryCaloriesReply.caloriesTotal.toString()
+                    }
+
+                    else -> Log.e(
+                        "CounterVM",
+                        "Loading calories entry from database by its category did not succeed"
                     )
                 }
 
@@ -483,6 +510,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
     fun actionCaloriesChange(caloriesInKcal: String) {
         _caloriesInput.value = caloriesInKcal
+    }
+
+    fun actionCaloriesAmountChange(caloriesAmount: String) {
+        _caloriesAmount.value = caloriesAmount
     }
 
     fun actionChangeSegmentedButtonIndex(index: Int) {

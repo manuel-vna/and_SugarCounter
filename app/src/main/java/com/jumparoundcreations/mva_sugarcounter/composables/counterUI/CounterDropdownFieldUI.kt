@@ -70,31 +70,17 @@ fun RowScope.CategoryDropdownField(
         )
 
         TextField(
-            modifier =
-            if (caloriesCounterActivated) {
-                Modifier
-                    .padding(end = 8.dp)
-                    .border(
-                        width = 1.8.dp,
-                        shape = RoundedCornerShape(15.dp),
-                        color = Color.Transparent
-                    )
-                    .onGloballyPositioned { coordinates ->
-                        counterVM.actionChangeCategoryFieldSize(coordinates.size.toSize())
-                    }
-            } else {
-                Modifier
-                    .padding(end = 8.dp)
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.8.dp,
-                        shape = RoundedCornerShape(15.dp),
-                        color = Color.Transparent
-                    )
-                    .onGloballyPositioned { coordinates ->
-                        counterVM.actionChangeCategoryFieldSize(coordinates.size.toSize())
-                    }
-            },
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .fillMaxWidth()
+                .border(
+                    width = 1.8.dp,
+                    shape = RoundedCornerShape(15.dp),
+                    color = Color.Transparent
+                )
+                .onGloballyPositioned { coordinates ->
+                    counterVM.actionChangeCategoryFieldSize(coordinates.size.toSize())
+                },
             value = category,
             onValueChange = {
                 //limit input to x characters

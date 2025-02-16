@@ -109,17 +109,17 @@ fun Counter(
                 caloriesCounterActivated = caloriesCounterActivated,
                 keyboardController = keyboardController
             )
-
-            CounterCaloriesUI(
-                caloriesCounterActivated = caloriesCounterActivated
-            )
-
         }
 
         TabRow(counterVM)
 
+        CounterCaloriesUI(
+            caloriesCounterActivated = caloriesCounterActivated
+        )
+
         Row(
             modifier = Modifier
+                .padding(top = 16.dp)
                 .fillMaxWidth(),
             Arrangement.SpaceEvenly
         ) {

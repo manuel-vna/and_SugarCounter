@@ -21,8 +21,13 @@ class CounterCaloriesHelper : KoinComponent {
             counterVM: CounterVM,
             category: String,
             dateOfEntryEpochSecValue: Long,
-            caloriesInputValue: String
+            caloriesInputValue: String,
+            caloriesAmountValue: String
         ) {
+
+            var caloriesAmountInt = 1
+            if (caloriesAmountValue.isNotEmpty()) caloriesAmountInt =
+                caloriesAmountValue.toInt()
 
             if (caloriesInputValue.isNotEmpty()) {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -34,7 +39,7 @@ class CounterCaloriesHelper : KoinComponent {
                                 "yyyy-MM-dd"
                             ),
                             category = category,
-                            caloriesTotal = caloriesInputValue.toInt()
+                            caloriesTotal = caloriesInputValue.toInt() * caloriesAmountInt
                         )
                     )
 
