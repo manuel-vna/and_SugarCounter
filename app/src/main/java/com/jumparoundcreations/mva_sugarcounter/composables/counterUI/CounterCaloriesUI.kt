@@ -43,13 +43,13 @@ fun CounterCaloriesUI(
 
     if (caloriesCounterActivated) {
 
-        HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+        HorizontalDivider(modifier = Modifier.padding(top = 4.dp))
 
         Row {
 
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .weight(1f)
             ) {
 
@@ -92,7 +92,7 @@ fun CounterCaloriesUI(
 
             Column(
                 modifier = Modifier
-                    .padding(16.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .weight(1f)
             ) {
 
