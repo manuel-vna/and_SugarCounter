@@ -160,6 +160,8 @@ class HelperMethods : KoinComponent {
                                         "yyyy-MM-dd"
                                     ),
                                     category = "TestCalories",
+                                    caloriesPerPiece = 120,
+                                    caloriesAmount = 2,
                                     caloriesTotal = caloriesValue
                                 )
                             )

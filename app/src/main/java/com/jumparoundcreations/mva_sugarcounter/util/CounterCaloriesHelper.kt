@@ -39,6 +39,8 @@ class CounterCaloriesHelper : KoinComponent {
                                 "yyyy-MM-dd"
                             ),
                             category = category,
+                            caloriesPerPiece = caloriesInputValue.toInt(),
+                            caloriesAmount = caloriesAmountValue.toInt(),
                             caloriesTotal = caloriesInputValue.toInt() * caloriesAmountInt
                         )
                     )

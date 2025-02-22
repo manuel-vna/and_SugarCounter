@@ -128,7 +128,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val _itemToDeleteEntryCalories = MutableStateFlow(
         EntryCalories(
-            0, 0, "", "", 0
+            0, 0, "", "", 0, 1, 0
         )
     )
     val itemToDeleteEntryCalories = _itemToDeleteEntryCalories.asStateFlow()

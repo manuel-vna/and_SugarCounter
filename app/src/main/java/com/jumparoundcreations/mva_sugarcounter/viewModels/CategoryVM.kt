@@ -91,6 +91,8 @@ class CategoryVM : ViewModel(), KoinComponent {
             currentTimestamp = 1L,
             date = "",
             category = "",
+            caloriesPerPiece = 0,
+            caloriesAmount = 1,
             caloriesTotal = 0
         )
     )
@@ -214,6 +216,8 @@ class CategoryVM : ViewModel(), KoinComponent {
                 currentTimestamp = 0L,
                 date = "",
                 category = "",
+                caloriesPerPiece = 0,
+                caloriesAmount = 1,
                 caloriesTotal = 0
             )
         }

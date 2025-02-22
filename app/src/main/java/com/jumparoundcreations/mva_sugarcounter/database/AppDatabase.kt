@@ -5,19 +5,28 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 8)
+@Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 9)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-
 
     abstract fun appDao(): DaoAppDatabase
 
     companion object {
+
+        private val migration_8_9 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER calories_table ADD COLUMN 'caloriesPerPiece' INTEGER")
+                db.execSQL("ALTER calories_table ADD COLUMN 'caloriesAmount' INTEGER")
+            }
+        }
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
@@ -30,7 +39,8 @@ abstract class AppDatabase : RoomDatabase() {
                         application.applicationContext,
                         AppDatabase::class.java,
                         "app_database"
-                    ).fallbackToDestructiveMigration()
+                    ).addMigrations(migration_8_9)
+                        .fallbackToDestructiveMigration()
                         .build()
 
                     INSTANCE = instance
