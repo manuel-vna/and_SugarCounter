@@ -22,8 +22,8 @@ abstract class AppDatabase : RoomDatabase() {
 
         private val migration_8_9 = object : Migration(8, 9) {
             override fun migrate(db: SupportSQLiteDatabase) {
-                db.execSQL("ALTER calories_table ADD COLUMN 'caloriesPerPiece' INTEGER")
-                db.execSQL("ALTER calories_table ADD COLUMN 'caloriesAmount' INTEGER")
+                db.execSQL("ALTER TABLE calories_table ADD COLUMN caloriesPerPiece INTEGER DEFAULT 0")
+                db.execSQL("ALTER TABLE calories_table ADD COLUMN caloriesAmount INTEGER DEFAULT 1")
             }
         }
 
