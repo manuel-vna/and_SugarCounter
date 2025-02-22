@@ -112,7 +112,11 @@ fun <T : IEntry> ShowSharedCards(
 
                 is EntryCalories -> {
                     firstColumnText =
-                        it.caloriesAmount.toString() + stringResource(id = R.string.sugar_card_multiplier_expression) + it.caloriesPerPiece.toString()
+                        if (it.caloriesPerPiece == 0) {
+                            stringResource(R.string.general_kcal)
+                        } else {
+                            it.caloriesAmount.toString() + stringResource(id = R.string.sugar_card_multiplier_expression) + it.caloriesPerPiece.toString()
+                        }
                     thirdColumnText = it.caloriesTotal.toString()
                 }
 
