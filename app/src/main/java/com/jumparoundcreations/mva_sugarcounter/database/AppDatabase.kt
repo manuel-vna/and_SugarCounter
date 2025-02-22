@@ -20,7 +20,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     companion object {
 
-        private val migration_8_9 = object : Migration(1, 2) {
+        private val migration_8_9 = object : Migration(8, 9) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER calories_table ADD COLUMN 'caloriesPerPiece' INTEGER")
                 db.execSQL("ALTER calories_table ADD COLUMN 'caloriesAmount' INTEGER")
