@@ -1,4 +1,3 @@
-import java.io.ByteArrayOutputStream
 import java.util.regex.Pattern
 
 plugins {
@@ -30,6 +29,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+            }
         }
 
     }
@@ -74,18 +79,28 @@ android {
     room {
         schemaDirectory("$projectDir/schemas")
     }
+    sourceSets {
+        // Adds exported Room schema location as test app assets.
+        getByName("androidTest").assets.srcDir("$projectDir/schemas")
+    }
 }
 
+// Ensure the folder exists
+tasks.register("ensureSchemaFolder") {
+    doLast {
+        val schemaDir = file("$projectDir/schemas")
+        if (!schemaDir.exists()) {
+            schemaDir.mkdirs()
+        }
+    }
+}
 
 fun getAppGitVersion(): String {
-    println("ABC")
-    val stdout = ByteArrayOutputStream()
-    exec {
+    // ProviderFactory.exec() is from Gradle 8.12+ the recommended Gradle API for executing shell commands within a Gradle build script.
+    val gitVersion = providers.exec {
         commandLine("git", "describe", "--tags", "--long", "--always")
-        standardOutput = stdout
-    }
-    val gitVersion = stdout.toString().trim()
-    println("Print git Version:$gitVersion")
+    }.standardOutput.asText.get().trim()
+    println("Git version: $gitVersion")
     return gitVersion
 }
 
@@ -96,6 +111,7 @@ fun getAppVersionCode(gitVersion: String): Int {
     if (matcher.matches()) {
         versionCode = matcher.group(1)
     }
+    println("Version code: $versionCode")
     return versionCode.toInt()
 }
 
@@ -106,6 +122,7 @@ fun getAppVersionNameValue(gitVersion: String): String {
     if (matcher.matches()) {
         versionName = matcher.group(1)
     }
+    println("Version name: $versionName")
     return versionName
 }
 
