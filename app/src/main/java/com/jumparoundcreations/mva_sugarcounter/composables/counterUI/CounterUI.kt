@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -73,6 +75,7 @@ fun Counter(
                     counterVM.actionChangeCategoryFieldExpanded(false)
                 }
             )
+            .verticalScroll(rememberScrollState())
     ) {
 
         Row(
@@ -100,7 +103,7 @@ fun Counter(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 6.dp, bottom = 16.dp)
+                .padding(top = 4.dp, bottom = 4.dp)
         ) {
 
             CategoryDropdownField(
@@ -119,7 +122,7 @@ fun Counter(
 
         Row(
             modifier = Modifier
-                .padding(top = 16.dp)
+                .padding(top = 8.dp)
                 .fillMaxWidth(),
             Arrangement.SpaceEvenly
         ) {

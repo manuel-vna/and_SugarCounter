@@ -1,11 +1,10 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
@@ -71,8 +70,8 @@ fun CounterCardsAreaUI(
 
     when (segmentedButtonIndex) {
         0 -> {
-            LazyColumn {
-                items(savedSugarCountGrouped) {
+            Column {
+                savedSugarCountGrouped.forEach {
                     ShowSharedCards(
                         entryGroup = it,
                         backgroundColorPrimary = false
@@ -82,8 +81,8 @@ fun CounterCardsAreaUI(
         }
 
         1 -> {
-            LazyColumn {
-                items(savedCaloriesCountGrouped) {
+            Column {
+                savedCaloriesCountGrouped.forEach {
                     ShowSharedCards(
                         entryGroup = it,
                         backgroundColorPrimary = false
@@ -94,6 +93,5 @@ fun CounterCardsAreaUI(
 
         else -> Text("No index")
     }
-
 
 }

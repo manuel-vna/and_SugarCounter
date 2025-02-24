@@ -15,6 +15,10 @@ data class EntryCalories(
     override val date: String,
     @ColumnInfo(name = "category")
     override val category: String,
+    @ColumnInfo(name = "caloriesPerPiece")
+    val caloriesPerPiece: Int,
+    @ColumnInfo(name = "caloriesAmount")
+    val caloriesAmount: Int,
     @ColumnInfo(name = "caloriesTotal")
     val caloriesTotal: Int,
 ) : IEntry

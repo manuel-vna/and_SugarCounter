@@ -88,7 +88,7 @@ class HistoryVM : ViewModel(), KoinComponent {
                 "", "",
                 listOf(
                     EntryCalories(
-                        0, 0, "", "", 0
+                        0, 0, "", "", 0, 1, 0
                     )
                 )
             )
