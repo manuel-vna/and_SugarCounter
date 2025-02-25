@@ -68,9 +68,9 @@
     <string name="faq_answer_seven">Diese App ist keine kommerzielle App. Sie können das Entwicklerteam jedoch durch eine kleine Geldspende unterstützen, damit es die App bestmöglich erweitern und pflegen kann.</string>
     <string name="faq_question_eight">Welches Farbschema hat die App?</string>
     <string name="faq_answer_eight">Die App übernimmt jene Farbeinstellungen, die im Android-System eingestellt werden.</string>
-    <string name="faq_question_nine">Frage 9</string>
-    <string name="faq_answer_nine">TBD</string>
-    <string name="faq_question_ten">Frage 10</string>
+    <string name="faq_question_nine">Welche Motivation steck hinter der Entwicklung dieser App?</string>
+    <string name="faq_answer_nine">Hinter dieser App steckt die Motivation, die von vielen Seiten eompfohlene Obergrenze von 50 Gramm Zucker pro Tag, nicht zu überschreiten. Diese App soll dabei helfen, dieses Ziel zu erreichen. </string>
+    <string name="faq_question_ten">10</string>
     <string name="faq_answer_ten">TBD</string>
     <string name="settings_threshold_title">Tagesobergrenze</string>
     <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
