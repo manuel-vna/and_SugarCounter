@@ -104,7 +104,12 @@ fun SettingsDonationUI(
                     FilledTonalButton(
                         modifier = Modifier.weight(1F),
                         onClick = {
-                            println("To Do: link to buyMeACoffee")
+                            val webPageIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://buymeacoffee.com/manuelva")
+                            )
+                            webPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(webPageIntent)
                         }
                     ) {
                         Text(
