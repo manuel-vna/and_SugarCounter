@@ -59,7 +59,7 @@ fun RowScope.DatePicker(
         Text(
             text = HelperMethods.convertTimestampToDateString(
                 dateOfEntryEpochSec,
-                "EEEE dd.MM.yy"
+                "EEEE dd.MM."
             )
         )
     }
