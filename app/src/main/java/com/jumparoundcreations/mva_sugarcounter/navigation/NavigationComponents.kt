@@ -24,7 +24,6 @@ import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Onboardin
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.PrivacyPolicyUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
-import com.jumparoundcreations.mva_sugarcounter.util.VideoPlayerFullScreen
 
 
 @Composable
@@ -64,11 +63,6 @@ fun NavigationGraph(
         composable(route = NavItem.Onboarding.screenRoute) {
             OnboardingUI(navController)
         }
-        composable(route = NavItem.VideoPlayerFullScreen.screenRoute) {
-            VideoPlayerFullScreen(context, navController)
-        }
-
-
     }
 }
 

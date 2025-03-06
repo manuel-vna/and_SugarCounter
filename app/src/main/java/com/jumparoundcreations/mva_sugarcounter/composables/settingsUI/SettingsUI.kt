@@ -57,7 +57,7 @@ fun Settings(
             )
 
             SettingsSectionBoxUI(
-                title = "Funktionen",
+                title = stringResource(R.string.settings_functions_other_title),
                 sectionRows = listOf(
                     Pair(
                         stringResource(R.string.export_settings_button),

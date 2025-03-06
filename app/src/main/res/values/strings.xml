@@ -105,11 +105,26 @@
     <string name="about_title_privacy_policy">Privacy policy</string>
     <string name="about_title_imprint">Imprint</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
+    <string name="settings_functions_other_title">Functions</string>
     <string name="settings_donation_title">Support developers</string>
     <string name="settings_donation_description">If you like this app, you can send a small donation to the development team. This will help our team to continue working on this and similar apps in the future.</string>
     <string name="settings_donation_paypal">Paypal</string>
     <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
     <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
     <string name="settings_introduction_title">Introduction</string>
+    <string name="settings_intoduction_counter_title">Add sugar</string>
+    <string name="settings_introduction_counter_top">TBD</string>
+    <string name="settings_introduction_counter_middle">TBD</string>
+    <string name="settings_introduction_counter_bottom">TBD</string>
+    <string name="settings_introduction_history_title">TBD</string>
+    <string name="settings_introduction_history_top">TBD</string>
+    <string name="settings_introduction_history_middle">TBD</string>
+    <string name="settings_introduction_history_graph">TBD</string>
+    <string name="settings_introduction_category_title">Look into categories</string>
+    <string name="settings_introduction_category_top">TBD</string>
+    <string name="settings_introduction_category_bottom">TBD</string>
+    <string name="settings_introduction_settings_title">TBD</string>
+    <string name="settings_introduction_settings_top">TBD</string>
+    <string name="settings_introduction_settings_middle">TBD</string>
 
 </resources>
