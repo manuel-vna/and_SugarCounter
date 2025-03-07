@@ -119,13 +119,13 @@
     <string name="settings_introduction_counter_bottom">Die eingetragenen Angaben müssen gespeichert werden. Angaben zum heutigen und gestrigen Tag werden auf dieser Seite angezeigt.\n\nIn diesem Beispiel wurden 2 Stück \'Candy Example\' von jeweils 4 Gramm gegessen, was zusammen 8 Gramm entspricht. Der Haken links unten in der Box zeigt an, dass die gesetzte Zuckerobergrenze für diesen Tag aktuell eingehalten ist.</string>
     <string name="settings_introduction_history_title">Verlauf einsehen</string>
     <string name="settings_introduction_history_top">Die Historie der Einträge wird in Form von Karten dargestellt. Eine Karte beinhaltet die Einträge eines Tages. 80 à 38 bedeutet hierbei 80 Gramm verzehrte Menge à 38g Zucker pro 100 Gramm.</string>
-    <string name="settings_introduction_history_middle">TBD</string>
-    <string name="settings_introduction_history_graph">TBD</string>
+    <string name="settings_introduction_history_middle">Wenn die in den Einstellungen eingetragene Obergrenze überschritten wurde, wird der entsprechende Tag rot umrandet. In diesem Beispiel bedeutet 2 x 4, dass 2 Stück mit jeweils 4 Gramm verzehrt wurden.</string>
+    <string name="settings_introduction_history_graph">Die rote horizontale Linie kennzeichnet die festgelegte Obergrenze. Die blaue Linie kennzeichnet den Verlauf des Verzehrs. </string>
     <string name="settings_introduction_category_title">Kategorien einsehen</string>
-    <string name="settings_introduction_category_top">TBD</string>
-    <string name="settings_introduction_category_bottom">TBD</string>
+    <string name="settings_introduction_category_top">In der oberen Leiste kann mit dem linken Suchsymbol zu einem bestimmten Buchstaben gesprungen werden. Über das Mülleimersymbol können die Kategorien einzeln per Checkbox gelöscht werden. Ein erneutes Klicken auf das Symbol entfernt die Löschansicht wieder.</string>
+    <string name="settings_introduction_category_bottom">Durch Anklicken einer bestimmten Kategorie, öffnet sich ein Fenster in dem Einzelheiten zu dieser Kategorie aufgeführt werden.</string>
     <string name="settings_introduction_settings_title">Einstellungen verfeinern</string>
-    <string name="settings_introduction_settings_top">TBD</string>
-    <string name="settings_introduction_settings_middle">TBD</string>
+    <string name="settings_introduction_settings_top">Zusätzlich zum Erfassen der Zuckerwerte können auch Kalorien gezählt werden. Für Zucker in Gramm (g) und Kalorien in Kilokalorien (kcal) sind Tagesobergrenzen festglelgt, die über den Regler angepasst werden können.</string>
+    <string name="settings_introduction_settings_middle">Die erfassten Einträge können im CSV-Format exportiert werden. Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.</string>
 
 </resources>

@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import de.sldw.composeonboarding.OnboardingPage
-import de.sldw.composeonboarding.PolicyOnboardingPage
 
 class OnboardingPage1(
     private val systemLanguage: String,
@@ -332,7 +331,7 @@ class OnboardingPage3(
 class OnboardingPage4(
     private val systemLanguage: String,
     private val fontColorOnBackground: Color
-) : PolicyOnboardingPage() {
+) : OnboardingPage() {
 
     @Composable
     override fun Content(paddingValues: PaddingValues) {
