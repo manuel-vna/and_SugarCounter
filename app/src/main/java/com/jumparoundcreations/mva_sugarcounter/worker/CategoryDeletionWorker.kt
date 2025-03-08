@@ -14,7 +14,7 @@ class CategoryDeletionWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
 
     private val appDatabase = AppDatabase.getInstance(context)
-    private val MAXIMUM_AMOUNT_CATEGORIES = 100
+    private val MAXIMUM_AMOUNT_CATEGORIES = 5000
     private val AMOUNT_OF_ENTRIES_TO_DELETE = 5
 
     companion object {
