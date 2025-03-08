@@ -113,18 +113,17 @@
     <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
     <string name="settings_introduction_title">Introduction</string>
     <string name="settings_intoduction_counter_title">Add sugar</string>
-    <string name="settings_introduction_counter_top">TBD</string>
-    <string name="settings_introduction_counter_middle">TBD</string>
-    <string name="settings_introduction_counter_bottom">TBD</string>
-    <string name="settings_introduction_history_title">TBD</string>
-    <string name="settings_introduction_history_top">TBD</string>
-    <string name="settings_introduction_history_middle">TBD</string>
-    <string name="settings_introduction_history_graph">TBD</string>
+    <string name="settings_introduction_counter_top">At the top left, you can set the exact day for which the sugar entry should be entered.\n\nAt the top right, an entry can be linked to a barcode so that the sugar values are automatically entered for this category when the barcode is scanned again.\n\nThe food that was eaten can be entered in the \'Category\' field. The user can choose the exact name here. It can be a general name, a brand name or similar.</string>
+    <string name="settings_introduction_counter_middle">When entering the sugar value, it can either be entered per 100g, as this information can usually be found on packaging. In addition, the amount of food consumed must then be entered in grams.\n\nOr the sugar can be entered per piece consumed. Then the number of pieces can also be specified, which is set to 1 by default.</string>
+    <string name="settings_introduction_counter_bottom">The information entered must be saved. Information about today and yesterday is displayed on this page.\n\nIn this example, 2 pieces of \'Candy Example\' of 4 grams each were eaten, which together corresponds to 8 grams. The tick at the bottom left of the box indicates that the upper sugar limit set for this day is currently adhered to.</string>
+    <string name="settings_introduction_history_title">View history</string>
+    <string name="settings_introduction_history_top">The history of entries is displayed in the form of cards. A card contains the entries for one day. 80 à 38 means 80 grams of sugar consumed at 38g per 100 grams.</string>
+    <string name="settings_introduction_history_middle">If the upper limit entered in the settings has been exceeded, the corresponding day is outlined in red. In this example, 2 x 4 means that 2 pieces of 4 grams each have been consumed.</string>
+    <string name="settings_introduction_history_graph">The red horizontal line indicates the defined upper limit. The blue line indicates the course of consumption.</string>
     <string name="settings_introduction_category_title">Look into categories</string>
-    <string name="settings_introduction_category_top">TBD</string>
-    <string name="settings_introduction_category_bottom">TBD</string>
-    <string name="settings_introduction_settings_title">TBD</string>
-    <string name="settings_introduction_settings_top">TBD</string>
-    <string name="settings_introduction_settings_middle">TBD</string>
-
+    <string name="settings_introduction_category_top">In the top bar, you can jump to a specific letter using the search icon on the left. The categories can be deleted individually via the trash can symbol using the checkbox. Clicking on the icon again removes the delete view.</string>
+    <string name="settings_introduction_category_bottom">By clicking on a specific category, a window opens in which details of this category are listed.</string>
+    <string name="settings_introduction_settings_title">Adjust settings</string>
+    <string name="settings_introduction_settings_top">In addition to recording the sugar values, calories can also be counted. Daily upper limits are set for sugar in grams (g) and calories in kilocalories (kcal), which can be adjusted using the slider.</string>
+    <string name="settings_introduction_settings_middle">The recorded entries can be exported in CSV format. Automatic deletion of older entries can also be activated.</string>
 </resources>
