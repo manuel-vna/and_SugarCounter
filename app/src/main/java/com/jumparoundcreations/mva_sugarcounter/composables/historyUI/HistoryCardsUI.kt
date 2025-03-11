@@ -84,8 +84,8 @@ fun CardsScreen(
                         historyCardSearchFieldShown.not()
                     )
                 },
-                modifier = Modifier
-                    .padding(16.dp)
+                modifier = Modifier.padding(16.dp),
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
                 Icon(Icons.Default.Search, contentDescription = "Search")
             }

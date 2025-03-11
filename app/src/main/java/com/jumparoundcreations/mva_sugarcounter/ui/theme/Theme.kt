@@ -15,15 +15,19 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Blue80, //Purple80,
-    secondary = BlueGrey80, //PurpleGrey80,
-    tertiary = White80 //Pink80
+    primary = MintGreen,
+    secondary = BlueGrey80,
+    tertiary = White80,
+    onSecondary = MintGreen,
+    error = Red,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Blue40, //Purple40,
-    secondary = BlueGrey40, //PurpleGrey40,
-    tertiary = White40 //Pink40
+    primary = Green,
+    secondary = PurpleGrey40,
+    tertiary = White40,
+    secondaryContainer = MintGreen,
+    error = Red
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -40,7 +44,7 @@ private val LightColorScheme = lightColorScheme(
 fun Mva_SugarCounterTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -48,7 +52,6 @@ fun Mva_SugarCounterTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
@@ -56,7 +59,6 @@ fun Mva_SugarCounterTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // setAppearanceLightStatusBars(boolean isLight)
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
                 darkTheme.not()
         }

@@ -19,7 +19,9 @@ class MainActivity : ComponentActivity(), KoinComponent {
         enableEdgeToEdge()
 
         setContent {
-            Mva_SugarCounterTheme {
+            Mva_SugarCounterTheme(
+                dynamicColor = false
+            ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
