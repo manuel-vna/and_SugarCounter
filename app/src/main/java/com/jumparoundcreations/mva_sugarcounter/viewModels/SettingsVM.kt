@@ -65,6 +65,12 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val _donationBottomSheetShown = MutableStateFlow(false)
     val donationBottomSheetShown = _donationBottomSheetShown.asStateFlow()
 
+    private val _colorSchemeBottomSheetShown = MutableStateFlow(false)
+    val colorSchemeBottomSheetShown = _colorSchemeBottomSheetShown.asStateFlow()
+
+    private val _dynamicColorActivated = MutableStateFlow(loadShaPrefColorSchemeSwitch())
+    val dynamicColorActivated = _dynamicColorActivated.asStateFlow()
+
     //SateFlows: END
 
     //Actions: START
@@ -226,6 +232,18 @@ class SettingsVM : ViewModel(), KoinComponent {
         _donationBottomSheetShown.value = isShown
     }
 
+    fun actionChangeColorSchemeBottomSheetShown(isShown: Boolean) {
+        _colorSchemeBottomSheetShown.value = isShown
+    }
+
+    fun actionChangeDynamicColorActivated(isActivated: Boolean) {
+        _dynamicColorActivated.value = isActivated
+
+        val editorSharedPrefsMain = sharedPrefsMain.edit()
+        editorSharedPrefsMain.putBoolean("dynamicColorActivated", isActivated)
+        editorSharedPrefsMain.apply()
+    }
+
     //Actions: END
 
     // Loading Shared Preferences: START
@@ -239,6 +257,13 @@ class SettingsVM : ViewModel(), KoinComponent {
     private fun loadShaPrefEntriesDeletionSwitch(): Boolean {
         return sharedPrefsMain.getBoolean(
             "entriesDeletionActivated",
+            false
+        )
+    }
+
+    private fun loadShaPrefColorSchemeSwitch(): Boolean {
+        return sharedPrefsMain.getBoolean(
+            "dynamicColorActivated",
             false
         )
     }

@@ -64,11 +64,16 @@ fun Settings(
                         { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
                     Pair(
                         stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                        { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) })
+                        { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
+                    Pair(
+                        stringResource(R.string.settings_color_scheme_title),
+                        { settingsVM.actionChangeColorSchemeBottomSheetShown(true) })
                 )
             )
 
             SettingsEntriesDeletion(settingsVM = settingsVM)
+
+            SettingsColorScheme(settingsVM = settingsVM)
 
             ExportProgressIndicator(settingsVM = settingsVM)
 
