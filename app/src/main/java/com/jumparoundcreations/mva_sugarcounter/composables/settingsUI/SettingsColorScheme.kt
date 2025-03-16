@@ -37,7 +37,7 @@ fun SettingsColorScheme(settingsVM: SettingsVM) {
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
-                settingsVM.actionChangeEntriesDeletionBottomSheetShown(false)
+                settingsVM.actionChangeColorSchemeBottomSheetShown(false)
             }
         ) {
 
