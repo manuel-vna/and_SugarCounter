@@ -41,7 +41,7 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun Mva_SugarCounterTheme(
+fun SugarCounterTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean,
