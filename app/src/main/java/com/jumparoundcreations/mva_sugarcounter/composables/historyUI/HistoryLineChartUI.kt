@@ -37,7 +37,6 @@ import com.jumparoundcreations.mva_sugarcounter.data.GraphData
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 @Composable
 fun LineChart(
@@ -45,7 +44,7 @@ fun LineChart(
     countMode: HelperMethods.CountMode,
     sugarEntryDbHistory: List<EntryGroup<Entry>>,
     caloriesEntryDbHistory: List<EntryGroup<EntryCalories>>,
-    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     lateinit var graphDataList: List<GraphData>
