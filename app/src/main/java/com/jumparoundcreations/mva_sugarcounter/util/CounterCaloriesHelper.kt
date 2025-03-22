@@ -88,7 +88,7 @@ class CounterCaloriesHelper : KoinComponent {
                             2250
                         )
                     ) {
-                        counterVM._alertCaloriesThreshold.value = true
+                        counterVM.actionChangeAlertCaloriesThreshold(true)
                     }
                 }
 

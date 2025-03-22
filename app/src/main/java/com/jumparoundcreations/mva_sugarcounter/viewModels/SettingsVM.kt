@@ -26,40 +26,40 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val sharedPrefsMain by inject<SharedPreferences>()
 
     //SateFlows: START
-    val _faqExpandedId = MutableStateFlow(-1L)
+    private val _faqExpandedId = MutableStateFlow(-1L)
     var faqSingleSelectMode = _faqExpandedId.asStateFlow()
 
-    val _gramThresholdSlider = MutableStateFlow(0F)
+    private val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
 
-    val _caloriesThresholdSlider = MutableStateFlow(0F)
+    private val _caloriesThresholdSlider = MutableStateFlow(0F)
     val caloriesThresholdSlider = _caloriesThresholdSlider.asStateFlow()
 
-    val _gramThresholDialogCheck = MutableStateFlow(false)
+    private val _gramThresholDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
 
-    val _exportProgressIndicator = MutableStateFlow(0.1f)
+    private val _exportProgressIndicator = MutableStateFlow(0.1f)
     val exportProgressIndicator = _exportProgressIndicator.asStateFlow()
 
-    val _exportProgressIndicatorShown = MutableStateFlow(false)
+    private val _exportProgressIndicatorShown = MutableStateFlow(false)
     val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
 
-    val _dataPreExportBottomSheetShown = MutableStateFlow(false)
+    private val _dataPreExportBottomSheetShown = MutableStateFlow(false)
     val dataPreExportBottomSheetShown = _dataPreExportBottomSheetShown.asStateFlow()
 
-    val _dataSuccessfullyExportedShown = MutableStateFlow(false)
+    private val _dataSuccessfullyExportedShown = MutableStateFlow(false)
     val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
 
-    val _exportSuccessfully = MutableStateFlow(true)
+    private val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
-    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
+    private val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
 
-    val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
+    private val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
     val entriesDeletionBottomSheetShown = _entriesDeletionBottomSheetShown.asStateFlow()
 
-    val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
+    private val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
     val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
 
     private val _donationBottomSheetShown = MutableStateFlow(false)
