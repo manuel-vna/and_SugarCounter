@@ -13,7 +13,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import kotlin.test.assertNotEquals
@@ -28,7 +27,7 @@ class SettingsVMTest : KoinTest {
         startKoin {
             modules(
                 module {
-                    single<SharedPreferences>(qualifier = named("sharedPrefsMain")) {
+                    single<SharedPreferences> {
                         mockkSharedPrefsMain
                     }
                 }

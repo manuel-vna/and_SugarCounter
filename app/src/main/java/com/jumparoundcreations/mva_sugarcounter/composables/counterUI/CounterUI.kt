@@ -35,14 +35,13 @@ import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 
 @Composable
 fun Counter(
     context: Context,
     snackbarHostState: SnackbarHostState,
-    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
     val counterVM: CounterVM = koinViewModel()
 

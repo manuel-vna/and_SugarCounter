@@ -22,14 +22,13 @@ import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 
 @Composable
 fun Settings(
     context: Context,
     navController: NavController,
-    sharedPrefsMain: SharedPreferences = koinInject(qualifier = named("sharedPrefsMain"))
+    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     val settingsVM: SettingsVM = koinViewModel()

@@ -129,5 +129,5 @@
     <string name="settings_introduction_settings_middle">Die erfassten Einträge können im CSV-Format exportiert werden. Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.</string>
     <string name="settings_color_scheme_title">Farben</string>
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
-    <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.\n\nSugarCounter muss neu geöffnet werden, damit die Änderung sichtbar wird.</string>
+    <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>
 </resources>

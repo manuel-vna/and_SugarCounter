@@ -33,7 +33,7 @@ import java.time.ZoneId
 class CounterVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
-    private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
+    private val sharedPrefsMain by inject<SharedPreferences>()
     private val barcodeScanner by inject<GmsBarcodeScanner>(qualifier = named("barcodeScanner"))
 
     // Timestamps: BEGIN
