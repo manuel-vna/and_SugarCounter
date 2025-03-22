@@ -98,12 +98,12 @@ fun <T : IEntry> ShowSharedCards(
                 is Entry -> {
                     firstColumnText = if (it.isPerHundred) {
                         it.perHundredQuantity.toString() +
-                                stringResource(id = R.string.sugar_card_relation_expression) +
-                                it.perHundredGram
+                                stringResource(id = R.string.gram_unit_short)
                     } else {
                         it.perPieceAmount.toString() +
                                 stringResource(id = R.string.sugar_card_multiplier_expression) +
-                                it.perPieceGram.toString()
+                                it.perPieceGram.toString() +
+                                stringResource(id = R.string.gram_unit_short)
                     }
                     thirdColumnText =
                         it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
@@ -188,9 +188,10 @@ fun <T : IEntry> ShowSharedCards(
             Text(
                 modifier = Modifier.padding(end = 8.dp),
                 text =
-                stringResource(id = R.string.totalAmountSugar) + ": " + HelperMethods.calculateTotalGramPerDayBlock(
-                    entryGroup.entryList
-                ),
+                    stringResource(id = R.string.totalAmountSugar) +
+                            stringResource(id = R.string.general_colon_character) +
+                            stringResource(id = R.string.general_whitespace_character) +
+                            HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
                 fontWeight = FontWeight.Bold
             )
         }
@@ -204,9 +205,44 @@ fun <T : IEntry> ShowSharedCards(
 
     if (showDeleteDialog) {
 
+        val dialogDescription: String =
+            when (itemToDeleteIsEntrySugar) {
+                true -> if (itemToDeleteEntrySugar.isPerHundred) itemToDeleteEntrySugar.perHundredGram.toString() +
+                        stringResource(id = R.string.cards_dialog_description_sugar_per_hundred) +
+                        stringResource(id = R.string.cards_dialog_description_at) +
+                        itemToDeleteEntrySugar.perHundredQuantity +
+                        stringResource(id = R.string.cards_dialog_description_sugar_consumed_amount) +
+                        stringResource(id = R.string.cards_dialog_description_sugar_portion) +
+                        itemToDeleteEntrySugar.gramTotal +
+                        stringResource(id = R.string.gram_unit_short)
+                else itemToDeleteEntrySugar.perPieceGram.toString() +
+                        stringResource(id = R.string.cards_dialog_description_sugar_per_piece) +
+                        stringResource(id = R.string.cards_dialog_description_sugar_amount_of) +
+                        itemToDeleteEntrySugar.perPieceAmount +
+                        stringResource(id = R.string.general_whitespace_character) +
+                        stringResource(id = R.string.general_piece) +
+                        stringResource(id = R.string.general_newline_character) +
+                        stringResource(id = R.string.cards_dialog_description_sugar_portion) +
+                        itemToDeleteEntrySugar.gramTotal +
+                        stringResource(id = R.string.gram_unit_short)
+
+                else -> itemToDeleteEntryCalories.caloriesPerPiece.toString() +
+                        stringResource(id = R.string.cards_dialog_description_kcal_per_piece) +
+                        stringResource(id = R.string.cards_dialog_description_sugar_amount_of) +
+                        itemToDeleteEntryCalories.caloriesAmount +
+                        stringResource(id = R.string.general_whitespace_character) +
+                        stringResource(id = R.string.general_piece) +
+                        stringResource(id = R.string.general_whitespace_character) +
+                        stringResource(id = R.string.general_newline_character) +
+                        stringResource(id = R.string.cards_dialog_description_equivalent_to) +
+                        itemToDeleteEntryCalories.caloriesTotal.toString() +
+                        stringResource(id = R.string.general_whitespace_character) +
+                        stringResource(id = R.string.general_kcal)
+            }
+
         ShowAlertDialogDoubleBtn(
             dialogTitle = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar.category else itemToDeleteEntryCalories.category,
-            dialogDescription = stringResource(id = R.string.general_delete_question),
+            dialogDescription = dialogDescription + "\n\n" + stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
                 val itemToDelete =

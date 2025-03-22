@@ -31,6 +31,10 @@
     <string name="general_delete_question">Möchten Sie diesen Eintrag löschen?</string>
     <string name="general_conjunction">\u0020und\u0020</string>
     <string name="general_help">Hilfe</string>
+    <string name="general_piece">Stück</string>
+    <string name="general_newline_character">\n</string>
+    <string name="general_whitespace_character">\u0020</string>
+    <string name="general_colon_character">:</string>
     <string name="alertSugarThresholdTitle">Warnung: Zucker</string>
     <string name="alertCaloriesThresholdTitle">Warnung: Kalorien</string>
     <string name="alertSugarThresholdDescription">Dieser Eintrag würde die Maximalgrenze an Gramm pro Tag übersteigen</string>
@@ -130,4 +134,12 @@
     <string name="settings_color_scheme_title">Farben</string>
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
     <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>
+    <string name="cards_dialog_description_sugar_per_hundred">g Zucker pro 100 Gramm \n</string>
+    <string name="cards_dialog_description_at">bei\u0020</string>
+    <string name="cards_dialog_description_sugar_consumed_amount">g verzehrter Menge \n</string>
+    <string name="cards_dialog_description_sugar_portion">entspricht einem Zuckeranteil von\u0020</string>
+    <string name="cards_dialog_description_sugar_per_piece">g Zucker pro Stück \n</string>
+    <string name="cards_dialog_description_sugar_amount_of">bei einer Anzahl von\u0020</string>
+    <string name="cards_dialog_description_kcal_per_piece">\u0020kcal pro Stück \n</string>
+    <string name="cards_dialog_description_equivalent_to">entspricht\u0020</string>
 </resources>
