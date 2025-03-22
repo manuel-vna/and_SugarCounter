@@ -24,7 +24,7 @@ val appModule = module {
     viewModel { SettingsVM() }
     viewModel { HistoryVM() }
     viewModel { CategoryVM() }
-    single(named("sharedPrefsMain")) { provideSharedPrefsMain(androidApplication()) }
+    single { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
     single(named("privacyPolicy")) { provideHtmlContent(get(), R.raw.privacy_policy) }

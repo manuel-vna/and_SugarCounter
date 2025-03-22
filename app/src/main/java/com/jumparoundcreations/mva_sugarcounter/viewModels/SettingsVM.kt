@@ -4,6 +4,7 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.ExportData
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.named
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
 class SettingsVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
-    private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
+    private val sharedPrefsMain by inject<SharedPreferences>()
 
     //SateFlows: START
     val _faqExpandedId = MutableStateFlow(-1L)
@@ -239,9 +239,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     fun actionChangeDynamicColorActivated(isActivated: Boolean) {
         _dynamicColorActivated.value = isActivated
 
-        val editorSharedPrefsMain = sharedPrefsMain.edit()
-        editorSharedPrefsMain.putBoolean("dynamicColorActivated", isActivated)
-        editorSharedPrefsMain.apply()
+        sharedPrefsMain.edit { putBoolean("dynamicColorActivated", isActivated) }
     }
 
     //Actions: END

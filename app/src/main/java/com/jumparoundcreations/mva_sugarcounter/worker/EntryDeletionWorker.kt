@@ -11,13 +11,12 @@ import androidx.work.WorkerParameters
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import org.koin.core.qualifier.named
 import java.util.concurrent.TimeUnit
 
 class EntryDeletionWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params), KoinComponent {
 
-    private val sharedPrefsMain by inject<SharedPreferences>(qualifier = named("sharedPrefsMain"))
+    private val sharedPrefsMain by inject<SharedPreferences>()
     private val appDatabase = AppDatabase.getInstance(context)
 
     private val deletionPeriod = 94670778 // = three years in seconds
