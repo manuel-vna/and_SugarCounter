@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,7 +60,13 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                 HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            settingsVM.actionChangeEntriesDeletionActivated(
+                                entriesDeletionActivated.not()
+                            )
+                        },
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {

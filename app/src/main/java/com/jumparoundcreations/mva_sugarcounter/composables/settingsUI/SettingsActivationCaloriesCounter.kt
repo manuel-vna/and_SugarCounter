@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,14 +40,17 @@ fun SettingsActivateCaloriesCounter(
     HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { settingsVM.actionChangeCaloriesCounterGeneral(caloriesCounterActivated.not()) },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = stringResource(id = R.string.calories_activation_switch_description)
         )
-        Switch(checked = caloriesCounterActivated,
+        Switch(
+            checked = caloriesCounterActivated,
             onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) })
     }
 
