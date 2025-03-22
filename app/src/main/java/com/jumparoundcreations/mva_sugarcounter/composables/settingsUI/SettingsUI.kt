@@ -4,6 +4,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -57,17 +58,29 @@ fun Settings(
 
             SettingsSectionBoxUI(
                 title = stringResource(R.string.settings_functions_other_title),
-                sectionRows = listOf(
-                    Pair(
-                        stringResource(R.string.export_settings_button),
-                        { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
-                    Pair(
-                        stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                        { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
-                    Pair(
-                        stringResource(R.string.settings_color_scheme_title),
-                        { settingsVM.actionChangeColorSchemeBottomSheetShown(true) })
-                )
+                sectionRows =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // S = Android 12
+                        listOf(
+                            Pair(
+                                stringResource(R.string.export_settings_button),
+                                { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
+                            Pair(
+                                stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
+                                { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
+                            Pair(
+                                stringResource(R.string.settings_color_scheme_title),
+                                { settingsVM.actionChangeColorSchemeBottomSheetShown(true) })
+                        )
+                    } else {
+                        listOf(
+                            Pair(
+                                stringResource(R.string.export_settings_button),
+                                { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
+                            Pair(
+                                stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
+                                { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
+                        )
+                    }
             )
 
             SettingsEntriesDeletion(settingsVM = settingsVM)
