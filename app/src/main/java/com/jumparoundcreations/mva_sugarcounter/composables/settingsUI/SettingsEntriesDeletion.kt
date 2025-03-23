@@ -22,23 +22,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
 
-    val entriesDeletionBottomSheetShown by settingsVM.entriesDeletionBottomSheetShown.collectAsState()
+    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
     val entriesDeletionActivated by settingsVM.entriesDeletionActivated.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
 
-    if (entriesDeletionBottomSheetShown) {
+    if (bottomSheetsSettings == BottomSheetsSettings.ENTRIES_DELETION) {
 
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
-                settingsVM.actionChangeEntriesDeletionBottomSheetShown(false)
+                settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
             }
         ) {
 
@@ -106,7 +107,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedButton(
-                        onClick = { settingsVM.actionChangeEntriesDeletionBottomSheetShown(false) }
+                        onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
                     ) {
                         Text(
                             text = stringResource(R.string.generalClose)

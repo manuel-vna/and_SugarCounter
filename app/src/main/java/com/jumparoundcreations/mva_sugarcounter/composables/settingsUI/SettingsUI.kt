@@ -3,7 +3,6 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -19,17 +18,16 @@ import androidx.navigation.NavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
-import org.koin.compose.koinInject
 
 
 @Composable
 fun Settings(
     context: Context,
     navController: NavController,
-    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     val settingsVM: SettingsVM = koinViewModel()
@@ -63,22 +61,23 @@ fun Settings(
                         listOf(
                             Pair(
                                 stringResource(R.string.export_settings_button),
-                                { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) }),
                             Pair(
                                 stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                                { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) }),
                             Pair(
                                 stringResource(R.string.settings_color_scheme_title),
-                                { settingsVM.actionChangeColorSchemeBottomSheetShown(true) })
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.COLOR_SCHEME) })
+
                         )
                     } else {
                         listOf(
                             Pair(
                                 stringResource(R.string.export_settings_button),
-                                { settingsVM.actionChangeDataPreExportBottomSheetShown(true) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) }),
                             Pair(
                                 stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                                { settingsVM.actionChangeEntriesDeletionBottomSheetShown(true) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) }),
                         )
                     }
             )
@@ -108,7 +107,7 @@ fun Settings(
                     ),
                     Pair(
                         stringResource(R.string.settings_donation_title),
-                        { settingsVM.actionChangeDonationBottomSheetShown(true) }
+                        { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DONATION) }
                     )
                 )
             )

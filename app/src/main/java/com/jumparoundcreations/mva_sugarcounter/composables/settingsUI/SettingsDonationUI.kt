@@ -2,7 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,14 +36,14 @@ fun SettingsDonationUI(
     settingsVM: SettingsVM
 ) {
 
-    val donationBottomSheetShown by settingsVM.donationBottomSheetShown.collectAsState()
+    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (donationBottomSheetShown) {
+    if (bottomSheetsSettings == BottomSheetsSettings.DONATION) {
 
         ModalBottomSheet(
             sheetState = sheetState,
-            onDismissRequest = { settingsVM.actionChangeDonationBottomSheetShown(false) }
+            onDismissRequest = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
         ) {
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp)
@@ -83,7 +84,7 @@ fun SettingsDonationUI(
                         onClick = {
                             val webPageIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG")
+                                "https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG".toUri()
                             )
                             webPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(webPageIntent)
@@ -106,7 +107,7 @@ fun SettingsDonationUI(
                         onClick = {
                             val webPageIntent = Intent(
                                 Intent.ACTION_VIEW,
-                                Uri.parse("https://buymeacoffee.com/manuelva")
+                                "https://buymeacoffee.com/manuelva".toUri()
                             )
                             webPageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(webPageIntent)
@@ -125,7 +126,7 @@ fun SettingsDonationUI(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedButton(
-                        onClick = { settingsVM.actionChangeDonationBottomSheetShown(false) }
+                        onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
                     ) {
                         Text(
                             text = stringResource(R.string.generalClose)
