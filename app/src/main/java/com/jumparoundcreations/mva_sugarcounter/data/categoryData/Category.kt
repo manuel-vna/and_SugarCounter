@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.data
+package com.jumparoundcreations.mva_sugarcounter.data.categoryData
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

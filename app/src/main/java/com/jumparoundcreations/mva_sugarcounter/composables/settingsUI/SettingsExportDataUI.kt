@@ -38,8 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 

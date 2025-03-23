@@ -4,10 +4,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
-import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -31,8 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.Category
-import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 

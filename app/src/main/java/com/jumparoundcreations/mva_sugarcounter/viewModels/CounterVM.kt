@@ -8,12 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.CounterCaloriesHelper
 import com.jumparoundcreations.mva_sugarcounter.util.CounterSugarHelper

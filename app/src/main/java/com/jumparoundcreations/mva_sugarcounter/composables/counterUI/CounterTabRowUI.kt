@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.CounterTabItem
-import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
+import com.jumparoundcreations.mva_sugarcounter.data.counterData.CounterTabItem
+import com.jumparoundcreations.mva_sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 

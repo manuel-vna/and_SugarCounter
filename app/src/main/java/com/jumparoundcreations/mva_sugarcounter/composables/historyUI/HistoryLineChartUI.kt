@@ -33,8 +33,8 @@ import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.GraphData
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
+import com.jumparoundcreations.mva_sugarcounter.data.historyData.GraphData
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.compose.koinInject
 

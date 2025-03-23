@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.data.states
+package com.jumparoundcreations.mva_sugarcounter.data.categoryData
 
 data class CategoryStates(
     val deletionCheckboxesDisplayed: Boolean = false,

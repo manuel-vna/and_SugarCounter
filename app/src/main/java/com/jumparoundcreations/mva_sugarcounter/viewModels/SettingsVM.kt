@@ -7,8 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
