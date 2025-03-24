@@ -47,6 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 lateinit var uri: Uri
 
 
+@SuppressLint("NewApi", "API level check is handled via a Boolean in actionExportEntries()")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPostExportBottomSheet(
