@@ -2,7 +2,11 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
@@ -37,6 +41,7 @@ fun OnboardingUI(navController: NavController) {
         )
 
         ComposeOnboarding(
+            modifier = Modifier.consumeWindowInsets(WindowInsets.systemBars),
             pages = listOf(
                 OnboardingPage1(systemLanguage, fontColorOnBackground),
                 OnboardingPage2(systemLanguage, fontColorOnBackground),
