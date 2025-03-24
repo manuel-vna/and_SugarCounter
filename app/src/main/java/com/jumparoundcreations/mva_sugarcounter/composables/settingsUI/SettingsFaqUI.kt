@@ -38,7 +38,7 @@ fun FAQScreen(navController: NavController) {
 
     val context = LocalContext.current
     val settingsVM: SettingsVM = koinViewModel()
-    val expandedId by settingsVM.faqSingleSelectMode.collectAsState()
+    val expandedId by settingsVM.faqExpandedId.collectAsState()
 
     val darkMode = HelperMethods.checkForUIMode(context)
     var fontColor = Color.Black

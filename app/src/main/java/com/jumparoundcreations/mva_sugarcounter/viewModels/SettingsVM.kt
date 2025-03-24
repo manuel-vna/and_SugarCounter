@@ -28,7 +28,7 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     //SateFlows: START
     private val _faqExpandedId = MutableStateFlow(-1L)
-    var faqSingleSelectMode = _faqExpandedId.asStateFlow()
+    var faqExpandedId = _faqExpandedId.asStateFlow()
 
     private val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()

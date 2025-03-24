@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 
 import android.content.SharedPreferences
 import app.cash.turbine.test
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -46,7 +47,7 @@ class SettingsVMTest : KoinTest {
         val settingsVM = SettingsVM()
 
         //Check
-        assertTrue(settingsVM._faqExpandedId.value == -1L)
+        assertTrue(settingsVM.faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
         assertTrue(settingsVM.caloriesThresholdSlider.value == 0F)
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
@@ -55,7 +56,7 @@ class SettingsVMTest : KoinTest {
         assertTrue(settingsVM.dataSuccessfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
         assertTrue(settingsVM.caloriesCounterActivated.value == false)
-        assertTrue(settingsVM.entriesDeletionBottomSheetShown.value == false)
+        assertTrue(settingsVM.bottomSheetsSettings.value == BottomSheetsSettings.NONE)
         assertTrue(settingsVM.entriesDeletionActivated.value == false)
     }
 
@@ -64,7 +65,7 @@ class SettingsVMTest : KoinTest {
         runTest {
             //Arrange
             val settingsVM = SettingsVM()
-            settingsVM.faqSingleSelectMode.test {
+            settingsVM.faqExpandedId.test {
                 //Check
                 assertEquals(-1L, awaitItem())
                 //Action
@@ -235,13 +236,13 @@ class SettingsVMTest : KoinTest {
             //Arrange
             val settingsVM = SettingsVM()
 
-            settingsVM.entriesDeletionBottomSheetShown.test {
+            settingsVM.bottomSheetsSettings.test {
                 //Check for Initial value
-                assertEquals(false, awaitItem())
+                assertEquals(BottomSheetsSettings.NONE, awaitItem())
                 //Action
-                settingsVM.actionChangeEntriesDeletionBottomSheetShown(true)
+                settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION)
                 //Check
-                assertEquals(true, awaitItem())
+                assertEquals(BottomSheetsSettings.ENTRIES_DELETION, awaitItem())
             }
         }
     }
