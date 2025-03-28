@@ -4,10 +4,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
-import com.jumparoundcreations.mva_sugarcounter.data.states.CategoryStates
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -53,23 +53,23 @@ class CategoryVM : ViewModel(), KoinComponent {
     private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
 
-    val _categoryListScrollState = MutableStateFlow(LazyListState(0, 0))
+    private val _categoryListScrollState = MutableStateFlow(LazyListState(0, 0))
     val categoryListScrollState = _categoryListScrollState.asStateFlow()
 
-    val _scrollSearchMenuExpanded = MutableStateFlow(false)
+    private val _scrollSearchMenuExpanded = MutableStateFlow(false)
     val scrollSearchMenuExpanded = _scrollSearchMenuExpanded.asStateFlow()
 
-    val _deletionCheckboxes = MutableStateFlow(CategoryStates())
+    private val _deletionCheckboxes = MutableStateFlow(CategoryStates())
     val deletionCheckboxes = _deletionCheckboxes.asStateFlow()
 
-    val _categoryBottomSheetShown = MutableStateFlow(false)
+    private val _categoryBottomSheetShown = MutableStateFlow(false)
     val categoryBottomSheetShown = _categoryBottomSheetShown.asStateFlow()
 
-    val _clickedCategory =
+    private val _clickedCategory =
         MutableStateFlow(Category(category = "", deletionCheckbox = false, barcodeNumber = ""))
     val clickedCategory = _clickedCategory.asStateFlow()
 
-    val _entrySugarForClickedCategory = MutableStateFlow(
+    private val _entrySugarForClickedCategory = MutableStateFlow(
         Entry(
             id = 0,
             currentTimestamp = 1L,
@@ -85,7 +85,7 @@ class CategoryVM : ViewModel(), KoinComponent {
     )
     val entrySugarForClickedCategory = _entrySugarForClickedCategory.asStateFlow()
 
-    val _entryCaloriesForClickedCategory = MutableStateFlow(
+    private val _entryCaloriesForClickedCategory = MutableStateFlow(
         EntryCalories(
             id = 0,
             currentTimestamp = 1L,

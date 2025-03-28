@@ -38,7 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
@@ -46,6 +47,7 @@ import org.koin.androidx.compose.koinViewModel
 lateinit var uri: Uri
 
 
+@SuppressLint("NewApi", "API level check is handled via a Boolean in actionExportEntries()")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPostExportBottomSheet(
@@ -55,7 +57,7 @@ fun SettingsPostExportBottomSheet(
     buttonIcon: Int,
 ) {
 
-    val dataPreExportBottomSheetShown by settingsVM.dataPreExportBottomSheetShown.collectAsState()
+    val bottomSheetsSettings = settingsVM.bottomSheetsSettings.collectAsState()
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -64,10 +66,10 @@ fun SettingsPostExportBottomSheet(
         }
     )
 
-    if (dataPreExportBottomSheetShown) {
+    if (bottomSheetsSettings.value == BottomSheetsSettings.DATA_PRE_EXPORT) {
         ModalBottomSheet(
             onDismissRequest = {
-                settingsVM.actionChangeDataPreExportBottomSheetShown(isShown = false)
+                settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
             }
         ) {
 
@@ -106,7 +108,7 @@ fun SettingsPostExportBottomSheet(
                         .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
                         .weight(0.5f),
 
-                    onClick = { settingsVM.actionChangeDataPreExportBottomSheetShown(isShown = false) }
+                    onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
                 ) {
                     Text(
                         text = stringResource(R.string.generalCancel)
@@ -135,7 +137,7 @@ fun SettingsPostExportBottomSheet(
                                 requestPermissionLauncher.launch(input = Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             }
                         }
-                        settingsVM.actionChangeDataPreExportBottomSheetShown(false)
+                        settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
                     }
                 ) {
                     Text(

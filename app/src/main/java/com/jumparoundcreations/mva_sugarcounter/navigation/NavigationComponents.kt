@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -85,7 +86,13 @@ fun BottomNavigation(navController: NavController) {
             NavigationBarItem(
                 selected = currentRoute == item.screenRoute,
                 icon = { Icon(item.icon, contentDescription = stringResource(id = item.title)) },
-                label = { Text(stringResource(id = item.title)) },
+                label = {
+                    Text(
+                        text = stringResource(id = item.title),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                },
                 onClick = {
                     navController.navigate(item.screenRoute) {
                         navController.graph.startDestinationRoute?.let { screenRoute ->

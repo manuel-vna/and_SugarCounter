@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.data
+package com.jumparoundcreations.mva_sugarcounter.data.settingsData
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,6 +7,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
+import com.jumparoundcreations.mva_sugarcounter.data.Entry
+import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
+import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.core.component.KoinComponent

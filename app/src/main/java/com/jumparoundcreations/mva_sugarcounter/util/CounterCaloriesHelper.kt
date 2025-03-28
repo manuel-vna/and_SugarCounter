@@ -3,7 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.SharedPreferences
 import android.util.Log
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -88,7 +88,7 @@ class CounterCaloriesHelper : KoinComponent {
                             2250
                         )
                     ) {
-                        counterVM._alertCaloriesThreshold.value = true
+                        counterVM.actionChangeAlertCaloriesThreshold(true)
                     }
                 }
 

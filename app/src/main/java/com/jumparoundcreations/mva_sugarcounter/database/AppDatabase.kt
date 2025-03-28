@@ -7,9 +7,9 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.util.CustomTypeConverter
 
 @Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 9)

@@ -24,15 +24,12 @@ import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 
 @Composable
 fun History(
     context: Context,
-    sharedPrefsMain: SharedPreferences = koinInject(
-        qualifier = named("sharedPrefsMain")
-    )
+    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     val historyVM: HistoryVM = koinViewModel()

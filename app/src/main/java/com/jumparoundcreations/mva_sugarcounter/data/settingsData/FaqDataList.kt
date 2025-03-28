@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.data
+package com.jumparoundcreations.mva_sugarcounter.data.settingsData
 
 import com.jumparoundcreations.mva_sugarcounter.R
 

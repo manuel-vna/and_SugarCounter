@@ -3,8 +3,8 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.SharedPreferences
 import android.util.Log
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
-import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
+import com.jumparoundcreations.mva_sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -140,7 +140,7 @@ class CounterSugarHelper : KoinComponent {
 
                 withContext(Dispatchers.Main) {
                     if (databaseSum > sharedPrefsMain.getInt("gramThresholdValue", 50)) {
-                        counterVM._alertDialogGramThreshold.value = true
+                        counterVM.actionChangeAlertCaloriesThreshold(true)
                     }
                 }
             }

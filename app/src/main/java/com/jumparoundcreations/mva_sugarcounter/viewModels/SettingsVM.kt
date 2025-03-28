@@ -1,13 +1,14 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
-import android.annotation.TargetApi
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,51 +27,41 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val sharedPrefsMain by inject<SharedPreferences>()
 
     //SateFlows: START
-    val _faqExpandedId = MutableStateFlow(-1L)
-    var faqSingleSelectMode = _faqExpandedId.asStateFlow()
+    private val _faqExpandedId = MutableStateFlow(-1L)
+    var faqExpandedId = _faqExpandedId.asStateFlow()
 
-    val _gramThresholdSlider = MutableStateFlow(0F)
+    private val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
 
-    val _caloriesThresholdSlider = MutableStateFlow(0F)
+    private val _caloriesThresholdSlider = MutableStateFlow(0F)
     val caloriesThresholdSlider = _caloriesThresholdSlider.asStateFlow()
 
-    val _gramThresholDialogCheck = MutableStateFlow(false)
-    val gramThresholdDialogCheck = _gramThresholDialogCheck.asStateFlow()
+    private val _gramThresholdDialogCheck = MutableStateFlow(false)
+    val gramThresholdDialogCheck = _gramThresholdDialogCheck.asStateFlow()
 
-    val _exportProgressIndicator = MutableStateFlow(0.1f)
+    private val _exportProgressIndicator = MutableStateFlow(0.1f)
     val exportProgressIndicator = _exportProgressIndicator.asStateFlow()
 
-    val _exportProgressIndicatorShown = MutableStateFlow(false)
+    private val _exportProgressIndicatorShown = MutableStateFlow(false)
     val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
 
-    val _dataPreExportBottomSheetShown = MutableStateFlow(false)
-    val dataPreExportBottomSheetShown = _dataPreExportBottomSheetShown.asStateFlow()
-
-    val _dataSuccessfullyExportedShown = MutableStateFlow(false)
+    private val _dataSuccessfullyExportedShown = MutableStateFlow(false)
     val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
 
-    val _exportSuccessfully = MutableStateFlow(true)
+    private val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
 
-    val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
+    private val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
     val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
 
-    val _entriesDeletionBottomSheetShown = MutableStateFlow(false)
-    val entriesDeletionBottomSheetShown = _entriesDeletionBottomSheetShown.asStateFlow()
-
-    val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
+    private val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
     val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
-
-    private val _donationBottomSheetShown = MutableStateFlow(false)
-    val donationBottomSheetShown = _donationBottomSheetShown.asStateFlow()
-
-    private val _colorSchemeBottomSheetShown = MutableStateFlow(false)
-    val colorSchemeBottomSheetShown = _colorSchemeBottomSheetShown.asStateFlow()
 
     private val _dynamicColorActivated = MutableStateFlow(loadShaPrefColorSchemeSwitch())
     val dynamicColorActivated = _dynamicColorActivated.asStateFlow()
 
+    private val _bottomSheetsSettings = MutableStateFlow(BottomSheetsSettings.NONE)
+    val bottomSheetsSettings = _bottomSheetsSettings.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -80,18 +71,18 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionUpdateGramThresholdSharedPref() {
-        val editorSharedPrefsMain = sharedPrefsMain.edit()
-        editorSharedPrefsMain.putInt("gramThresholdValue", _gramThresholdSlider.value.toInt())
-        editorSharedPrefsMain.apply()
+        sharedPrefsMain.edit {
+            putInt("gramThresholdValue", _gramThresholdSlider.value.toInt())
+        }
     }
 
     fun actionUpdateCaloriesThresholdSharedPref() {
-        val editorSharedPrefsMain = sharedPrefsMain.edit()
-        editorSharedPrefsMain.putInt(
-            "caloriesThresholdValue",
-            _caloriesThresholdSlider.value.toInt()
-        )
-        editorSharedPrefsMain.apply()
+        sharedPrefsMain.edit {
+            putInt(
+                "caloriesThresholdValue",
+                _caloriesThresholdSlider.value.toInt()
+            )
+        }
     }
 
     fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
@@ -104,7 +95,7 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionGramThresholdDialogCheck(isShown: Boolean) {
-        _gramThresholDialogCheck.value = isShown
+        _gramThresholdDialogCheck.value = isShown
     }
 
     fun actionResetThresholdSliderValuesToSharedPref() {
@@ -118,7 +109,7 @@ class SettingsVM : ViewModel(), KoinComponent {
         ).toFloat()
     }
 
-    @TargetApi(Build.VERSION_CODES.R)
+    @RequiresApi(Build.VERSION_CODES.R)
     fun actionExportEntries(
         context: Context,
         osVersionHigherOrEqualsR: Boolean,
@@ -188,10 +179,6 @@ class SettingsVM : ViewModel(), KoinComponent {
         _exportProgressIndicatorShown.value = isShown
     }
 
-    fun actionChangeDataPreExportBottomSheetShown(isShown: Boolean) {
-        _dataPreExportBottomSheetShown.value = isShown
-    }
-
     fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
         _dataSuccessfullyExportedShown.value = isShown
     }
@@ -204,36 +191,26 @@ class SettingsVM : ViewModel(), KoinComponent {
         _caloriesCounterActivated.value = isActivated
 
         //Save activation boolean in SharedPreferences
-        val editorSharedPrefsMain = sharedPrefsMain.edit()
-        editorSharedPrefsMain.putBoolean(
-            "caloriesCounterActivated",
-            _caloriesCounterActivated.value
-        )
-        editorSharedPrefsMain.apply()
+        sharedPrefsMain.edit {
+            putBoolean(
+                "caloriesCounterActivated",
+                _caloriesCounterActivated.value
+            )
+        }
     }
 
+    /*
     fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
         _caloriesCounterActivated.value = isActivated
     }
-
-    fun actionChangeEntriesDeletionBottomSheetShown(isShown: Boolean) {
-        _entriesDeletionBottomSheetShown.value = isShown
-    }
+     */
 
     fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
         _entriesDeletionActivated.value = isActivated
 
-        val editorSharedPrefsMain = sharedPrefsMain.edit()
-        editorSharedPrefsMain.putBoolean("entriesDeletionActivated", isActivated)
-        editorSharedPrefsMain.apply()
-    }
-
-    fun actionChangeDonationBottomSheetShown(isShown: Boolean) {
-        _donationBottomSheetShown.value = isShown
-    }
-
-    fun actionChangeColorSchemeBottomSheetShown(isShown: Boolean) {
-        _colorSchemeBottomSheetShown.value = isShown
+        sharedPrefsMain.edit {
+            putBoolean("entriesDeletionActivated", isActivated)
+        }
     }
 
     fun actionChangeDynamicColorActivated(isActivated: Boolean) {
@@ -242,10 +219,14 @@ class SettingsVM : ViewModel(), KoinComponent {
         sharedPrefsMain.edit { putBoolean("dynamicColorActivated", isActivated) }
     }
 
+    fun actionChangeBottomSheetsSetting(shownSheet: BottomSheetsSettings) {
+        _bottomSheetsSettings.value = shownSheet
+    }
+
     //Actions: END
 
     // Loading Shared Preferences: START
-    fun loadShaPrefCaloriesCounterSwitch(): Boolean {
+    private fun loadShaPrefCaloriesCounterSwitch(): Boolean {
         return sharedPrefsMain.getBoolean(
             "caloriesCounterActivated",
             false

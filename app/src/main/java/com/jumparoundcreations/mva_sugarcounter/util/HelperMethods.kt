@@ -6,8 +6,8 @@ import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.ExportData.database
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

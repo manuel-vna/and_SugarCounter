@@ -22,23 +22,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsColorScheme(settingsVM: SettingsVM) {
 
-    val colorSchemeBottomSheetShown by settingsVM.colorSchemeBottomSheetShown.collectAsState()
+    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
     val dynamicColorActivated by settingsVM.dynamicColorActivated.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-
-    if (colorSchemeBottomSheetShown) {
+    if (bottomSheetsSettings == BottomSheetsSettings.COLOR_SCHEME) {
 
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
-                settingsVM.actionChangeColorSchemeBottomSheetShown(false)
+                settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
             }
         ) {
 
@@ -95,7 +95,7 @@ fun SettingsColorScheme(settingsVM: SettingsVM) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     OutlinedButton(
-                        onClick = { settingsVM.actionChangeColorSchemeBottomSheetShown(false) }
+                        onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
                     ) {
                         Text(
                             text = stringResource(R.string.generalClose)

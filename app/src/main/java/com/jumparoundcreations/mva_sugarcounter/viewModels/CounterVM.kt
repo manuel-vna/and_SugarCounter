@@ -8,12 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.jumparoundcreations.mva_sugarcounter.data.Category
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
+import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.CounterCaloriesHelper
 import com.jumparoundcreations.mva_sugarcounter.util.CounterSugarHelper
@@ -133,11 +133,11 @@ class CounterVM : ViewModel(), KoinComponent {
     )
     val itemToDeleteEntryCalories = _itemToDeleteEntryCalories.asStateFlow()
 
-    val _alertDialogGramThreshold = MutableStateFlow(false)
+    private val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
 
-    val _alertCaloriesThreshold = MutableStateFlow(false)
-    val alertCaloriesThreshold = _alertCaloriesThreshold.asStateFlow()
+    private val _alertCaloriesThreshold = MutableStateFlow(false)
+    var alertCaloriesThreshold = _alertCaloriesThreshold.asStateFlow()
 
     private val _noBarcodeYetInfoTitle = MutableStateFlow(false)
     val noBarcodeYetInfoTitle = _noBarcodeYetInfoTitle.asStateFlow()
@@ -153,6 +153,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private var _caloriesAmount = MutableStateFlow("")
     val caloriesAmount = _caloriesAmount
+
     private var _segmentedButtonIndex = MutableStateFlow(0)
     val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
     //StateFlow: END
@@ -393,6 +394,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
 
     //Actions Start: User actions reported by the UI to the ViewModel
+
+    fun actionChangeAlertCaloriesThreshold(isActivated: Boolean) {
+        _alertCaloriesThreshold.value = isActivated
+    }
 
     fun actionChangeDatePickerVisibility(datePickerShownValue: Boolean) {
         _datePickerShown.value = datePickerShownValue
