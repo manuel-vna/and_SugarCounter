@@ -59,9 +59,9 @@
     <string name="faq_question_one">Wofür ist diese App gedacht?</string>
     <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch das Aufschreiben des konsumierten Zuckers in Gramm. Zusätzlich können noch die verzehrte Kalorien eingetragen und täglich festgehalten werden.</string>
     <string name="faq_question_two">Ist die App kostenlos nutzbar?</string>
-    <string name="faq_answer_two">Ja, die App ist komplett kostenlos und es wird keine Werbung angezeigt. Die Entwickler der App freuen sich aber über eine kleine Geldpsende.</string>
-    <string name="faq_question_three">Warum müssen die Zuckerwete eines bestimmten Lebensmittels vom Nutzer selbst eingetragen werden?</string>
-    <string name="faq_answer_three">Durch das eigenstädnige Eingeben der Zuckerwerte soll ein besseres Gefühl für den eigenen Zuckerkonsum entstehen.</string>
+    <string name="faq_answer_two">Ja, die App ist komplett kostenlos und es wird keine Werbung angezeigt. Die Entwickler der App freuen sich aber über eine kleine Geldspende.</string>
+    <string name="faq_question_three">Warum müssen die Zuckerwerte eines bestimmten Lebensmittels vom Nutzer selbst eingetragen werden?</string>
+    <string name="faq_answer_three">Durch das eigenständige Eingeben der Zuckerwerte soll ein besseres Gefühl für den eigenen Zuckerkonsum entstehen.</string>
     <string name="faq_question_four">Was bedeutet die beiden Eingabevariante Zucker/100g und Zucker/Stück?</string>
     <string name="faq_answer_four">Für die Variante Zucker/100g kann der Zuckergehalt pro 100g von der Packung abgelesen und im ersten Feld eingetragen werden. Zudem muss die konsumierte Menge angegeben werden. Der Zuckergehalt wird dann automatisch berechnet. Wenn die Zuckermenge eines Produkts auch pro Stück bekannt ist, kann der Zuckergehalt je Teilstück angegeben werden.</string>
     <string name="faq_question_five">Muss ich mich einloggen, um die App zu nutzen?</string>
@@ -72,8 +72,8 @@
     <string name="faq_answer_seven">Diese App ist keine kommerzielle App. Sie können das Entwicklerteam jedoch durch eine kleine Geldspende unterstützen, damit es die App bestmöglich erweitern und pflegen kann.</string>
     <string name="faq_question_eight">Welches Farbschema hat die App?</string>
     <string name="faq_answer_eight">Die App übernimmt jene Farbeinstellungen, die im Android-System eingestellt werden.</string>
-    <string name="faq_question_nine">Welche Motivation steck hinter der Entwicklung dieser App?</string>
-    <string name="faq_answer_nine">Hinter dieser App steckt die Motivation, die von vielen Seiten eompfohlene Obergrenze von 50 Gramm Zucker pro Tag, nicht zu überschreiten. Diese App soll dabei helfen, dieses Ziel zu erreichen.</string>
+    <string name="faq_question_nine">Welche Motivation steckt hinter der Entwicklung dieser App?</string>
+    <string name="faq_answer_nine">Hinter dieser App steckt die Motivation, die von vielen Seiten empfohlene Obergrenze von 50 Gramm Zucker pro Tag, nicht zu überschreiten. Diese App soll dabei helfen, dieses Ziel zu erreichen.</string>
     <string name="faq_question_ten">Warum wird beim Scannen des Barcodes das entsprechende Lebensmittelprodukt mit Zuckerangabe nicht automatisch erkannt?</string>
     <string name="faq_answer_ten">Die Idee dieser App ist, dass sich Nutzer mit Zucker- und/oder Kalorienwerten selbstständig auseinandersetzen. Daher wird auf ein automatisches Laden von Zucker- und/oder Kalorienwerten verzichtet.</string>
     <string name="settings_threshold_title">Tagesobergrenze</string>
@@ -127,7 +127,7 @@
     <string name="settings_introduction_history_graph">Die rote horizontale Linie kennzeichnet die festgelegte Obergrenze. Die blaue Linie kennzeichnet den Verlauf des Verzehrs.</string>
     <string name="settings_introduction_category_title">Kategorien einsehen</string>
     <string name="settings_introduction_category_top">In der oberen Leiste kann mit dem linken Suchsymbol zu einem bestimmten Buchstaben gesprungen werden. Über das Mülleimersymbol können die Kategorien einzeln per Checkbox gelöscht werden. Ein erneutes Klicken auf das Symbol entfernt die Löschansicht wieder.</string>
-    <string name="settings_introduction_category_bottom">Durch Anklicken einer bestimmten Kategorie, öffnet sich ein Fenster in dem Einzelheiten zu dieser Kategorie aufgeführt werden.</string>
+    <string name="settings_introduction_category_bottom">Durch Anklicken einer bestimmten Kategorie öffnet sich ein Fenster in dem Einzelheiten zu dieser Kategorie aufgeführt werden.</string>
     <string name="settings_introduction_settings_title">Einstellungen verfeinern</string>
     <string name="settings_introduction_settings_top">Zusätzlich zum Erfassen der Zuckerwerte können auch Kalorien gezählt werden. Für Zucker in Gramm (g) und Kalorien in Kilokalorien (kcal) sind Tagesobergrenzen festgelegt, die über den Regler angepasst werden können.</string>
     <string name="settings_introduction_settings_middle">Die erfassten Einträge können im CSV-Format exportiert werden. Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.</string>
