@@ -26,12 +26,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.SharedCardItem
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
-import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.SharedVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -42,7 +43,7 @@ fun <T : IEntry> ShowSharedCards(
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    val counterVM: CounterVM = koinViewModel()
+    val sharedVM: SharedVM = koinViewModel()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList)
     var thresholdValue = 0
 
@@ -131,7 +132,7 @@ fun <T : IEntry> ShowSharedCards(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        counterVM.actionShowDeleteAlertDialog(it)
+                        sharedVM.actionShowCardItem(it)
                     },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -198,66 +199,20 @@ fun <T : IEntry> ShowSharedCards(
 
     }
 
-    val showDeleteDialog by counterVM.showDeleteDialog.collectAsState()
-    val itemToDeleteEntrySugar by counterVM.itemToDeleteEntrySugar.collectAsState()
-    val itemToDeleteEntryCalories by counterVM.itemToDeleteEntryCalories.collectAsState()
-    val itemToDeleteIsEntrySugar by counterVM.itemToDeleteIsEntrySugar.collectAsState()
+    // Card Item Bottom Sheet
+    val showCardItemBottomSheet by sharedVM.showCardItemBottomSheet.collectAsState()
+    val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
+    val cardItemToShowCalories by sharedVM.cardItemToShowCalories.collectAsState()
+    val cardItemToShowIsEntrySugar by sharedVM.cardItemToShowIsEntrySugar.collectAsState()
 
-    if (showDeleteDialog) {
-
-        val dialogDescription: String =
-            when (itemToDeleteIsEntrySugar) {
-                true -> if (itemToDeleteEntrySugar.isPerHundred) itemToDeleteEntrySugar.perHundredGram.toString() +
-                        stringResource(id = R.string.cards_dialog_description_sugar_per_hundred) +
-                        stringResource(id = R.string.cards_dialog_description_at) +
-                        itemToDeleteEntrySugar.perHundredQuantity +
-                        stringResource(id = R.string.cards_dialog_description_sugar_consumed_amount) +
-                        stringResource(id = R.string.cards_dialog_description_sugar_portion) +
-                        itemToDeleteEntrySugar.gramTotal +
-                        stringResource(id = R.string.gram_unit_short)
-                else itemToDeleteEntrySugar.perPieceGram.toString() +
-                        stringResource(id = R.string.cards_dialog_description_sugar_per_piece) +
-                        stringResource(id = R.string.cards_dialog_description_sugar_amount_of) +
-                        itemToDeleteEntrySugar.perPieceAmount +
-                        stringResource(id = R.string.general_whitespace_character) +
-                        stringResource(id = R.string.general_piece) +
-                        stringResource(id = R.string.general_newline_character) +
-                        stringResource(id = R.string.cards_dialog_description_sugar_portion) +
-                        itemToDeleteEntrySugar.gramTotal +
-                        stringResource(id = R.string.gram_unit_short)
-
-                else -> itemToDeleteEntryCalories.caloriesPerPiece.toString() +
-                        stringResource(id = R.string.cards_dialog_description_kcal_per_piece) +
-                        stringResource(id = R.string.cards_dialog_description_sugar_amount_of) +
-                        itemToDeleteEntryCalories.caloriesAmount +
-                        stringResource(id = R.string.general_whitespace_character) +
-                        stringResource(id = R.string.general_piece) +
-                        stringResource(id = R.string.general_whitespace_character) +
-                        stringResource(id = R.string.general_newline_character) +
-                        stringResource(id = R.string.cards_dialog_description_equivalent_to) +
-                        itemToDeleteEntryCalories.caloriesTotal.toString() +
-                        stringResource(id = R.string.general_whitespace_character) +
-                        stringResource(id = R.string.general_kcal)
-            }
-
-        ShowAlertDialogDoubleBtn(
-            dialogTitle = if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar.category else itemToDeleteEntryCalories.category,
-            dialogDescription = dialogDescription + "\n\n" + stringResource(id = R.string.general_delete_question),
-            confirmBtnText = stringResource(id = R.string.general_delete),
-            confirmBtnAction = {
-                val itemToDelete =
-                    if (itemToDeleteIsEntrySugar) itemToDeleteEntrySugar else itemToDeleteEntryCalories
-                counterVM.actionDeleteSpecificEntryRow(itemToDelete.id)
-                counterVM.actionDismissDeleteAlertDialog()
-            },
-            dismissBtnText = stringResource(R.string.generalCancel),
-            dismissBtnAction = {
-                counterVM.actionDismissDeleteAlertDialog()
-            },
-            onDismissRequest = { counterVM.actionDismissDeleteAlertDialog() }
+    if (showCardItemBottomSheet) {
+        SharedCardItem(
+            isEntrySugar = cardItemToShowIsEntrySugar,
+            entrySugar = cardItemToShowSugar,
+            entryCalories = cardItemToShowCalories
         )
-
     }
+
 }
 
 

@@ -37,7 +37,7 @@ fun CounterCardsAreaUI(
 
         val buttonOptions = listOf(
             stringResource(id = R.string.general_sugar),
-            stringResource(id = R.string.general_calories)
+            stringResource(id = R.string.general_calories_uppercase)
         )
         var selectedIndex by remember { mutableIntStateOf(0) }
 

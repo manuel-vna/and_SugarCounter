@@ -32,7 +32,7 @@ fun SettingsSharedSliderThreshold(
 
     val title = stringResource(id = R.string.settings_threshold_title)
     val titleSugar = stringResource(id = R.string.general_sugar)
-    val titleCalories = stringResource(R.string.general_calories)
+    val titleCalories = stringResource(R.string.general_calories_uppercase)
     val gramSliderValueRange = 0f..100f
     val caloriesSliderValueRange = 500f..4000f
     val unitOfMeasureGram = stringResource(id = R.string.general_gram)

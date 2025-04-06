@@ -12,6 +12,7 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.SharedVM
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -24,6 +25,7 @@ val appModule = module {
     viewModel { SettingsVM() }
     viewModel { HistoryVM() }
     viewModel { CategoryVM() }
+    viewModel { SharedVM() }
     single { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
