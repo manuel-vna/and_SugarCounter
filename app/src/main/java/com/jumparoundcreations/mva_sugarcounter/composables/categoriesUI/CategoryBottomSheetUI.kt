@@ -85,7 +85,7 @@ fun CategoryBottomSheet() {
                         Text(
                             modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
                             text = stringResource(
-                                R.string.calories_textfield_title
+                                R.string.general_calories_lowercase
                             )
                         )
                         Text(

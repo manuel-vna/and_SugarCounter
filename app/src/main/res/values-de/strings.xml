@@ -25,10 +25,12 @@
     <string name="general_gram">Gramm</string>
     <string name="general_kcal">Kilokalorien</string>
     <string name="general_delete">Löschen</string>
+    <string name="general_edit">Editieren</string>
     <string name="general_error">Error</string>
     <string name="general_sugar">Zucker</string>
-    <string name="general_calories">Kalorien</string>
-    <string name="general_delete_question">Möchten Sie diesen Eintrag löschen?</string>
+    <string name="general_calories_uppercase">Kalorien</string>
+    <string name="general_calories_lowercase">Kalorien</string>
+    <string name="general_delete_question">Wirklich löschen?</string>
     <string name="general_conjunction">\u0020und\u0020</string>
     <string name="general_help">Hilfe</string>
     <string name="general_piece">Stück</string>
@@ -97,7 +99,6 @@
     <string name="export_data_error_message">Leider konnten die Zuckereinträge nicht in einer Datei gespeichert werden. Bitte erneut versuchen.</string>
     <string name="calories_activation_switch_title">Kalorienzähler</string>
     <string name="calories_activation_switch_description">Ein- &amp; Ausschalten</string>
-    <string name="calories_textfield_title">Kalorien</string>
     <string name="calories_textfield_placeholder">kcal</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
@@ -134,12 +135,5 @@
     <string name="settings_color_scheme_title">Farben</string>
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
     <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>
-    <string name="cards_dialog_description_sugar_per_hundred">g Zucker pro 100 Gramm \n</string>
-    <string name="cards_dialog_description_at">bei\u0020</string>
-    <string name="cards_dialog_description_sugar_consumed_amount">g verzehrter Menge \n</string>
-    <string name="cards_dialog_description_sugar_portion">entspricht einem Zuckeranteil von\u0020</string>
-    <string name="cards_dialog_description_sugar_per_piece">g Zucker pro Stück \n</string>
-    <string name="cards_dialog_description_sugar_amount_of">bei einer Anzahl von\u0020</string>
-    <string name="cards_dialog_description_kcal_per_piece">\u0020kcal pro Stück \n</string>
-    <string name="cards_dialog_description_equivalent_to">entspricht\u0020</string>
+    <string name="card_item_detail_view_heading">Editieren / Löschen</string>
 </resources>

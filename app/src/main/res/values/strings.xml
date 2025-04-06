@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">SugarCounter</string>
-    <string name="foodType">Category</string>
+    <string name="foodType">category</string>
     <string name="gramSugar"> sugar per piece</string>
     <string name="quantitySugar">consumed quantity</string>
     <string name="gramPerHundredLabel">sugar per 100g</string>
@@ -24,10 +24,12 @@
     <string name="general_gram">gram</string>
     <string name="general_kcal">kcal</string>
     <string name="general_delete">Delete</string>
+    <string name="general_edit">Edit</string>
     <string name="general_error">Error</string>
     <string name="general_sugar">Sugar</string>
-    <string name="general_calories">Calories</string>
-    <string name="general_delete_question">Do you want to delete this item?</string>
+    <string name="general_calories_uppercase">Calories</string>
+    <string name="general_calories_lowercase">calories</string>
+    <string name="general_delete_question">Are you sure?</string>
     <string name="general_conjunction">\sand\s</string>
     <string name="general_help">Help</string>
     <string name="general_piece">Stück</string>
@@ -96,7 +98,6 @@
     <string name="export_data_error_message">Unfortunately, the sugar entries could not be saved in a file. Please try again.</string>
     <string name="calories_activation_switch_title">Calories Counter</string>
     <string name="calories_activation_switch_description">Switch on/off</string>
-    <string name="calories_textfield_title">Calories</string>
     <string name="calories_textfield_placeholder">kcal</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">No entry data found for the given category</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
@@ -133,12 +134,5 @@
     <string name="settings_color_scheme_title">Color scheme</string>
     <string name="settings_use_dynamic_colors_from_os">Android color scheme</string>
     <string name="settings_use_dynamic_colors_from_os_description">If you set this switch, the SugarCounter app will use the color scheme that you have set in the Android operating system in the settings.</string>
-    <string name="cards_dialog_description_sugar_per_hundred"></string>
-    <string name="cards_dialog_description_at"></string>
-    <string name="cards_dialog_description_sugar_consumed_amount"></string>
-    <string name="cards_dialog_description_sugar_portion"></string>
-    <string name="cards_dialog_description_sugar_per_piece"></string>
-    <string name="cards_dialog_description_sugar_amount_of"></string>
-    <string name="cards_dialog_description_kcal_per_piece"></string>
-    <string name="cards_dialog_description_equivalent_to"></string>
+    <string name="card_item_detail_view_heading">Edit / Delete</string>
 </resources>

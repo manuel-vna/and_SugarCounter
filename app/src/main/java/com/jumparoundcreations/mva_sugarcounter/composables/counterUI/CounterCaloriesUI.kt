@@ -55,7 +55,7 @@ fun CounterCaloriesUI(
 
                 Text(
                     modifier = Modifier.padding(4.dp),
-                    text = stringResource(id = R.string.calories_textfield_title),
+                    text = stringResource(id = R.string.general_calories_lowercase),
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium
                 )

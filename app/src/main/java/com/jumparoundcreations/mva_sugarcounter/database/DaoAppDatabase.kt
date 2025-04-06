@@ -12,10 +12,37 @@ import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 @Dao
 interface DaoAppDatabase {
 
-    // Entries
+    // Sugar
 
     @Insert
     fun insertEntry(vararg sugarCounter: Entry)
+
+    @Query(
+        "UPDATE entry_table SET " +
+                "category = :category, perHundredGram = :perHundredGram, " +
+                "perHundredQuantity = :perHundredQuantity, gramTotal = :gramTotal " +
+                "WHERE id = :id"
+    )
+    fun updateEntrySugarPerHundred(
+        id: Int,
+        category: String,
+        perHundredGram: Int,
+        perHundredQuantity: Int,
+        gramTotal: Int
+    )
+
+    @Query(
+        "UPDATE entry_table SET " +
+                "category = :category,perPieceGram= :perPieceGram, " +
+                "perPieceAmount = :perPieceAmount, gramTotal = :gramTotal " +
+                "WHERE id = :id"
+    )
+    fun updateEntrySugarPerPiece(
+        id: Int, category: String,
+        perPieceGram: Int,
+        perPieceAmount: Int,
+        gramTotal: Int
+    )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
     @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
@@ -95,6 +122,19 @@ interface DaoAppDatabase {
 
     @Insert
     fun insertEntryCalories(vararg caloriesEntry: EntryCalories)
+
+    @Query(
+        "UPDATE calories_table SET " +
+                "category = :category,caloriesPerPiece = :caloriesPerPiece, " +
+                "caloriesAmount = :caloriesAmount, caloriesTotal = :caloriesTotal" +
+                " WHERE id = :id"
+    )
+    fun updateEntryCalories(
+        id: Int, category: String,
+        caloriesPerPiece: Int,
+        caloriesAmount: Int,
+        caloriesTotal: Int
+    )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
     @Query("""SELECT * FROM calories_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)

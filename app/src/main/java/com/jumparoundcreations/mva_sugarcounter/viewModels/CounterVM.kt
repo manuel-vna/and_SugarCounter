@@ -11,7 +11,6 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
@@ -102,36 +101,6 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val _noDataForChosenCategorySnackbarShown = MutableStateFlow(false)
     val noDataForChosenCategorySnackbarShown = _noDataForChosenCategorySnackbarShown.asStateFlow()
-
-    private val _showDeleteDialog = MutableStateFlow(false)
-    val showDeleteDialog = _showDeleteDialog.asStateFlow()
-
-    private val _itemToDeleteIsEntrySugar = MutableStateFlow(false)
-    val itemToDeleteIsEntrySugar = _itemToDeleteIsEntrySugar.asStateFlow()
-
-
-    private val _categoryItemDeleteObject = MutableStateFlow(
-        Entry(
-            0, 0, "", "", true,
-            0, 0, 0, 0, 0
-        )
-    )
-    val categoryItemDeleteObject = _categoryItemDeleteObject.asStateFlow()
-
-    private val _itemToDeleteEntrySugar = MutableStateFlow(
-        Entry(
-            0, 0, "", "", true,
-            0, 0, 0, 0, 0
-        )
-    )
-    val itemToDeleteEntrySugar = _itemToDeleteEntrySugar.asStateFlow()
-
-    private val _itemToDeleteEntryCalories = MutableStateFlow(
-        EntryCalories(
-            0, 0, "", "", 0, 1, 0
-        )
-    )
-    val itemToDeleteEntryCalories = _itemToDeleteEntryCalories.asStateFlow()
 
     private val _alertDialogGramThreshold = MutableStateFlow(false)
     val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
@@ -278,7 +247,7 @@ class CounterVM : ViewModel(), KoinComponent {
             )
             val databaseSumCalories =
                 database.appDao().checkIfCaloriesThresholdIsBreached(dateString) ?: 0
-            Log.d("tag", "DatabaseSumCalories: " + databaseSumCalories)
+            Log.d("tag", "DatabaseSumCalories: $databaseSumCalories")
 
 
             withContext(Dispatchers.Main) {
@@ -409,38 +378,6 @@ class CounterVM : ViewModel(), KoinComponent {
 
     fun actionNoDataForChosenCategorySnackbarShownChange(isShown: Boolean) {
         _noDataForChosenCategorySnackbarShown.value = isShown
-    }
-
-    fun actionShowDeleteAlertDialog(item: IEntry) {
-        when (item) {
-            is Entry -> {
-                _itemToDeleteIsEntrySugar.value = true
-                _itemToDeleteEntrySugar.value = item
-                _categoryItemDeleteObject.value = item
-            }
-
-            is EntryCalories -> {
-                _itemToDeleteIsEntrySugar.value = false
-                _itemToDeleteEntryCalories.value = item
-            }
-
-            else -> Log.d("DeleteAlertDialog", "Delete action did not work")
-        }
-        _showDeleteDialog.value = true
-    }
-
-    fun actionDismissDeleteAlertDialog() {
-        _showDeleteDialog.value = false
-    }
-
-    fun actionDeleteSpecificEntryRow(id: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (_itemToDeleteIsEntrySugar.value) {
-                database.appDao().deleteSpecificEntryRow(id)
-            } else {
-                database.appDao().deleteSpecificEntryCaloriesRow(id)
-            }
-        }
     }
 
     fun actionChangeSelectedCategory(categorySelected: String) {
