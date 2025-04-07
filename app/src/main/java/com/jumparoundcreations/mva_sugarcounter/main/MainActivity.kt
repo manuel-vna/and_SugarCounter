@@ -12,7 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.ui.theme.SugarCounterTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -56,6 +61,8 @@ class MainActivity : ComponentActivity(), KoinComponent,
                 }
             }
         }
+        val appDatabase = AppDatabase.getInstance(applicationContext)
+        testing(appDatabase)
     }
 
     override fun onDestroy() {
@@ -63,4 +70,24 @@ class MainActivity : ComponentActivity(), KoinComponent,
         sharedPrefsMain.unregisterOnSharedPreferenceChangeListener(this)
     }
 
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun testing(appDatabase: AppDatabase) {
+    GlobalScope.launch(Dispatchers.IO) {
+
+        val entriesSugarToBeDeleted = appDatabase.appDao()
+            .getEntriesSugarToBeDeleted((System.currentTimeMillis() / 1000) - 86400)
+        println("entriesSugarToBeDeleted: " + entriesSugarToBeDeleted)
+        val sugarCategoriesExisting =
+            appDatabase.appDao().getExistingCategories(entriesSugarToBeDeleted)
+        val categoriesToBeDeletedOne = entriesSugarToBeDeleted.subtract(sugarCategoriesExisting)
+        println("categoriesToBeDeleted: " + categoriesToBeDeletedOne)
+
+
+        val entriesCaloriesToBeDeleted = appDatabase.appDao()
+            .getEntriesCaloriesToBeDeleted((System.currentTimeMillis() / 1000) - 86400)
+
+
+    }
 }

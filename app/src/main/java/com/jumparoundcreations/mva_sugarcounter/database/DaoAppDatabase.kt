@@ -51,6 +51,12 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM entry_table""")
     fun getAllEntries(): List<Entry>
 
+    @Query("SELECT category FROM entry_table WHERE currentTimestamp < :deletionPointintime")
+    fun getEntriesSugarToBeDeleted(deletionPointintime: Long): List<String>
+
+    @Query("SELECT category FROM entry_table WHERE category IN (:categoryNames)")
+    fun getExistingCategories(categoryNames: List<String>): List<String>
+
     @Query("""DELETE FROM entry_table WHERE id = :id""")
     fun deleteSpecificEntryRow(id: Int)
 
@@ -142,6 +148,9 @@ interface DaoAppDatabase {
 
     @Query("""SELECT * FROM calories_table""")
     fun getAllEntriesCalories(): List<EntryCalories>
+
+    @Query("SELECT category FROM calories_table WHERE currentTimestamp < :deletionPointintime")
+    fun getEntriesCaloriesToBeDeleted(deletionPointintime: Long): List<String>
 
     @Query("""DELETE FROM calories_table WHERE id = :id""")
     fun deleteSpecificEntryCaloriesRow(id: Int)
