@@ -53,9 +53,10 @@ class EntryDeletionWorker(context: Context, params: WorkerParameters) :
                 (System.currentTimeMillis() / 1000) - deletionPeriod
 
             //Get Entries that will be deleted
-            val sugarEntries = appDatabase.appDao().getEntriesSugarToBeDeleted(deletionPointInTime)
+            val sugarEntries =
+                appDatabase.appDao().getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
             val caloriesEntries =
-                appDatabase.appDao().getEntriesCaloriesToBeDeleted(deletionPointInTime)
+                appDatabase.appDao().getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
             val allEntriesToBeDeleted = sugarEntries + caloriesEntries
 
             //TBD: Check if there are any other entries in the database for these IDS:

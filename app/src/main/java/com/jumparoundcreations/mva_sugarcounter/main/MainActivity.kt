@@ -76,18 +76,52 @@ class MainActivity : ComponentActivity(), KoinComponent,
 fun testing(appDatabase: AppDatabase) {
     GlobalScope.launch(Dispatchers.IO) {
 
-        val entriesSugarToBeDeleted = appDatabase.appDao()
-            .getEntriesSugarToBeDeleted((System.currentTimeMillis() / 1000) - 86400)
-        println("entriesSugarToBeDeleted: " + entriesSugarToBeDeleted)
-        val sugarCategoriesExisting =
-            appDatabase.appDao().getExistingCategories(entriesSugarToBeDeleted)
-        val categoriesToBeDeletedOne = entriesSugarToBeDeleted.subtract(sugarCategoriesExisting)
-        println("categoriesToBeDeleted: " + categoriesToBeDeletedOne)
+        val deletionPointInTime = (System.currentTimeMillis() / 1000) - 86400
 
+        // SugarEntries: START
+        val categoriesOfSugarEntriesToBeDeleted = appDatabase.appDao()
+            .getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
+        println("categoriesOfSugarEntriesToBeDeleted: " + categoriesOfSugarEntriesToBeDeleted)
 
-        val entriesCaloriesToBeDeleted = appDatabase.appDao()
-            .getEntriesCaloriesToBeDeleted((System.currentTimeMillis() / 1000) - 86400)
+        val categoryExistsInMoreThanOneEntryRow = categoriesOfSugarEntriesToBeDeleted.map {
+            Pair(
+                first = it,
+                second = appDatabase.appDao()
+                    .checkIfCategoryIsPresentSinceInSugarTable(it, deletionPointInTime)
+            )
+        }
+        println("categoryExistsInMoreThanOneEntryRow: " + categoryExistsInMoreThanOneEntryRow)
 
+        val categoriesToBeDeletedFromSugarEntries = categoryExistsInMoreThanOneEntryRow.filter {
+            it.second.not()
+        }.map { it.first }
+        println("categoriesToBeDeletedFromSugarEntries: " + categoriesToBeDeletedFromSugarEntries)
+        // SugarEntries: END
+
+        //CaloriesEntries: START
+        val categoriesOfCaloriesEntriesToBeDeleted = appDatabase.appDao()
+            .getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
+        println("categoriesOfCaloriesEntriesToBeDeleted: " + categoriesOfCaloriesEntriesToBeDeleted)
+
+        val categoryExistsInMoreThanOneCaloriesRow = categoriesOfCaloriesEntriesToBeDeleted.map {
+            Pair(
+                first = it,
+                second = appDatabase.appDao()
+                    .checkIfCategoryIsPresentSinceInCaloriesTable(it, deletionPointInTime)
+            )
+        }
+        println("categoryExistsInMoreThanOneCaloriesRows: " + categoryExistsInMoreThanOneCaloriesRow)
+
+        val categoriesToBeDeletedFromCaloriesEntries =
+            categoryExistsInMoreThanOneCaloriesRow.filter {
+                it.second.not()
+            }.map { it.first }
+        println("categoriesToBeDeletedFromCaloriesEntries: " + categoriesToBeDeletedFromCaloriesEntries)
+        //CaloriesEntries: END
+
+        val categoriesToBeDeletedOverall =
+            categoriesToBeDeletedFromSugarEntries + categoriesToBeDeletedFromCaloriesEntries
+        println(categoriesToBeDeletedOverall)
 
     }
 }
