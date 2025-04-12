@@ -62,6 +62,9 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     private val _bottomSheetsSettings = MutableStateFlow(BottomSheetsSettings.NONE)
     val bottomSheetsSettings = _bottomSheetsSettings.asStateFlow()
+
+    private val _deletionWorkerSlider = MutableStateFlow(3F)
+    val deletionWorkerSlider = _deletionWorkerSlider.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -107,6 +110,13 @@ class SettingsVM : ViewModel(), KoinComponent {
             "caloriesThresholdValue",
             2250
         ).toFloat()
+    }
+
+    fun actionUpdateDeletionWorkerSlider(sliderPosition: Float) {
+        _deletionWorkerSlider.value = sliderPosition
+        sharedPrefsMain.edit {
+            putInt("automaticDeletionValue", sliderPosition.toInt())
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

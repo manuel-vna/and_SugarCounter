@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity(), KoinComponent,
             }
         }
         val appDatabase = AppDatabase.getInstance(applicationContext)
-        testing(appDatabase)
+        //testing(appDatabase)
     }
 
     override fun onDestroy() {
@@ -76,9 +76,10 @@ class MainActivity : ComponentActivity(), KoinComponent,
 fun testing(appDatabase: AppDatabase) {
     GlobalScope.launch(Dispatchers.IO) {
 
-        val deletionPointInTime = (System.currentTimeMillis() / 1000) - 86400
+        //86400 = one day in seconds, 172800 = 2 days in seconds
+        val deletionPointInTime = (System.currentTimeMillis() / 1000) - 172800
 
-        // SugarEntries: START
+        //<editor-fold desc="SugarEntries">
         val categoriesOfSugarEntriesToBeDeleted = appDatabase.appDao()
             .getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
         println("categoriesOfSugarEntriesToBeDeleted: " + categoriesOfSugarEntriesToBeDeleted)
@@ -96,9 +97,9 @@ fun testing(appDatabase: AppDatabase) {
             it.second.not()
         }.map { it.first }
         println("categoriesToBeDeletedFromSugarEntries: " + categoriesToBeDeletedFromSugarEntries)
-        // SugarEntries: END
+        //</editor-fold>
 
-        //CaloriesEntries: START
+        //<editor-fold desc="CaloriesEntries">
         val categoriesOfCaloriesEntriesToBeDeleted = appDatabase.appDao()
             .getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
         println("categoriesOfCaloriesEntriesToBeDeleted: " + categoriesOfCaloriesEntriesToBeDeleted)
@@ -117,11 +118,29 @@ fun testing(appDatabase: AppDatabase) {
                 it.second.not()
             }.map { it.first }
         println("categoriesToBeDeletedFromCaloriesEntries: " + categoriesToBeDeletedFromCaloriesEntries)
-        //CaloriesEntries: END
+        //</editor-fold>
 
+        //<editor-fold desc="Deletion of Categories">
         val categoriesToBeDeletedOverall =
             categoriesToBeDeletedFromSugarEntries + categoriesToBeDeletedFromCaloriesEntries
         println(categoriesToBeDeletedOverall)
+
+        println("Deleted categories:")
+        categoriesToBeDeletedOverall.forEach {
+            appDatabase.appDao().deleteSpecificCategoryByName(it)
+            println(it)
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Deletion of Sugar Entries">
+        appDatabase.appDao().deleteEntriesSugarOlderThanN(deletionPointInTime)
+        println("Sugar Entries were deleted")
+        //</editor-fold>
+
+        //<editor-fold desc="Deletion of Calories Entries">
+        appDatabase.appDao().deleteEntriesCaloriesOlderThanN(deletionPointInTime)
+        println("Calories Entries were deleted")
+        //</editor-fold>
 
     }
 }
