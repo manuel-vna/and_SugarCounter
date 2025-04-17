@@ -34,7 +34,7 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
     private val deletionPeriod = automaticDeletionValueMapping[automaticDeletionValue] ?: 94670778
 
     companion object {
-        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
+        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 1L
         fun scheduleDeletionWorker(context: Context) {
 
             val constraints = Constraints.Builder()
@@ -44,7 +44,8 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
             val workRequest =
                 PeriodicWorkRequestBuilder<DeletionWorker>(
                     WORK_REPEAT_INTERVAL_IN_DAYS,
-                    TimeUnit.DAYS
+                    //TimeUnit.DAYS
+                    TimeUnit.HOURS
                 )
                     .setConstraints(constraints)
                     .build()
