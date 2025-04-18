@@ -137,6 +137,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.truth)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.work.testing)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.accompanist.webview)
@@ -175,6 +176,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.api)
     testImplementation(libs.junitFive.android.core)
     testRuntimeOnly(libs.junitFive.test.runner)
+    testRuntimeOnly(libs.junit.vintage.engine) // for usage of junit4 along junit5, remove when no more junit4 tests exist
     testRuntimeOnly(libs.junit.jupiter.engine)
     ksp(libs.androidx.room.compiler)
 
