@@ -8,22 +8,22 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import java.util.concurrent.TimeUnit
 
-class DeletionWorker(context: Context, params: WorkerParameters) :
-    CoroutineWorker(context, params), KoinComponent {
-
-    private val sharedPrefsMain by inject<SharedPreferences>()
-    private val appDatabase = AppDatabase.getInstance(context)
+class DeletionWorker(
+    context: Context,
+    params: WorkerParameters,
+    private val dao: DaoAppDatabase,
+    private val sharedPrefsMain: SharedPreferences
+) : CoroutineWorker(context, params), KoinComponent {
 
     val automaticDeletionValue = sharedPrefsMain.getInt("automaticDeletionValue", 3)
     val automaticDeletionValueMapping = mapOf(
-        0 to 15778463, // 1/2 year
-        1 to 31556926, // 1 year
-        2 to 63113852, // 2 years
+        0 to 86400, // 86400 = 1 day # // 15778463, // 1/2 year
+        1 to 172800, // 1728000 = 2 days # // 31556926, // 1 year
+        2 to 259200, // 259200 = 3 days # // 63113852, // 2 years
         3 to 94670778, // 3 years
         4 to 126227704, // 4 years
         5 to 157784630, // 5 years
@@ -33,8 +33,9 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
     )
     private val deletionPeriod = automaticDeletionValueMapping[automaticDeletionValue] ?: 94670778
 
+
     companion object {
-        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 1L
+        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 20L
         fun scheduleDeletionWorker(context: Context) {
 
             val constraints = Constraints.Builder()
@@ -45,7 +46,7 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
                 PeriodicWorkRequestBuilder<DeletionWorker>(
                     WORK_REPEAT_INTERVAL_IN_DAYS,
                     //TimeUnit.DAYS
-                    TimeUnit.HOURS
+                    TimeUnit.MINUTES
                 )
                     .setConstraints(constraints)
                     .build()
@@ -64,16 +65,15 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
         if (entriesDeletionActivated) {
 
             // 86400 = 1 day in seconds
-            val deletionPointInTime = (System.currentTimeMillis() / 1000) - 86400
+            val deletionPointInTime = (System.currentTimeMillis() / 1000) - deletionPeriod
 
             //<editor-fold desc="SugarEntries">
-            val categoriesOfSugarEntriesToBeDeleted = appDatabase.appDao()
-                .getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
+            val categoriesOfSugarEntriesToBeDeleted =
+                dao.getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
             val categoryExistsInMoreThanOneEntryRow = categoriesOfSugarEntriesToBeDeleted.map {
                 Pair(
                     first = it,
-                    second = appDatabase.appDao()
-                        .checkIfCategoryIsPresentSinceInSugarTable(it, deletionPointInTime)
+                    second = dao.checkIfCategoryIsPresentSinceInSugarTable(it, deletionPointInTime)
                 )
             }
             val categoriesToBeDeletedFromSugarEntries = categoryExistsInMoreThanOneEntryRow.filter {
@@ -82,14 +82,14 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
             //</editor-fold>
 
             //<editor-fold desc="CaloriesEntries">
-            val categoriesOfCaloriesEntriesToBeDeleted = appDatabase.appDao()
-                .getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
+            val categoriesOfCaloriesEntriesToBeDeleted =
+                dao.getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
 
             val categoryExistsInMoreThanOneCaloriesRow =
                 categoriesOfCaloriesEntriesToBeDeleted.map {
                     Pair(
                         first = it,
-                        second = appDatabase.appDao()
+                        second = dao
                             .checkIfCategoryIsPresentSinceInCaloriesTable(it, deletionPointInTime)
                     )
                 }
@@ -105,17 +105,18 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
                 categoriesToBeDeletedFromSugarEntries + categoriesToBeDeletedFromCaloriesEntries
 
             categoriesToBeDeletedOverall.forEach {
-                appDatabase.appDao().deleteSpecificCategoryByName(it)
+                dao.deleteSpecificCategoryByName(it)
             }
             //</editor-fold>
 
             //<editor-fold desc="Deletion of Sugar Entries">
-            appDatabase.appDao().deleteEntriesSugarOlderThanN(deletionPointInTime)
+            dao.deleteEntriesSugarOlderThanN(deletionPointInTime)
             //</editor-fold>
 
             //<editor-fold desc="Deletion of Calories Entries">
-            appDatabase.appDao().deleteEntriesCaloriesOlderThanN(deletionPointInTime)
+            dao.deleteEntriesCaloriesOlderThanN(deletionPointInTime)
             //</editor-fold>
+
 
             return Result.success()
         } else {
@@ -123,5 +124,6 @@ class DeletionWorker(context: Context, params: WorkerParameters) :
         }
 
     }
+
 
 }

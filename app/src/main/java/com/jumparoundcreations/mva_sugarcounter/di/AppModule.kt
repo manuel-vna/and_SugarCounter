@@ -13,6 +13,7 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SharedVM
+import com.jumparoundcreations.mva_sugarcounter.worker.CustomWorkerFactory
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -31,6 +32,7 @@ val appModule = module {
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
     single(named("privacyPolicy")) { provideHtmlContent(get(), R.raw.privacy_policy) }
     single(named("imprint")) { provideHtmlContent(get(), R.raw.imprint) }
+    single { CustomWorkerFactory(get(), get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =
