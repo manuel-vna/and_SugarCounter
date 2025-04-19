@@ -47,7 +47,6 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
         7 to stringResource(R.string.deletion_period_seven_years),
         8 to stringResource(R.string.deletion_period_eight_years),
     )
-    val deletionWorkerSliderInt = deletionWorkerSlider.toInt()
 
     if (bottomSheetsSettings == BottomSheetsSettings.ENTRIES_DELETION) {
 
@@ -101,7 +100,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Slider(
-                            value = deletionWorkerSlider,
+                            value = deletionWorkerSlider.toFloat(),
                             onValueChange = { settingsVM.actionUpdateDeletionWorkerSlider(it) },
                             valueRange = deletionWorkerSliderValueRange,
                             steps = 7
@@ -113,7 +112,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                     ) {
                         Text(
                             modifier = Modifier.padding(end = 12.dp),
-                            text = deletionWorkerSliderValueRangeMap[deletionWorkerSliderInt] ?: "0"
+                            text = deletionWorkerSliderValueRangeMap[deletionWorkerSlider] ?: "0"
                         )
                     }
                     Row(
@@ -124,7 +123,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                             modifier = Modifier.padding(top = 16.dp),
                             text = stringResource(
                                 id = R.string.settings_entries_deletion_description,
-                                deletionWorkerSliderValueRangeMap[deletionWorkerSliderInt].toString()
+                                deletionWorkerSliderValueRangeMap[deletionWorkerSlider].toString()
                             )
                         )
                     }

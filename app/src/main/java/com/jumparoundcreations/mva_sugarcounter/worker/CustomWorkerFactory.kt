@@ -20,7 +20,6 @@ class CustomWorkerFactory(
         return when (workerClassName) {
             DeletionWorker::class.java.name ->
                 DeletionWorker(context, workerParameters, dao, sharedPrefsMain)
-
             else ->
                 null
         }
