@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -25,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -234,6 +236,23 @@ fun SharedCardItem(
             horizontalArrangement = Arrangement.SpaceBetween
 
         ) {
+            Button(
+                modifier = Modifier
+                    .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                    .weight(0.1F),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = Color.White,
+                    //contentColor for text font statically because it fits light and dark mode
+                ),
+                onClick = {
+                    sharedVM.actionShowDialogEntryDeletionConfirmation(true)
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.general_delete)
+                )
+            }
             OutlinedButton(
                 modifier = Modifier
                     .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
@@ -243,18 +262,6 @@ fun SharedCardItem(
             ) {
                 Text(
                     text = stringResource(R.string.generalCancel)
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                    .weight(0.1F),
-                onClick = {
-                    sharedVM.actionShowDialogEntryDeletionConfirmation(true)
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.general_delete)
                 )
             }
             Button(
