@@ -21,10 +21,10 @@ class DeletionWorker(
 
     val automaticDeletionValue = sharedPrefsMain.getInt("automaticDeletionValue", 3)
     val automaticDeletionValueMapping = mapOf(
-        0 to 86400, // 86400 = 1 day # // 15778463, // 1/2 year
-        1 to 172800, // 1728000 = 2 days # // 31556926, // 1 year
-        2 to 259200, // 259200 = 3 days # // 63113852, // 2 years
-        3 to 345600, // 345600 = 4 days # // 94670778, // 3 years
+        0 to 15778463, // 1/2 year
+        1 to 31556926, // 1 year
+        2 to 63113852, // 2 years
+        3 to 94670778, // 3 years
         4 to 126227704, // 4 years
         5 to 157784630, // 5 years
         6 to 189341556, // 6 years
@@ -35,7 +35,7 @@ class DeletionWorker(
 
 
     companion object {
-        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 1L
+        private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
         fun scheduleDeletionWorker(context: Context) {
 
             val constraints = Constraints.Builder()
@@ -45,8 +45,7 @@ class DeletionWorker(
             val workRequest =
                 PeriodicWorkRequestBuilder<DeletionWorker>(
                     WORK_REPEAT_INTERVAL_IN_DAYS,
-                    //TimeUnit.DAYS
-                    TimeUnit.HOURS
+                    TimeUnit.DAYS
                 )
                     .setConstraints(constraints)
                     .build()

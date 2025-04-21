@@ -25,17 +25,11 @@ class MainApplication() : Application(), Configuration.Provider {
             modules(appModule)
         }
 
+        //WorkFactory for DeletionWorker
         val db = AppDatabase.getInstance(this)
         val dao = db.appDao()
         val sharedPrefs = getKoin().get<SharedPreferences>()
         workerFactory = CustomWorkerFactory(dao, sharedPrefs)
-
-        //val config = workManagerConfiguration
-        //WorkManager.initialize(this, config)
-
-        //val request = OneTimeWorkRequestBuilder<DeletionWorker>().build()
-        //WorkManager.getInstance(this).enqueue(request)
-
         DeletionWorker.scheduleDeletionWorker(this)
     }
 

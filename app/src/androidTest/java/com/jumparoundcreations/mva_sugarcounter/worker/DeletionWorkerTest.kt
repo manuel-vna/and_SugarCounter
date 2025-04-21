@@ -181,31 +181,34 @@ class DeletionWorkerTest {
 
     @Test
     fun testThatDeletionWorkerRanSuccessfully() {
+
+        // Test
         assertEquals(WorkInfo.State.SUCCEEDED, workInfo.state)
     }
 
     @Test
     fun testThatNumberOfSugarEntriesIsSmallerAfterWorkerWasRunning() {
 
+        // Prepare
         val numberOfSugarEntriesAfterDeletion = dao.getAllEntries().size
         println("numberOfSugarEntriesBeforeDeletion: $numberOfSugarEntriesBeforeDeletion")
         println("numberOfSugarEntriesAfterDeletion: $numberOfSugarEntriesAfterDeletion")
 
+        // Test
         assertTrue(numberOfSugarEntriesBeforeDeletion > numberOfSugarEntriesAfterDeletion)
 
     }
 
     @Test
-    fun checkLatestSugarEntryIsOlderThan6Months() {
-        // Check that the last sugar entry is not older than 6 months
-        // by checking if its timestamp is bigger than the timestamp of seven month ago
+    fun checkThatLatestSugarEntryIsOlderThan6Months() {
 
+        // Prepare
         val allLeftEntries = dao.getAllEntries()
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
 
+        // Test
         assertTrue(timestampOfEntry > sevenMonthsAgo)
     }
-
 
 
 }
