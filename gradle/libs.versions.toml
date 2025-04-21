@@ -11,6 +11,8 @@ gmsScanner = "16.1.0"
 espressoCore = "3.6.1"
 googleAccompanist = "0.36.0"
 junit = "4.13.2"
+junitFive = "1.9.3.0"
+junitFiveTesting = "1.3.0"
 junitVersion = "1.2.1"
 koinAndroid = "4.0.0"
 koinAndroidxCompose = "4.0.0"
@@ -26,10 +28,15 @@ navigation = "2.8.9"
 ossLicenses = "17.1.0"
 room = "2.6.1"
 sldwOnboarding = "1.0.0-9"
+testCore = "1.6.1"
 truth = "1.4.4"
 turbine = "1.1.0"
 vanpraDatetime = "0.9.0"
 workManager = "2.10.0"
+workTesting = "2.10.0"
+junitJupiter = "5.8.2"
+junitJupiterApi = "5.10.0"
+
 
 [libraries]
 accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist" }
@@ -53,6 +60,7 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "testCore" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -60,6 +68,7 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
+androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workTesting" }
 app-cash-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 github-vanpra-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "vanpraDatetime" }
 gms-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "gmsScanner" }
@@ -71,8 +80,15 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koinTestJunit4" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 sldw-onboarding = { group = "de.sldw", name = "compose-onboarding", version.ref = "sldwOnboarding" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiterApi" }
+junit-vintage-engine = { group = "org.junit.vintage", name = "junit-vintage-engine", version.ref = "junitJupiterApi" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junitJupiterApi" }
+junitFive-android-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version.ref = "junitFiveTesting" }
+junitFive-test-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version.ref = "junitFiveTesting" }
 
 [bundles]
 room = ["androidx-room-common", "androidx-room-ktx", "androidx-room-runtime", "androidx-room-testing"]
@@ -83,5 +99,6 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+androidJunitFive = { id = "de.mannodermaus.android-junit5", version.ref = "junitFive" }
 
 

@@ -62,6 +62,9 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     private val _bottomSheetsSettings = MutableStateFlow(BottomSheetsSettings.NONE)
     val bottomSheetsSettings = _bottomSheetsSettings.asStateFlow()
+
+    private val _deletionWorkerSlider = MutableStateFlow(loadShaPrefEntriesDeletionSwitchValue())
+    val deletionWorkerSlider = _deletionWorkerSlider.asStateFlow()
     //SateFlows: END
 
     //Actions: START
@@ -107,6 +110,13 @@ class SettingsVM : ViewModel(), KoinComponent {
             "caloriesThresholdValue",
             2250
         ).toFloat()
+    }
+
+    fun actionUpdateDeletionWorkerSlider(sliderPosition: Float) {
+        _deletionWorkerSlider.value = sliderPosition.toInt()
+        sharedPrefsMain.edit {
+            putInt("automaticDeletionValue", sliderPosition.toInt())
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
@@ -240,13 +250,19 @@ class SettingsVM : ViewModel(), KoinComponent {
         )
     }
 
+    private fun loadShaPrefEntriesDeletionSwitchValue(): Int {
+        return sharedPrefsMain.getInt(
+            "automaticDeletionValue",
+            3
+        )
+    }
+
     private fun loadShaPrefColorSchemeSwitch(): Boolean {
         return sharedPrefsMain.getBoolean(
             "dynamicColorActivated",
             false
         )
     }
-    // Loading Shared Preferences: END
 
 
 }

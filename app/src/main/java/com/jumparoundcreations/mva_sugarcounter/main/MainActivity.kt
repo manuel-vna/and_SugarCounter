@@ -12,7 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.ui.theme.SugarCounterTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -56,6 +61,8 @@ class MainActivity : ComponentActivity(), KoinComponent,
                 }
             }
         }
+        val appDatabase = AppDatabase.getInstance(applicationContext)
+        //testing(appDatabase)
     }
 
     override fun onDestroy() {
@@ -63,4 +70,77 @@ class MainActivity : ComponentActivity(), KoinComponent,
         sharedPrefsMain.unregisterOnSharedPreferenceChangeListener(this)
     }
 
+}
+
+@OptIn(DelicateCoroutinesApi::class)
+fun testing(appDatabase: AppDatabase) {
+    GlobalScope.launch(Dispatchers.IO) {
+
+        //86400 = one day in seconds, 172800 = 2 days in seconds
+        val deletionPointInTime = (System.currentTimeMillis() / 1000) - 172800
+
+        //<editor-fold desc="SugarEntries">
+        val categoriesOfSugarEntriesToBeDeleted = appDatabase.appDao()
+            .getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime)
+        println("categoriesOfSugarEntriesToBeDeleted: " + categoriesOfSugarEntriesToBeDeleted)
+
+        val categoryExistsInMoreThanOneEntryRow = categoriesOfSugarEntriesToBeDeleted.map {
+            Pair(
+                first = it,
+                second = appDatabase.appDao()
+                    .checkIfCategoryIsPresentSinceInSugarTable(it, deletionPointInTime)
+            )
+        }
+        println("categoryExistsInMoreThanOneEntryRow: " + categoryExistsInMoreThanOneEntryRow)
+
+        val categoriesToBeDeletedFromSugarEntries = categoryExistsInMoreThanOneEntryRow.filter {
+            it.second.not()
+        }.map { it.first }
+        println("categoriesToBeDeletedFromSugarEntries: " + categoriesToBeDeletedFromSugarEntries)
+        //</editor-fold>
+
+        //<editor-fold desc="CaloriesEntries">
+        val categoriesOfCaloriesEntriesToBeDeleted = appDatabase.appDao()
+            .getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
+        println("categoriesOfCaloriesEntriesToBeDeleted: " + categoriesOfCaloriesEntriesToBeDeleted)
+
+        val categoryExistsInMoreThanOneCaloriesRow = categoriesOfCaloriesEntriesToBeDeleted.map {
+            Pair(
+                first = it,
+                second = appDatabase.appDao()
+                    .checkIfCategoryIsPresentSinceInCaloriesTable(it, deletionPointInTime)
+            )
+        }
+        println("categoryExistsInMoreThanOneCaloriesRows: " + categoryExistsInMoreThanOneCaloriesRow)
+
+        val categoriesToBeDeletedFromCaloriesEntries =
+            categoryExistsInMoreThanOneCaloriesRow.filter {
+                it.second.not()
+            }.map { it.first }
+        println("categoriesToBeDeletedFromCaloriesEntries: " + categoriesToBeDeletedFromCaloriesEntries)
+        //</editor-fold>
+
+        //<editor-fold desc="Deletion of Categories">
+        val categoriesToBeDeletedOverall =
+            categoriesToBeDeletedFromSugarEntries + categoriesToBeDeletedFromCaloriesEntries
+        println(categoriesToBeDeletedOverall)
+
+        println("Deleted categories:")
+        categoriesToBeDeletedOverall.forEach {
+            appDatabase.appDao().deleteSpecificCategoryByName(it)
+            println(it)
+        }
+        //</editor-fold>
+
+        //<editor-fold desc="Deletion of Sugar Entries">
+        appDatabase.appDao().deleteEntriesSugarOlderThanN(deletionPointInTime)
+        println("Sugar Entries were deleted")
+        //</editor-fold>
+
+        //<editor-fold desc="Deletion of Calories Entries">
+        appDatabase.appDao().deleteEntriesCaloriesOlderThanN(deletionPointInTime)
+        println("Calories Entries were deleted")
+        //</editor-fold>
+
+    }
 }

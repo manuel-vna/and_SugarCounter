@@ -10,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -31,8 +32,21 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
 
     val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
     val entriesDeletionActivated by settingsVM.entriesDeletionActivated.collectAsState()
+    val deletionWorkerSlider by settingsVM.deletionWorkerSlider.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    val deletionWorkerSliderValueRange = 0f..8f
+    val deletionWorkerSliderValueRangeMap = mapOf(
+        0 to stringResource(R.string.deletion_period_half_year),
+        1 to stringResource(R.string.deletion_period_one_year),
+        2 to stringResource(R.string.deletion_period_two_years),
+        3 to stringResource(R.string.deletion_period_three_years),
+        4 to stringResource(R.string.deletion_period_four_years),
+        5 to stringResource(R.string.deletion_period_five_years),
+        6 to stringResource(R.string.deletion_period_six_years),
+        7 to stringResource(R.string.deletion_period_seven_years),
+        8 to stringResource(R.string.deletion_period_eight_years),
+    )
 
     if (bottomSheetsSettings == BottomSheetsSettings.ENTRIES_DELETION) {
 
@@ -67,7 +81,8 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                             settingsVM.actionChangeEntriesDeletionActivated(
                                 entriesDeletionActivated.not()
                             )
-                        },
+                        }
+                        .padding(bottom = 12.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -79,25 +94,39 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                     )
                 }
 
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        modifier = Modifier.padding(top = 16.dp),
-                        text = stringResource(id = R.string.settings_entries_deletion_bottom_sheet_description_top)
-                    )
-                }
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        modifier = Modifier.padding(top = 16.dp),
-                        text = stringResource(id = R.string.settings_entries_deletion_bottom_sheet_description_bottom)
-                    )
+                if (entriesDeletionActivated) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Slider(
+                            value = deletionWorkerSlider.toFloat(),
+                            onValueChange = { settingsVM.actionUpdateDeletionWorkerSlider(it) },
+                            valueRange = deletionWorkerSliderValueRange,
+                            steps = 7
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(end = 12.dp),
+                            text = deletionWorkerSliderValueRangeMap[deletionWorkerSlider] ?: "0"
+                        )
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(top = 16.dp),
+                            text = stringResource(
+                                id = R.string.settings_entries_deletion_description,
+                                deletionWorkerSliderValueRangeMap[deletionWorkerSlider].toString()
+                            )
+                        )
+                    }
                 }
 
                 Row(

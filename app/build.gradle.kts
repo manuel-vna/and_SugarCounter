@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.android.gms.oss-licenses-plugin")
     id("androidx.room")
+    id("de.mannodermaus.android-junit5")
 }
 
 // retrieve versionCode and versionName from the last commit-TAG
@@ -129,11 +130,15 @@ fun getAppVersionNameValue(gitVersion: String): String {
 //noinspection UseTomlInstead
 dependencies {
 
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.truth)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.work.testing)
+    androidTestImplementation(libs.mockk.android)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.accompanist.webview)
@@ -152,9 +157,9 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.work)
     implementation(libs.app.cash.turbine)
     implementation(libs.bundles.room)
+    implementation(libs.androidx.work)
     implementation(libs.github.vanpra.datetime)
     implementation(libs.gms.scanner)
     implementation(libs.google.accompanist)
@@ -164,10 +169,16 @@ dependencies {
     implementation(libs.material)
     implementation(libs.sldw.onboarding)
     implementation(platform(libs.androidx.compose.bom))
-    ksp(libs.androidx.room.compiler)
     testImplementation(libs.junit)
     testImplementation(libs.koin.test.junit4)
-    //implementation(libs.mockk) // activating this versionCatalog reference leads to a build error
-    testImplementation("io.mockk:mockk:1.13.12") // so the old way is still used for this dependency
+    testImplementation(libs.androidx.work.testing)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junitFive.android.core)
+    testRuntimeOnly(libs.junitFive.test.runner)
+    testRuntimeOnly(libs.junit.vintage.engine) // for usage of junit4 along junit5, remove when no more junit4 tests exist
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    ksp(libs.androidx.room.compiler)
 
 }
