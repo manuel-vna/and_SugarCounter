@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Compress
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.ButtonDefaults.elevatedButtonColors
 import androidx.compose.material3.Card
@@ -52,6 +53,11 @@ fun RowScope.Barcode(
         ),
         border = BorderStroke(width = 1.dp, color = textColor)
     ) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            imageVector = Icons.Rounded.Compress,
+            contentDescription = "date",
+        )
         Text(
             text = stringResource(id = R.string.scan_barcode_button),
             overflow = TextOverflow.Ellipsis,

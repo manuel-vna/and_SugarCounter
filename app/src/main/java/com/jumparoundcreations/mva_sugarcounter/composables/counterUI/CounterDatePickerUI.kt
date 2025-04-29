@@ -3,12 +3,16 @@ package com.jumparoundcreations.mva_sugarcounter.composables.counterUI
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.elevatedButtonColors
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -56,10 +60,15 @@ fun RowScope.DatePicker(
         ),
         border = BorderStroke(width = 1.dp, color = textColor)
     ) {
+        Icon(
+            modifier = Modifier.size(20.dp),
+            imageVector = Icons.Rounded.CalendarMonth,
+            contentDescription = "date",
+        )
         Text(
             text = HelperMethods.convertTimestampToDateString(
                 dateOfEntryEpochSec,
-                "EEEE dd.MM."
+                " EE dd.MM."
             )
         )
     }

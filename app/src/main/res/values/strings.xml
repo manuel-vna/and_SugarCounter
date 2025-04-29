@@ -80,7 +80,7 @@
     <string name="settings_threshold_title">Daily limit</string>
     <string name="settings_threshold_dialog_title">Select these values as your new daily limits?</string>
     <string name="settings_button_about_text">About</string>
-    <string name="scan_barcode_button">Scan barcode</string>
+    <string name="scan_barcode_button"> Barcode</string>
     <string name="no_barcode_yet_info_card">Barcode: %1$s</string>
     <string name="no_barcode_yet_info_title">Barcode not assigned</string>
     <string name="no_barcode_yet_info_description">There is no product category connected to this barcode number yet. If you fill out the other fields and save the entry the product name entered in the \'<i>Category</i>\' field is automatically assigned to this barcode number \'<i>%1$s</i>\'.</string>
