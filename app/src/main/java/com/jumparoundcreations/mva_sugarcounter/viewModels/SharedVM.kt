@@ -155,7 +155,7 @@ class SharedVM : ViewModel(), KoinComponent {
                 val today = LocalDate.now()
                 val endOfToday =
                     today.plusDays(1).atStartOfDay(ZoneId.systemDefault())
-                        .toEpochSecond() - 1 //ToDo millisecond approach: * 1000 - 1
+                        .toEpochSecond() - 1
                 val currentTimestamp = System.currentTimeMillis() / 1000
                 val endOfXDaysAgo =
                     currentTimestamp - 172800 //7776000 // 7776000 = 90 days in seconds
