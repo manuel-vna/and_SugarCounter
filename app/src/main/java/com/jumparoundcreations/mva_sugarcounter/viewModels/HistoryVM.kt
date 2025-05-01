@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.mva_sugarcounter.data.AppConstants
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
@@ -15,23 +16,11 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.time.LocalDate
-import java.time.ZoneId
 
 
 class HistoryVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
-
-    //Timestamps: START
-    private val today = LocalDate.now()
-    private val endOfToday =
-        today.plusDays(1).atStartOfDay(ZoneId.systemDefault())
-            .toEpochSecond() - 1 //ToDo millisecond approach: * 1000 - 1
-    private val currentTimestamp = System.currentTimeMillis() / 1000
-    private val endOfXDaysAgo =
-        currentTimestamp - 7776000 // 7776000 = 90 days in seconds
-    //Timestamps: END
 
     //SateFlows: START
 
@@ -128,16 +117,25 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getEntries(endOfXDaysAgo, endOfToday).observeForever(historyObserver)
-        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+        database.appDao().getEntries(
+            AppConstants.endOf90DaysAgo,
+            AppConstants.endOfToday
+        ).observeForever(historyObserver)
+        database.appDao().getEntryCalories(
+            AppConstants.endOf90DaysAgo, AppConstants.endOfToday
+        )
             .observeForever(caloriesHistoryObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(endOfXDaysAgo, endOfToday).removeObserver(historyObserver)
-        database.appDao().getEntryCalories(endOfXDaysAgo, endOfToday)
+        database.appDao().getEntries(
+            AppConstants.endOf90DaysAgo,
+            AppConstants.endOfToday
+        )
+            .removeObserver(historyObserver)
+        database.appDao().getEntryCalories(AppConstants.endOf90DaysAgo, AppConstants.endOfToday)
             .removeObserver(caloriesHistoryObserver)
 
     }

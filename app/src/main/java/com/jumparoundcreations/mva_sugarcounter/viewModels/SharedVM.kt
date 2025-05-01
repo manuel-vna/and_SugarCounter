@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.mva_sugarcounter.data.AppConstants
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
@@ -77,7 +78,7 @@ class SharedVM : ViewModel(), KoinComponent {
                 _cardItemToShowCalories.value = item
             }
 
-            else -> Log.d("DeleteAlertDialog", "Delete action did not work")
+            else -> Log.d("CardDetailsSheet", "Showing CardDetailsSheet did not work")
         }
         _showCardItemBottomSheet.value = true
 
@@ -122,7 +123,6 @@ class SharedVM : ViewModel(), KoinComponent {
                 true -> if (entrySugar.isPerHundred) {
                     database.appDao().updateEntrySugarPerHundred(
                         entrySugar.id,
-                        valueCategory,
                         valueProportion.toInt(),
                         valueConsumed.toInt(),
                         gramTotal = ((valueProportion.toDouble() / 100)
@@ -132,7 +132,6 @@ class SharedVM : ViewModel(), KoinComponent {
                 } else {
                     database.appDao().updateEntrySugarPerPiece(
                         entrySugar.id,
-                        valueCategory,
                         valueProportion.toInt(),
                         valueConsumed.toInt(),
                         gramTotal = valueProportion.toInt() * valueConsumed.toInt()
@@ -142,13 +141,35 @@ class SharedVM : ViewModel(), KoinComponent {
                 else -> {
                     database.appDao().updateEntryCalories(
                         entryCalories.id,
-                        valueCategory,
                         valueProportion.toInt(),
                         valueConsumed.toInt(),
                         caloriesTotal = valueProportion.toInt() * valueConsumed.toInt()
                     )
                 }
             }
+
+            if (valueCategory != entrySugar.category && valueCategory != entryCalories.category) {
+
+                database.appDao().updateEntrySugarCategoryOfLastXDays(
+                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
+                    newCategory = valueCategory,
+                    startPoint = AppConstants.endOf90DaysAgo,
+                    endPoint = AppConstants.endOfToday
+                )
+
+                database.appDao().updateEntryCaloriesCategoryOfLastXDays(
+                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
+                    newCategory = valueCategory,
+                    startPoint = AppConstants.endOf90DaysAgo,
+                    endPoint = AppConstants.endOfToday
+                )
+
+                database.appDao().updateCategoryOnEdit(
+                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
+                    newCategory = valueCategory
+                )
+            }
+
         }
     }
 
