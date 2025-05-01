@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.viewModels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.mva_sugarcounter.data.AppConstants
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
@@ -13,8 +14,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.time.LocalDate
-import java.time.ZoneId
 import kotlin.math.roundToInt
 
 class SharedVM : ViewModel(), KoinComponent {
@@ -151,28 +150,18 @@ class SharedVM : ViewModel(), KoinComponent {
 
             if (valueCategory != entrySugar.category && valueCategory != entryCalories.category) {
 
-                //Timestamps: START
-                val today = LocalDate.now()
-                val endOfToday =
-                    today.plusDays(1).atStartOfDay(ZoneId.systemDefault())
-                        .toEpochSecond() - 1
-                val currentTimestamp = System.currentTimeMillis() / 1000
-                val endOfXDaysAgo =
-                    currentTimestamp - 172800 //7776000 // 7776000 = 90 days in seconds
-                //Timestamps: END
-
                 database.appDao().updateEntrySugarCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
                     newCategory = valueCategory,
-                    startPoint = endOfXDaysAgo,
-                    endPoint = endOfToday
+                    startPoint = AppConstants.endOf90DaysAgo,
+                    endPoint = AppConstants.endOfToday
                 )
 
                 database.appDao().updateEntryCaloriesCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
                     newCategory = valueCategory,
-                    startPoint = endOfXDaysAgo,
-                    endPoint = endOfToday
+                    startPoint = AppConstants.endOf90DaysAgo,
+                    endPoint = AppConstants.endOfToday
                 )
 
                 database.appDao().updateCategoryOnEdit(
