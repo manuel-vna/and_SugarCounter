@@ -19,13 +19,12 @@ interface DaoAppDatabase {
 
     @Query(
         "UPDATE entry_table SET " +
-                "category = :category, perHundredGram = :perHundredGram, " +
+                "perHundredGram = :perHundredGram, " +
                 "perHundredQuantity = :perHundredQuantity, gramTotal = :gramTotal " +
                 "WHERE id = :id"
     )
     fun updateEntrySugarPerHundred(
         id: Int,
-        category: String,
         perHundredGram: Int,
         perHundredQuantity: Int,
         gramTotal: Int
@@ -33,15 +32,27 @@ interface DaoAppDatabase {
 
     @Query(
         "UPDATE entry_table SET " +
-                "category = :category,perPieceGram= :perPieceGram, " +
+                "perPieceGram= :perPieceGram, " +
                 "perPieceAmount = :perPieceAmount, gramTotal = :gramTotal " +
                 "WHERE id = :id"
     )
     fun updateEntrySugarPerPiece(
-        id: Int, category: String,
+        id: Int,
         perPieceGram: Int,
         perPieceAmount: Int,
         gramTotal: Int
+    )
+
+    //On the timeline startPoint is further to the left/in the past than endPoint
+    @Query(
+        "UPDATE entry_table SET category = :newCategory WHERE category = :oldCategory AND " +
+                "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
+    )
+    fun updateEntrySugarCategoryOfLastXDays(
+        oldCategory: String,
+        newCategory: String,
+        startPoint: Long,
+        endPoint: Long
     )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
@@ -106,6 +117,12 @@ interface DaoAppDatabase {
     @Update
     fun updateCategory(vararg category: Category)
 
+    @Query("UPDATE category_table SET category = :newCategory WHERE category = :oldCategory ")
+    fun updateCategoryOnEdit(
+        oldCategory: String,
+        newCategory: String,
+    )
+
     @Query("""SELECT * FROM category_table""")
     fun getAllCategories(): LiveData<List<Category>>
 
@@ -134,15 +151,27 @@ interface DaoAppDatabase {
 
     @Query(
         "UPDATE calories_table SET " +
-                "category = :category,caloriesPerPiece = :caloriesPerPiece, " +
+                "caloriesPerPiece = :caloriesPerPiece, " +
                 "caloriesAmount = :caloriesAmount, caloriesTotal = :caloriesTotal" +
                 " WHERE id = :id"
     )
     fun updateEntryCalories(
-        id: Int, category: String,
+        id: Int,
         caloriesPerPiece: Int,
         caloriesAmount: Int,
         caloriesTotal: Int
+    )
+
+    //On the timeline startPoint is further to the left/in the past than endPoint
+    @Query(
+        "UPDATE calories_table SET category = :newCategory WHERE category = :oldCategory AND " +
+                "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
+    )
+    fun updateEntryCaloriesCategoryOfLastXDays(
+        oldCategory: String,
+        newCategory: String,
+        startPoint: Long,
+        endPoint: Long
     )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
