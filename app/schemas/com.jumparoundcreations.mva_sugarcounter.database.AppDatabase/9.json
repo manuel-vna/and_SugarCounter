@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "d8c03d4b5380ab3194169837cc78d44e",
+    "identityHash": "92fdec8fa8983817cf5711ba74afa2b6",
     "entities": [
       {
         "tableName": "entry_table",
@@ -74,9 +74,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "calories_table",
@@ -130,9 +128,7 @@
           "columnNames": [
             "id"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "category_table",
@@ -169,14 +165,22 @@
             "id"
           ]
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "index_category_table_category",
+            "unique": true,
+            "columnNames": [
+              "category"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_category_table_category` ON `${TABLE_NAME}` (`category`)"
+          }
+        ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd8c03d4b5380ab3194169837cc78d44e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '92fdec8fa8983817cf5711ba74afa2b6')"
     ]
   }
 }

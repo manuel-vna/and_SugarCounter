@@ -12,7 +12,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 9)
+@Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 10)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
