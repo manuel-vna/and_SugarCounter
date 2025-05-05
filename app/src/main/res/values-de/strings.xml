@@ -98,7 +98,7 @@
     <string name="export_settings_button">Einträge exportieren</string>
     <string name="export_data_error_message">Leider konnten die Zuckereinträge nicht in einer Datei gespeichert werden. Bitte erneut versuchen.</string>
     <string name="calories_activation_switch_title">Kalorienzähler</string>
-    <string name="calories_activation_switch_description">Ein- &amp; Ausschalten</string>
+    <string name="calories_activation_switch_description">Aktivieren</string>
     <string name="calories_textfield_placeholder">kcal</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
