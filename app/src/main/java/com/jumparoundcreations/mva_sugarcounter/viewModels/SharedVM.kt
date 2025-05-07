@@ -152,22 +152,22 @@ class SharedVM : ViewModel(), KoinComponent {
 
                 database.appDao().updateEntrySugarCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory,
+                    newCategory = valueCategory.trim(),
                     startPoint = AppConstants.endOf90DaysAgo,
                     endPoint = AppConstants.endOfToday
                 )
 
                 database.appDao().updateEntryCaloriesCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory,
+                    newCategory = valueCategory.trim(),
                     startPoint = AppConstants.endOf90DaysAgo,
                     endPoint = AppConstants.endOfToday
                 )
 
                 try {
                     database.appDao().updateCategoryOnEdit(
-                        oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                        newCategory = valueCategory
+                        oldCategory = if (isEntrySugar) entrySugar.category.trim() else entryCalories.category.trim(),
+                        newCategory = valueCategory.trim()
                     )
                 } catch (exception: SQLiteConstraintException) {
                     database.appDao().deleteSpecificCategoryByName(entrySugar.category)

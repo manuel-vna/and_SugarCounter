@@ -213,14 +213,14 @@ class CounterVM : ViewModel(), KoinComponent {
 
             // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
             if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
-                database.appDao().insertCategory(Category(category = category))
+                database.appDao().insertCategory(Category(category = category.trim()))
             }
 
             // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
             if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
                 database.appDao().insertCategory(
                     Category(
-                        category = category,
+                        category = category.trim(),
                         barcodeNumber = _barcodeNumber.value
                     )
                 )

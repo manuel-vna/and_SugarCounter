@@ -38,7 +38,7 @@ class CounterCaloriesHelper : KoinComponent {
                                 dateOfEntryEpochSecValue,
                                 "yyyy-MM-dd"
                             ),
-                            category = category,
+                            category = category.trim(),
                             caloriesPerPiece = caloriesInputValue.toInt(),
                             caloriesAmount = caloriesAmountInt,
                             caloriesTotal = caloriesInputValue.toInt() * caloriesAmountInt

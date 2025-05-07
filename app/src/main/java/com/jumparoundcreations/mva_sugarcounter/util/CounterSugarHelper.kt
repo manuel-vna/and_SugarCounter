@@ -98,7 +98,7 @@ class CounterSugarHelper : KoinComponent {
                             dateOfEntryEpochSecValue,
                             "yyyy-MM-dd"
                         ),
-                        category = category,
+                        category = category.trim(),
                         isPerHundred = isPerHundred,
                         perPieceGram = perPieceGramInt,
                         perPieceAmount = perPieceAmountInt,
