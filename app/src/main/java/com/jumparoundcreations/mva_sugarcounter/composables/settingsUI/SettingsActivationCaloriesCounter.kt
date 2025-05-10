@@ -17,7 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
+import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import org.koin.compose.getKoin
+
 
 
 @Composable
@@ -26,6 +30,8 @@ fun SettingsActivateCaloriesCounter(
 ) {
 
     val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
+    val historyVM = getKoin().get<HistoryVM>()
+    val counterVM = getKoin().get<CounterVM>()
 
 
     Row(
@@ -51,7 +57,14 @@ fun SettingsActivateCaloriesCounter(
         )
         Switch(
             checked = caloriesCounterActivated,
-            onCheckedChange = { settingsVM.actionChangeCaloriesCounterGeneral(it) })
+            onCheckedChange = {
+                settingsVM.actionChangeCaloriesCounterGeneral(it)
+                // HistoryUI: set the segmentedButton to the selection 'Sugar'
+                historyVM.actionChangeSegmentedButtonSugarOrCaloriesIndex(0)
+                // CounterUI: set the segmentedButton to the selection 'Sugar'
+                counterVM.actionChangeSegmentedButtonIndex(0)
+            }
+        )
     }
 
 }

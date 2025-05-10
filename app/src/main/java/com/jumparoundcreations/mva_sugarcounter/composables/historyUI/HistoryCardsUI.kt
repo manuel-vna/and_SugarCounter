@@ -42,13 +42,13 @@ fun CardsScreen(
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
     val historyCardSearchFieldText by historyVM.historyCardSearchFieldText.collectAsState()
-    val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
+    val segmentedButtonSugarOrCaloriesIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
-
-            when (segmentedButtonIndex) {
+            when (segmentedButtonSugarOrCaloriesIndex) {
                 0 -> {
+                    Log.d("HistoryCardsUI.kt", "Sugar tab chosen")
                     items(savedSugarCountGrouped) {
                         ShowSharedCards(
                             entryGroup = it,
@@ -59,7 +59,6 @@ fun CardsScreen(
 
                 1 -> {
                     Log.d("HistoryCardsUI.kt", "Calories tab chosen")
-
                     items(caloriesEntryDbHistory) {
                         ShowSharedCards(
                             entryGroup = it,

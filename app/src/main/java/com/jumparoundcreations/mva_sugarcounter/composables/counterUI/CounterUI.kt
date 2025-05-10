@@ -33,7 +33,7 @@ import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogDoubl
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowAlertDialogSingleBtn
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 
 
@@ -43,7 +43,7 @@ fun Counter(
     snackbarHostState: SnackbarHostState,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
-    val counterVM: CounterVM = koinViewModel()
+    val counterVM = getKoin().get<CounterVM>()
 
     // States
     val category by counterVM.categorySelected.collectAsState()

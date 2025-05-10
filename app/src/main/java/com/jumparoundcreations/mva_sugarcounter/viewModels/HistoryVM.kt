@@ -98,10 +98,6 @@ class HistoryVM : ViewModel(), KoinComponent {
             SharingStarted.WhileSubscribed(5000),
             _caloriesEntryDbHistory.value
         )
-
-    private var _segmentedButtonIndex = MutableStateFlow(0)
-    val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
-
     //SateFlows: END
 
     //Observer: START
@@ -173,10 +169,6 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     fun actionChangeHistoryCardSearchFieldText(searchText: String) {
         _historyCardSearchFieldText.value = searchText
-    }
-
-    fun actionChangeSegmentedButtonIndex(index: Int) {
-        _segmentedButtonIndex.value = index
     }
     //Actions: END
 }
