@@ -24,6 +24,7 @@ import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.ImprintUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.OnboardingUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.PrivacyPolicyUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.Settings
+import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.SettingsThirdPartyLibrariesUI
 import com.jumparoundcreations.mva_sugarcounter.composables.settingsUI.TermsAndConditionsUI
 
 
@@ -51,6 +52,9 @@ fun NavigationGraph(
         }
         composable(route = NavItem.FAQ.screenRoute) {
             FAQScreen(navController)
+        }
+        composable(route = NavItem.ThirdPartyLibraries.screenRoute) {
+            SettingsThirdPartyLibrariesUI(navController)
         }
         composable(route = NavItem.TermsAndConditions.screenRoute) {
             TermsAndConditionsUI(navController)

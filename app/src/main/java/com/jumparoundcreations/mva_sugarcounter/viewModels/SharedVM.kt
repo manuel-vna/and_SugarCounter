@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import android.database.sqlite.SQLiteConstraintException
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -127,7 +128,6 @@ class SharedVM : ViewModel(), KoinComponent {
                         valueConsumed.toInt(),
                         gramTotal = ((valueProportion.toDouble() / 100)
                                 * valueConsumed.toDouble()).roundToInt()
-                        // rule of three
                     )
                 } else {
                     database.appDao().updateEntrySugarPerPiece(
@@ -152,24 +152,28 @@ class SharedVM : ViewModel(), KoinComponent {
 
                 database.appDao().updateEntrySugarCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory,
+                    newCategory = valueCategory.trim(),
                     startPoint = AppConstants.endOf90DaysAgo,
                     endPoint = AppConstants.endOfToday
                 )
 
                 database.appDao().updateEntryCaloriesCategoryOfLastXDays(
                     oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory,
+                    newCategory = valueCategory.trim(),
                     startPoint = AppConstants.endOf90DaysAgo,
                     endPoint = AppConstants.endOfToday
                 )
 
-                database.appDao().updateCategoryOnEdit(
-                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory
-                )
+                try {
+                    database.appDao().updateCategoryOnEdit(
+                        oldCategory = if (isEntrySugar) entrySugar.category.trim() else entryCalories.category.trim(),
+                        newCategory = valueCategory.trim()
+                    )
+                } catch (exception: SQLiteConstraintException) {
+                    database.appDao().deleteSpecificCategoryByName(entrySugar.category)
+                    Log.v("SugarCounter", "Category already exists in database: $exception")
+                }
             }
-
         }
     }
 
@@ -189,7 +193,6 @@ class SharedVM : ViewModel(), KoinComponent {
     fun actionShowDialogEntryDeletionConfirmation(isShown: Boolean) {
         _dialogEntryDeletionConfirmation.value = isShown
     }
-
 
     //Actions: END
 

@@ -6,12 +6,6 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.androidJunitFive) apply false
+    alias(libs.plugins.aboutLibraries) apply false
 
-}
-
-//noinspection UseTomlInstead
-buildscript {
-    dependencies {
-        classpath("com.google.android.gms:oss-licenses-plugin:0.10.6")
-    }
 }

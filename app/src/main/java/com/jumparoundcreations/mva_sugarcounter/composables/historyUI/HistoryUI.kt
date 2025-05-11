@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 import org.koin.compose.koinInject
 
 
@@ -31,9 +31,8 @@ fun History(
     context: Context,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
-
-    val historyVM: HistoryVM = koinViewModel()
-    val segmentedButtonIndex by historyVM.segmentedButtonIndex.collectAsState()
+    val historyVM = getKoin().get<HistoryVM>()
+    val segmentedButtonSugarOrCaloriesIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
     val caloriesEntryDbHistory by historyVM.caloriesEntryDbHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
@@ -45,7 +44,11 @@ fun History(
 
     Column {
 
-        HistoryScreenTopArea(historyVM, caloriesCounterActivated)
+        HistoryScreenTopArea(
+            historyVM,
+            caloriesCounterActivated,
+            segmentedButtonSugarOrCaloriesIndex
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -62,7 +65,7 @@ fun History(
         if (historyChartScreenShown) {
             LineChart(
                 context = context,
-                countMode = if (segmentedButtonIndex == 0) {
+                countMode = if (segmentedButtonSugarOrCaloriesIndex == 0) {
                     HelperMethods.CountMode.SUGAR
                 } else {
                     HelperMethods.CountMode.CALORIES
@@ -77,7 +80,8 @@ fun History(
 @Composable
 fun HistoryScreenTopArea(
     historyVM: HistoryVM,
-    caloriesCounterActivated: Boolean
+    caloriesCounterActivated: Boolean,
+    segmentedButtonSugarOrCaloriesIndex: Int
 ) {
 
     HistoryTabRowUI(historyVM)
@@ -89,8 +93,6 @@ fun HistoryScreenTopArea(
             stringResource(id = R.string.general_calories_uppercase)
         )
 
-        val selectedIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -100,10 +102,9 @@ fun HistoryScreenTopArea(
             SingleChoiceSegmentedButtonRow {
                 buttonOptions.forEachIndexed { index, option ->
                     SegmentedButton(
-                        selected = selectedIndex == index,
+                        selected = segmentedButtonSugarOrCaloriesIndex == index,
                         onClick = {
                             historyVM.actionChangeSegmentedButtonSugarOrCaloriesIndex(index)
-                            historyVM.actionChangeSegmentedButtonIndex(index)
                         },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = 2)
                     )

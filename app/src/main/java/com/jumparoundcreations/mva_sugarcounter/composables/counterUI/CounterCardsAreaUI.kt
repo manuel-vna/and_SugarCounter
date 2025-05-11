@@ -12,9 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,7 +36,6 @@ fun CounterCardsAreaUI(
             stringResource(id = R.string.general_sugar),
             stringResource(id = R.string.general_calories_uppercase)
         )
-        var selectedIndex by remember { mutableIntStateOf(0) }
 
         Row(
             modifier = Modifier
@@ -50,9 +46,8 @@ fun CounterCardsAreaUI(
             SingleChoiceSegmentedButtonRow {
                 buttonOptions.forEachIndexed { index, option ->
                     SegmentedButton(
-                        selected = selectedIndex == index,
+                        selected = segmentedButtonIndex == index,
                         onClick = {
-                            selectedIndex = index
                             counterVM.actionChangeSegmentedButtonIndex(index)
                         },
                         shape = SegmentedButtonDefaults.itemShape(index = index, count = 2)

@@ -2,7 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -15,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
@@ -130,9 +128,7 @@ fun Settings(
                     Pair(
                         stringResource(R.string.settings_third_party_licenses_text),
                         {
-                            val intent = Intent(context, OssLicensesMenuActivity::class.java)
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(intent)
+                            navController.navigate(NavItem.ThirdPartyLibraries.screenRoute)
                         }),
                     Pair(
                         stringResource(R.string.about_title_imprint),

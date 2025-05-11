@@ -7,8 +7,8 @@ sealed class NavItem(var title: Int, var screenRoute: String) {
     data object FAQ :
         NavItem(R.string.settings_button_faq_text, "faq")
 
-    data object About :
-        NavItem(R.string.settings_button_about_text, "about")
+    data object ThirdPartyLibraries :
+        NavItem(R.string.settings_third_party_licenses_text, "thirdPartyLibraries")
 
     data object TermsAndConditions :
         NavItem(R.string.about_title_terms_and_conditions, "termsAndConditions")

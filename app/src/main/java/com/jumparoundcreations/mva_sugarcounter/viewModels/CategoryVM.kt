@@ -157,7 +157,7 @@ class CategoryVM : ViewModel(), KoinComponent {
                 database.appDao().updateCategory(
                     Category(
                         id = category.id,
-                        category = category.category,
+                        category = category.category.trim(),
                         deletionCheckbox = false
                     )
                 )
@@ -165,7 +165,7 @@ class CategoryVM : ViewModel(), KoinComponent {
                 database.appDao().updateCategory(
                     Category(
                         id = category.id,
-                        category = category.category,
+                        category = category.category.trim(),
                         deletionCheckbox = true
                     )
                 )
@@ -236,7 +236,7 @@ class CategoryVM : ViewModel(), KoinComponent {
 
                 database.appDao().insertCategory(
                     Category(
-                        category = randomWord,
+                        category = randomWord.trim(),
                         barcodeNumber = "123456789"
                     )
                 )

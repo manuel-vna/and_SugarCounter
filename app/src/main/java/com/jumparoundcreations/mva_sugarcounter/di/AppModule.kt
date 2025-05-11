@@ -21,11 +21,11 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
-    viewModel { CounterVM() }
     viewModel { SettingsVM() }
-    viewModel { HistoryVM() }
     viewModel { CategoryVM() }
     viewModel { SharedVM() }
+    single { CounterVM() }
+    single { HistoryVM() }
     single { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }

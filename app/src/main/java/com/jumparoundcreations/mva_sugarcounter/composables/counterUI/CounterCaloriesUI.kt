@@ -27,17 +27,16 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
-import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.getKoin
 
 
 @Composable
 fun CounterCaloriesUI(
-    caloriesCounterActivated: Boolean,
-    //modifier: Modifier = Modifier
+    caloriesCounterActivated: Boolean
 ) {
 
     // States
-    val counterVM: CounterVM = koinViewModel()
+    val counterVM = getKoin().get<CounterVM>()
     val caloriesInput by counterVM.caloriesInput.collectAsState()
     val caloriesAmount by counterVM.caloriesAmount.collectAsState()
 
