@@ -5,7 +5,9 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,8 +27,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowSharedCards
+import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
@@ -49,23 +54,51 @@ fun CardsScreen(
             when (segmentedButtonSugarOrCaloriesIndex) {
                 0 -> {
                     Log.d("HistoryCardsUI.kt", "Sugar tab chosen")
-                    items(savedSugarCountGrouped) {
-                        ShowSharedCards(
-                            entryGroup = it,
-                            backgroundColorPrimary = false
-                        )
+                    if (savedSugarCountGrouped.isNotEmpty()) {
+                        items(savedSugarCountGrouped) {
+                            ShowSharedCards(
+                                entryGroup = it,
+                                backgroundColorPrimary = false
+                            )
+                        }
+                    } else {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillParentMaxHeight()
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
+                            }
+                        }
                     }
                 }
 
                 1 -> {
                     Log.d("HistoryCardsUI.kt", "Calories tab chosen")
-                    items(caloriesEntryDbHistory) {
-                        ShowSharedCards(
-                            entryGroup = it,
-                            backgroundColorPrimary = false
-                        )
-                    }
+                    if (caloriesEntryDbHistory.isNotEmpty()) {
+                        items(caloriesEntryDbHistory) {
+                            ShowSharedCards(
+                                entryGroup = it,
+                                backgroundColorPrimary = false
+                            )
+                        }
 
+                    } else {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillParentMaxHeight()
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
+                            }
+                        }
+                    }
                 }
 
                 else -> Log.d("HistoryCardsUI.kt", "No index found")
