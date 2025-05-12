@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.CategoryStates
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
@@ -125,39 +127,53 @@ fun CategoryList(
         }
 
         LazyColumn(state = scrollState) {
-            items(categories.toList()) { (key, value) ->
-                Text(
-                    modifier = Modifier.padding(start = 16.dp, end = 4.dp),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold,
-                    text = key.toString()
-                )
+            if (categories.isNotEmpty()) {
+                items(categories.toList()) { (key, value) ->
+                    Text(
+                        modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        text = key.toString()
+                    )
 
-                Column {
-                    value.sortedBy { it.category }.forEach { category ->
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    categoryVM.actionChangeCategoryBottomSheetShown(
-                                        true,
-                                        category
-                                    )
-                                },
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(text = category.category)
-                            if (deletionCheckboxes.deletionCheckboxesDisplayed) {
-                                Checkbox(
-                                    modifier = Modifier
-                                        .align(Alignment.CenterEnd)
-                                        .padding(end = 12.dp),
-                                    checked = category.deletionCheckbox,
-                                    onCheckedChange = {
-                                        categoryVM.actionChangeDeleteCheckbox(category)
-                                    })
+                    Column {
+                        value.sortedBy { it.category }.forEach { category ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        categoryVM.actionChangeCategoryBottomSheetShown(
+                                            true,
+                                            category
+                                        )
+                                    },
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Text(text = category.category)
+                                if (deletionCheckboxes.deletionCheckboxesDisplayed) {
+                                    Checkbox(
+                                        modifier = Modifier
+                                            .align(Alignment.CenterEnd)
+                                            .padding(end = 12.dp),
+                                        checked = category.deletionCheckbox,
+                                        onCheckedChange = {
+                                            categoryVM.actionChangeDeleteCheckbox(category)
+                                        })
+                                }
                             }
                         }
+                    }
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .fillParentMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        EmptyDataInfo(stringResource(id = R.string.no_cateogries_yet_description))
                     }
                 }
             }

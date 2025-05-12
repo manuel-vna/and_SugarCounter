@@ -30,7 +30,7 @@
     <string name="general_calories_uppercase">Calories</string>
     <string name="general_calories_lowercase">calories</string>
     <string name="general_delete_question">Are you sure?</string>
-    <string name="general_conjunction">\sand\s</string>
+    <string name="general_conjunction">\u0020and\u0020</string>
     <string name="general_help">Help</string>
     <string name="general_piece">Stück</string>
     <string name="general_newline_character">\n</string>
@@ -143,4 +143,7 @@
     <string name="settings_use_dynamic_colors_from_os">Android color scheme</string>
     <string name="settings_use_dynamic_colors_from_os_description">If you set this switch, the SugarCounter app will use the color scheme that you have set in the Android operating system in the settings.</string>
     <string name="card_item_detail_view_heading">Edit / Delete</string>
+    <string name="no_cards_yet_description">No cards yet</string>
+    <string name="no_data_yet_description">No data yet</string>
+    <string name="no_cateogries_yet_description">No categories yet</string>
 </resources>

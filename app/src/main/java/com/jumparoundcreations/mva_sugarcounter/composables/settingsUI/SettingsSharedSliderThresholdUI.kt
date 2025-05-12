@@ -106,9 +106,11 @@ fun SettingsSharedSliderThreshold(
         ShowAlertDialogDoubleBtn(
             dialogTitle = if (caloriesCounterActivated) {
                 gramThresholdSlider.toInt().toString() +
+                        " " +
                         stringResource(id = R.string.gram_unit_short) +
                         stringResource(id = R.string.general_conjunction) +
                         caloriesThresholdSlider.toInt().toString() +
+                        " " +
                         stringResource(id = R.string.calories_unit_short)
             } else {
                 gramThresholdSlider.toInt().toString() + " " + stringResource(R.string.general_gram)
