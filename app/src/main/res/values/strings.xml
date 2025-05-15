@@ -146,4 +146,5 @@
     <string name="no_cards_yet_description">No cards yet</string>
     <string name="no_data_yet_description">No data yet</string>
     <string name="no_cateogries_yet_description">No categories yet</string>
+    <string name="landscape_mode_no_graph_description">This page is unfortunately not available in the landscape mode. Please change to the vertical format to view this page.</string>
 </resources>
