@@ -161,7 +161,7 @@ fun Counter(
     if (alertDialog) {
 
         ShowAlertDialogSingleBtn(
-            dialogTitle = stringResource(id = R.string.categoryInputOnlyTitle),
+            dialogTitle = stringResource(id = R.string.foodType),
             dialogDescription = stringResource(id = R.string.categoryInputOnlyDescription),
             confirmBtnText = stringResource(id = R.string.generalClose),
             confirmBtnAction = { counterVM.actionDismissAlertDialog() },
@@ -175,7 +175,7 @@ fun Counter(
         ShowAlertDialogDoubleBtn(
             dialogTitle = stringResource(id = R.string.alertSugarThresholdTitle),
             dialogDescription = stringResource(id = R.string.alertSugarThresholdDescription),
-            confirmBtnText = stringResource(id = R.string.alertThresholdConfirmBtn),
+            confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = { counterVM.actionGramThresholdDeleteLastEntry() },
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = { counterVM.actionGramThresholdKeepLastEntry() },
@@ -188,7 +188,7 @@ fun Counter(
         ShowAlertDialogDoubleBtn(
             dialogTitle = stringResource(id = R.string.alertCaloriesThresholdTitle),
             dialogDescription = stringResource(id = R.string.alertCaloriesThresholdDescription),
-            confirmBtnText = stringResource(id = R.string.alertThresholdConfirmBtn),
+            confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = { counterVM.actionCaloriesThresholdDeleteLastEntry() },
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = { counterVM.actionCaloriesThresholdKeepLastEntry() },

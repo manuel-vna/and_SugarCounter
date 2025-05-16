@@ -11,12 +11,10 @@
     <string name="timestampYesterday">Yesterday</string>
     <string name="counterTitle">Counter</string>
     <string name="historyTitle">History</string>
-    <string name="categoryTitle">Categories</string>
+    <string name="categoryPlural">Categories</string>
     <string name="settingsTitle">Settings</string>
     <string name="categoryMaxInput">Maximum length: 40 characters</string>
-    <string name="categoryInputOnlyTitle">Category only</string>
     <string name="categoryInputOnlyDescription">A category alone without a sugar or calories entry was added, as these were not specified.</string>
-    <string name="categoriesScreenDescription">Categories</string>
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>
     <string name="generalConfirm">Confirm</string>
     <string name="generalCancel">Cancel</string>
@@ -32,7 +30,7 @@
     <string name="general_delete_question">Are you sure?</string>
     <string name="general_conjunction">\u0020and\u0020</string>
     <string name="general_help">Help</string>
-    <string name="general_piece">Stück</string>
+    <string name="general_piece">piece</string>
     <string name="general_newline_character">\n</string>
     <string name="general_whitespace_character">\u0020</string>
     <string name="general_colon_character">:</string>
@@ -40,7 +38,6 @@
     <string name="alertCaloriesThresholdTitle">Warning: Calories</string>
     <string name="alertSugarThresholdDescription">This entry would breach your threshold of maximum grams per day</string>
     <string name="alertCaloriesThresholdDescription">This entry would breach your threshold of maximum calories per day</string>
-    <string name="alertThresholdConfirmBtn">Delete it</string>
     <string name="alertThresholdDismissBtn">Keep it</string>
     <string name="historygraphBtn">Graph</string>
     <string name="historyCardsBtn">Cards</string>
@@ -49,7 +46,7 @@
     <string name="historyNoDataInfoDescription">No entries yet</string>
     <string name="settings_third_party_licenses_text">Third-party licenses</string>
     <string name="entryDateTitle">Day selection</string>
-    <string name="entryDateDescription">You can change the date of your sugar entry within the last 30 days</string>
+    <string name="entryDateDescription">Selectable today up to 30 days in the past</string>
     <string name="tabCounterPerHundred">sugar/100g</string>
     <string name="tabCounterPerPiece">sugar/piece</string>
     <string name="gram_unit_short">g</string>

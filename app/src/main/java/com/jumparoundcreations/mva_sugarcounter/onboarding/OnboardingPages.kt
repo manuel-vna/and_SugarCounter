@@ -290,7 +290,7 @@ class OnboardingPage3(
                     painter = if (systemLanguage == "de")
                         painterResource(id = R.drawable.introduction_category_top_de)
                     else painterResource(id = R.drawable.introduction_category_top_en),
-                    contentDescription = stringResource(R.string.categoryTitle)
+                    contentDescription = stringResource(R.string.categoryPlural)
                 )
             }
             Text(
@@ -315,7 +315,7 @@ class OnboardingPage3(
                     painter = if (systemLanguage == "de")
                         painterResource(id = R.drawable.introduction_category_bottom_de)
                     else painterResource(id = R.drawable.introduction_category_bottom_en),
-                    contentDescription = stringResource(R.string.categoryTitle)
+                    contentDescription = stringResource(R.string.categoryPlural)
                 )
             }
             Text(

@@ -16,7 +16,7 @@ sealed class BottomNavItem(var title: Int, var icon: ImageVector, var screenRout
         BottomNavItem(R.string.historyTitle, Icons.Filled.AreaChart, "history")
 
     data object CategoryTitle :
-        BottomNavItem(R.string.categoryTitle, Icons.Filled.Category, "category")
+        BottomNavItem(R.string.categoryPlural, Icons.Filled.Category, "category")
 
     data object Settings : BottomNavItem(R.string.settingsTitle, Icons.Filled.Settings, "settings")
 }
