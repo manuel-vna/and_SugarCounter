@@ -26,12 +26,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.data.AppLanguage
 import de.sldw.composeonboarding.OnboardingPage
 
 class OnboardingPage1(
-    private val systemLanguage: String,
+    private val appLanguage: AppLanguage,
     private val fontColorOnBackground: Color
 ) : OnboardingPage() {
+
 
     @Composable
     override fun Content(paddingValues: PaddingValues) {
@@ -81,9 +83,20 @@ class OnboardingPage1(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_counter_top_de)
-                    else painterResource(id = R.drawable.introduction_counter_top_en),
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_counter_top_de)
+                            }
+
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_counter_top_de)
+                            }
+
+                            else -> {
+                                painterResource(id = R.drawable.introduction_counter_top_en)
+                            }
+                        },
                     contentDescription = stringResource(R.string.counterTitle)
                 )
             }
@@ -94,9 +107,19 @@ class OnboardingPage1(
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Image(
-                painter = if (systemLanguage == "de")
-                    painterResource(id = R.drawable.introduction_counter_middle_de)
-                else painterResource(id = R.drawable.introduction_counter_middle_en),
+                painter = when (appLanguage) {
+                    AppLanguage.GERMAN -> {
+                        painterResource(id = R.drawable.introduction_counter_middle_de)
+                    }
+
+                    AppLanguage.SPANISH -> {
+                        painterResource(id = R.drawable.introduction_counter_middle_de)
+                    }
+
+                    else -> {
+                        painterResource(id = R.drawable.introduction_counter_middle_en)
+                    }
+                },
                 contentDescription = stringResource(R.string.counterTitle)
             )
             Text(
@@ -106,9 +129,19 @@ class OnboardingPage1(
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Image(
-                painter = if (systemLanguage == "de")
-                    painterResource(id = R.drawable.introduction_counter_bottom_de)
-                else painterResource(id = R.drawable.introduction_counter_bottom_en),
+                painter = when (appLanguage) {
+                    AppLanguage.GERMAN -> {
+                        painterResource(id = R.drawable.introduction_counter_bottom_de)
+                    }
+
+                    AppLanguage.SPANISH -> {
+                        painterResource(id = R.drawable.introduction_counter_bottom_de)
+                    }
+
+                    else -> {
+                        painterResource(id = R.drawable.introduction_counter_bottom_en)
+                    }
+                },
                 contentDescription = stringResource(R.string.counterTitle)
             )
             Text(
@@ -121,7 +154,7 @@ class OnboardingPage1(
 }
 
 class OnboardingPage2(
-    private val systemLanguage: String,
+    private val appLanguage: AppLanguage,
     private val fontColorOnBackground: Color
 ) : OnboardingPage() {
 
@@ -171,9 +204,19 @@ class OnboardingPage2(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_history_top_de)
-                    else painterResource(id = R.drawable.introduction_history_top_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_history_top_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_history_top_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_history_top_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.counterTitle)
                 )
             }
@@ -196,9 +239,19 @@ class OnboardingPage2(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_history_middle_de)
-                    else painterResource(id = R.drawable.introduction_history_middle_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_history_middle_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_history_middle_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_history_middle_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.historyTitle)
                 )
             }
@@ -221,9 +274,19 @@ class OnboardingPage2(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_history_graph_de)
-                    else painterResource(id = R.drawable.introduction_history_graph_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_history_graph_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_history_graph_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_history_graph_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.historyTitle)
                 )
             }
@@ -237,7 +300,7 @@ class OnboardingPage2(
 }
 
 class OnboardingPage3(
-    private val systemLanguage: String,
+    private val appLanguage: AppLanguage,
     private val fontColorOnBackground: Color
 ) : OnboardingPage() {
 
@@ -287,9 +350,19 @@ class OnboardingPage3(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_category_top_de)
-                    else painterResource(id = R.drawable.introduction_category_top_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_category_top_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_category_top_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_category_top_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.categoryPlural)
                 )
             }
@@ -312,9 +385,19 @@ class OnboardingPage3(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_category_bottom_de)
-                    else painterResource(id = R.drawable.introduction_category_bottom_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_category_bottom_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_category_bottom_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_category_bottom_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.categoryPlural)
                 )
             }
@@ -329,7 +412,7 @@ class OnboardingPage3(
 
 
 class OnboardingPage4(
-    private val systemLanguage: String,
+    private val appLanguage: AppLanguage,
     private val fontColorOnBackground: Color
 ) : OnboardingPage() {
 
@@ -379,9 +462,19 @@ class OnboardingPage4(
                     .clip(RoundedCornerShape(8.dp))
             ) {
                 Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_settings_top_de)
-                    else painterResource(id = R.drawable.introduction_settings_top_en),
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_settings_top_de)
+                        }
+
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_settings_top_de)
+                        }
+
+                        else -> {
+                            painterResource(id = R.drawable.introduction_settings_top_en)
+                        }
+                    },
                     contentDescription = stringResource(R.string.settingsTitle)
                 )
             }
@@ -391,30 +484,6 @@ class OnboardingPage4(
                 text = stringResource(R.string.settings_introduction_settings_top)
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
-            Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
-            ) {
-                Image(
-                    painter = if (systemLanguage == "de")
-                        painterResource(id = R.drawable.introduction_settings_middle_de)
-                    else painterResource(id = R.drawable.introduction_settings_middle_en),
-                    contentDescription = stringResource(R.string.settingsTitle)
-                )
-            }
-            Text(
-                modifier = Modifier.padding(12.dp),
-                textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_settings_middle)
-            )
         }
     }
 }
