@@ -77,7 +77,7 @@ fun CategoryList(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.categoriesScreenDescription)
+                text = stringResource(id = R.string.categoryPlural)
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically
