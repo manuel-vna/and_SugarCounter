@@ -106,44 +106,70 @@ class OnboardingPage1(
                 text = stringResource(R.string.settings_introduction_counter_top)
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
-            Image(
-                painter = when (appLanguage) {
-                    AppLanguage.GERMAN -> {
-                        painterResource(id = R.drawable.introduction_counter_middle_de)
-                    }
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .border(
+                        BorderStroke(
+                            1.5.dp,
+                            MaterialTheme.colorScheme.secondary
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+            ) {
+                Image(
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_counter_middle_de)
+                        }
 
-                    AppLanguage.SPANISH -> {
-                        painterResource(id = R.drawable.introduction_counter_middle_de)
-                    }
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_counter_middle_de)
+                        }
 
-                    else -> {
-                        painterResource(id = R.drawable.introduction_counter_middle_en)
-                    }
-                },
-                contentDescription = stringResource(R.string.counterTitle)
-            )
+                        else -> {
+                            painterResource(id = R.drawable.introduction_counter_middle_en)
+                        }
+                    },
+                    contentDescription = stringResource(R.string.counterTitle)
+                )
+            }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
                 text = stringResource(R.string.settings_introduction_counter_middle)
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
-            Image(
-                painter = when (appLanguage) {
-                    AppLanguage.GERMAN -> {
-                        painterResource(id = R.drawable.introduction_counter_bottom_de)
-                    }
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .border(
+                        BorderStroke(
+                            1.5.dp,
+                            MaterialTheme.colorScheme.secondary
+                        ),
+                        shape = RoundedCornerShape(8.dp)
+                    )
+                    .clip(RoundedCornerShape(8.dp))
+            ) {
+                Image(
+                    painter = when (appLanguage) {
+                        AppLanguage.GERMAN -> {
+                            painterResource(id = R.drawable.introduction_counter_bottom_de)
+                        }
 
-                    AppLanguage.SPANISH -> {
-                        painterResource(id = R.drawable.introduction_counter_bottom_de)
-                    }
+                        AppLanguage.SPANISH -> {
+                            painterResource(id = R.drawable.introduction_counter_bottom_de)
+                        }
 
-                    else -> {
-                        painterResource(id = R.drawable.introduction_counter_bottom_en)
-                    }
-                },
-                contentDescription = stringResource(R.string.counterTitle)
-            )
+                        else -> {
+                            painterResource(id = R.drawable.introduction_counter_bottom_en)
+                        }
+                    },
+                    contentDescription = stringResource(R.string.counterTitle)
+                )
+            }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
