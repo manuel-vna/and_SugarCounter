@@ -136,7 +136,6 @@
     <string name="settings_introduction_category_bottom">Al hacer clic en una categoría concreta, se abre una ventana en la que se enumeran los detalles de esa categoría.</string>
     <string name="settings_introduction_settings_title">Afinar la configuración</string>
     <string name="settings_introduction_settings_top">1) Además de registrar los valores de azúcar, también se pueden contar las calorías.\n2)Se establecen límites máximos diarios para el azúcar en gramos (g) y las calorías en kilocalorías (kcal), que se pueden ajustar con el control deslizante.\n3) Las entradas registradas se pueden exportar en formato CSV.\n4) También se puede activar el borrado automático de entradas antiguas.\n5) También se puede seleccionar la combinación de colores seleccionada en los ajustes del sistema operativo Android.</string>
-    <string name="settings_introduction_settings_middle"></string>
     <string name="settings_color_scheme_title">Colores</string>
     <string name="settings_use_dynamic_colors_from_os">Esquema de colores de Android</string>
     <string name="settings_use_dynamic_colors_from_os_description">Si activas este interruptor, la aplicación SugarCounter utilizará el esquema de colores que hayas definido en la configuración del sistema operativo Android.</string>

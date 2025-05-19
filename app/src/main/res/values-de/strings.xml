@@ -136,7 +136,6 @@
     <string name="settings_introduction_category_bottom">Durch Anklicken einer bestimmten Kategorie öffnet sich ein Fenster in dem Einzelheiten zu dieser Kategorie aufgeführt werden.</string>
     <string name="settings_introduction_settings_title">Einstellungen verfeinern</string>
     <string name="settings_introduction_settings_top">1) Zusätzlich zum Erfassen der Zuckerwerte können auch Kalorien gezählt werden.\n\n2)Für Zucker in Gramm (g) und Kalorien in Kilokalorien (kcal) sind Tagesobergrenzen festgelegt, die über den Regler angepasst werden können.\n\n3) Die erfassten Einträge können im CSV-Format exportiert werden.\n\n4) Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.\n\n5) Es kann auch jenes Farbschema gewählt werden, welches im Android-Betriebssystem in den Einstellungen gewählt ist.</string>
-    <string name="settings_introduction_settings_middle"></string>
     <string name="settings_color_scheme_title">Farben</string>
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
     <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>

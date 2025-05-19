@@ -135,7 +135,6 @@
     <string name="settings_introduction_category_bottom">By clicking on a specific category, a window opens in which details of this category are listed.</string>
     <string name="settings_introduction_settings_title">Adjust settings</string>
     <string name="settings_introduction_settings_top">1) In addition to recording the sugar values, calories can also be counted.\n\n2)Daily upper limits are set for sugar in grams (g) and calories in kilocalories (kcal), which can be adjusted using the slider.\n\n3) The recorded entries can be exported in CSV format.\n\n4) In addition, automatic deletion of older entries can be activated.\n\n5) The color scheme selected in the Android operating system settings can also be selected.</string>
-    <string name="settings_introduction_settings_middle"></string>
     <string name="settings_color_scheme_title">Color scheme</string>
     <string name="settings_use_dynamic_colors_from_os">Android color scheme</string>
     <string name="settings_use_dynamic_colors_from_os_description">If you set this switch, the SugarCounter app will use the color scheme that you have set in the Android operating system in the settings.</string>
