@@ -13,17 +13,19 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.SharedTopAppBar
+import com.jumparoundcreations.mva_sugarcounter.data.AppLanguage
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage1
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage2
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage3
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage4
 import de.sldw.composeonboarding.ComposeOnboarding
-import de.sldw.composeonboarding.indicator.ProgressIndicator
+import de.sldw.composeonboarding.indicator.TextIndicator
 
 @Composable
 fun OnboardingUI(navController: NavController) {
 
     val systemLanguage = Locale.current.language
+    val appLanguage = AppLanguage.fromCode(systemLanguage) ?: AppLanguage.ENGLISH
 
     var fontColorOnBackground: Color = Color.White
     val darkTheme: Boolean = isSystemInDarkTheme()
@@ -43,12 +45,12 @@ fun OnboardingUI(navController: NavController) {
         ComposeOnboarding(
             modifier = Modifier.consumeWindowInsets(WindowInsets.systemBars),
             pages = listOf(
-                OnboardingPage1(systemLanguage, fontColorOnBackground),
-                OnboardingPage2(systemLanguage, fontColorOnBackground),
-                OnboardingPage3(systemLanguage, fontColorOnBackground),
-                OnboardingPage4(systemLanguage, fontColorOnBackground)
+                OnboardingPage1(appLanguage, fontColorOnBackground),
+                OnboardingPage2(appLanguage, fontColorOnBackground),
+                OnboardingPage3(appLanguage, fontColorOnBackground),
+                OnboardingPage4(appLanguage, fontColorOnBackground)
             ),
-            indicatorType = ProgressIndicator,
+            indicatorType = TextIndicator(),
             onFinishPressed = { navController.popBackStack() }
         )
     }
