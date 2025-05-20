@@ -19,7 +19,7 @@ import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage2
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage3
 import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage4
 import de.sldw.composeonboarding.ComposeOnboarding
-import de.sldw.composeonboarding.indicator.ProgressIndicator
+import de.sldw.composeonboarding.indicator.TextIndicator
 
 @Composable
 fun OnboardingUI(navController: NavController) {
@@ -50,7 +50,7 @@ fun OnboardingUI(navController: NavController) {
                 OnboardingPage3(appLanguage, fontColorOnBackground),
                 OnboardingPage4(appLanguage, fontColorOnBackground)
             ),
-            indicatorType = ProgressIndicator,
+            indicatorType = TextIndicator(),
             onFinishPressed = { navController.popBackStack() }
         )
     }

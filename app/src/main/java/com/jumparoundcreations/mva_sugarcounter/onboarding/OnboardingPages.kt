@@ -90,7 +90,7 @@ class OnboardingPage1(
                             }
 
                             AppLanguage.SPANISH -> {
-                                painterResource(id = R.drawable.introduction_counter_top_de)
+                                painterResource(id = R.drawable.introduction_counter_top_en)
                             }
 
                             else -> {
@@ -125,7 +125,7 @@ class OnboardingPage1(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_counter_middle_de)
+                            painterResource(id = R.drawable.introduction_counter_middle_en)
                         }
 
                         else -> {
@@ -160,7 +160,7 @@ class OnboardingPage1(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_counter_bottom_de)
+                            painterResource(id = R.drawable.introduction_counter_bottom_en)
                         }
 
                         else -> {
@@ -236,7 +236,7 @@ class OnboardingPage2(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_top_de)
+                            painterResource(id = R.drawable.introduction_history_top_en)
                         }
 
                         else -> {
@@ -271,7 +271,7 @@ class OnboardingPage2(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_middle_de)
+                            painterResource(id = R.drawable.introduction_history_middle_en)
                         }
 
                         else -> {
@@ -306,7 +306,7 @@ class OnboardingPage2(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_graph_de)
+                            painterResource(id = R.drawable.introduction_history_graph_en)
                         }
 
                         else -> {
@@ -382,7 +382,7 @@ class OnboardingPage3(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_category_top_de)
+                            painterResource(id = R.drawable.introduction_category_top_en)
                         }
 
                         else -> {
@@ -417,7 +417,7 @@ class OnboardingPage3(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_category_bottom_de)
+                            painterResource(id = R.drawable.introduction_category_bottom_en)
                         }
 
                         else -> {
@@ -494,7 +494,7 @@ class OnboardingPage4(
                         }
 
                         AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_settings_top_de)
+                            painterResource(id = R.drawable.introduction_settings_top_en)
                         }
 
                         else -> {
