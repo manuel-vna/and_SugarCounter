@@ -92,7 +92,7 @@ assembleDebug:
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}" #name of the build-zip-file
     expire_in: 1 week
   except:
-    - "master" #run this job 'assembleDebug' for all branches but not for master
+    - "release" #run this job 'assembleDebug' for all branches but not for release
 
 
 assembleRelease:
@@ -112,4 +112,4 @@ assembleRelease:
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}"
     expire_in: 1 week
   only:
-    - "master" #run this job 'assembleRelease' for branch master only
+    - "release" #run this job 'assembleRelease' for branch release only
