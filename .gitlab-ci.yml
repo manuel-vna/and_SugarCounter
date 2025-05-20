@@ -91,8 +91,10 @@ assembleDebug:
       - app/build/outputs/ # place artifcts in this directory
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}" #name of the build-zip-file
     expire_in: 1 week
-  except:
-    - "release" #run this job 'assembleDebug' for all branches but not for release
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release.*/'
+      when: never
+    - when: always
 
 
 assembleRelease:
@@ -111,5 +113,7 @@ assembleRelease:
       - app/build/outputs/
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}"
     expire_in: 1 week
-  only:
-    - "release" #run this job 'assembleRelease' for branch release only
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release.*/'
+      when: always
+    - when: never
