@@ -40,7 +40,7 @@ fun ScrollToSpecificLetter(categoryVM: CategoryVM, scrollState: LazyListState) {
         }) {
             Icon(
                 imageVector = Icons.Default.ContentPasteSearch,
-                contentDescription = stringResource(R.string.categoriesScreenDescription)
+                contentDescription = stringResource(R.string.categoryPlural)
             )
         }
     }
