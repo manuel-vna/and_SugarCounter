@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.SsidChart
 import androidx.compose.material.icons.outlined.Tab
 import androidx.compose.material3.Icon
@@ -31,13 +30,13 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
         HistoryTabItem(
             index = 0,
             title = stringResource(id = R.string.historyCardsBtn),
-            unselectedIcon = Icons.Outlined.Clear,
+            unselectedIcon = Icons.Outlined.Tab,
             selectedIcon = Icons.Outlined.Tab
         ),
         HistoryTabItem(
             index = 1,
             title = stringResource(id = R.string.historygraphBtn),
-            unselectedIcon = Icons.Outlined.Clear,
+            unselectedIcon = Icons.Outlined.SsidChart,
             selectedIcon = Icons.Outlined.SsidChart
         )
     )
@@ -60,7 +59,8 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
 
     TabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
-            Tab(selected = index == selectedTabIndex,
+            Tab(
+                selected = index == selectedTabIndex,
                 onClick = {
                     historyVM.actionSetIsCardTabIndex(index)
 
