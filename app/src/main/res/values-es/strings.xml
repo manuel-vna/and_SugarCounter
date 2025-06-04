@@ -61,7 +61,7 @@
     <string name="faq_answer_two">Sí, la aplicación es totalmente gratuita y no muestra anuncios. Sin embargo, los desarrolladores de la aplicación están encantados de recibir una pequeña donación.</string>
     <string name="faq_question_three">¿Por qué tiene que introducir el usuario los valores de azúcar de un determinado alimento?</string>
     <string name="faq_answer_three">Si introduce usted mismo los valores de azúcar, podrá hacerse una mejor idea de su propio consumo de azúcar.</string>
-    <string name="faq_question_four">¿Qué significan las dos variantes de entrada azúcar/100 g y azúcar/unidad?</string>
+    <string name="faq_question_four">¿Qué significan las dos variantes de entrada \'azúcar/100g\' y \'azúcar/unidad\' ?</string>
     <string name="faq_answer_four">Para la variante azúcar/100 g, el contenido de azúcar por 100 g puede leerse en el paquete e introducirse en el primer campo. También debe introducirse la cantidad consumida. El contenido de azúcar se calcula automáticamente. Si también se conoce la cantidad de azúcar de un producto por unidad, puede introducirse el contenido de azúcar por unidad.</string>
     <string name="faq_question_five">¿Tengo que conectarme para usar la aplicación?</string>
     <string name="faq_answer_five">No, la aplicación puede utilizarse en su totalidad sin necesidad de iniciar sesión.</string>
@@ -74,6 +74,8 @@
     <string name="faq_question_nine">¿Cuál es la motivación para desarrollar esta aplicación?</string>
     <string name="faq_answer_nine">La motivación de esta aplicación es no superar el límite máximo de 50 gramos de azúcar al día recomendado por muchas fuentes. Esta aplicación está diseñada para ayudarte a conseguir este objetivo.</string>
     <string name="faq_question_ten">¿Por qué al escanear el código de barras no se reconoce automáticamente el producto alimenticio correspondiente con información sobre el azúcar?</string>
+    <string name="faq_question_eleven">¿No lleva demasiado tiempo introducir todo lo que tiene un poco de azúcar en esta aplicación?</string>
+    <string name="faq_answer_eleven">Tú decides cómo utilizar la aplicación. Sin embargo, un método habitual sería establecer el límite superior de azúcar (aquí, en los ajustes de la app) entre 5 y 15 gramos por debajo del límite superior al que aspiras llegar al día, de modo que haya margen de maniobra para las cantidades más pequeñas y te mantengas por debajo de la cantidad de azúcar deseada al día incluso sin introducirlas.</string>
     <string name="faq_answer_ten">La idea de esta aplicación es que los usuarios se ocupen de los valores de azúcar y/o calorías por sí mismos. Por lo tanto, los valores de azúcar y/o calorías no se cargan automáticamente.</string>
     <string name="settings_threshold_title">Límite máximo diario</string>
     <string name="settings_threshold_dialog_title">¿Fijar estos valores como nuevos límites superiores?</string>
