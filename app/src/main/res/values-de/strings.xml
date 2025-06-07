@@ -61,7 +61,7 @@
     <string name="faq_answer_two">Ja, die App ist komplett kostenlos und es wird keine Werbung angezeigt. Die Entwickler der App freuen sich aber über eine kleine Geldspende.</string>
     <string name="faq_question_three">Warum müssen die Zuckerwerte eines bestimmten Lebensmittels vom Nutzer selbst eingetragen werden?</string>
     <string name="faq_answer_three">Durch das eigenständige Eingeben der Zuckerwerte soll ein besseres Gefühl für den eigenen Zuckerkonsum entstehen.</string>
-    <string name="faq_question_four">Was bedeutet die beiden Eingabevariante Zucker/100g und Zucker/Stück?</string>
+    <string name="faq_question_four">Was bedeuten die beiden Eingabevarianten \'Zucker/100g\' und \'Zucker/Stück\'?</string>
     <string name="faq_answer_four">Für die Variante Zucker/100g kann der Zuckergehalt pro 100g von der Packung abgelesen und im ersten Feld eingetragen werden. Zudem muss die konsumierte Menge angegeben werden. Der Zuckergehalt wird dann automatisch berechnet. Wenn die Zuckermenge eines Produkts auch pro Stück bekannt ist, kann der Zuckergehalt je Teilstück angegeben werden.</string>
     <string name="faq_question_five">Muss ich mich einloggen, um die App zu nutzen?</string>
     <string name="faq_answer_five">Nein, die App ist ohne Login vollumfänglich nutzbar.</string>
@@ -75,6 +75,8 @@
     <string name="faq_answer_nine">Hinter dieser App steckt die Motivation, die von vielen Seiten empfohlene Obergrenze von 50 Gramm Zucker pro Tag, nicht zu überschreiten. Diese App soll dabei helfen, dieses Ziel zu erreichen.</string>
     <string name="faq_question_ten">Warum wird beim Scannen des Barcodes das entsprechende Lebensmittelprodukt mit Zuckerangabe nicht automatisch erkannt?</string>
     <string name="faq_answer_ten">Die Idee dieser App ist, dass sich Nutzer mit Zucker- und/oder Kalorienwerten selbstständig auseinandersetzen. Daher wird auf ein automatisches Laden von Zucker- und/oder Kalorienwerten verzichtet.</string>
+    <string name="faq_question_eleven">Ist es nicht zu aufwendig, alles was ein wenig Zucker hat in diese App einzutragen?</string>
+    <string name="faq_answer_eleven">Es ist jedem selbst überlassen, wie die App verwendet wird. Eine gängige Methode wäre jedoch, die Zucker-Obergrenze (hier in den Einstellungen der App) 5-15 Gramm tiefer als das pro Tag angestrebte Oberlimit zu setzen, damit für Kleinstmengen Spielraum bleibt und man auch ohne deren Einträge unter der gewünschten Zuckermenge pro Tag bleibt.</string>
     <string name="settings_threshold_title">Tagesobergrenze</string>
     <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
     <string name="settings_button_about_text">Über die App</string>

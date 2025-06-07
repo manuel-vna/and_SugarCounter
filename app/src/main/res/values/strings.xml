@@ -60,7 +60,7 @@
     <string name="faq_answer_two">Yes, the app is completely free and no advertising is displayed. However, the developers of the app are happy to receive a small donation.</string>
     <string name="faq_question_three">Why does a user have to enter the sugar content of a particular food product?</string>
     <string name="faq_answer_three">Entering the sugar values by yourself should give you a better feeling for your own sugar consumption.</string>
-    <string name="faq_question_four">What do the two input variants Sugar/100g and Sugar/piece mean?</string>
+    <string name="faq_question_four">What do the two input variants \'Sugar/100g\' and \'Sugar/piece\' mean?</string>
     <string name="faq_answer_four">For the sugar/100g variant, the sugar content per 100g can be read off the packing and entered in the first field. The quantity consumed must also be entered. The sugar content is then calculated automatically. If the amount of sugar in a product is also known per piece, the sugar content per piece can be entered as well.</string>
     <string name="faq_question_five">Do I have to log in to use the app?</string>
     <string name="faq_answer_five">No, the app can be used in full without logging in.</string>
@@ -74,6 +74,8 @@
     <string name="faq_answer_nine">The motivation behind this app is not to exceed the upper limit of 50 grams of sugar per day recommended by many sources. This app is designed to help you achieve this goal.</string>
     <string name="faq_question_ten">Why is the corresponding food product with sugar information not automatically recognized when the barcode is scanned?</string>
     <string name="faq_answer_ten">The idea of this app is that users deal with sugar and/or calorie values on their own. Therefore, sugar and/or calorie values are not loaded automatically.</string>
+    <string name="faq_question_eleven">Isn\'t it too time-consuming to enter everything that has a little sugar in this app?</string>
+    <string name="faq_answer_eleven">It is up to you how you use the app. However, a common method would be to set the upper sugar limit (here in the app settings) 5-15 grams lower than the upper limit you are aiming for per day, so that there is room for small amounts and you remain below the desired amount of sugar per day even without entering them.</string>
     <string name="settings_threshold_title">Daily limit</string>
     <string name="settings_threshold_dialog_title">Select these values as your new daily limits?</string>
     <string name="settings_button_about_text">About</string>

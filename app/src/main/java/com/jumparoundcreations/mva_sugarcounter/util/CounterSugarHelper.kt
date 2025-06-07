@@ -140,7 +140,7 @@ class CounterSugarHelper : KoinComponent {
 
                 withContext(Dispatchers.Main) {
                     if (databaseSum > sharedPrefsMain.getInt("gramThresholdValue", 50)) {
-                        counterVM.actionChangeAlertCaloriesThreshold(true)
+                        counterVM.actionChangeAlertSugarThreshold(true)
                     }
                 }
             }
