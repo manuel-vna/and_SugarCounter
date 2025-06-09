@@ -102,8 +102,8 @@ class CounterVM : ViewModel(), KoinComponent {
     private val _noDataForChosenCategorySnackbarShown = MutableStateFlow(false)
     val noDataForChosenCategorySnackbarShown = _noDataForChosenCategorySnackbarShown.asStateFlow()
 
-    private val _alertDialogGramThreshold = MutableStateFlow(false)
-    val alertDialogGramThreshold = _alertDialogGramThreshold.asStateFlow()
+    private val _alertSugarThreshold = MutableStateFlow(false)
+    val alertSugarThreshold = _alertSugarThreshold.asStateFlow()
 
     private val _alertCaloriesThreshold = MutableStateFlow(false)
     var alertCaloriesThreshold = _alertCaloriesThreshold.asStateFlow()
@@ -364,6 +364,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
     //Actions Start: User actions reported by the UI to the ViewModel
 
+    fun actionChangeAlertSugarThreshold(isActivated: Boolean) {
+        _alertSugarThreshold.value = isActivated
+    }
+
     fun actionChangeAlertCaloriesThreshold(isActivated: Boolean) {
         _alertCaloriesThreshold.value = isActivated
     }
@@ -425,11 +429,11 @@ class CounterVM : ViewModel(), KoinComponent {
     }
 
     fun actionGramThresholdKeepLastEntry() {
-        _alertDialogGramThreshold.value = false
+        _alertSugarThreshold.value = false
     }
 
     fun actionGramThresholdDeleteLastEntry() {
-        _alertDialogGramThreshold.value = false
+        _alertSugarThreshold.value = false
         viewModelScope.launch(Dispatchers.IO) {
             database.appDao().deleteLastEntry()
         }

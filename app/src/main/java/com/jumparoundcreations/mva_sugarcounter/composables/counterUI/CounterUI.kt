@@ -170,7 +170,7 @@ fun Counter(
 
     }
 
-    val alertDialogGramThreshold by counterVM.alertDialogGramThreshold.collectAsState()
+    val alertDialogGramThreshold by counterVM.alertSugarThreshold.collectAsState()
     if (alertDialogGramThreshold) {
         ShowAlertDialogDoubleBtn(
             dialogTitle = stringResource(id = R.string.alertSugarThresholdTitle),
