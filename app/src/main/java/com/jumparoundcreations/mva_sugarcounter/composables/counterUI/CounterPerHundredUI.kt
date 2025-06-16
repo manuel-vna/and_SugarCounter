@@ -68,12 +68,17 @@ fun CounterPerHundred(counterVM: CounterVM) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor =
-                    MaterialTheme.colorScheme.secondaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer,
                     focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 value = perHundredGram,
-                onValueChange = {
-                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerHundredChange(it)
+                onValueChange = { input ->
+                    if (input.isDigitsOnly()) {
+                        val number = input.toIntOrNull()
+                        if (number != null && number in 1..100) {
+                            counterVM.actionPerHundredChange(input)
+                        }
+                    }
                 },
                 singleLine = true,
                 trailingIcon = {
@@ -117,7 +122,7 @@ fun CounterPerHundred(counterVM: CounterVM) {
                 },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor =
-                    MaterialTheme.colorScheme.secondaryContainer,
+                        MaterialTheme.colorScheme.secondaryContainer,
                     focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 value = amountValue,
