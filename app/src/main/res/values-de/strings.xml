@@ -146,4 +146,15 @@
     <string name="no_data_yet_description">Noch keine Daten vorhanden</string>
     <string name="no_cateogries_yet_description">Noch keine Kategorien vorhanden</string>
     <string name="landscape_mode_no_graph_description">Diese Seite ist leider im Querformat nicht vergügbar. Wechseln sie bitte in das vertikale Formar, um diese Seite zu sehen.</string>
+    <string name="accessibility_tabCounterPerHundred">Zucker pro hundert Gramm hier eingeben</string>
+    <string name="accessibility_tabCounterPerPiece">Zucker pro Stück hier eingeben</string>
+    <string name="accessibility_date_picker_button">Wählen Sie das Datum für Ihren Eintrag</string>
+    <string name="accessibility_scan_barcode_button">Rufen Sie die Details einer Produktkategorie durch Scannen des Barcodes ab</string>
+    <string name="accessibility_delete_value">Wert löschen</string>
+    <string name="accessibility_perHundredGram_textField">Hier einen Wert in Gramm unter Hundert eingeben</string>
+    <string name="accessibility_perHundredGram_textField_consumed">Hier die verzehrte Menge eingeben</string>
+    <string name="accessibility_category_input_field">Geben Sie hier eine Lebensmittelkategorie ein oder wählen Sie eine aus der Liste</string>
+    <string name="accessibility_category_arrow_list">Liste öffnen</string>
+    <string name="accessibility_perPiece_textField">Geben Sie einen Wert in Gramm für ein Stück ein</string>
+    <string name="accessibility_perPiece_textField_consumed">Hier die verzehrte Anzahl eingeben</string>
 </resources>

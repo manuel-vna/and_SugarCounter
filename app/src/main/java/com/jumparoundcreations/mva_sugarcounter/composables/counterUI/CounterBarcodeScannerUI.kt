@@ -30,6 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -43,10 +45,15 @@ fun RowScope.Barcode(
     textColor: Color
 ) {
 
+    val accessibilityScanBarcodeButton = stringResource(R.string.accessibility_scan_barcode_button)
+
     ElevatedButton(
         modifier = Modifier
             .weight(1f)
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .semantics {
+                contentDescription = accessibilityScanBarcodeButton
+            },
         onClick = { counterVM.scanBarcode() },
         colors = elevatedButtonColors(
             contentColor = textColor
@@ -56,7 +63,7 @@ fun RowScope.Barcode(
         Icon(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Rounded.Compress,
-            contentDescription = "date",
+            contentDescription = "",
         )
         Text(
             text = stringResource(id = R.string.scan_barcode_button),

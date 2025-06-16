@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -56,6 +58,9 @@ fun RowScope.CategoryDropdownField(
     val category by counterVM.categorySelected.collectAsState()
     val categories by counterVM.categories.collectAsState()
     val categoryFieldExpanded by counterVM.categoryFieldExpanded.collectAsState()
+
+    val accessibility_category_input_field =
+        stringResource(R.string.accessibility_category_input_field)
 
 
     Column(
@@ -80,6 +85,9 @@ fun RowScope.CategoryDropdownField(
                 )
                 .onGloballyPositioned { coordinates ->
                     counterVM.actionChangeCategoryFieldSize(coordinates.size.toSize())
+                }
+                .semantics {
+                    contentDescription = accessibility_category_input_field
                 },
             value = category,
             onValueChange = {
@@ -97,8 +105,7 @@ fun RowScope.CategoryDropdownField(
                 }
             },
             colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor =
-                MaterialTheme.colorScheme.secondaryContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
             ),
             textStyle = TextStyle(
@@ -114,7 +121,7 @@ fun RowScope.CategoryDropdownField(
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Rounded.KeyboardArrowDown,
-                        contentDescription = "arrow",
+                        contentDescription = stringResource(R.string.accessibility_category_arrow_list),
                     )
                 }
             }

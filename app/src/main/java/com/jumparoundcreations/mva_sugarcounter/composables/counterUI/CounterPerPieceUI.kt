@@ -21,6 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,10 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.CounterVM
 
 @Composable
 fun CounterPerPiece(counterVM: CounterVM) {
+
+    val accessibilityPerPieceTextField = stringResource(R.string.accessibility_perPiece_textField)
+    val accessibilityPerPieceTextFieldConsumed =
+        stringResource(R.string.accessibility_perPiece_textField_consumed)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -55,6 +62,9 @@ fun CounterPerPiece(counterVM: CounterVM) {
 
             val perPieceGram by counterVM.perPieceGram.collectAsState()
             TextField(
+                modifier = Modifier.semantics {
+                    contentDescription = accessibilityPerPieceTextField
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor =
                     MaterialTheme.colorScheme.secondaryContainer,
@@ -70,12 +80,17 @@ fun CounterPerPiece(counterVM: CounterVM) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
-                            contentDescription = "arrow",
+                            contentDescription = stringResource(R.string.accessibility_delete_value),
                         )
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                placeholder = { Text("g") }
+                placeholder = {
+                    Text(
+                        text = "g",
+                        modifier = Modifier.clearAndSetSemantics {}
+                    )
+                }
             )
         }
 
@@ -96,6 +111,9 @@ fun CounterPerPiece(counterVM: CounterVM) {
             )
 
             TextField(
+                modifier = Modifier.semantics {
+                    contentDescription = accessibilityPerPieceTextFieldConsumed
+                },
                 colors = OutlinedTextFieldDefaults.colors(
                     unfocusedContainerColor =
                     MaterialTheme.colorScheme.secondaryContainer,
@@ -113,12 +131,17 @@ fun CounterPerPiece(counterVM: CounterVM) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
-                            contentDescription = "arrow",
+                            contentDescription = stringResource(R.string.accessibility_delete_value),
                         )
                     }
                 },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                placeholder = { Text("1") }
+                placeholder = {
+                    Text(
+                        text = "1",
+                        modifier = Modifier.clearAndSetSemantics {}
+                    )
+                }
             )
         }
     }

@@ -6,7 +6,8 @@ data class CounterTabItem(
     val gramCountMode: GramCountMode,
     val title: String,
     val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val selectedIcon: ImageVector,
+    val contentDescription: String
 )
 
 enum class GramCountMode {
