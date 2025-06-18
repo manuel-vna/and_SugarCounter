@@ -22,12 +22,12 @@ class HelperMethods : KoinComponent {
 
     companion object {
 
-        fun <T : IEntry> groupCounterItemsInGroupsByDay(savedEntries: List<T>): List<EntryGroup<T>> {
+        fun <T : IEntry> groupCounterItemsInGroupsByDay(savedEntries: List<T>): List<EntryGroup> {
 
             lateinit var todayOrYesterday: TodayOrYesterday
             val tempGroupedEntriesByDay =
                 mutableMapOf<Pair<String, String>, MutableList<T>>()
-            val groupedEntriesByDay = mutableListOf<EntryGroup<T>>()
+            val groupedEntriesByDay = mutableListOf<EntryGroup>()
 
             // This intermediate step prepares the data for further processing
             // It creates group entries within a map, grouped by day.

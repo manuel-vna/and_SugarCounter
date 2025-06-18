@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,15 +29,14 @@ import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.SharedCardI
 import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SharedVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun <T : IEntry> ShowSharedCards(
-    entryGroup: EntryGroup<T>,
+fun ShowSharedCards(
+    entryGroup: EntryGroup,
     backgroundColorPrimary: Boolean,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
@@ -137,35 +135,28 @@ fun <T : IEntry> ShowSharedCards(
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(3f),
+                    textAlign = TextAlign.Start,
+                    text = firstColumnText,
 
-                Box(
-                    modifier = Modifier.weight(3f), contentAlignment = Alignment.TopStart
-                ) {
-                    Text(
-                        textAlign = TextAlign.Start,
-                        text = firstColumnText,
-
-                        modifier = Modifier.padding(start = 8.dp),
                     )
-                }
-                Box(
-                    modifier = Modifier.weight(8f), contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        textAlign = TextAlign.Center,
-                        text = secondColumnText,
-                        modifier = Modifier.padding(horizontal = 2.dp),
-                    )
-                }
-                Box(
-                    modifier = Modifier.weight(2f), contentAlignment = Alignment.BottomEnd
-                ) {
-                    Text(
-                        textAlign = TextAlign.End,
-                        text = thirdColumnText,
-                        modifier = Modifier.padding(end = 8.dp),
-                    )
-                }
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 2.dp)
+                        .weight(8f),
+                    textAlign = TextAlign.Center,
+                    text = secondColumnText,
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .weight(2f),
+                    textAlign = TextAlign.End,
+                    text = thirdColumnText,
+                )
             }
         }
 
