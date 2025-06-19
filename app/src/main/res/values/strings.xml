@@ -156,4 +156,9 @@
     <string name="accessibility_category_arrow_list">Open list</string>
     <string name="accessibility_perPiece_textField">Enter a value in grams for one piece</string>
     <string name="accessibility_perPiece_textField_consumed">Enter the number eaten here</string>
+    <string name="accessibility_search">Search</string>
+    <string name="accessibility_categories_srolling">Scroll to a specific letter</string>
+    <string name="accessibility_delete_categories">Delete selected categories</string>
+    <string name="accessibility_number_of_entries">Number of entries</string>
+    <string name="accessibility_card_status">Card status</string>
 </resources>

@@ -82,7 +82,7 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
                             imageVector = if (index == selectedTabIndex) {
                                 item.selectedIcon
                             } else item.unselectedIcon,
-                            contentDescription = item.title
+                            contentDescription = ""
                         )
                         Spacer(modifier = Modifier.width(20.dp))
                         Text(text = item.title)

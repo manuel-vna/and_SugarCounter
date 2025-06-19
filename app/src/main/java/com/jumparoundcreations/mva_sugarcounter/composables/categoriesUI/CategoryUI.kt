@@ -27,6 +27,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -82,9 +84,15 @@ fun CategoryList(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val accessibilityNumberOfEntries =
+                    stringResource(R.string.accessibility_number_of_entries)
                 Text(
                     modifier = Modifier
-                        .padding(2.dp),
+                        .padding(2.dp)
+                        .semantics {
+                            contentDescription =
+                                accessibilityNumberOfEntries + categories.flatMap { it.value }.size.toString()
+                        },
                     text = categories.flatMap { it.value }.size.toString(),
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
@@ -102,7 +110,7 @@ fun CategoryList(
                     Icon(
                         modifier = Modifier.size(28.dp),
                         imageVector = Icons.Rounded.Delete,
-                        contentDescription = "Delete selected categories",
+                        contentDescription = stringResource(R.string.accessibility_delete_categories),
                     )
                 }
             }

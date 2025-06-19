@@ -157,4 +157,9 @@
     <string name="accessibility_category_arrow_list">Lista abierta</string>
     <string name="accessibility_perPiece_textField">Introduzca un valor en gramos para una pieza</string>
     <string name="accessibility_perPiece_textField_consumed">Introduzca aquí el número comido</string>
+    <string name="accessibility_search">Busca</string>
+    <string name="accessibility_categories_srolling">Desplácese hasta una letra concreta</string>
+    <string name="accessibility_delete_categories">Borrar categorías seleccionadas</string>
+    <string name="accessibility_number_of_entries">Número de entradas</string>
+    <string name="accessibility_card_status">Estado de la tarjeta</string>
 </resources>

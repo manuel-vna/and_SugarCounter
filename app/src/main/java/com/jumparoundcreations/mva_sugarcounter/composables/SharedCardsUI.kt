@@ -174,7 +174,7 @@ fun ShowSharedCards(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
                 tint = if (totalGramPerDayBlock > thresholdValue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
-                contentDescription = "",
+                contentDescription = stringResource(R.string.accessibility_card_status),
             )
 
             Text(

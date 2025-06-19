@@ -157,4 +157,9 @@
     <string name="accessibility_category_arrow_list">Liste öffnen</string>
     <string name="accessibility_perPiece_textField">Geben Sie einen Wert in Gramm für ein Stück ein</string>
     <string name="accessibility_perPiece_textField_consumed">Hier die verzehrte Anzahl eingeben</string>
+    <string name="accessibility_search">Suche</string>
+    <string name="accessibility_categories_srolling">Zu einem bestimmten Buchstaben scrollen</string>
+    <string name="accessibility_delete_categories">Löschen von ausgewählten Kategorien</string>
+    <string name="accessibility_number_of_entries">Anzahl der Einträge</string>
+    <string name="accessibility_card_status">Status dieser Karte</string>
 </resources>

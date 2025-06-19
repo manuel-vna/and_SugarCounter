@@ -117,7 +117,10 @@ fun CardsScreen(
                 modifier = Modifier.padding(16.dp),
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = stringResource(R.string.accessibility_search)
+                )
             }
 
             androidx.compose.animation.AnimatedVisibility(
