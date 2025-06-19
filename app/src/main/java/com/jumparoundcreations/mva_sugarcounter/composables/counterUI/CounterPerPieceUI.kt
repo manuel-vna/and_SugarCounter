@@ -121,7 +121,7 @@ fun CounterPerPiece(counterVM: CounterVM) {
                 ),
                 value = perPieceAmount,
                 onValueChange = {
-                    if (it.isDigitsOnly() && it.count() <= 3) counterVM.actionPerPieceAmountChange(
+                    if (it.isDigitsOnly() && it.count() <= 2) counterVM.actionPerPieceAmountChange(
                         it
                     )
                 },
