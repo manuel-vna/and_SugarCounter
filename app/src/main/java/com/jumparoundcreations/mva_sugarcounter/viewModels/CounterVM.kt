@@ -48,14 +48,14 @@ class CounterVM : ViewModel(), KoinComponent {
 
     private val _sugarEntryDbRecent = MutableStateFlow(
         listOf(
-            EntryGroup<Entry>("", "", listOf())
+            EntryGroup("", "", listOf())
         )
     )
     val sugarEntryDbRecent = _sugarEntryDbRecent.asStateFlow()
 
     private val _caloriesEntryDbRecent = MutableStateFlow(
         listOf(
-            EntryGroup<EntryCalories>("", "", listOf())
+            EntryGroup("", "", listOf())
         )
     )
     val caloriesEntryDbRecent = _caloriesEntryDbRecent.asStateFlow()

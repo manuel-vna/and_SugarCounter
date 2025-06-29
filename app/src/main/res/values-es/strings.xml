@@ -146,4 +146,20 @@
     <string name="no_data_yet_description">Aún no hay datos disponibles</string>
     <string name="no_cateogries_yet_description">Aún no hay categorías disponibles</string>
     <string name="landscape_mode_no_graph_description">Esta página no está disponible en formato horizontal. Por favor, cambie a formato vertical para ver esta página.</string>
+    <string name="accessibility_tabCounterPerHundred">Introduzca aquí el azúcar por cada cien gramos</string>
+    <string name="accessibility_tabCounterPerPiece">Introduzca aquí el azúcar por pieza</string>
+    <string name="accessibility_date_picker_button">Elija la fecha de su inscripción</string>
+    <string name="accessibility_scan_barcode_button">Recuperar los detalles de una categoría de productos escaneando su código de barras</string>
+    <string name="accessibility_delete_value">Borrar valor</string>
+    <string name="accessibility_perHundredGram_textField">Introduzca aquí un valor en gramos inferior a cien</string>
+    <string name="accessibility_perHundredGram_textField_consumed">Introduzca aquí la cantidad consumida</string>
+    <string name="accessibility_category_input_field">Introduzca aquí una categoría de alimentos o seleccione una de la lista</string>
+    <string name="accessibility_category_arrow_list">Lista abierta</string>
+    <string name="accessibility_perPiece_textField">Introduzca un valor en gramos para una pieza</string>
+    <string name="accessibility_perPiece_textField_consumed">Introduzca aquí el número comido</string>
+    <string name="accessibility_search">Busca</string>
+    <string name="accessibility_categories_srolling">Desplácese hasta una letra concreta</string>
+    <string name="accessibility_delete_categories">Borrar categorías seleccionadas</string>
+    <string name="accessibility_number_of_entries">Número de entradas</string>
+    <string name="accessibility_card_status">Estado de la tarjeta</string>
 </resources>

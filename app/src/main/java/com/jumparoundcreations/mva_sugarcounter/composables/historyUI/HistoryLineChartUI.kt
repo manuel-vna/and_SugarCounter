@@ -31,10 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.EmptyDataInfo
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.GraphData
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.compose.koinInject
@@ -43,8 +40,8 @@ import org.koin.compose.koinInject
 fun LineChart(
     context: Context,
     countMode: HelperMethods.CountMode,
-    sugarEntryDbHistory: List<EntryGroup<Entry>>,
-    caloriesEntryDbHistory: List<EntryGroup<EntryCalories>>,
+    sugarEntryDbHistory: List<EntryGroup>,
+    caloriesEntryDbHistory: List<EntryGroup>,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
@@ -452,7 +449,7 @@ fun DrawScope.drawHorizontalLinesForMatrix(
 //END: Methods called from within CANVAS()
 
 
-fun <T : IEntry> getGraphDataList(entryList: List<EntryGroup<T>>): List<GraphData> {
+fun getGraphDataList(entryList: List<EntryGroup>): List<GraphData> {
     val returnList = entryList.take(60).mapIndexed { id, entryGroup ->
         GraphData(
             id = id,

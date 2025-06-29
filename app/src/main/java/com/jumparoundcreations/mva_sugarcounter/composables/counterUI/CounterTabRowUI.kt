@@ -34,13 +34,15 @@ fun TabRow(counterVM: CounterVM) {
             gramCountMode = GramCountMode.PerHundred,
             title = stringResource(id = R.string.tabCounterPerHundred),
             unselectedIcon = Icons.Outlined.BarChart,
-            selectedIcon = Icons.Outlined.BarChart
+            selectedIcon = Icons.Outlined.BarChart,
+            contentDescription = stringResource(id = R.string.accessibility_tabCounterPerHundred),
         ),
         CounterTabItem(
             gramCountMode = GramCountMode.PerPiece,
             title = stringResource(id = R.string.tabCounterPerPiece),
             unselectedIcon = Icons.Outlined.Dialpad,
-            selectedIcon = Icons.Outlined.Dialpad
+            selectedIcon = Icons.Outlined.Dialpad,
+            contentDescription = stringResource(id = R.string.accessibility_tabCounterPerPiece),
         )
     )
 
@@ -60,7 +62,8 @@ fun TabRow(counterVM: CounterVM) {
     Column {
         TabRow(selectedTabIndex = selectedTabIndex) {
             tabItems.forEachIndexed { index, item ->
-                Tab(selected = index == selectedTabIndex,
+                Tab(
+                    selected = index == selectedTabIndex,
                     onClick = {
                         counterVM.actionSetIsHundredTabIndex(index) //selectedTabIndex = index
                     },
@@ -73,7 +76,7 @@ fun TabRow(counterVM: CounterVM) {
                                 imageVector = if (index == selectedTabIndex) {
                                     item.selectedIcon
                                 } else item.unselectedIcon,
-                                contentDescription = item.title
+                                contentDescription = item.contentDescription
                             )
                             Text(text = item.title)
                         }
