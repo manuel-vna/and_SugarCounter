@@ -8,6 +8,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -44,6 +47,7 @@ class MainActivity : ComponentActivity(), KoinComponent,
         }
     }
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,11 +57,17 @@ class MainActivity : ComponentActivity(), KoinComponent,
         setContent {
             SugarCounterTheme(dynamicColor = isDynamicColor) {
                 // A surface container using the 'background' color from the theme
+
+                val windowClass = calculateWindowSizeClass(activity = this)
+                val showNavigationRail =
+                    windowClass.widthSizeClass != WindowWidthSizeClass.Compact
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreenView(applicationContext)
+
+                    MainScreenView(applicationContext, showNavigationRail)
                 }
             }
         }
@@ -93,9 +103,10 @@ fun testing(appDatabase: AppDatabase) {
         }
         println("categoryExistsInMoreThanOneEntryRow: " + categoryExistsInMoreThanOneEntryRow)
 
-        val categoriesToBeDeletedFromSugarEntries = categoryExistsInMoreThanOneEntryRow.filter {
-            it.second.not()
-        }.map { it.first }
+        val categoriesToBeDeletedFromSugarEntries =
+            categoryExistsInMoreThanOneEntryRow.filter {
+                it.second.not()
+            }.map { it.first }
         println("categoriesToBeDeletedFromSugarEntries: " + categoriesToBeDeletedFromSugarEntries)
         //</editor-fold>
 
@@ -104,13 +115,17 @@ fun testing(appDatabase: AppDatabase) {
             .getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
         println("categoriesOfCaloriesEntriesToBeDeleted: " + categoriesOfCaloriesEntriesToBeDeleted)
 
-        val categoryExistsInMoreThanOneCaloriesRow = categoriesOfCaloriesEntriesToBeDeleted.map {
-            Pair(
-                first = it,
-                second = appDatabase.appDao()
-                    .checkIfCategoryIsPresentSinceInCaloriesTable(it, deletionPointInTime)
-            )
-        }
+        val categoryExistsInMoreThanOneCaloriesRow =
+            categoriesOfCaloriesEntriesToBeDeleted.map {
+                Pair(
+                    first = it,
+                    second = appDatabase.appDao()
+                        .checkIfCategoryIsPresentSinceInCaloriesTable(
+                            it,
+                            deletionPointInTime
+                        )
+                )
+            }
         println("categoryExistsInMoreThanOneCaloriesRows: " + categoryExistsInMoreThanOneCaloriesRow)
 
         val categoriesToBeDeletedFromCaloriesEntries =

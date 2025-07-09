@@ -133,6 +133,7 @@ fun getAppVersionNameValue(gitVersion: String): String {
 //noinspection UseTomlInstead
 dependencies {
 
+    implementation(libs.androidx.material3.window.size.class1.android)
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.espresso.core)
