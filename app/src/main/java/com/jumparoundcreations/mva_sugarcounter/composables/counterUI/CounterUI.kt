@@ -126,7 +126,8 @@ fun Counter(
             Arrangement.SpaceEvenly
         ) {
             Button(
-                modifier = Modifier.width(160.dp),
+                modifier = Modifier
+                    .width(160.dp),
                 onClick = {
                     counterVM.saveEntry(category)
                     counterVM.categoryHandling(category)
@@ -144,7 +145,7 @@ fun Counter(
                 Text(
                     text = stringResource(id = R.string.saveButton),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    fontSize = 16.sp
                 )
             }
 

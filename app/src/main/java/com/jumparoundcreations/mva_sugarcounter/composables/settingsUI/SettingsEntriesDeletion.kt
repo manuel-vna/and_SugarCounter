@@ -20,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
@@ -99,7 +101,11 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
                     ) {
+                        val gram = stringResource(R.string.general_gram)
                         Slider(
+                            modifier = Modifier.semantics {
+                                contentDescription = "${deletionWorkerSlider.toInt()} ${gram}"
+                            },
                             value = deletionWorkerSlider.toFloat(),
                             onValueChange = { settingsVM.actionUpdateDeletionWorkerSlider(it) },
                             valueRange = deletionWorkerSliderValueRange,

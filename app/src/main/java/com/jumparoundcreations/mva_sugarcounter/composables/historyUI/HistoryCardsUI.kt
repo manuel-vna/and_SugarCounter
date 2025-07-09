@@ -32,8 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.composables.ShowSharedCards
 import com.jumparoundcreations.mva_sugarcounter.composables.sharedUI.EmptyDataInfo
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 
@@ -41,8 +39,8 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 @Composable
 fun CardsScreen(
     historyVM: HistoryVM,
-    savedSugarCountGrouped: List<EntryGroup<Entry>>,
-    caloriesEntryDbHistory: List<EntryGroup<EntryCalories>>
+    savedSugarCountGrouped: List<EntryGroup>,
+    caloriesEntryDbHistory: List<EntryGroup>
 ) {
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
@@ -119,7 +117,10 @@ fun CardsScreen(
                 modifier = Modifier.padding(16.dp),
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
+                Icon(
+                    Icons.Default.Search,
+                    contentDescription = stringResource(R.string.accessibility_search)
+                )
             }
 
             androidx.compose.animation.AnimatedVisibility(

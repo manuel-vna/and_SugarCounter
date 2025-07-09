@@ -145,4 +145,20 @@
     <string name="no_data_yet_description">No data yet</string>
     <string name="no_cateogries_yet_description">No categories yet</string>
     <string name="landscape_mode_no_graph_description">This page is unfortunately not available in the landscape mode. Please change to the vertical format to view this page.</string>
+    <string name="accessibility_tabCounterPerHundred">Enter sugar per one hundred gram here</string>
+    <string name="accessibility_tabCounterPerPiece">Enter sugar per piece here</string>
+    <string name="accessibility_date_picker_button">Choose the date of your entry</string>
+    <string name="accessibility_scan_barcode_button">Retrieve the details of a product category by scanning its barcode</string>
+    <string name="accessibility_delete_value">Delete value</string>
+    <string name="accessibility_perHundredGram_textField">Enter a value in grams under one hundred here</string>
+    <string name="accessibility_perHundredGram_textField_consumed">Enter the amount eaten here</string>
+    <string name="accessibility_category_input_field">Enter a food category here or select one from the list</string>
+    <string name="accessibility_category_arrow_list">Open list</string>
+    <string name="accessibility_perPiece_textField">Enter a value in grams for one piece</string>
+    <string name="accessibility_perPiece_textField_consumed">Enter the number eaten here</string>
+    <string name="accessibility_search">Search</string>
+    <string name="accessibility_categories_srolling">Scroll to a specific letter</string>
+    <string name="accessibility_delete_categories">Delete selected categories</string>
+    <string name="accessibility_number_of_entries">Number of entries</string>
+    <string name="accessibility_card_status">Card status</string>
 </resources>

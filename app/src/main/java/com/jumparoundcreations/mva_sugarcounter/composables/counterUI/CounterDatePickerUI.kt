@@ -22,6 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
@@ -36,6 +38,7 @@ fun RowScope.DatePicker(
 ) {
     val nowMillis = System.currentTimeMillis()
     val xDaysAgoMillis = nowMillis - 2629743000
+    val accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button)
 
     val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
     val datePickerShown by counterVM.datePickerShown.collectAsState()
@@ -51,7 +54,10 @@ fun RowScope.DatePicker(
     ElevatedButton(
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .weight(1f),
+            .weight(1f)
+            .semantics {
+                contentDescription = accessibilityDatePickerButton
+            },
         onClick = {
             counterVM.actionChangeDatePickerVisibility(!datePickerShown)
         },
@@ -63,7 +69,7 @@ fun RowScope.DatePicker(
         Icon(
             modifier = Modifier.size(20.dp),
             imageVector = Icons.Rounded.CalendarMonth,
-            contentDescription = "date",
+            contentDescription = "",
         )
         Text(
             text = HelperMethods.convertTimestampToDateString(
