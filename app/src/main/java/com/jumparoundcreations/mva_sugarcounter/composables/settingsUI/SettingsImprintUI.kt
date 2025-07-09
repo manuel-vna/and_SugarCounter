@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,7 +29,25 @@ fun ImprintUI(navController: NavController) {
         )
 
         WebView(
-            state = rememberWebViewStateWithHTMLData(termsHtml),
+            state = rememberWebViewStateWithHTMLData(
+                termsHtml.replace(
+                    "##STYLE_PLACEHOLDER##",
+                    """<style>
+                        body {
+                            background-color: rgb(
+                                ${MaterialTheme.colorScheme.background.red * 255},
+                                ${MaterialTheme.colorScheme.background.green * 255},
+                                ${MaterialTheme.colorScheme.background.blue * 255}
+                            ); 
+                            color: rgb(
+                                ${MaterialTheme.colorScheme.onBackground.red * 255},
+                                ${MaterialTheme.colorScheme.onBackground.green * 255},
+                                ${MaterialTheme.colorScheme.onBackground.blue * 255}
+                            );
+                        }
+                    </style>""".trimMargin()
+                )
+            ),
             modifier = Modifier.fillMaxSize()
         )
     }

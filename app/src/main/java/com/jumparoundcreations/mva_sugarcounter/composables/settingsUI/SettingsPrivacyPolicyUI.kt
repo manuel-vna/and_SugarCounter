@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +34,25 @@ fun PrivacyPolicyUI(navController: NavController) {
         )
 
         WebView(
-            state = rememberWebViewStateWithHTMLData(termsHtml),
+            state = rememberWebViewStateWithHTMLData(
+                termsHtml.replace(
+                    "##STYLE_PLACEHOLDER##",
+                    """<style>
+                        body {
+                            background-color: rgb(
+                                ${MaterialTheme.colorScheme.background.red * 255},
+                                ${MaterialTheme.colorScheme.background.green * 255},
+                                ${MaterialTheme.colorScheme.background.blue * 255}
+                            ); 
+                            color: rgb(
+                                ${MaterialTheme.colorScheme.onBackground.red * 255},
+                                ${MaterialTheme.colorScheme.onBackground.green * 255},
+                                ${MaterialTheme.colorScheme.onBackground.blue * 255}
+                            );
+                        }
+                    </style>""".trimMargin()
+                )
+            ),
             modifier = Modifier.fillMaxSize()
         )
 
