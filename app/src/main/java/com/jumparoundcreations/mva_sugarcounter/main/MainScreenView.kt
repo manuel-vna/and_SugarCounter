@@ -2,7 +2,10 @@ package com.jumparoundcreations.mva_sugarcounter.main
 
 import android.content.Context
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
@@ -19,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -48,29 +50,36 @@ fun MainScreenView(
     Scaffold(
         modifier = Modifier.displayCutoutPadding(),
         bottomBar = {
-            if (showNavigationRail) {
-                NavigationSideBar(
-                    items = items,
-                    navController = navController,
-                )
-            } else {
+            if (showNavigationRail.not()) {
                 BottomNavigation(navController = navController)
             }
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        Box(
+        Row(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(it)
-                .padding(horizontal = 16.dp)
-        )
-        {
-            NavigationGraph(
-                navController = navController,
-                snackbarHostState = snackbarHostState,
-                context = context
+        ) {
+            if (showNavigationRail) {
+                NavigationSideBar(
+                    items = items,
+                    navController = navController,
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
             )
+            {
+                NavigationGraph(
+                    navController = navController,
+                    snackbarHostState = snackbarHostState,
+                    context = context
+                )
+            }
         }
     }
 }

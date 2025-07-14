@@ -66,6 +66,7 @@ fun Counter(
 
     Column(
         modifier = Modifier
+            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
