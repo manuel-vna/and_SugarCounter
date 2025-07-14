@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
@@ -89,207 +91,210 @@ fun SharedCardItem(
         onDismissRequest = { sharedVM.actionDismissCardItem() }
     ) {
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Text(
-                text = stringResource(R.string.card_item_detail_view_heading),
-                fontWeight = FontWeight.Bold
-            )
-        }
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState())
         ) {
 
-            Column(
-                modifier = Modifier.padding(8.dp)
-            ) {
-
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = stringResource(id = R.string.foodType),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                TextField(
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor =
-                            MaterialTheme.colorScheme.secondaryContainer,
-                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    value = valueCategory,
-                    onValueChange = { sharedVM.actionChangeValueCategory(it) },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { sharedVM.actionChangeValueCategory("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                )
-            }
-
-        }
-
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Column(
+            Row(
                 modifier = Modifier
-                    .padding(16.dp)
                     .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
-
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = headingProportion,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                TextField(
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor =
-                            MaterialTheme.colorScheme.secondaryContainer,
-                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    value = valueProportion,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueProportion(
-                            it
-                        )
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { sharedVM.actionChangeValueProportion("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    placeholder = { Text(stringResource(R.string.gram_unit_short)) }
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth()
-                    .weight(1f),
-                Arrangement.SpaceEvenly
-            ) {
-
-                Text(
-                    modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                    text = headingConsumed,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium
-                )
-
-                TextField(
-                    colors = OutlinedTextFieldDefaults.colors(
-                        unfocusedContainerColor =
-                            MaterialTheme.colorScheme.secondaryContainer,
-                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    value = valueConsumed,
-                    onValueChange = {
-                        if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueConsumed(
-                            it
-                        )
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { sharedVM.actionChangeValueConsumed("") }) {
-                            Icon(
-                                modifier = Modifier.size(20.dp),
-                                imageVector = Icons.Rounded.Clear,
-                                contentDescription = "arrow",
-                            )
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    placeholder = { Text(stringResource(R.string.gram_unit_short)) }
-                )
-            }
-        }
-
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
-
-        ) {
-            Button(
-                modifier = Modifier
-                    .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                    .weight(0.1F),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error,
-                    contentColor = Color.White,
-                    //contentColor for text font statically because it fits light and dark mode
-                ),
-                onClick = {
-                    sharedVM.actionShowDialogEntryDeletionConfirmation(true)
-                }
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Start
             ) {
                 Text(
-                    text = stringResource(id = R.string.general_delete)
+                    text = stringResource(R.string.card_item_detail_view_heading),
+                    fontWeight = FontWeight.Bold
                 )
             }
-            OutlinedButton(
-                modifier = Modifier
-                    .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                    .weight(0.1f),
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
 
-                onClick = { sharedVM.actionDismissCardItem() }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = stringResource(R.string.generalCancel)
-                )
-            }
-            Button(
-                modifier = Modifier
-                    .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                    .weight(0.1F),
-                onClick = {
-                    sharedVM.actionEditDatabaseEntry(
-                        isEntrySugar,
-                        entrySugar,
-                        entryCalories,
-                        valueCategory,
-                        valueProportion,
-                        valueConsumed
+
+                Column(
+                    modifier = Modifier.padding(8.dp)
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
+                        text = stringResource(id = R.string.foodType),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
                     )
-                    sharedVM.actionDismissCardItem()
+
+                    TextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor =
+                                MaterialTheme.colorScheme.secondaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        value = valueCategory,
+                        onValueChange = { sharedVM.actionChangeValueCategory(it) },
+                        singleLine = true,
+                        trailingIcon = {
+                            IconButton(onClick = { sharedVM.actionChangeValueCategory("") }) {
+                                Icon(
+                                    modifier = Modifier.size(20.dp),
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "arrow",
+                                )
+                            }
+                        },
+                    )
                 }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.general_edit)
-                )
             }
 
-        }
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    Arrangement.SpaceEvenly
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
+                        text = headingProportion,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor =
+                                MaterialTheme.colorScheme.secondaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        value = valueProportion,
+                        onValueChange = {
+                            if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueProportion(
+                                it
+                            )
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            IconButton(onClick = { sharedVM.actionChangeValueProportion("") }) {
+                                Icon(
+                                    modifier = Modifier.size(20.dp),
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "arrow",
+                                )
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        placeholder = { Text(stringResource(R.string.gram_unit_short)) }
+                    )
+                }
+
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    Arrangement.SpaceEvenly
+                ) {
+
+                    Text(
+                        modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
+                        text = headingConsumed,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    TextField(
+                        colors = OutlinedTextFieldDefaults.colors(
+                            unfocusedContainerColor =
+                                MaterialTheme.colorScheme.secondaryContainer,
+                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
+                        ),
+                        value = valueConsumed,
+                        onValueChange = {
+                            if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueConsumed(
+                                it
+                            )
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            IconButton(onClick = { sharedVM.actionChangeValueConsumed("") }) {
+                                Icon(
+                                    modifier = Modifier.size(20.dp),
+                                    imageVector = Icons.Rounded.Clear,
+                                    contentDescription = "arrow",
+                                )
+                            }
+                        },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        placeholder = { Text(stringResource(R.string.gram_unit_short)) }
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+
+            ) {
+                Button(
+                    modifier = Modifier
+                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                        .weight(0.1F),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = Color.White,
+                        //contentColor for text font statically because it fits light and dark mode
+                    ),
+                    onClick = {
+                        sharedVM.actionShowDialogEntryDeletionConfirmation(true)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.general_delete)
+                    )
+                }
+                OutlinedButton(
+                    modifier = Modifier
+                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                        .weight(0.1f),
+
+                    onClick = { sharedVM.actionDismissCardItem() }
+                ) {
+                    Text(
+                        text = stringResource(R.string.generalCancel)
+                    )
+                }
+                Button(
+                    modifier = Modifier
+                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                        .weight(0.1F),
+                    onClick = {
+                        sharedVM.actionEditDatabaseEntry(
+                            isEntrySugar,
+                            entrySugar,
+                            entryCalories,
+                            valueCategory,
+                            valueProportion,
+                            valueConsumed
+                        )
+                        sharedVM.actionDismissCardItem()
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.general_edit)
+                    )
+                }
+
+            }
+        }
     }
 
 
