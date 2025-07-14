@@ -84,7 +84,8 @@ fun SharedCardItem(
     }
 
     ModalBottomSheet(
-        modifier = Modifier.navigationBarsPadding(),
+        modifier = Modifier
+            .navigationBarsPadding(),
         onDismissRequest = { sharedVM.actionDismissCardItem() }
     ) {
 

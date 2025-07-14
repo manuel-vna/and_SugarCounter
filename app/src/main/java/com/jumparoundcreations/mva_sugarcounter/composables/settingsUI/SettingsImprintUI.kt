@@ -2,9 +2,11 @@ package com.jumparoundcreations.mva_sugarcounter.composables.settingsUI
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewStateWithHTMLData
@@ -18,7 +20,9 @@ fun ImprintUI(navController: NavController) {
 
     val termsHtml: String = getKoin().get(named("imprint"))
 
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
 
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.about_title_imprint),
