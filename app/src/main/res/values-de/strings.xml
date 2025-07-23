@@ -142,6 +142,7 @@
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
     <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>
     <string name="card_item_detail_view_heading">Editieren / Löschen</string>
+    <string name="card_item_detail_view_reuse_button">Am heutigen Tag erneut eintragen</string>
     <string name="no_cards_yet_description">Noch keine Karten vorhanden</string>
     <string name="no_data_yet_description">Noch keine Daten vorhanden</string>
     <string name="no_cateogries_yet_description">Noch keine Kategorien vorhanden</string>

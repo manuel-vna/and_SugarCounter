@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -62,19 +64,20 @@ fun SharedCardItem(
 
     // The fields of the bottom sheet are filled with the values from the entry that was clicked
     when (isEntrySugar) {
-        true -> if (entrySugar.isPerHundred) {
-            sharedVM.actionChangeValueCategory(entrySugar.category)
-            sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramPerHundredLabel))
-            sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.amountSugar))
-            sharedVM.actionChangeValueProportion(entrySugar.perHundredGram.toString())
-            sharedVM.actionChangeValueConsumed(entrySugar.perHundredQuantity.toString())
-        } else {
-            sharedVM.actionChangeValueCategory(entrySugar.category)
-            sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramSugar))
-            sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
-            sharedVM.actionChangeValueProportion(entrySugar.perPieceGram.toString())
-            sharedVM.actionChangeValueConsumed(entrySugar.perPieceAmount.toString())
-        }
+        true ->
+            if (entrySugar.isPerHundred) {
+                sharedVM.actionChangeValueCategory(entrySugar.category)
+                sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramPerHundredLabel))
+                sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.amountSugar))
+                sharedVM.actionChangeValueProportion(entrySugar.perHundredGram.toString())
+                sharedVM.actionChangeValueConsumed(entrySugar.perHundredQuantity.toString())
+            } else {
+                sharedVM.actionChangeValueCategory(entrySugar.category)
+                sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramSugar))
+                sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
+                sharedVM.actionChangeValueProportion(entrySugar.perPieceGram.toString())
+                sharedVM.actionChangeValueConsumed(entrySugar.perPieceAmount.toString())
+            }
 
         else -> {
             sharedVM.actionChangeValueCategory(entryCalories.category)
@@ -240,9 +243,36 @@ fun SharedCardItem(
             }
 
             Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier = Modifier
+                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                ElevatedButton(
+                    shape = RoundedCornerShape(12.dp),
+                    onClick = {
+                        sharedVM.actionReuseEntryForToday(
+                            isEntrySugar,
+                            entrySugar,
+                            entryCalories
+                        )
+                        sharedVM.actionDismissCardItem()
+                    }
+                ) {
+                    Text(
+                        text = stringResource(R.string.card_item_detail_view_reuse_button)
+                    )
+                }
+            }
 
+
+            Row(
+                modifier = Modifier.padding(
+                    bottom = 32.dp,
+                    start = 16.dp,
+                    end = 16.dp
+                ),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     modifier = Modifier

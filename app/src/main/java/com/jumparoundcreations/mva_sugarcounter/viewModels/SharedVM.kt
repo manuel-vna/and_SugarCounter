@@ -9,6 +9,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.Entry
 import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
 import com.jumparoundcreations.mva_sugarcounter.data.IEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,8 +32,7 @@ class SharedVM : ViewModel(), KoinComponent {
 
     private val _cardItemToShowSugar = MutableStateFlow(
         Entry(
-            0, 0, "", "", true,
-            0, 0, 0, 0, 0
+            0, 0, "", "", true, 0, 0, 0, 0, 0
         )
     )
     val cardItemToShowSugar = _cardItemToShowSugar.asStateFlow()
@@ -126,8 +126,7 @@ class SharedVM : ViewModel(), KoinComponent {
                         entrySugar.id,
                         valueProportion.toInt(),
                         valueConsumed.toInt(),
-                        gramTotal = ((valueProportion.toDouble() / 100)
-                                * valueConsumed.toDouble()).roundToInt()
+                        gramTotal = ((valueProportion.toDouble() / 100) * valueConsumed.toDouble()).roundToInt()
                     )
                 } else {
                     database.appDao().updateEntrySugarPerPiece(
@@ -178,8 +177,7 @@ class SharedVM : ViewModel(), KoinComponent {
     }
 
     fun actionDeleteSpecificEntryRow(
-        itemToDeleteIsEntrySugar: Boolean,
-        id: Int
+        itemToDeleteIsEntrySugar: Boolean, id: Int
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             if (itemToDeleteIsEntrySugar) {
@@ -194,7 +192,73 @@ class SharedVM : ViewModel(), KoinComponent {
         _dialogEntryDeletionConfirmation.value = isShown
     }
 
-    //Actions: END
+    fun actionReuseEntryForToday(
+        isEntrySugar: Boolean,
+        entrySugar: Entry,
+        entryCalories: EntryCalories
+    ) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val currentTimestamp = System.currentTimeMillis() / 1000
+
+            when (isEntrySugar) {
+                true ->
+                    if (entrySugar.isPerHundred) {
+                        database.appDao().insertEntry(
+                            Entry(
+                                currentTimestamp = currentTimestamp,
+                                date = HelperMethods.convertTimestampToDateString(
+                                    currentTimestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                category = entrySugar.category,
+                                isPerHundred = true,
+                                perPieceGram = 0,
+                                perPieceAmount = 0,
+                                perHundredGram = entrySugar.perHundredGram,
+                                perHundredQuantity = entrySugar.perHundredQuantity,
+                                gramTotal = entrySugar.gramTotal
+                            )
+                        )
+                    } else {
+                        database.appDao().insertEntry(
+                            Entry(
+                                currentTimestamp = currentTimestamp,
+                                date = HelperMethods.convertTimestampToDateString(
+                                    currentTimestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                category = entrySugar.category,
+                                isPerHundred = false,
+                                perPieceGram = entrySugar.perPieceGram,
+                                perPieceAmount = entrySugar.perPieceAmount,
+                                perHundredGram = 0,
+                                perHundredQuantity = 0,
+                                gramTotal = entrySugar.gramTotal
+                            )
+                        )
+                    }
+
+                else -> {
+                    database.appDao().insertEntryCalories(
+                        EntryCalories(
+                            currentTimestamp = currentTimestamp,
+                            date = HelperMethods.convertTimestampToDateString(
+                                currentTimestamp,
+                                "yyyy-MM-dd"
+                            ),
+                            category = entryCalories.category,
+                            caloriesPerPiece = entryCalories.caloriesPerPiece,
+                            caloriesAmount = entryCalories.caloriesAmount,
+                            caloriesTotal = entryCalories.caloriesTotal
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+//Actions: END
 
 }
 
