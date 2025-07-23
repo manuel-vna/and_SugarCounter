@@ -145,7 +145,7 @@
     <string name="no_cards_yet_description">Noch keine Karten vorhanden</string>
     <string name="no_data_yet_description">Noch keine Daten vorhanden</string>
     <string name="no_cateogries_yet_description">Noch keine Kategorien vorhanden</string>
-    <string name="landscape_mode_no_graph_description">Diese Seite ist leider im Querformat nicht vergügbar. Wechseln sie bitte in das vertikale Formar, um diese Seite zu sehen.</string>
+    <string name="landscape_mode_no_graph_description">Im Querformat leider nicht vergügbar. Wechseln sie bitte in das vertikale Format, um den Inhalt dieser Seite anzuzeigen.</string>
     <string name="accessibility_tabCounterPerHundred">Zucker pro hundert Gramm hier eingeben</string>
     <string name="accessibility_tabCounterPerPiece">Zucker pro Stück hier eingeben</string>
     <string name="accessibility_date_picker_button">Wählen Sie das Datum für Ihren Eintrag</string>

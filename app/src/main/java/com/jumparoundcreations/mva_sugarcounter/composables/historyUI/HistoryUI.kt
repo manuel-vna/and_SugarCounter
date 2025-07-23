@@ -49,7 +49,9 @@ fun History(
     val isLandscape =
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
 
         HistoryScreenTopArea(
             historyVM,
