@@ -180,7 +180,7 @@ fun SharedCardItem(
                         ),
                         value = valueProportion,
                         onValueChange = {
-                            if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueProportion(
+                            if (it.isDigitsOnly() && it.count() <= if (isEntrySugar) 2 else 4) sharedVM.actionChangeValueProportion(
                                 it
                             )
                         },
