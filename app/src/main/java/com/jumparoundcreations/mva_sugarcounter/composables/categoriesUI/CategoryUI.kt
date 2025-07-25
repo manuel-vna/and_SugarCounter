@@ -64,7 +64,7 @@ fun CategoryList(
     scrollState: LazyListState
 ) {
 
-    Column {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
 
         Row(
             modifier = Modifier

@@ -50,7 +50,9 @@ fun FAQScreen(navController: NavController) {
 
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
     ) {
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_title_faq_text),

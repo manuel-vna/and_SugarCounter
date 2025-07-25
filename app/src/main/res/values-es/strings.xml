@@ -142,6 +142,7 @@
     <string name="settings_use_dynamic_colors_from_os">Esquema de colores de Android</string>
     <string name="settings_use_dynamic_colors_from_os_description">Si activas este interruptor, la aplicación SugarCounter utilizará el esquema de colores que hayas definido en la configuración del sistema operativo Android.</string>
     <string name="card_item_detail_view_heading">Editar / Borrar</string>
+    <string name="card_item_detail_view_reuse_button">Volver a registrarse hoy mismo</string>
     <string name="no_cards_yet_description">Aún no hay entradas disponibles</string>
     <string name="no_data_yet_description">Aún no hay datos disponibles</string>
     <string name="no_cateogries_yet_description">Aún no hay categorías disponibles</string>

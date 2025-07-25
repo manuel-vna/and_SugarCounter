@@ -42,7 +42,8 @@ class DeletionWorkerTest {
     private var numberOfSugarEntriesBeforeDeletion by Delegates.notNull<Int>()
     private lateinit var workInfo: WorkInfo
 
-    private var sevenMonthsAgo = 0L
+    private var threeMonthsAgo = 0L
+    private var sixMonthsAgo = 0L
 
 
     @Before
@@ -67,8 +68,10 @@ class DeletionWorkerTest {
         //<editor-fold desc="Set timestamps used for testing">
         val oneYearAgo =
             (System.currentTimeMillis() / 1000) - 31556926 // 31556926 = 1 year in seconds
-        sevenMonthsAgo =
-            (System.currentTimeMillis() / 1000) - 18408201L // 18408201 = 7 months in seconds
+        threeMonthsAgo =
+            (System.currentTimeMillis() / 1000) - 7889229L // 7889229 = 3 months in seconds
+        sixMonthsAgo =
+            (System.currentTimeMillis() / 1000) - 15778458L // 15778458 = 6 months in seconds
         //</editor-fold>
 
 
@@ -200,14 +203,28 @@ class DeletionWorkerTest {
     }
 
     @Test
-    fun checkThatLatestSugarEntryIsOlderThan6Months() {
+    fun checkThatLatestSugarEntryIsWithin6MonthsRange() {
+
+        // Prepare
+        val allLeftEntries = dao.getAllEntries()
+        val timestampOfEntry = allLeftEntries.first().currentTimestamp
+
+        println("timestampOfEntry: $timestampOfEntry")
+        println("sixMonthsAgo: $sixMonthsAgo")
+
+        // Test
+        assertTrue(timestampOfEntry > sixMonthsAgo)
+    }
+
+    @Test
+    fun checkThatLatestSugarEntryIsOlderThan3MonthsAgo() {
 
         // Prepare
         val allLeftEntries = dao.getAllEntries()
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
 
         // Test
-        assertTrue(timestampOfEntry > sevenMonthsAgo)
+        assertTrue(timestampOfEntry < threeMonthsAgo)
     }
 
 
