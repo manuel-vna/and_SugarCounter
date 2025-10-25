@@ -53,11 +53,10 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Frequently Asked Questions</string>
-    <string name="settings_button_donation_text">Support developers</string>
     <string name="faq_question_one">What is this app for?</string>
     <string name="faq_answer_one">To monitor your daily sugar consumption by writing down the sugar consumed in grams. In addition, the calories consumed can be entered and recorded daily.</string>
     <string name="faq_question_two">Can the app be used free of charge?</string>
-    <string name="faq_answer_two">Yes, the app is completely free and no advertising is displayed. However, the developers of the app are happy to receive a small donation.</string>
+    <string name="faq_answer_two">Yes, the app is completely free and no advertising is displayed.</string>
     <string name="faq_question_three">Why does a user have to enter the sugar content of a particular food product?</string>
     <string name="faq_answer_three">Entering the sugar values by yourself should give you a better feeling for your own sugar consumption.</string>
     <string name="faq_question_four">What do the two input variants \'Sugar/100g\' and \'Sugar/piece\' mean?</string>
@@ -118,11 +117,6 @@
     <string name="about_title_imprint">Imprint</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
     <string name="settings_functions_other_title">Functions</string>
-    <string name="settings_donation_title">Support developers</string>
-    <string name="settings_donation_description">If you like this app, you can send a small donation to the development team. This will help our team to continue working on this and similar apps in the future.</string>
-    <string name="settings_donation_paypal">Paypal</string>
-    <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
-    <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
     <string name="settings_introduction_title">Introduction</string>
     <string name="settings_intoduction_counter_title">Add sugar</string>
     <string name="settings_introduction_counter_top">1) For which day should the entry be entered?\n\n2) Link the entry to a barcode so that the sugar values are automatically entered for this category when the barcode is scanned again.\n\n3) Enter here which food was eaten. The exact name can be chosen by the user. It can be a general name, a brand name or something similar.</string>
