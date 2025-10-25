@@ -18,12 +18,12 @@ val versionNameValue = getAppVersionNameValue(gitVersion)
 
 android {
     namespace = "com.jumparoundcreations.mva_sugarcounter"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
-        targetSdk = 35
+        targetSdk = 36
         versionCode = versionCodeValue // e.g. 1
         versionName = versionNameValue // e.g. "v0.0.1"
 

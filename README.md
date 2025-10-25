@@ -1,6 +1,6 @@
 SugarCounter
 
-v1.1.0_36
+v1.2.0_38
 
 This app has the purpose to raise awareness of one's daily sugar consumption by writing it down
 in a list-like style. The accuracy of sugar tracking is deliberately left to the user of the app.
