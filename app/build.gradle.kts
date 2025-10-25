@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.detekt)
     id("kotlin-kapt")
     id("com.mikepenz.aboutlibraries.plugin")
     id("androidx.room")
