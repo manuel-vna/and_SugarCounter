@@ -19,23 +19,47 @@ class DeletionWorker(
     private val sharedPrefsMain: SharedPreferences
 ) : CoroutineWorker(context, params), KoinComponent {
 
-    val automaticDeletionValue = sharedPrefsMain.getInt("automaticDeletionValue", 3)
-    val automaticDeletionValueMapping = mapOf(
-        0 to 15778463, // 1/2 year
-        1 to 31556926, // 1 year
-        2 to 63113852, // 2 years
-        3 to 94670778, // 3 years
-        4 to 126227704, // 4 years
-        5 to 157784630, // 5 years
-        6 to 189341556, // 6 years
-        7 to 220898482, // 7 years
-        8 to 252455408, // 8 years
-    )
-    private val deletionPeriod = automaticDeletionValueMapping[automaticDeletionValue] ?: 94670778
-
+    val automaticDeletionValue = sharedPrefsMain.getInt("automaticDeletionValue", YEAR_THREE)
+    private val deletionPeriod =
+        automaticDeletionValueMapping[automaticDeletionValue] ?: YEAR_THREE_IN_SECONDS
 
     companion object {
+
+        private const val MILLISECONDS_TO_SECONDS_DIVIDER = 1000
+
+        private const val YEAR_HALF = 0
+        private const val YEAR_ONE = 1
+        private const val YEAR_TWO = 2
+        private const val YEAR_THREE = 3
+        private const val YEAR_FOUR = 4
+        private const val YEAR_FIVE = 5
+        private const val YEAR_SIX = 6
+        private const val YEAR_SEVEN = 7
+        private const val YEAR_EIGHT = 8
+
+        private const val YEAR_HALF_IN_SECONDS = 15778463
+        private const val YEAR_ONE_IN_SECONDS = 31556926
+        private const val YEAR_TWO_IN_SECONDS = 63113852
+        private const val YEAR_THREE_IN_SECONDS = 94670778
+        private const val YEAR_FOUR_IN_SECONDS = 126227704
+        private const val YEAR_FIVE_IN_SECONDS = 157784630
+        private const val YEAR_SIX_IN_SECONDS = 189341556
+        private const val YEAR_SEVEN_IN_SECONDS = 220898482
+        private const val YEAR_EIGHT_IN_SECONDS = 252455408
+
+        val automaticDeletionValueMapping = mapOf(
+            YEAR_HALF to YEAR_HALF_IN_SECONDS, // 1/2 year
+            YEAR_ONE to YEAR_ONE_IN_SECONDS, // 1 year
+            YEAR_TWO to YEAR_TWO_IN_SECONDS, // 2 years
+            YEAR_THREE to YEAR_THREE_IN_SECONDS, // 3 years
+            YEAR_FOUR to YEAR_FOUR_IN_SECONDS, // 4 years
+            YEAR_FIVE to YEAR_FIVE_IN_SECONDS, // 5 years
+            YEAR_SIX to YEAR_SIX_IN_SECONDS, // 6 years
+            YEAR_SEVEN to YEAR_SEVEN_IN_SECONDS, // 7 years
+            YEAR_EIGHT to YEAR_EIGHT_IN_SECONDS, // 8 years
+        )
         private const val WORK_REPEAT_INTERVAL_IN_DAYS = 30L
+
         fun scheduleDeletionWorker(context: Context) {
 
             val constraints = Constraints.Builder()
@@ -63,7 +87,8 @@ class DeletionWorker(
         val entriesDeletionActivated = sharedPrefsMain.getBoolean("entriesDeletionActivated", false)
         if (entriesDeletionActivated) {
 
-            val deletionPointInTime = (System.currentTimeMillis() / 1000) - deletionPeriod
+            val deletionPointInTime =
+                (System.currentTimeMillis() / MILLISECONDS_TO_SECONDS_DIVIDER) - deletionPeriod
 
             //<editor-fold desc="SugarEntries">
             val categoriesOfSugarEntriesToBeDeleted =
