@@ -9,6 +9,7 @@ import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.elevatedButtonColors
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
+import com.jumparoundcreations.sugarcounter.util.TimeConstants
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +39,7 @@ fun RowScope.DatePicker(
     textColor: Color
 ) {
     val nowMillis = System.currentTimeMillis()
-    val xDaysAgoMillis = nowMillis - 2629743000
+    val xDaysAgoMillis = nowMillis - TimeConstants.MONTH_ONE_IN_MILLISECONDS
     val accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button)
 
     val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
@@ -51,6 +53,30 @@ fun RowScope.DatePicker(
         }
     )
 
+    ElevatedButton(
+        counterVM = counterVM,
+        accessibilityDatePickerButton = accessibilityDatePickerButton,
+        textColor = textColor,
+        datePickerShown = datePickerShown,
+        dateOfEntryEpochSec = dateOfEntryEpochSec
+    )
+
+    if (datePickerShown) {
+        DatePickerDialog(
+            counterVM = counterVM,
+            datePickerState = datePickerState
+        )
+    }
+}
+
+@Composable
+fun RowScope.ElevatedButton(
+    counterVM: CounterVM,
+    accessibilityDatePickerButton: String,
+    textColor: Color,
+    datePickerShown: Boolean,
+    dateOfEntryEpochSec: Long
+) {
     ElevatedButton(
         modifier = Modifier
             .padding(horizontal = 8.dp)
@@ -78,51 +104,55 @@ fun RowScope.DatePicker(
             )
         )
     }
+}
 
+@Composable
+fun DatePickerDialog(
+    counterVM: CounterVM,
+    datePickerState: DatePickerState
+) {
 
-    if (datePickerShown) {
-        DatePickerDialog(
-            onDismissRequest = {
+    DatePickerDialog(
+        onDismissRequest = {
+            counterVM.actionChangeDatePickerVisibility(false)
+        },
+        confirmButton = {
+            Button(onClick = {
                 counterVM.actionChangeDatePickerVisibility(false)
-            },
-            confirmButton = {
-                Button(onClick = {
-                    counterVM.actionChangeDatePickerVisibility(false)
-                    datePickerState.selectedDateMillis?.let {
-                        counterVM.actionChangeDateOfEntryM3(
-                            it / 1000
-                        )
-                    }
-                }) {
-                    Text(text = stringResource(id = R.string.saveButton))
-                }
-            },
-            dismissButton = {
-                Button(
-                    onClick = {
-                        counterVM.actionChangeDatePickerVisibility(false)
-                    }
-                ) {
-                    Text(text = stringResource(id = R.string.generalCancel))
+                datePickerState.selectedDateMillis?.let {
+                    counterVM.actionChangeDateOfEntryM3(
+                        it / 1000
+                    )
                 }
             }) {
-            androidx.compose.material3.DatePicker(
-                title = {
-                    Text(
-                        modifier = Modifier.padding(12.dp),
-                        fontSize = 12.sp,
-                        text = stringResource(R.string.entryDateDescription)
-                    )
-                },
-                headline = {
-                    Text(
-                        modifier = Modifier.padding(2.dp),
-                        fontSize = 18.sp,
-                        text = stringResource(R.string.entryDateTitle)
-                    )
-                },
-                state = datePickerState,
-            )
-        }
+                Text(text = stringResource(id = R.string.saveButton))
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = {
+                    counterVM.actionChangeDatePickerVisibility(false)
+                }
+            ) {
+                Text(text = stringResource(id = R.string.generalCancel))
+            }
+        }) {
+        androidx.compose.material3.DatePicker(
+            title = {
+                Text(
+                    modifier = Modifier.padding(12.dp),
+                    fontSize = 12.sp,
+                    text = stringResource(R.string.entryDateDescription)
+                )
+            },
+            headline = {
+                Text(
+                    modifier = Modifier.padding(2.dp),
+                    fontSize = 18.sp,
+                    text = stringResource(R.string.entryDateTitle)
+                )
+            },
+            state = datePickerState,
+        )
     }
 }

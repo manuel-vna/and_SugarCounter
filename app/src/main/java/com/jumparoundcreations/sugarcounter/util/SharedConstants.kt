@@ -8,6 +8,10 @@ object DatabaseConstants {
     const val DEFAULT_DATABASE_BOOLEAN = false
 }
 
+object TimeConstants {
+    const val MONTH_ONE_IN_MILLISECONDS = 2629743000
+}
+
 object TestData {
     const val TEST_BARCODE_NUMBER = "123456789"
 }
