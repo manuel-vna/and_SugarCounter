@@ -1,6 +1,5 @@
 package com.jumparoundcreations.sugarcounter.composables.categoriesUI
 
-import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun Categories(context: Context) {
+fun Categories() {
 
     //get an instance of the ViewModel
     val categoryVM: CategoryVM = koinViewModel()

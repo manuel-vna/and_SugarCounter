@@ -211,12 +211,14 @@ class CounterVM : ViewModel(), KoinComponent {
     fun categoryHandling(category: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            // saving option 1: The category is not in the database yet and there is NO barcode displayed to the user: Save the category only
+            // saving option 1: The category is not in the database yet and there is
+            // NO barcode displayed to the user: Save the category only
             if (!_categories.value.contains(category) && !_noBarcodeYetInfoTitle.value) {
                 database.appDao().insertCategory(Category(category = category.trim()))
             }
 
-            // saving option 2: The category is not in the database yet and a barcode is displayed to the user: Save the category and the barcode in a new row
+            // saving option 2: The category is not in the database yet
+            // and a barcode is displayed to the user: Save the category and the barcode in a new row
             if (!_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
                 database.appDao().insertCategory(
                     Category(
@@ -227,7 +229,8 @@ class CounterVM : ViewModel(), KoinComponent {
                 removeLastBarcodeInput()
             }
 
-            //saving option 3: The category is already in the database and the user is displayed a barcode: Get that category from the database and save the barcode with it
+            //saving option 3: The category is already in the database and the user is
+            // displayed a barcode: Get that category from the database and save the barcode with it
             if (_categories.value.contains(category) && _noBarcodeYetInfoTitle.value) {
                 val categoryRow = database.appDao().getCategoryByCategoryName(category)
                 categoryRow.barcodeNumber = _barcodeNumber.value
@@ -251,7 +254,10 @@ class CounterVM : ViewModel(), KoinComponent {
 
 
             withContext(Dispatchers.Main) {
-                if (databaseSumCalories > sharedPrefsMain.getInt("caloriesThresholdValue", 0)) {
+                if (databaseSumCalories > sharedPrefsMain.getInt(
+                        "caloriesThresholdValue", 0
+                    )
+                ) {
                     _alertCaloriesThreshold.value = true
                 }
             }
@@ -343,7 +349,9 @@ class CounterVM : ViewModel(), KoinComponent {
                 } else {
                     viewModelScope.launch(Dispatchers.IO) {
                         val categoryFromBarcode =
-                            database.appDao().getCategoryByBarcodeNumber(_barcodeNumber.value)
+                            database.appDao().getCategoryByBarcodeNumber(
+                                _barcodeNumber.value
+                            )
                         if (categoryFromBarcode.isNullOrEmpty()) {
                             _noBarcodeYetInfoTitle.value = true
                         } else {

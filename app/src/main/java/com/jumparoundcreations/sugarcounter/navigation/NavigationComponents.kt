@@ -45,7 +45,7 @@ fun NavigationGraph(
             History(context)
         }
         composable(route = BottomNavItem.CategoryTitle.screenRoute) {
-            Categories(context)
+            Categories()
         }
         composable(route = BottomNavItem.Settings.screenRoute) {
             Settings(context, navController)
