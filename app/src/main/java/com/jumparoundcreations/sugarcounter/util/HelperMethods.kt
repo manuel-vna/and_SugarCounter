@@ -66,9 +66,14 @@ class HelperMethods : KoinComponent {
         }
 
         fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
-            return if (DateUtils.isToday(currentTimestamp * 1000)) {
+            return if (DateUtils.isToday(currentTimestamp * TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER)) {
                 TodayOrYesterday.TODAY
-            } else if (DateUtils.isToday(currentTimestamp * 1000 + 86400000)) {
+            } else if (DateUtils.isToday(
+                    currentTimestamp *
+                            TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER +
+                            TimeConstants.DAY_ONE_IN_MILLISECONDS
+                )
+            ) {
                 TodayOrYesterday.YESTERDAY
             } else {
                 TodayOrYesterday.LATER

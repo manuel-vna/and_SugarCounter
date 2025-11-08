@@ -9,6 +9,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.jumparoundcreations.sugarcounter.database.DaoAppDatabase
+import com.jumparoundcreations.sugarcounter.util.TimeConstants
 import org.koin.core.component.KoinComponent
 import java.util.concurrent.TimeUnit
 
@@ -24,8 +25,6 @@ class DeletionWorker(
         automaticDeletionValueMapping[automaticDeletionValue] ?: YEAR_THREE_IN_SECONDS
 
     companion object {
-
-        private const val MILLISECONDS_TO_SECONDS_DIVIDER = 1000
 
         private const val YEAR_HALF = 0
         private const val YEAR_ONE = 1
@@ -88,7 +87,7 @@ class DeletionWorker(
         if (entriesDeletionActivated) {
 
             val deletionPointInTime =
-                (System.currentTimeMillis() / MILLISECONDS_TO_SECONDS_DIVIDER) - deletionPeriod
+                (System.currentTimeMillis() / TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER) - deletionPeriod
 
             //<editor-fold desc="SugarEntries">
             val categoriesOfSugarEntriesToBeDeleted =

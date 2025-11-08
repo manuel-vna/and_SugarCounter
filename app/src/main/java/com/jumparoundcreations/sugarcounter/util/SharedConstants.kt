@@ -9,7 +9,12 @@ object DatabaseConstants {
 }
 
 object TimeConstants {
+
+    const val MILLISECONDS_TO_SECONDS_DIVIDER = 1000
     const val MONTH_ONE_IN_MILLISECONDS = 2629743000
+
+    const val DAY_ONE_IN_MILLISECONDS = 86400000
+
 }
 
 object TestData {

@@ -8,6 +8,7 @@ import com.jumparoundcreations.sugarcounter.data.Entry
 import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.util.DatabaseConstants
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,12 +23,17 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
 
+    companion object {
+        private const val INDEX_DEFAULT = 0
+        private const val TIMEOUT = 5000L
+    }
+
     //SateFlows: START
 
-    private val _isCardTabIndex = MutableStateFlow(0)
+    private val _isCardTabIndex = MutableStateFlow(INDEX_DEFAULT)
     val isCardTabIndex = _isCardTabIndex.asStateFlow()
 
-    private val _segmentedButtonSugarOrCaloriesIndex = MutableStateFlow(0)
+    private val _segmentedButtonSugarOrCaloriesIndex = MutableStateFlow(INDEX_DEFAULT)
     val segmentedButtonSugarOrCaloriesIndex = _segmentedButtonSugarOrCaloriesIndex.asStateFlow()
 
     private val _historyChartScreenShown = MutableStateFlow(false)
@@ -48,8 +54,16 @@ class HistoryVM : ViewModel(), KoinComponent {
                 "", "",
                 listOf(
                     Entry(
-                        0, 0, "", "", true,
-                        0, 0, 0, 0, 0
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
+                        DatabaseConstants.DEFAULT_DATABASE_STRING,
+                        DatabaseConstants.DEFAULT_DATABASE_STRING,
+                        true,
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT
                     )
                 )
             )
@@ -67,17 +81,24 @@ class HistoryVM : ViewModel(), KoinComponent {
             }
         }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
+            SharingStarted.WhileSubscribed(TIMEOUT),
             _savedHistory.value
         )
 
     private val _caloriesEntryDbHistory = MutableStateFlow(
         listOf(
             EntryGroup(
-                "", "",
+                DatabaseConstants.DEFAULT_DATABASE_STRING,
+                DatabaseConstants.DEFAULT_DATABASE_STRING,
                 listOf(
                     EntryCalories(
-                        0, 0, "", "", 0, 1, 0
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
+                        DatabaseConstants.DEFAULT_DATABASE_STRING,
+                        DatabaseConstants.DEFAULT_DATABASE_STRING,
+                        DatabaseConstants.DEFAULT_DATABASE_INT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT_AMOUNT,
+                        DatabaseConstants.DEFAULT_DATABASE_INT
                     )
                 )
             )
@@ -95,7 +116,7 @@ class HistoryVM : ViewModel(), KoinComponent {
             }
         }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
             viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
+            SharingStarted.WhileSubscribed(TIMEOUT),
             _caloriesEntryDbHistory.value
         )
     //SateFlows: END
@@ -111,7 +132,8 @@ class HistoryVM : ViewModel(), KoinComponent {
         _caloriesEntryDbHistory.value = _caloriesEntryDbHistoryGrouped
     }
 
-    // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
+    // When this ViewModal is initialized,
+    // tell the above created observer what has to be observed and how long
     init {
         database.appDao().getEntries(
             AppConstants.endOf90DaysAgo,
