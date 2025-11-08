@@ -15,6 +15,7 @@ import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewStateWithHTMLData
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.SharedTopAppBar
+import com.jumparoundcreations.sugarcounter.util.GeneralConstants
 import org.koin.compose.getKoin
 import org.koin.core.qualifier.named
 
@@ -43,14 +44,32 @@ fun TermsAndConditionsUI(navController: NavController) {
                     """<style>
                         body {
                             background-color: rgb(
-                                ${MaterialTheme.colorScheme.background.red * 255},
-                                ${MaterialTheme.colorScheme.background.green * 255},
-                                ${MaterialTheme.colorScheme.background.blue * 255}
+                                ${
+                        MaterialTheme.colorScheme.background.red *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    },
+                                ${
+                        MaterialTheme.colorScheme.background.green *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    },
+                                ${
+                        MaterialTheme.colorScheme.background.blue *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    }
                             ); 
                             color: rgb(
-                                ${MaterialTheme.colorScheme.onBackground.red * 255},
-                                ${MaterialTheme.colorScheme.onBackground.green * 255},
-                                ${MaterialTheme.colorScheme.onBackground.blue * 255}
+                                ${
+                        MaterialTheme.colorScheme.onBackground.red *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    },
+                                ${
+                        MaterialTheme.colorScheme.onBackground.green *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    },
+                                ${
+                        MaterialTheme.colorScheme.onBackground.blue *
+                                GeneralConstants.COLOR_RGB_MULTIPLIER
+                    }
                             );
                         }
                     </style>""".trimMargin()
