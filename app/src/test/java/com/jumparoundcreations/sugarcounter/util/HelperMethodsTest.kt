@@ -79,7 +79,9 @@ class HelperMethodsTest {
             )
         )
         //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(exampleListWithEntries)
+        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(
+            exampleListWithEntries
+        )
         //Validate
         assertEquals(entryGroupControl, entryGroup)
     }
@@ -99,7 +101,9 @@ class HelperMethodsTest {
             )
         )
         //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(exampleListWithEntries)
+        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(
+            exampleListWithEntries
+        )
         //Validate
         assertNotEquals(entryGroupControl, entryGroup)
     }
@@ -111,8 +115,9 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any()) } returns true
 
+        // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801)
         assertEquals(timeString, HelperMethods.TodayOrYesterday.TODAY)
     }
 
@@ -124,8 +129,9 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any()) } returns false
 
+        // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801)
         assertEquals(timeString, HelperMethods.TodayOrYesterday.LATER)
     }
 
@@ -135,13 +141,21 @@ class HelperMethodsTest {
     fun formatDateToString() {
         val timestamp: Long = 1735495200 //= GMT: Sunday, December 29, 2024 18:00:00
 
-        val dateString = HelperMethods.convertTimestampToDateString(timestamp, "yyyy-MM-dd")
+        val dateString = HelperMethods.convertTimestampToDateString(
+            timestamp,
+            "yyyy-MM-dd"
+        )
         assertEquals(dateString, "2024-12-29")
         // "yyyy" represents the calendar year.
 
-        val dateString2 = HelperMethods.convertTimestampToDateString(timestamp, "YYYY-MM-dd")
+        val dateString2 = HelperMethods.convertTimestampToDateString(
+            timestamp,
+            "YYYY-MM-dd"
+        )
+        // Not equal because it returns 2025-12-29 since "YYYY"
+        // represents the year associated with the ISO week date system.
         assertNotEquals(dateString2, "2024-12-29")
-        // not equal because it returns 2025-12-29 since "YYYY" represents the year associated with the ISO week date system.
+
     }
 
     @Test

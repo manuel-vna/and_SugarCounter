@@ -55,14 +55,34 @@ object ExportData : KoinComponent {
                 when (entry) {
                     is Entry -> {
                         if (entry.isPerHundred) {
-                            writer.append("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n")
+                            writer.append(
+                                "${entry.date}," +
+                                        "${entry.category}," +
+                                        "perHundred," +
+                                        "${entry.perHundredGram}," +
+                                        "${entry.perHundredQuantity}," +
+                                        "${entry.gramTotal}\n"
+                            )
                         } else {
-                            writer.append("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n")
+                            writer.append(
+                                "" +
+                                        "${entry.date}," +
+                                        "${entry.category}," +
+                                        "perPiece," +
+                                        "${entry.perPieceGram}," +
+                                        "${entry.perPieceAmount}," +
+                                        "${entry.gramTotal}\n"
+                            )
                         }
                     }
 
                     is EntryCalories -> {
-                        writer.append("${entry.date},${entry.category},${entry.caloriesTotal}\n")
+                        writer.append(
+                            "" +
+                                    "${entry.date}," +
+                                    "${entry.category}," +
+                                    "${entry.caloriesTotal}\n"
+                        )
                     }
 
                     else -> writer.append("")
@@ -132,14 +152,34 @@ object ExportData : KoinComponent {
                         when (entry) {
                             is Entry -> {
                                 if (entry.isPerHundred) {
-                                    outputStream.write("${entry.date},${entry.category},perHundred,${entry.perHundredGram},${entry.perHundredQuantity},${entry.gramTotal}\n".toByteArray())
+                                    outputStream.write(
+                                        (
+                                                "${entry.date}," +
+                                                        "${entry.category}," +
+                                                        "perHundred," +
+                                                        "${entry.perHundredGram}," +
+                                                        "${entry.perHundredQuantity}," +
+                                                        "${entry.gramTotal}\n").toByteArray()
+                                    )
                                 } else {
-                                    outputStream.write("${entry.date},${entry.category},perPiece,${entry.perPieceGram},${entry.perPieceAmount},${entry.gramTotal}\n".toByteArray())
+                                    outputStream.write(
+                                        (
+                                                "${entry.date}," +
+                                                        "${entry.category}," +
+                                                        "perPiece,${entry.perPieceGram}," +
+                                                        "${entry.perPieceAmount}," +
+                                                        "${entry.gramTotal}\n").toByteArray()
+                                    )
                                 }
                             }
 
                             is EntryCalories -> {
-                                outputStream.write("${entry.date},${entry.category},${entry.caloriesTotal}\n".toByteArray())
+                                outputStream.write(
+                                    (
+                                            "${entry.date}," +
+                                                    "${entry.category}," +
+                                                    "${entry.caloriesTotal}\n").toByteArray()
+                                )
                             }
 
                             else -> outputStream.write("".toByteArray())

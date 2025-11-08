@@ -52,7 +52,10 @@ class CounterSugarHelper : KoinComponent {
                     perHundredQuantityInt = perHundredQuantityDouble.toInt(),
                     perPieceGramInt = 0,
                     perPieceAmountInt = 0,
-                    gramTotalInt = ((perHundredGramDouble / 100) * perHundredQuantityDouble).roundToInt()  // rule of three: Calculate sugar on basis of the quantity eaten
+                    gramTotalInt = (
+                            (perHundredGramDouble / 100) *
+                                    perHundredQuantityDouble
+                            ).roundToInt()
                 )
 
             } else {
@@ -71,7 +74,7 @@ class CounterSugarHelper : KoinComponent {
                     perHundredQuantityInt = 0,
                     perPieceGramInt = perPieceGramInt,
                     perPieceAmountInt = perPieceAmountInt,
-                    gramTotalInt = perPieceGramInt * perPieceAmountInt // multiplying gram per piece value with amount of itmes eaten
+                    gramTotalInt = perPieceGramInt * perPieceAmountInt
                 )
 
             }

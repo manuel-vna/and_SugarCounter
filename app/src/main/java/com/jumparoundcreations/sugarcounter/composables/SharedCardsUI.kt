@@ -42,7 +42,9 @@ fun ShowSharedCards(
 ) {
 
     val sharedVM: SharedVM = koinViewModel()
-    val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList)
+    val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
+        entryGroup.entryList
+    )
     var thresholdValue = 0
 
     if (entryGroup.entryList.isNotEmpty()) {
@@ -64,7 +66,9 @@ fun ShowSharedCards(
             BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
         },
         colors = CardDefaults.cardColors(
-            containerColor = if (backgroundColorPrimary) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surface,
+            containerColor = if (backgroundColorPrimary)
+                MaterialTheme.colorScheme.surface
+            else MaterialTheme.colorScheme.surface,
         )
     ) {
 
@@ -75,7 +79,8 @@ fun ShowSharedCards(
         ) {
 
             Text(
-                modifier = Modifier.padding(top = 6.dp), text = when (entryGroup.dayDisplayFormat) {
+                modifier = Modifier.padding(top = 6.dp), text = when (
+                    entryGroup.dayDisplayFormat) {
                     "TODAY" -> stringResource(R.string.timestampToday)
                     "YESTERDAY" -> stringResource(
                         R.string.timestampYesterday
@@ -113,7 +118,9 @@ fun ShowSharedCards(
                         if (it.caloriesPerPiece == 0) {
                             stringResource(R.string.calories_textfield_placeholder)
                         } else {
-                            it.caloriesAmount.toString() + stringResource(id = R.string.sugar_card_multiplier_expression) + it.caloriesPerPiece.toString()
+                            it.caloriesAmount.toString() +
+                                    stringResource(id = R.string.sugar_card_multiplier_expression) +
+                                    it.caloriesPerPiece.toString()
                         }
                     thirdColumnText = it.caloriesTotal.toString()
                 }
@@ -170,10 +177,14 @@ fun ShowSharedCards(
 
             Icon(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                painter = if (totalGramPerDayBlock <= thresholdValue) painterResource(id = R.drawable.baseline_check_circle_outline_24) else painterResource(
+                painter = if (totalGramPerDayBlock <= thresholdValue)
+                    painterResource(id = R.drawable.baseline_check_circle_outline_24)
+                else painterResource(
                     id = R.drawable.baseline_remove_circle_outline_24
                 ),
-                tint = if (totalGramPerDayBlock > thresholdValue) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary,
+                tint = if (totalGramPerDayBlock > thresholdValue)
+                    MaterialTheme.colorScheme.error
+                else MaterialTheme.colorScheme.secondary,
                 contentDescription = stringResource(R.string.accessibility_card_status),
             )
 
@@ -183,7 +194,9 @@ fun ShowSharedCards(
                     stringResource(id = R.string.totalAmountSugar) +
                             stringResource(id = R.string.general_colon_character) +
                             stringResource(id = R.string.general_whitespace_character) +
-                            HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
+                            HelperMethods.calculateTotalGramPerDayBlock(
+                                entryGroup.entryList
+                            ),
                 fontWeight = FontWeight.Bold
             )
         }

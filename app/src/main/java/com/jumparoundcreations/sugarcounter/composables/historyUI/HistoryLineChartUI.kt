@@ -51,7 +51,8 @@ fun LineChart(
     if (countMode == HelperMethods.CountMode.SUGAR) {
         graphDataList = getGraphDataList(sugarEntryDbHistory)
 
-        // create array that tags the y axis of the graph with gram values: 0g,10g,...,90g = 0 + 18 = 19 gram tags
+        // create array that tags the y axis of the graph with gram values:
+        // 0g,10g,...,90g = 0 + 18 = 19 gram tags
         lineGraphYAxisTag = (0..18).map { i -> "${(18 - i) * 5}g" }
     } else {
         graphDataList = getGraphDataList(caloriesEntryDbHistory)
@@ -102,8 +103,10 @@ fun LineChart(
                 val onePercentHeight = size.height / 100
                 val onePercentWidth = size.width / 100
                 val oneWidthSection = size.width / 60 // width is divided in x sections
+                // height is divided in 20 sections
+                // ( 18 x 5er steps + 2 extra horizontal spaces at the bottom)
                 val oneHeightSection =
-                    size.height / 20 // height is divided in 20 sections ( 18 x 5er steps + 2 extra horizontal spaces at the bottom)
+                    size.height / 20
                 val path = Path()
 
                 drawThresholdLine(
@@ -242,7 +245,11 @@ fun DrawScope.drawThresholdLine(
         onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 50))
     } else {
         // dividing the kcal value by 50 brings ito the the scale of 100
-        onePercentHeight * (90 - sharedPrefsMain.getInt("caloriesThresholdValue", 1500) / 50)
+        onePercentHeight * (90 - sharedPrefsMain.getInt(
+            "caloriesThresholdValue",
+            1500
+        ) / 50
+                )
     }
 
     drawLine(
@@ -292,7 +299,9 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
         text = graphDataElement.day,
         style = styleSmall,
         topLeft = Offset(
-            x = xAxisPointVerticalLines - (onePercentWidth / 2), //subtract x% of the x axis point to have the date values centered under the vertical lines
+            //subtract x% of the x axis point to have the date
+            // values centered under the vertical lines
+            x = xAxisPointVerticalLines - (onePercentWidth / 2),
             y = oneHeightSection * 18 // take x height sections
         )
     )
@@ -300,7 +309,8 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
 
 /**
  * Calculates the height of a data point by subtracting the bottom area.
- * Additionally ensures that a value that exceeds the maximum height of the graph is drawn within the graph at the top
+ * Additionally ensures that a value that exceeds the maximum height
+ * of the graph is drawn within the graph at the top
  * @return heightGramDataPoint: Float
  */
 fun getHeightOfDataPoint(
@@ -320,15 +330,19 @@ fun getHeightOfDataPoint(
 
         HelperMethods.CountMode.CALORIES -> {
             maximalValue = 4750 // kilo calories
+            // dividing the kcal value by 50 brings ito the the scale of 100
             valueToSubtractFrom90Percent =
-                valueTotal / 50 // dividing the kcal value by 50 brings ito the the scale of 100
+                valueTotal / 50
             // e.g.: 4500 / 50 = 90 or 500 / 50 = 10
         }
     }
     return if (valueTotal <= maximalValue) {
-        onePercentHeight * (90 - valueToSubtractFrom90Percent) // 90 = 90% height line graph, 10% height bottom date line
+        // 90 = 90% height line graph, 10% height bottom date line
+        onePercentHeight * (90 - valueToSubtractFrom90Percent)
     } else {
-        onePercentHeight * -10 // multiplying one percent of the height with '-10' sets the data point above the top x-axis
+        // multiplying one percent of the height with '-10'
+        // sets the data point above the top x-axis
+        onePercentHeight * -10
         // by having a minus value on the vertical axis
     }
 }
@@ -409,8 +423,11 @@ fun DrawScope.drawYAxisLabels(
                 styleSmall
             },
             topLeft = Offset(
-                x = (onePercentWidth / 2), // Position tags horizontally in the middle (onePercentWidth / 2) oft the first horizontal section
-                y = ((oneHeightSection * xAxisCount) - onePercentHeight) // Position tags to the middle of the horizontal lines
+                // Position tags horizontally in the middle (onePercentWidth / 2)
+                // of the first horizontal section
+                x = (onePercentWidth / 2),
+                // Position tags to the middle of the horizontal lines
+                y = ((oneHeightSection * xAxisCount) - onePercentHeight)
             )
         )
         xAxisCount++
@@ -430,7 +447,8 @@ fun DrawScope.drawHorizontalLinesForMatrix(
     sizeGraphDataList: Int,
     barWidthPix: Float
 ) {
-    if (horizontalLinesCount <= 18) { // do not draw last horizontal lines at the bottom which are the 19th and 20th line
+    // do not draw last horizontal lines at the bottom which are the 19th and 20th line
+    if (horizontalLinesCount <= 18) {
         drawLine(
             drawColor,
             start = Offset(
@@ -453,7 +471,9 @@ fun getGraphDataList(entryList: List<EntryGroup>): List<GraphData> {
     val returnList = entryList.take(60).mapIndexed { id, entryGroup ->
         GraphData(
             id = id,
-            valueTotal = HelperMethods.calculateTotalGramPerDayBlock(entryGroup.entryList),
+            valueTotal = HelperMethods.calculateTotalGramPerDayBlock(
+                entryGroup.entryList
+            ),
             day = HelperMethods.convertTimestampToDateString(
                 entryGroup.entryList.first().currentTimestamp,
                 if (HelperMethods.getSystemLanguage() == "en") {
