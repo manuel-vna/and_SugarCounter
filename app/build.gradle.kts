@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.detekt)
     id("kotlin-kapt")
     id("com.mikepenz.aboutlibraries.plugin")
     id("androidx.room")
@@ -17,11 +18,11 @@ val versionCodeValue = getAppVersionCode(gitVersion)
 val versionNameValue = getAppVersionNameValue(gitVersion)
 
 android {
-    namespace = "com.jumparoundcreations.mva_sugarcounter"
+    namespace = "com.jumparoundcreations.sugarcounter"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.jumparoundcreations.mva_sugarcounter"
+        applicationId = "com.jumparoundcreations.sugarcounter"
         minSdk = 28
         targetSdk = 36
         versionCode = versionCodeValue // e.g. 1
@@ -68,8 +69,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
     }
     buildFeatures {
         compose = true
