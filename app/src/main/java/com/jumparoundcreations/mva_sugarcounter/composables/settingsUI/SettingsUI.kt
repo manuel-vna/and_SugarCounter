@@ -104,15 +104,10 @@ fun Settings(
                     Pair(
                         stringResource(R.string.settings_introduction_title),
                         { navController.navigate(NavItem.Onboarding.screenRoute) }
-                    ),
-                    Pair(
-                        stringResource(R.string.settings_donation_title),
-                        { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DONATION) }
                     )
                 )
             )
 
-            SettingsDonationUI(context, settingsVM)
         }
 
         item { Spacer(modifier = Modifier.height(32.dp)) }

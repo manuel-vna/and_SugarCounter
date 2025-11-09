@@ -54,11 +54,10 @@
     <string name="calories_unit_short">kcal</string>
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Preguntas más frecuentes</string>
-    <string name="settings_button_donation_text">Apoyar al equipo de desarrollo</string>
     <string name="faq_question_one">¿Para qué sirve esta aplicación?</string>
     <string name="faq_answer_one">Para controlar el consumo diario de azúcar anotando el azúcar consumido en gramos. Además, se pueden introducir y registrar diariamente las calorías consumidas.</string>
     <string name="faq_question_two">¿Se puede utilizar la aplicación gratuitamente?</string>
-    <string name="faq_answer_two">Sí, la aplicación es totalmente gratuita y no muestra anuncios. Sin embargo, los desarrolladores de la aplicación están encantados de recibir una pequeña donación.</string>
+    <string name="faq_answer_two">Sí, la aplicación es totalmente gratuita y no muestra anuncios.</string>
     <string name="faq_question_three">¿Por qué tiene que introducir el usuario los valores de azúcar de un determinado alimento?</string>
     <string name="faq_answer_three">Si introduce usted mismo los valores de azúcar, podrá hacerse una mejor idea de su propio consumo de azúcar.</string>
     <string name="faq_question_four">¿Qué significan las dos variantes de entrada \'azúcar/100g\' y \'azúcar/unidad\' ?</string>
@@ -119,11 +118,6 @@
     <string name="about_title_imprint">Imprimir</string>
     <string name="about_concluding_part">\u00A9 JumpAroundCreations\nMake pace not war 🏃 🏃‍♀</string>
     <string name="settings_functions_other_title">Funciones</string>
-    <string name="settings_donation_title">Apoyar al equipo de desarrollo</string>
-    <string name="settings_donation_description">Si te gusta esta aplicación, puedes enviar una pequeña donación al equipo de desarrollo. Esto ayudará a nuestro equipo a seguir trabajando en esta y otras apps similares en el futuro.</string>
-    <string name="settings_donation_paypal">Paypal</string>
-    <string name="settings_donation_buymeacoffee">Buy me a Coffee</string>
-    <string name="settings_donation_paypal_url">https://www.paypal.com/donate/?hosted_button_id=BQ6GNNNZ9FAXG</string>
     <string name="settings_introduction_title">Introducción a la aplicación</string>
     <string name="settings_intoduction_counter_title">Añadir azúcar</string>
     <string name="settings_introduction_counter_top">1) ¿Para qué día debe inscribirse la entrada?\n\n2) Vincule la entrada a un código de barras para que los valores de azúcar se introduzcan automáticamente para esta categoría cuando se vuelva a escanear el código de barras.\n\n3) Introduzca aquí qué comida se ha comido. El usuario puede elegir aquí el nombre exacto. Puede ser un nombre general, una marca o algo similar.</string>

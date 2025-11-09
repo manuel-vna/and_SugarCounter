@@ -20,6 +20,6 @@ sealed class NavItem(var title: Int, var screenRoute: String) {
         NavItem(R.string.about_title_imprint, "imprint")
 
     data object Onboarding :
-        NavItem(R.string.settings_donation_title, "onboarding")
+        NavItem(R.string.settings_introduction_title, "onboarding")
 
 }
