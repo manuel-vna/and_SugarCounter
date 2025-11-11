@@ -8,5 +8,5 @@ interface IEntry {
     val currentTimestamp: Long
     val category: String
     val entryType: GramCountMode
-    val gramTotal: Int
+    val gramTotal: Double
 }

@@ -1,9 +1,11 @@
 package com.jumparoundcreations.sugarcounter.data
 
 import androidx.room.ColumnInfo
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 
+@Entity(tableName = "entryPerHundred_table")
 data class EntryPerHundred(
     @PrimaryKey(autoGenerate = true)
     override val id: Int = 0,
@@ -16,9 +18,9 @@ data class EntryPerHundred(
     @ColumnInfo(name = "entryType")
     override val entryType: GramCountMode,
     @ColumnInfo(name = "perHundredGram")
-    val perHundredGram: Int,
+    val perHundredGram: Double,
     @ColumnInfo(name = "perHundredQuantity")
-    val perHundredQuantity: Int,
+    val perHundredQuantity: Double,
     @ColumnInfo(name = "perPieceGram")
-    override val gramTotal: Int
+    override val gramTotal: Double
 ) : IEntry
