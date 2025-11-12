@@ -3,8 +3,6 @@ package com.jumparoundcreations.sugarcounter.util
 
 import android.content.Context
 import android.text.format.DateUtils
-import com.jumparoundcreations.sugarcounter.data.Entry
-import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.IEntry
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database

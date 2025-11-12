@@ -1,7 +1,6 @@
 package com.jumparoundcreations.sugarcounter.util
 
 import android.text.format.DateUtils
-import com.jumparoundcreations.sugarcounter.data.Entry
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import io.mockk.every
 import io.mockk.junit4.MockKRule

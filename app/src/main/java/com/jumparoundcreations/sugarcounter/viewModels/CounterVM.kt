@@ -8,13 +8,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
-import com.jumparoundcreations.sugarcounter.data.Entry
-import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
-import com.jumparoundcreations.sugarcounter.util.CounterCaloriesHelper
 import com.jumparoundcreations.sugarcounter.util.CounterSugarHelper
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -52,13 +49,6 @@ class CounterVM : ViewModel(), KoinComponent {
         )
     )
     val sugarEntryDbRecent = _sugarEntryDbRecent.asStateFlow()
-
-    private val _caloriesEntryDbRecent = MutableStateFlow(
-        listOf(
-            EntryGroup("", "", listOf())
-        )
-    )
-    val caloriesEntryDbRecent = _caloriesEntryDbRecent.asStateFlow()
 
     private val _datePickerShown = MutableStateFlow(false)
     val datePickerShown = _datePickerShown.asStateFlow()
@@ -117,12 +107,6 @@ class CounterVM : ViewModel(), KoinComponent {
     private val _barcodeNumber = MutableStateFlow("")
     val barcodeNumber = _barcodeNumber.asStateFlow()
 
-    private var _caloriesInput = MutableStateFlow("")
-    val caloriesInput = _caloriesInput.asStateFlow()
-
-    private var _caloriesAmount = MutableStateFlow("")
-    val caloriesAmount = _caloriesAmount
-
     private var _segmentedButtonIndex = MutableStateFlow(0)
     val segmentedButtonIndex = _segmentedButtonIndex.asStateFlow()
     //StateFlow: END
@@ -139,22 +123,12 @@ class CounterVM : ViewModel(), KoinComponent {
         _sugarEntryDbRecent.value = savedSugarCountGrouped
     }
 
-    //Observer that is used to observe a method in the Dao which fetches a list of EntryCalories
-    private val caloriesTodayObserverObject = Observer<List<EntryCalories>> {
-        val caloriesTodayObserverObjectGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
-        _caloriesEntryDbRecent.value = caloriesTodayObserverObjectGrouped
-        print(caloriesTodayObserverObjectGrouped)
-    }
-
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
         database.appDao().getEntries(startOfYesterday, endOfToday)
             .observeForever(todayObserverObject)
-
-        database.appDao().getEntryCalories(startOfYesterday, endOfToday)
-            .observeForever(caloriesTodayObserverObject)
 
     }
 
@@ -165,9 +139,6 @@ class CounterVM : ViewModel(), KoinComponent {
 
         database.appDao().getEntries(startOfYesterday, endOfToday)
             .removeObserver(todayObserverObject)
-
-        database.appDao().getEntryCalories(startOfYesterday, endOfToday)
-            .removeObserver(caloriesTodayObserverObject)
     }
 
     //Saving an Entry: Start
@@ -187,22 +158,9 @@ class CounterVM : ViewModel(), KoinComponent {
             )
         }
 
-        if (_caloriesInput.value.isNotEmpty()) {
-            CounterCaloriesHelper.saveCaloriesEntryInDatabase(
-                sharedPreferences = sharedPrefsMain,
-                viewModelScope = viewModelScope,
-                counterVM = this,
-                category = category,
-                dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
-                caloriesInputValue = _caloriesInput.value,
-                caloriesAmountValue = _caloriesAmount.value
-            )
-        }
-
         if (
             _perPieceGram.value.isEmpty() &&
-            _perHundredGram.value.isEmpty() &&
-            _caloriesInput.value.isEmpty()
+            _perHundredGram.value.isEmpty()
         ) {
             actionChangeAlertDialogValue(true)
         }
@@ -240,32 +198,6 @@ class CounterVM : ViewModel(), KoinComponent {
         }
     }
 
-
-    //Check Calories Threshold: START
-    fun checkThresholdForCaloriesInput() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val dateString = HelperMethods.convertTimestampToDateString(
-                dateOfEntryEpochSec.value,
-                "yyyy-MM-dd"
-            )
-            val databaseSumCalories =
-                database.appDao().checkIfCaloriesThresholdIsBreached(dateString) ?: 0
-            Log.d("tag", "DatabaseSumCalories: $databaseSumCalories")
-
-
-            withContext(Dispatchers.Main) {
-                if (databaseSumCalories > sharedPrefsMain.getInt(
-                        "caloriesThresholdValue", 0
-                    )
-                ) {
-                    _alertCaloriesThreshold.value = true
-                }
-            }
-        }
-    }
-    //Check Calories Threshold: END
-
-
     //Loading an Entry: Start
     fun loadLastEntryForGivenCategory(keyboardController: SoftwareKeyboardController?) {
         keyboardController?.hide()
@@ -279,13 +211,10 @@ class CounterVM : ViewModel(), KoinComponent {
             val entrySugarReply =
                 database.appDao().checkIfGramValueExistsForCategory(category)
 
-            val entryCaloriesReply =
-                database.appDao().checkIfCaloriesValueExistsForCategory(category)
-
             withContext(Dispatchers.Main) {
 
-                // if no sugar AND no calories entry was found, tell the user about it
-                if (entrySugarReply == null && entryCaloriesReply == null) {
+                // if no sugar was found, tell the user about it
+                if (entrySugarReply == null) {
                     actionNoDataForChosenCategorySnackbarShownChange(true)
                 }
 
@@ -312,22 +241,6 @@ class CounterVM : ViewModel(), KoinComponent {
                     else -> Log.e(
                         "CounterVM",
                         "Loading sugar entry from database by its category did not succeed"
-                    )
-                }
-
-                // Calories
-                when {
-                    entryCaloriesReply == null -> {
-                        _caloriesInput.value = ""
-                    }
-
-                    entryCaloriesReply.caloriesTotal != 0 -> {
-                        _caloriesInput.value = entryCaloriesReply.caloriesTotal.toString()
-                    }
-
-                    else -> Log.e(
-                        "CounterVM",
-                        "Loading calories entry from database by its category did not succeed"
                     )
                 }
 
@@ -447,27 +360,8 @@ class CounterVM : ViewModel(), KoinComponent {
         }
     }
 
-    fun actionCaloriesThresholdKeepLastEntry() {
-        _alertCaloriesThreshold.value = false
-    }
-
-    fun actionCaloriesThresholdDeleteLastEntry() {
-        _alertCaloriesThreshold.value = false
-        viewModelScope.launch(Dispatchers.IO) {
-            database.appDao().deleteLastEntryCalories()
-        }
-    }
-
     fun actionChangeDateOfEntryM3(epochSec: Long) {
         _dateOfEntryEpochSec.value = epochSec
-    }
-
-    fun actionCaloriesChange(caloriesInKcal: String) {
-        _caloriesInput.value = caloriesInKcal
-    }
-
-    fun actionCaloriesAmountChange(caloriesAmount: String) {
-        _caloriesAmount.value = caloriesAmount
     }
 
     fun actionChangeSegmentedButtonIndex(index: Int) {

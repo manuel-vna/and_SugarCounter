@@ -10,8 +10,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.WorkManagerTestInitHelper
-import com.jumparoundcreations.sugarcounter.data.Entry
-import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.database.DaoAppDatabase
 import com.jumparoundcreations.sugarcounter.util.HelperMethods.Companion.convertTimestampToDateString

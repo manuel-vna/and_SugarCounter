@@ -2,7 +2,6 @@ package com.jumparoundcreations.sugarcounter.util
 
 import android.content.SharedPreferences
 import android.util.Log
-import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import kotlinx.coroutines.CoroutineScope

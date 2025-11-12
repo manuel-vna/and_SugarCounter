@@ -27,7 +27,6 @@ fun CounterCardsAreaUI(
 ) {
 
     val savedSugarCountGrouped by counterVM.sugarEntryDbRecent.collectAsState()
-    val savedCaloriesCountGrouped by counterVM.caloriesEntryDbRecent.collectAsState()
     val segmentedButtonIndex by counterVM.segmentedButtonIndex.collectAsState()
 
     if (caloriesCounterActivated) {

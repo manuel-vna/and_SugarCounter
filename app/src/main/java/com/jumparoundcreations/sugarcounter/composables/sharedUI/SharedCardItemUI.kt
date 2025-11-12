@@ -40,8 +40,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
-import com.jumparoundcreations.sugarcounter.data.Entry
-import com.jumparoundcreations.sugarcounter.data.EntryCalories
 import com.jumparoundcreations.sugarcounter.viewModels.SharedVM
 import org.koin.androidx.compose.koinViewModel
 
