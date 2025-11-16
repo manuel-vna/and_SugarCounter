@@ -134,7 +134,6 @@ class SettingsVM : ViewModel(), KoinComponent {
         viewModelScope.launch(Dispatchers.IO) {
 
             val allEntriesSugar = database.appDao().getAllEntries()
-            val allEntriesCalories = database.appDao().getAllEntriesCalories()
 
             if (osVersionHigherOrEqualsR) {
 
@@ -147,15 +146,6 @@ class SettingsVM : ViewModel(), KoinComponent {
                     settingsVM = settingsVM,
                     header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
                 )
-                // export calories entries for OS versions higher R
-                val fileNameCalories = "caloriesCounter-$timestampString"
-                ExportData.exportEntriesViaMediaStore(
-                    context = context,
-                    allEntries = allEntriesCalories,
-                    fileName = fileNameCalories,
-                    settingsVM = settingsVM,
-                    header = "Date,Name,kcalTotal\n"
-                )
 
             } else {
 
@@ -166,14 +156,6 @@ class SettingsVM : ViewModel(), KoinComponent {
                     fileName = fileNameSugar,
                     settingsVM = settingsVM,
                     header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
-                )
-                // export calories entries
-                val fileNameCalories = "caloriesCounter-$timestampString"
-                ExportData.exportEntriesViaFileWriter(
-                    allEntries = allEntriesCalories,
-                    fileName = fileNameCalories,
-                    settingsVM = settingsVM,
-                    header = "Date,Name,kcalTotal\n"
                 )
             }
             println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")

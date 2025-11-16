@@ -2,6 +2,7 @@ package com.jumparoundcreations.sugarcounter.util
 
 import android.content.SharedPreferences
 import android.util.Log
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
@@ -10,103 +11,48 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
-import kotlin.math.roundToInt
 
 class CounterSugarHelper : KoinComponent {
 
     companion object {
 
-        fun saveSugarEntryInDatabase(
+        fun saveEntryInDatabase(
             viewModelScope: CoroutineScope,
             sharedPrefsMain: SharedPreferences,
             counterVM: CounterVM,
             category: String,
             dateOfEntryEpochSecValue: Long,
-            gramCountModeValue: GramCountMode,
-            perHundredGramValue: String,
-            perHundredQuantityValue: String,
-            perPieceGramValue: String,
-            perPieceAmountValue: String,
-        ) {
-
-            var perPieceGramInt = 0
-            var perPieceAmountInt = 1
-            var perHundredGramDouble = 0.0
-            var perHundredQuantityDouble = 0.0
-
-            if (gramCountModeValue == GramCountMode.PerHundred) {
-                if (perHundredGramValue.isNotEmpty()) perHundredGramDouble =
-                    perHundredGramValue.toDouble()
-                if (perHundredQuantityValue.isNotEmpty()) perHundredQuantityDouble =
-                    perHundredQuantityValue.toDouble()
-
-                saveEntryInDatabase(
-                    viewModelScope = viewModelScope,
-                    sharedPrefsMain = sharedPrefsMain,
-                    counterVM = counterVM,
-                    category = category,
-                    dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
-                    isPerHundred = true,
-                    perHundredGramInt = perHundredGramDouble.toInt(),
-                    perHundredQuantityInt = perHundredQuantityDouble.toInt(),
-                    perPieceGramInt = 0,
-                    perPieceAmountInt = 0,
-                    gramTotalInt = (
-                            (perHundredGramDouble / 100) *
-                                    perHundredQuantityDouble
-                            ).roundToInt()
-                )
-
-            } else {
-                if (perPieceGramValue.isNotEmpty()) perPieceGramInt = perPieceGramValue.toInt()
-                if (perPieceAmountValue.isNotEmpty()) perPieceAmountInt =
-                    perPieceAmountValue.toInt()
-
-                saveEntryInDatabase(
-                    viewModelScope = viewModelScope,
-                    sharedPrefsMain = sharedPrefsMain,
-                    counterVM = counterVM,
-                    category = category,
-                    dateOfEntryEpochSecValue = dateOfEntryEpochSecValue,
-                    isPerHundred = false,
-                    perHundredGramInt = 0,
-                    perHundredQuantityInt = 0,
-                    perPieceGramInt = perPieceGramInt,
-                    perPieceAmountInt = perPieceAmountInt,
-                    gramTotalInt = perPieceGramInt * perPieceAmountInt
-                )
-
-            }
-        }
-
-        private fun saveEntryInDatabase(
-            viewModelScope: CoroutineScope,
-            sharedPrefsMain: SharedPreferences,
-            counterVM: CounterVM,
-            category: String,
-            dateOfEntryEpochSecValue: Long,
-            isPerHundred: Boolean,
-            perHundredGramInt: Int,
-            perHundredQuantityInt: Int,
-            perPieceGramInt: Int,
-            perPieceAmountInt: Int,
-            gramTotalInt: Int
+            entryType: GramCountMode,
+            perHundredGram: Double,
+            perHundredQuantity: Double,
+            perPieceGram: Double,
+            perPieceAmount: Double
         ) {
             viewModelScope.launch(Dispatchers.IO) {
-                database.appDao().insertEntry(
-                    Entry(
+                database.appDao().insertSugarEntry(
+                    SugarEntry(
                         currentTimestamp = dateOfEntryEpochSecValue,
                         date = HelperMethods.convertTimestampToDateString(
                             dateOfEntryEpochSecValue,
                             "yyyy-MM-dd"
                         ),
                         category = category.trim(),
-                        isPerHundred = isPerHundred,
-                        perPieceGram = perPieceGramInt,
-                        perPieceAmount = perPieceAmountInt,
-                        perHundredGram = perHundredGramInt,
-                        perHundredQuantity = perHundredQuantityInt,
-                        gramTotal = gramTotalInt
+                        entryType = entryType,
+                        gram = if (entryType == GramCountMode.PerHundred) {
+                            perHundredGram
+                        } else {
+                            perPieceGram
+                        },
+                        quantity = if (entryType == GramCountMode.PerHundred) {
+                            perHundredQuantity
+                        } else {
+                            perPieceAmount
+                        },
+                        gramTotal = if (entryType == GramCountMode.PerHundred) {
+                            (perHundredGram / 100) * perHundredQuantity
+                        } else {
+                            perPieceGram * perPieceAmount
+                        },
                     )
                 )
 

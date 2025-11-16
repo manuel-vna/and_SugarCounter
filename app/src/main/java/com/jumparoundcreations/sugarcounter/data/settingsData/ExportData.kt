@@ -7,7 +7,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
-import com.jumparoundcreations.sugarcounter.data.IEntry
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.viewModels.SettingsVM
 import org.koin.core.component.KoinComponent
@@ -22,8 +22,8 @@ object ExportData : KoinComponent {
     lateinit var csvFile: File
     var uri: Uri? = null
 
-    fun <T : IEntry> exportEntriesViaFileWriter(
-        allEntries: List<T>,
+    fun exportEntriesViaFileWriter(
+        allEntries: List<SugarEntry>,
         fileName: String,
         settingsVM: SettingsVM,
         header: String
@@ -49,42 +49,14 @@ object ExportData : KoinComponent {
             //END: Variables for ProgressIndicator
 
             for (entry in allEntries) {
-
-                when (entry) {
-                    is Entry -> {
-                        if (entry.isPerHundred) {
-                            writer.append(
-                                "${entry.date}," +
-                                        "${entry.category}," +
-                                        "perHundred," +
-                                        "${entry.perHundredGram}," +
-                                        "${entry.perHundredQuantity}," +
-                                        "${entry.gramTotal}\n"
-                            )
-                        } else {
-                            writer.append(
-                                "" +
-                                        "${entry.date}," +
-                                        "${entry.category}," +
-                                        "perPiece," +
-                                        "${entry.perPieceGram}," +
-                                        "${entry.perPieceAmount}," +
-                                        "${entry.gramTotal}\n"
-                            )
-                        }
-                    }
-
-                    is EntryCalories -> {
-                        writer.append(
-                            "" +
-                                    "${entry.date}," +
-                                    "${entry.category}," +
-                                    "${entry.caloriesTotal}\n"
-                        )
-                    }
-
-                    else -> writer.append("")
-                }
+                writer.append(
+                    "${entry.date}," +
+                            "${entry.category}," +
+                            "${entry.entryType}," +
+                            "${entry.gram}," +
+                            "${entry.quantity}," +
+                            "${entry.gramTotal}\n"
+                )
 
                 //progress indicator
                 count++
@@ -93,7 +65,6 @@ object ExportData : KoinComponent {
                     multiplier++
                     currentStep = tenPercent * multiplier
                 }
-
             }
 
             writer.flush()
@@ -111,9 +82,9 @@ object ExportData : KoinComponent {
 
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    fun <T : IEntry> exportEntriesViaMediaStore(
+    fun exportEntriesViaMediaStore(
         context: Context,
-        allEntries: List<T>,
+        allEntries: List<SugarEntry>,
         fileName: String,
         settingsVM: SettingsVM,
         header: String
@@ -147,41 +118,15 @@ object ExportData : KoinComponent {
 
                     for (entry in allEntries) {
 
-                        when (entry) {
-                            is Entry -> {
-                                if (entry.isPerHundred) {
-                                    outputStream.write(
-                                        (
-                                                "${entry.date}," +
-                                                        "${entry.category}," +
-                                                        "perHundred," +
-                                                        "${entry.perHundredGram}," +
-                                                        "${entry.perHundredQuantity}," +
-                                                        "${entry.gramTotal}\n").toByteArray()
-                                    )
-                                } else {
-                                    outputStream.write(
-                                        (
-                                                "${entry.date}," +
-                                                        "${entry.category}," +
-                                                        "perPiece,${entry.perPieceGram}," +
-                                                        "${entry.perPieceAmount}," +
-                                                        "${entry.gramTotal}\n").toByteArray()
-                                    )
-                                }
-                            }
-
-                            is EntryCalories -> {
-                                outputStream.write(
-                                    (
-                                            "${entry.date}," +
-                                                    "${entry.category}," +
-                                                    "${entry.caloriesTotal}\n").toByteArray()
-                                )
-                            }
-
-                            else -> outputStream.write("".toByteArray())
-                        }
+                        outputStream.write(
+                            (
+                                    "${entry.date}," +
+                                            "${entry.category}," +
+                                            "perHundred," +
+                                            "${entry.gram}," +
+                                            "${entry.quantity}," +
+                                            "${entry.gramTotal}\n").toByteArray()
+                        )
 
                         //progress indicator
                         count++

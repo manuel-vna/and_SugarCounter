@@ -17,10 +17,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.ui.theme.SugarCounterTheme
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -82,6 +78,8 @@ class MainActivity : ComponentActivity(), KoinComponent,
 
 }
 
+
+/*
 @OptIn(DelicateCoroutinesApi::class)
 fun testing(appDatabase: AppDatabase) {
     GlobalScope.launch(Dispatchers.IO) {
@@ -158,4 +156,7 @@ fun testing(appDatabase: AppDatabase) {
         //</editor-fold>
 
     }
+
 }
+
+ */

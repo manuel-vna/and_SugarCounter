@@ -103,30 +103,9 @@ class DeletionWorker(
             }.map { it.first }
             //</editor-fold>
 
-            //<editor-fold desc="CaloriesEntries">
-            val categoriesOfCaloriesEntriesToBeDeleted =
-                dao.getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime)
-
-            val categoryExistsInMoreThanOneCaloriesRow =
-                categoriesOfCaloriesEntriesToBeDeleted.map {
-                    Pair(
-                        first = it,
-                        second = dao
-                            .checkIfCategoryIsPresentSinceInCaloriesTable(it, deletionPointInTime)
-                    )
-                }
-
-            val categoriesToBeDeletedFromCaloriesEntries =
-                categoryExistsInMoreThanOneCaloriesRow.filter {
-                    it.second.not()
-                }.map { it.first }
-            //</editor-fold>
 
             //<editor-fold desc="Deletion of Categories">
-            val categoriesToBeDeletedOverall =
-                categoriesToBeDeletedFromSugarEntries + categoriesToBeDeletedFromCaloriesEntries
-
-            categoriesToBeDeletedOverall.forEach {
+            categoriesToBeDeletedFromSugarEntries.forEach {
                 dao.deleteSpecificCategoryByName(it)
             }
             //</editor-fold>
@@ -134,11 +113,6 @@ class DeletionWorker(
             //<editor-fold desc="Deletion of Sugar Entries">
             dao.deleteEntriesSugarOlderThanN(deletionPointInTime)
             //</editor-fold>
-
-            //<editor-fold desc="Deletion of Calories Entries">
-            dao.deleteEntriesCaloriesOlderThanN(deletionPointInTime)
-            //</editor-fold>
-
 
             return Result.success()
         } else {

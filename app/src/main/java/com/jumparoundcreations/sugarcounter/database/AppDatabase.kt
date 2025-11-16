@@ -7,110 +7,72 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [Entry::class, EntryCalories::class, Category::class], version = 10)
+@Database(entities = [SugarEntry::class, Category::class], version = 11)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun appDao(): DaoAppDatabase
 
     companion object {
-
+        private val migration_8_9 = object : Migration(8, 9) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE calories_table ADD COLUMN caloriesPerPiece INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE calories_table ADD COLUMN caloriesAmount INTEGER NOT NULL DEFAULT 1")
+            }
+        }
         val migration_10_11 = object : Migration(10, 11) {
-            override fun migrate(database: SupportSQLiteDatabase) {
+            override fun migrate(db: SupportSQLiteDatabase) {
 
-                // Create the new "entryPerHundred_table"
-                database.execSQL(
+                // Create the new "sugarEntriesTable"
+                db.execSQL(
                     """
-            CREATE TABLE IF NOT EXISTS entryPerHundred_table (
+            CREATE TABLE IF NOT EXISTS sugarEntriesTable (
                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 date TEXT NOT NULL,
                 currentTimestamp INTEGER NOT NULL,
                 category TEXT NOT NULL,
                 entryType TEXT NOT NULL,
-                perHundredGram REAL NOT NULL,
-                perHundredQuantity REAL NOT NULL,
-                perPieceGram REAL NOT NULL
-            )
-        """.trimIndent()
-                )
-
-                // Create the new "entryPerPiece_table"
-                database.execSQL(
-                    """
-            CREATE TABLE IF NOT EXISTS entryPerPiece_table (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                date TEXT NOT NULL,
-                currentTimestamp INTEGER NOT NULL,
-                category TEXT NOT NULL,
-                entryType TEXT NOT NULL,
-                perPieceGram REAL NOT NULL,
-                perPieceAmount REAL NOT NULL,
+                gram REAL NOT NULL,
+                quantity REAL NOT NULL,
                 gramTotal REAL NOT NULL
             )
         """.trimIndent()
                 )
 
-                // Move "isPerHundred == 1" rows → entryPerHundred_table
-                // Convert integer columns to REAL using *1.0
-                // Assign entryType = 'PerHundred'
-                database.execSQL(
+                // Insert ALL rows in correct original order
+                db.execSQL(
                     """
-            INSERT INTO entryPerHundred_table (
-                date,
+            INSERT INTO sugarEntriesTable (
                 currentTimestamp,
+                date,
                 category,
                 entryType,
-                perHundredGram,
-                perHundredQuantity,
-                perPieceGram
-            )
-            SELECT 
-                date,
-                currentTimestamp,
-                category,
-                'PerHundred' AS entryType,
-                perHundredGram * 1.0,
-                perHundredQuantity * 1.0,
-                gramTotal * 1.0
-            FROM entry_table
-            WHERE isPerHundred = 1
-        """.trimIndent()
-                )
-
-                // Move "isPerHundred == 0" rows → entryPerPiece_table
-                // Assign entryType = 'PerPiece'
-                database.execSQL(
-                    """
-            INSERT INTO entryPerPiece_table (
-                date,
-                currentTimestamp,
-                category,
-                entryType,
-                perPieceGram,
-                perPieceAmount,
+                gram,
+                quantity,
                 gramTotal
             )
-            SELECT 
-                date,
+            SELECT
                 currentTimestamp,
+                date,
                 category,
-                'PerPiece' AS entryType,
-                perPieceGram * 1.0,
-                perPieceAmount * 1.0,
+                CASE WHEN isPerHundred = 1 THEN 'PerHundred' ELSE 'PerPiece' END AS entryType,
+                CASE WHEN isPerHundred = 1 THEN perHundredGram * 1.0 ELSE perPieceGram * 1.0 END AS gram,
+                CASE WHEN isPerHundred = 1 THEN perHundredQuantity * 1.0 ELSE perPieceAmount * 1.0 END AS quantity,
                 gramTotal * 1.0
             FROM entry_table
-            WHERE isPerHundred = 0
+            ORDER BY currentTimestamp ASC
         """.trimIndent()
                 )
 
-                // Drop the old table now that data has been migrated
-                database.execSQL("DROP TABLE entry_table")
+                // Drop the old entry_table now that data has been migrated
+                db.execSQL("DROP TABLE entry_table")
 
                 // Drop the calories table since this feature is discontinued
-                database.execSQL("DROP TABLE entry_calories")
+                //db.execSQL("DROP TABLE entry_calories")
             }
         }
 
@@ -126,7 +88,7 @@ abstract class AppDatabase : RoomDatabase() {
                         application.applicationContext,
                         AppDatabase::class.java,
                         "app_database"
-                    ).addMigrations(migration_10_11)
+                    ).addMigrations(migration_8_9, migration_10_11)
                         .fallbackToDestructiveMigration(false)
                         .build()
 

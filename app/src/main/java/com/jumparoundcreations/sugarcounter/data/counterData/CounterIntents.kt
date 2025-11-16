@@ -1,20 +1,17 @@
 package com.jumparoundcreations.sugarcounter.data.counterData
 
-sealed class CounterIntents {
+sealed class EntryStoringActions {
 
-    data class ChooseEntryDate(
-        val datePickerShown: Boolean,
-        val newEntryDate: String
-    ) : CounterIntents()
+    object OpenAndCloseDatePicker : EntryStoringActions()
 
-    object ScanBarcode : CounterIntents()
+    object SaveSelectedDate : EntryStoringActions()
 
-    data class SaveEntry(
-        val tbd: String
-    ) : CounterIntents()
+    object ScanBarcodeAction : EntryStoringActions()
+
+    object OpenCategoryFieldAction : EntryStoringActions()
 
     data class SaveCategory(
         val tbd: String
-    ) : CounterIntents()
+    ) : EntryStoringActions()
 
 }

@@ -25,10 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.composables.sharedUI.SharedCardItem
+import com.jumparoundcreations.sugarcounter.composables.cardsUI.SharedCardItem
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
-import com.jumparoundcreations.sugarcounter.viewModels.SharedVM
+import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
@@ -39,18 +40,14 @@ fun ShowSharedCards(
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    val sharedVM: SharedVM = koinViewModel()
+    val sharedVM: CardsVM = koinViewModel()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
         entryGroup.entryList
     )
     var thresholdValue = 0
 
     if (entryGroup.entryList.isNotEmpty()) {
-        thresholdValue = when (entryGroup.entryList.first()) {
-            is Entry -> sharedPrefsMain.getInt("gramThresholdValue", 50)
-            is EntryCalories -> sharedPrefsMain.getInt("caloriesThresholdValue", 2250)
-            else -> 0
-        }
+        thresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
     }
 
 
@@ -96,40 +93,16 @@ fun ShowSharedCards(
             val secondColumnText = it.category
             var thirdColumnText = ""
 
-            when (it) {
-                is Entry -> {
-                    firstColumnText = if (it.isPerHundred) {
-                        it.perHundredQuantity.toString() +
-                                stringResource(id = R.string.gram_unit_short)
-                    } else {
-                        it.perPieceAmount.toString() +
-                                stringResource(id = R.string.sugar_card_multiplier_expression) +
-                                it.perPieceGram.toString() +
-                                stringResource(id = R.string.gram_unit_short)
-                    }
-                    thirdColumnText =
-                        it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
-                }
-
-                is EntryCalories -> {
-                    firstColumnText =
-                        if (it.caloriesPerPiece == 0) {
-                            stringResource(R.string.calories_textfield_placeholder)
-                        } else {
-                            it.caloriesAmount.toString() +
-                                    stringResource(id = R.string.sugar_card_multiplier_expression) +
-                                    it.caloriesPerPiece.toString()
-                        }
-                    thirdColumnText = it.caloriesTotal.toString()
-                }
-
-                else -> {
-                    firstColumnText = ""
-                    thirdColumnText = ""
-                }
-
+            firstColumnText = if (it.entryType == GramCountMode.PerHundred) {
+                it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
+            } else {
+                it.quantity.toString() +
+                        stringResource(id = R.string.sugar_card_multiplier_expression) +
+                        it.gram.toString() +
+                        stringResource(id = R.string.gram_unit_short)
             }
-
+            thirdColumnText =
+                it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
 
             Row(
                 modifier = Modifier
@@ -201,18 +174,12 @@ fun ShowSharedCards(
 
     }
 
-    // Card Item Bottom Sheet
+// Card Item Bottom Sheet
     val showCardItemBottomSheet by sharedVM.showCardItemBottomSheet.collectAsState()
     val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
-    val cardItemToShowCalories by sharedVM.cardItemToShowCalories.collectAsState()
-    val cardItemToShowIsEntrySugar by sharedVM.cardItemToShowIsEntrySugar.collectAsState()
 
     if (showCardItemBottomSheet) {
-        SharedCardItem(
-            isEntrySugar = cardItemToShowIsEntrySugar,
-            entrySugar = cardItemToShowSugar,
-            entryCalories = cardItemToShowCalories
-        )
+        SharedCardItem(entrySugar = cardItemToShowSugar)
     }
 
 }

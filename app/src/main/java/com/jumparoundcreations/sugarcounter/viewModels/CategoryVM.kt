@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.data.categoryData.CategoryStates
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
@@ -131,33 +132,18 @@ class CategoryVM : ViewModel(), KoinComponent {
     val clickedCategory = _clickedCategory.asStateFlow()
 
     private val _entrySugarForClickedCategory = MutableStateFlow(
-        Entry(
+        SugarEntry(
             id = DatabaseConstants.DEFAULT_DATABASE_INT,
             currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
             date = DatabaseConstants.DEFAULT_DATABASE_STRING,
             category = DatabaseConstants.DEFAULT_DATABASE_STRING,
-            isPerHundred = false,
-            perHundredGram = DatabaseConstants.DEFAULT_DATABASE_INT,
-            perHundredQuantity = DatabaseConstants.DEFAULT_DATABASE_INT,
-            perPieceGram = DatabaseConstants.DEFAULT_DATABASE_INT,
-            perPieceAmount = DatabaseConstants.DEFAULT_DATABASE_INT,
-            gramTotal = DatabaseConstants.DEFAULT_DATABASE_INT
+            entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
+            gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+            quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+            gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE
         )
     )
     val entrySugarForClickedCategory = _entrySugarForClickedCategory.asStateFlow()
-
-    private val _entryCaloriesForClickedCategory = MutableStateFlow(
-        EntryCalories(
-            id = DatabaseConstants.DEFAULT_DATABASE_INT,
-            currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
-            date = DatabaseConstants.DEFAULT_DATABASE_STRING,
-            category = DatabaseConstants.DEFAULT_DATABASE_STRING,
-            caloriesPerPiece = DatabaseConstants.DEFAULT_DATABASE_INT,
-            caloriesAmount = DatabaseConstants.DEFAULT_DATABASE_INT_AMOUNT,
-            caloriesTotal = DatabaseConstants.DEFAULT_DATABASE_INT
-        )
-    )
-    val entryCaloriesForClickedCategory = _entryCaloriesForClickedCategory.asStateFlow()
 
     //SateFlows: END
 
@@ -254,32 +240,17 @@ class CategoryVM : ViewModel(), KoinComponent {
 
     private fun retrieveLastEntriesForClickedCategory(clickedCategory: Category) {
         viewModelScope.launch(Dispatchers.IO) {
-
-            val lastEntrySugar: Entry? =
+            val lastEntrySugar: SugarEntry? =
                 database.appDao().checkIfGramValueExistsForCategory(clickedCategory.category)
-            _entrySugarForClickedCategory.value = lastEntrySugar ?: Entry(
+            _entrySugarForClickedCategory.value = lastEntrySugar ?: SugarEntry(
                 id = DatabaseConstants.DEFAULT_DATABASE_INT,
                 currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
                 date = DatabaseConstants.DEFAULT_DATABASE_STRING,
                 category = DatabaseConstants.DEFAULT_DATABASE_STRING,
-                isPerHundred = DatabaseConstants.DEFAULT_DATABASE_BOOLEAN,
-                perHundredGram = DatabaseConstants.DEFAULT_DATABASE_INT,
-                perHundredQuantity = DatabaseConstants.DEFAULT_DATABASE_INT,
-                perPieceGram = DatabaseConstants.DEFAULT_DATABASE_INT,
-                perPieceAmount = DatabaseConstants.DEFAULT_DATABASE_INT,
-                gramTotal = DatabaseConstants.DEFAULT_DATABASE_INT
-            )
-
-            val lastEntryCalories: EntryCalories? =
-                database.appDao().checkIfCaloriesValueExistsForCategory(clickedCategory.category)
-            _entryCaloriesForClickedCategory.value = lastEntryCalories ?: EntryCalories(
-                id = DatabaseConstants.DEFAULT_DATABASE_INT,
-                currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
-                date = DatabaseConstants.DEFAULT_DATABASE_STRING,
-                category = DatabaseConstants.DEFAULT_DATABASE_STRING,
-                caloriesPerPiece = DatabaseConstants.DEFAULT_DATABASE_INT,
-                caloriesAmount = DatabaseConstants.DEFAULT_DATABASE_INT_AMOUNT,
-                caloriesTotal = DatabaseConstants.DEFAULT_DATABASE_INT
+                entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
+                gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE
             )
         }
     }

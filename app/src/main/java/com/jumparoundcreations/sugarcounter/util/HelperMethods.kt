@@ -4,13 +4,15 @@ package com.jumparoundcreations.sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
-import com.jumparoundcreations.sugarcounter.data.IEntry
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -20,11 +22,21 @@ class HelperMethods : KoinComponent {
 
     companion object {
 
-        fun <T : IEntry> groupCounterItemsInGroupsByDay(savedEntries: List<T>): List<EntryGroup> {
+        fun formatDateForDisplay(date: String): String {
+            return try {
+                val input = LocalDate.parse(date)
+                val formatter = DateTimeFormatter.ofPattern("EEEE (dd.MM.)")
+                input.format(formatter)
+            } catch (e: Exception) {
+                date // fallback
+            }
+        }
+
+        fun groupCounterItemsInGroupsByDay(savedEntries: List<SugarEntry>): List<EntryGroup> {
 
             lateinit var todayOrYesterday: TodayOrYesterday
             val tempGroupedEntriesByDay =
-                mutableMapOf<Pair<String, String>, MutableList<T>>()
+                mutableMapOf<Pair<String, String>, MutableList<SugarEntry>>()
             val groupedEntriesByDay = mutableListOf<EntryGroup>()
 
             // This intermediate step prepares the data for further processing
@@ -89,17 +101,13 @@ class HelperMethods : KoinComponent {
         }
 
 
-        fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
-            if (valueList.isNotEmpty()) {
-                return valueList.map {
-                    when (it) {
-                        is Entry -> it.gramTotal
-                        is EntryCalories -> it.caloriesTotal
-                        else -> return 0
-                    }
+        fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double {
+            return if (valueList.isNotEmpty()) {
+                valueList.map {
+                    it.gramTotal
                 }.reduce { sum, element -> sum + element }
             } else {
-                return 0
+                GeneralConstants.NULL_AS_DOUBLE
             }
         }
 
@@ -123,8 +131,6 @@ class HelperMethods : KoinComponent {
         fun actionAddTestData(
             timestampInSeconds: Int,
             yearsTimespan: Int,
-            sugarTestData: Boolean,
-            caloriesTestData: Boolean
         ) {
             GlobalScope.launch(Dispatchers.IO) {
                 var timestamp = timestampInSeconds.toLong() //1600617740.toLong()
@@ -132,43 +138,38 @@ class HelperMethods : KoinComponent {
                     timestamp += 86400
 
                     repeat((1..4).random()) {
-                        val gramValue = Random.nextInt(from = 1, until = 20)
-                        val caloriesValue = Random.nextInt(from = 200, until = 1200)
+                        val gramValue = Random.nextDouble(from = 1.0, until = 10.0)
+                        val quantityValue = Random.nextDouble(from = 1.0, until = 8.0)
 
-                        if (sugarTestData) {
-                            database.appDao().insertEntry(
-                                Entry(
-                                    currentTimestamp = timestamp,
-                                    date = convertTimestampToDateString(
-                                        timestamp,
-                                        "yyyy-MM-dd"
-                                    ),
-                                    category = "TestSugar",
-                                    isPerHundred = true,
-                                    perPieceGram = gramValue,
-                                    perPieceAmount = 1,
-                                    perHundredGram = 0,
-                                    perHundredQuantity = 0,
-                                    gramTotal = gramValue
-                                )
+                        database.appDao().insertSugarEntry(
+                            SugarEntry(
+                                date = convertTimestampToDateString(
+                                    timestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                currentTimestamp = timestamp,
+                                category = "TestSugar",
+                                entryType = GramCountMode.PerHundred,
+                                gram = gramValue,
+                                quantity = quantityValue,
+                                gramTotal = gramValue
                             )
-                        }
+                        )
 
-                        if (caloriesTestData) {
-                            database.appDao().insertEntryCalories(
-                                EntryCalories(
-                                    currentTimestamp = timestamp,
-                                    date = convertTimestampToDateString(
-                                        timestamp,
-                                        "yyyy-MM-dd"
-                                    ),
-                                    category = "TestCalories",
-                                    caloriesPerPiece = 120,
-                                    caloriesAmount = 2,
-                                    caloriesTotal = caloriesValue
-                                )
+                        database.appDao().insertSugarEntry(
+                            SugarEntry(
+                                date = convertTimestampToDateString(
+                                    timestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                currentTimestamp = timestamp,
+                                category = "TestSugar",
+                                entryType = GramCountMode.PerHundred,
+                                gram = gramValue,
+                                quantity = quantityValue,
+                                gramTotal = gramValue
                             )
-                        }
+                        )
                     }
 
                 }

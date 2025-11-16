@@ -1,11 +1,9 @@
 package com.jumparoundcreations.sugarcounter.viewModels
 
-import android.database.sqlite.SQLiteConstraintException
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.sugarcounter.data.AppConstants
-import com.jumparoundcreations.sugarcounter.data.IEntry
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import kotlin.math.roundToInt
 
-class SharedVM : ViewModel(), KoinComponent {
+class CardsVM : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
 
@@ -29,18 +26,11 @@ class SharedVM : ViewModel(), KoinComponent {
     val cardItemToShowIsEntrySugar = _cardItemToShowIsEntrySugar.asStateFlow()
 
     private val _cardItemToShowSugar = MutableStateFlow(
-        Entry(
-            0, 0, "", "", true, 0, 0, 0, 0, 0
+        SugarEntry(
+            0, 0, "", "", GramCountMode.PerHundred, 0.0, 0.0, 0.0
         )
     )
     val cardItemToShowSugar = _cardItemToShowSugar.asStateFlow()
-
-    private val _cardItemToShowCalories = MutableStateFlow(
-        EntryCalories(
-            0, 0, "", "", 0, 1, 0
-        )
-    )
-    val cardItemToShowCalories = _cardItemToShowCalories.asStateFlow()
 
     private val _valueCategory = MutableStateFlow("")
     val valueCategory = _valueCategory.asStateFlow()
@@ -65,22 +55,10 @@ class SharedVM : ViewModel(), KoinComponent {
 
     //Actions: START
 
-    fun actionShowCardItem(item: IEntry) {
-        when (item) {
-            is Entry -> {
-                _cardItemToShowIsEntrySugar.value = true
-                _cardItemToShowSugar.value = item
-            }
-
-            is EntryCalories -> {
-                _cardItemToShowIsEntrySugar.value = false
-                _cardItemToShowCalories.value = item
-            }
-
-            else -> Log.d("CardDetailsSheet", "Showing CardDetailsSheet did not work")
-        }
+    fun actionShowCardItem(item: SugarEntry) {
+        _cardItemToShowIsEntrySugar.value = true
+        _cardItemToShowSugar.value = item
         _showCardItemBottomSheet.value = true
-
     }
 
     fun actionDismissCardItem() {
@@ -107,10 +85,11 @@ class SharedVM : ViewModel(), KoinComponent {
         _valueConsumed.value = newValueConsumed
     }
 
+    /*
     fun actionEditDatabaseEntry(
         isEntrySugar: Boolean,
-        entrySugar: Entry,
-        entryCalories: EntryCalories,
+        entryPerHundred: EntryPerHundred,
+        entryPerPiece: EntryPerPiece,
         valueCategory: String,
         valueProportion: String,
         valueConsumed: String
@@ -145,17 +124,10 @@ class SharedVM : ViewModel(), KoinComponent {
                 }
             }
 
-            if (valueCategory != entrySugar.category && valueCategory != entryCalories.category) {
+            if (valueCategory != entrySugar.category) {
 
                 database.appDao().updateEntrySugarCategoryOfLastXDays(
-                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
-                    newCategory = valueCategory.trim(),
-                    startPoint = AppConstants.endOf90DaysAgo,
-                    endPoint = AppConstants.endOfToday
-                )
-
-                database.appDao().updateEntryCaloriesCategoryOfLastXDays(
-                    oldCategory = if (isEntrySugar) entrySugar.category else entryCalories.category,
+                    oldCategory = entrySugar.category,
                     newCategory = valueCategory.trim(),
                     startPoint = AppConstants.endOf90DaysAgo,
                     endPoint = AppConstants.endOfToday
@@ -173,16 +145,11 @@ class SharedVM : ViewModel(), KoinComponent {
             }
         }
     }
+    */
 
-    fun actionDeleteSpecificEntryRow(
-        itemToDeleteIsEntrySugar: Boolean, id: Int
-    ) {
+    fun actionDeleteSpecificEntryRow(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            if (itemToDeleteIsEntrySugar) {
-                database.appDao().deleteSpecificEntryRow(id)
-            } else {
-                database.appDao().deleteSpecificEntryCaloriesRow(id)
-            }
+            database.appDao().deleteSpecificEntryRow(id)
         }
     }
 
@@ -190,68 +157,40 @@ class SharedVM : ViewModel(), KoinComponent {
         _dialogEntryDeletionConfirmation.value = isShown
     }
 
-    fun actionReuseEntryForToday(
-        isEntrySugar: Boolean,
-        entrySugar: Entry,
-        entryCalories: EntryCalories
-    ) {
-
+    fun actionReuseEntryForToday(entrySugar: SugarEntry) {
         viewModelScope.launch(Dispatchers.IO) {
             val currentTimestamp = System.currentTimeMillis() / 1000
 
-            when (isEntrySugar) {
-                true ->
-                    if (entrySugar.isPerHundred) {
-                        database.appDao().insertEntry(
-                            Entry(
-                                currentTimestamp = currentTimestamp,
-                                date = HelperMethods.convertTimestampToDateString(
-                                    currentTimestamp,
-                                    "yyyy-MM-dd"
-                                ),
-                                category = entrySugar.category,
-                                isPerHundred = true,
-                                perPieceGram = 0,
-                                perPieceAmount = 0,
-                                perHundredGram = entrySugar.perHundredGram,
-                                perHundredQuantity = entrySugar.perHundredQuantity,
-                                gramTotal = entrySugar.gramTotal
-                            )
-                        )
-                    } else {
-                        database.appDao().insertEntry(
-                            Entry(
-                                currentTimestamp = currentTimestamp,
-                                date = HelperMethods.convertTimestampToDateString(
-                                    currentTimestamp,
-                                    "yyyy-MM-dd"
-                                ),
-                                category = entrySugar.category,
-                                isPerHundred = false,
-                                perPieceGram = entrySugar.perPieceGram,
-                                perPieceAmount = entrySugar.perPieceAmount,
-                                perHundredGram = 0,
-                                perHundredQuantity = 0,
-                                gramTotal = entrySugar.gramTotal
-                            )
-                        )
-                    }
-
-                else -> {
-                    database.appDao().insertEntryCalories(
-                        EntryCalories(
-                            currentTimestamp = currentTimestamp,
-                            date = HelperMethods.convertTimestampToDateString(
-                                currentTimestamp,
-                                "yyyy-MM-dd"
-                            ),
-                            category = entryCalories.category,
-                            caloriesPerPiece = entryCalories.caloriesPerPiece,
-                            caloriesAmount = entryCalories.caloriesAmount,
-                            caloriesTotal = entryCalories.caloriesTotal
-                        )
+            if (entrySugar.entryType == GramCountMode.PerHundred) {
+                database.appDao().insertSugarEntry(
+                    SugarEntry(
+                        currentTimestamp = currentTimestamp,
+                        date = HelperMethods.convertTimestampToDateString(
+                            currentTimestamp,
+                            "yyyy-MM-dd"
+                        ),
+                        category = entrySugar.category,
+                        entryType = GramCountMode.PerHundred,
+                        gram = entrySugar.gram,
+                        quantity = entrySugar.quantity,
+                        gramTotal = entrySugar.gramTotal
                     )
-                }
+                )
+            } else {
+                database.appDao().insertSugarEntry(
+                    SugarEntry(
+                        currentTimestamp = currentTimestamp,
+                        date = HelperMethods.convertTimestampToDateString(
+                            currentTimestamp,
+                            "yyyy-MM-dd"
+                        ),
+                        category = entrySugar.category,
+                        entryType = GramCountMode.PerPiece,
+                        gram = entrySugar.gram,
+                        quantity = entrySugar.quantity,
+                        gramTotal = entrySugar.gramTotal
+                    )
+                )
             }
         }
     }

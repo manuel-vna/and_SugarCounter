@@ -1,6 +1,5 @@
 package com.jumparoundcreations.sugarcounter.composables.historyUI
 
-import android.util.Log
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -40,68 +39,34 @@ import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 fun CardsScreen(
     historyVM: HistoryVM,
     savedSugarCountGrouped: List<EntryGroup>,
-    caloriesEntryDbHistory: List<EntryGroup>
 ) {
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
     val historyCardSearchFieldText by historyVM.historyCardSearchFieldText.collectAsState()
-    val segmentedButtonSugarOrCaloriesIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
-            when (segmentedButtonSugarOrCaloriesIndex) {
-                0 -> {
-                    Log.d("HistoryCardsUI.kt", "Sugar tab chosen")
-                    if (savedSugarCountGrouped.isNotEmpty()) {
-                        items(savedSugarCountGrouped) {
-                            ShowSharedCards(
-                                entryGroup = it,
-                                backgroundColorPrimary = false
-                            )
-                        }
-                    } else {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillParentMaxHeight()
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
-                            }
-                        }
+
+            if (savedSugarCountGrouped.isNotEmpty()) {
+                items(savedSugarCountGrouped) {
+                    ShowSharedCards(
+                        entryGroup = it,
+                        backgroundColorPrimary = false
+                    )
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillParentMaxHeight()
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
                     }
                 }
-
-                1 -> {
-                    Log.d("HistoryCardsUI.kt", "Calories tab chosen")
-                    if (caloriesEntryDbHistory.isNotEmpty()) {
-                        items(caloriesEntryDbHistory) {
-                            ShowSharedCards(
-                                entryGroup = it,
-                                backgroundColorPrimary = false
-                            )
-                        }
-
-                    } else {
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillParentMaxHeight()
-                                    .fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
-                            }
-                        }
-                    }
-                }
-
-                else -> Log.d("HistoryCardsUI.kt", "No index found")
             }
-
         }
 
         Row(

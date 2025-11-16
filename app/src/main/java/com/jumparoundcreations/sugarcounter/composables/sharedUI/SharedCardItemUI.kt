@@ -1,4 +1,4 @@
-package com.jumparoundcreations.sugarcounter.composables.sharedUI
+package com.jumparoundcreations.sugarcounter.composables.cardsUI
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,56 +40,37 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
-import com.jumparoundcreations.sugarcounter.viewModels.SharedVM
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedCardItem(
-    isEntrySugar: Boolean,
-    entrySugar: Entry,
-    entryCalories: EntryCalories
+    entrySugar: SugarEntry
 ) {
 
-    val sharedVM: SharedVM = koinViewModel()
+    val cardsVM: CardsVM = koinViewModel()
 
-    val valueCategory by sharedVM.valueCategory.collectAsState()
-    val headingProportion by sharedVM.headingProportion.collectAsState()
-    val headingConsumed by sharedVM.headingConsumed.collectAsState()
-    val valueProportion by sharedVM.valueProportion.collectAsState()
-    val valueConsumed by sharedVM.valueConsumed.collectAsState()
+    val valueCategory by cardsVM.valueCategory.collectAsState()
+    val headingProportion by cardsVM.headingProportion.collectAsState()
+    val headingConsumed by cardsVM.headingConsumed.collectAsState()
+    val valueProportion by cardsVM.valueProportion.collectAsState()
+    val valueConsumed by cardsVM.valueConsumed.collectAsState()
 
-    // The fields of the bottom sheet are filled with the values from the entry that was clicked
-    when (isEntrySugar) {
-        true ->
-            if (entrySugar.isPerHundred) {
-                sharedVM.actionChangeValueCategory(entrySugar.category)
-                sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramPerHundredLabel))
-                sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.amountSugar))
-                sharedVM.actionChangeValueProportion(entrySugar.perHundredGram.toString())
-                sharedVM.actionChangeValueConsumed(entrySugar.perHundredQuantity.toString())
-            } else {
-                sharedVM.actionChangeValueCategory(entrySugar.category)
-                sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.gramSugar))
-                sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
-                sharedVM.actionChangeValueProportion(entrySugar.perPieceGram.toString())
-                sharedVM.actionChangeValueConsumed(entrySugar.perPieceAmount.toString())
-            }
+    cardsVM.actionChangeValueCategory(entrySugar.category)
+    cardsVM.actionChangeHeadingProportion(stringResource(id = R.string.gramSugar))
+    cardsVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
+    cardsVM.actionChangeValueProportion(entrySugar.gram.toString())
+    cardsVM.actionChangeValueConsumed(entrySugar.quantity.toString())
 
-        else -> {
-            sharedVM.actionChangeValueCategory(entryCalories.category)
-            sharedVM.actionChangeHeadingProportion(stringResource(id = R.string.general_calories_lowercase))
-            sharedVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
-            sharedVM.actionChangeValueProportion(entryCalories.caloriesPerPiece.toString())
-            sharedVM.actionChangeValueConsumed(entryCalories.caloriesAmount.toString())
-        }
-    }
 
     ModalBottomSheet(
         modifier = Modifier
             .navigationBarsPadding(),
-        onDismissRequest = { sharedVM.actionDismissCardItem() }
+        onDismissRequest = { cardsVM.actionDismissCardItem() }
     ) {
 
         Column(
@@ -133,10 +114,10 @@ fun SharedCardItem(
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
                         value = valueCategory,
-                        onValueChange = { sharedVM.actionChangeValueCategory(it) },
+                        onValueChange = { cardsVM.actionChangeValueCategory(it) },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { sharedVM.actionChangeValueCategory("") }) {
+                            IconButton(onClick = { cardsVM.actionChangeValueCategory("") }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -178,13 +159,16 @@ fun SharedCardItem(
                         ),
                         value = valueProportion,
                         onValueChange = {
-                            if (it.isDigitsOnly() && it.count() <= if (isEntrySugar) 2 else 4) sharedVM.actionChangeValueProportion(
-                                it
+                            if (
+                                it.isDigitsOnly()
+                                &&
+                                it.count() <= if (entrySugar.entryType == GramCountMode.PerHundred) 2 else 4
                             )
+                                cardsVM.actionChangeValueProportion(it)
                         },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { sharedVM.actionChangeValueProportion("") }) {
+                            IconButton(onClick = { cardsVM.actionChangeValueProportion("") }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -220,13 +204,13 @@ fun SharedCardItem(
                         ),
                         value = valueConsumed,
                         onValueChange = {
-                            if (it.isDigitsOnly() && it.count() <= 3) sharedVM.actionChangeValueConsumed(
+                            if (it.isDigitsOnly() && it.count() <= 3) cardsVM.actionChangeValueConsumed(
                                 it
                             )
                         },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { sharedVM.actionChangeValueConsumed("") }) {
+                            IconButton(onClick = { cardsVM.actionChangeValueConsumed("") }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -249,12 +233,10 @@ fun SharedCardItem(
                 ElevatedButton(
                     shape = RoundedCornerShape(12.dp),
                     onClick = {
-                        sharedVM.actionReuseEntryForToday(
-                            isEntrySugar,
+                        cardsVM.actionReuseEntryForToday(
                             entrySugar,
-                            entryCalories
                         )
-                        sharedVM.actionDismissCardItem()
+                        cardsVM.actionDismissCardItem()
                     }
                 ) {
                     Text(
@@ -282,7 +264,7 @@ fun SharedCardItem(
                         //contentColor for text font statically because it fits light and dark mode
                     ),
                     onClick = {
-                        sharedVM.actionShowDialogEntryDeletionConfirmation(true)
+                        cardsVM.actionShowDialogEntryDeletionConfirmation(true)
                     }
                 ) {
                     Text(
@@ -294,7 +276,7 @@ fun SharedCardItem(
                         .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
                         .weight(0.1f),
 
-                    onClick = { sharedVM.actionDismissCardItem() }
+                    onClick = { cardsVM.actionDismissCardItem() }
                 ) {
                     Text(
                         text = stringResource(R.string.generalCancel)
@@ -305,7 +287,8 @@ fun SharedCardItem(
                         .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
                         .weight(0.1F),
                     onClick = {
-                        sharedVM.actionEditDatabaseEntry(
+                        /*
+                        cardsVM.actionEditDatabaseEntry(
                             isEntrySugar,
                             entrySugar,
                             entryCalories,
@@ -313,7 +296,8 @@ fun SharedCardItem(
                             valueProportion,
                             valueConsumed
                         )
-                        sharedVM.actionDismissCardItem()
+                         */
+                        cardsVM.actionDismissCardItem()
                     }
                 ) {
                     Text(
@@ -326,28 +310,23 @@ fun SharedCardItem(
     }
 
 
-    val dialogEntryDeletionConfirmation by sharedVM.dialogEntryDeletionConfirmation.collectAsState()
+    val dialogEntryDeletionConfirmation by cardsVM.dialogEntryDeletionConfirmation.collectAsState()
 
     if (dialogEntryDeletionConfirmation) {
         ShowAlertDialogDoubleBtn(
-            dialogTitle = if (isEntrySugar) entrySugar.category else entryCalories.category,
+            dialogTitle = entrySugar.category,
             dialogDescription = stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
-                val itemToDelete =
-                    if (isEntrySugar) entrySugar else entryCalories
-                sharedVM.actionDeleteSpecificEntryRow(
-                    itemToDeleteIsEntrySugar = isEntrySugar,
-                    id = itemToDelete.id
-                )
-                sharedVM.actionShowDialogEntryDeletionConfirmation(false)
-                sharedVM.actionDismissCardItem()
+                cardsVM.actionDeleteSpecificEntryRow(id = entrySugar.id)
+                cardsVM.actionShowDialogEntryDeletionConfirmation(false)
+                cardsVM.actionDismissCardItem()
             },
             dismissBtnText = stringResource(R.string.generalCancel),
             dismissBtnAction = {
-                sharedVM.actionShowDialogEntryDeletionConfirmation(false)
+                cardsVM.actionShowDialogEntryDeletionConfirmation(false)
             },
-            onDismissRequest = { sharedVM.actionShowDialogEntryDeletionConfirmation(false) }
+            onDismissRequest = { cardsVM.actionShowDialogEntryDeletionConfirmation(false) }
         )
     }
 

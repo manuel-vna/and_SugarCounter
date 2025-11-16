@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -28,9 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogSingleBtn
+import com.jumparoundcreations.sugarcounter.data.counterData.EntryStoringState
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
@@ -46,6 +49,17 @@ fun Counter(
     val counterVM = getKoin().get<CounterVM>()
 
     // States
+
+    val entryStoringState by counterVM.entryStoringState.collectAsStateWithLifecycle()
+
+    when (entryStoringState) {
+        EntryStoringState.Loading -> CircularProgressIndicator()
+        EntryStoringState.Error -> println("Error in saving entry data")
+        is EntryStoringState.Saved -> println("Saved")
+        EntryStoringState.Idle -> Unit
+    }
+
+
     val category by counterVM.categorySelected.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
     // SharedPreferences: Calories Counter: Activation state retrieved from sharedPrefsMain
@@ -84,7 +98,12 @@ fun Counter(
                 .padding(bottom = 6.dp),
             Arrangement.Absolute.SpaceAround
         ) {
-            DatePicker(counterVM = counterVM, textColor = textColor)
+            DatePicker(
+                counterVM = counterVM,
+                datePickerShown = entryStoringState.data.datePickerShown,
+                dateOfEntryEpochSec = entryStoringState.data.dateOfEntryEpochSec,
+                textColor = textColor,
+            )
 
             Barcode(counterVM = counterVM, textColor = textColor)
         }
@@ -116,10 +135,6 @@ fun Counter(
 
         TabRow(counterVM)
 
-        CounterCaloriesUI(
-            caloriesCounterActivated = caloriesCounterActivated
-        )
-
         Row(
             modifier = Modifier
                 .padding(top = 8.dp)
@@ -139,7 +154,6 @@ fun Counter(
                     counterVM.actionPerHundredChange("")
                     counterVM.actionPerHundredQuantityChange("")
                     counterVM.actionChangeCategoryFieldExpanded(false)
-                    counterVM.actionCaloriesChange("")
                     keyboardController?.hide()
                 },
             ) {
@@ -154,10 +168,10 @@ fun Counter(
 
         CounterCardsAreaUI(
             counterVM,
-            caloriesCounterActivated
         )
 
     }
+
 
     val alertDialog by counterVM.alertDialog.collectAsState()
     if (alertDialog) {
@@ -182,19 +196,6 @@ fun Counter(
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = { counterVM.actionGramThresholdKeepLastEntry() },
             onDismissRequest = { }
-        )
-    }
-
-    val alertCaloriesThreshold by counterVM.alertCaloriesThreshold.collectAsState()
-    if (alertCaloriesThreshold) {
-        ShowAlertDialogDoubleBtn(
-            dialogTitle = stringResource(id = R.string.alertCaloriesThresholdTitle),
-            dialogDescription = stringResource(id = R.string.alertCaloriesThresholdDescription),
-            confirmBtnText = stringResource(id = R.string.general_delete),
-            confirmBtnAction = { counterVM.actionCaloriesThresholdDeleteLastEntry() },
-            dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
-            dismissBtnAction = { counterVM.actionCaloriesThresholdKeepLastEntry() },
-            onDismissRequest = { counterVM.actionCaloriesThresholdKeepLastEntry() }
         )
     }
 

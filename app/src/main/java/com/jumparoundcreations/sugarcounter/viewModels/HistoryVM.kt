@@ -3,8 +3,9 @@ package com.jumparoundcreations.sugarcounter.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.sugarcounter.data.AppConstants
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.util.DatabaseConstants
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
@@ -51,17 +52,15 @@ class HistoryVM : ViewModel(), KoinComponent {
             EntryGroup(
                 "", "",
                 listOf(
-                    Entry(
+                    SugarEntry(
                         DatabaseConstants.DEFAULT_DATABASE_INT,
                         DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
                         DatabaseConstants.DEFAULT_DATABASE_STRING,
                         DatabaseConstants.DEFAULT_DATABASE_STRING,
-                        true,
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT
+                        GramCountMode.PerHundred,
+                        DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                        DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                        DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                     )
                 )
             )
@@ -83,79 +82,42 @@ class HistoryVM : ViewModel(), KoinComponent {
             _savedHistory.value
         )
 
-    private val _caloriesEntryDbHistory = MutableStateFlow(
-        listOf(
-            EntryGroup(
-                DatabaseConstants.DEFAULT_DATABASE_STRING,
-                DatabaseConstants.DEFAULT_DATABASE_STRING,
-                listOf(
-                    EntryCalories(
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
-                        DatabaseConstants.DEFAULT_DATABASE_STRING,
-                        DatabaseConstants.DEFAULT_DATABASE_STRING,
-                        DatabaseConstants.DEFAULT_DATABASE_INT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT_AMOUNT,
-                        DatabaseConstants.DEFAULT_DATABASE_INT
-                    )
-                )
-            )
-        )
-    )
-    val caloriesEntryDbHistory =
-    // fun <T1, T2, R> Flow<T1>.combine(flow: Flow<T2>, transform: suspend (a: T1, b: T2) -> R):
-    // Returns a Flow whose values are generated with transform function by combining the most
-        // recently emitted values by each flow.
-        historyCardSearchFieldText.combine(_caloriesEntryDbHistory) { searchField, entries ->
-            entries.filter { entryGroup ->
-                entryGroup.entryList.any { entry ->
-                    entry.category.contains(_historyCardSearchFieldText.value)
-                }
-            }
-        }.stateIn( // Converts a cold Flow into a hot StateFlow (= return value)
-            viewModelScope,
-            SharingStarted.WhileSubscribed(TIMEOUT),
-            _caloriesEntryDbHistory.value
-        )
+
     //SateFlows: END
 
     //Observer: START
-    private val historyObserver = Observer<List<Entry>> {
+    private val historyObserver = Observer<List<SugarEntry>> {
         val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
         _savedHistory.value = savedSugarCountGrouped
     }
 
-    private val caloriesHistoryObserver = Observer<List<EntryCalories>> {
-        val _caloriesEntryDbHistoryGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
-        _caloriesEntryDbHistory.value = _caloriesEntryDbHistoryGrouped
-    }
 
-    // When this ViewModal is initialized,
-    // tell the above created observer what has to be observed and how long
-    init {
-        database.appDao().getEntries(
-            AppConstants.endOf90DaysAgo,
-            AppConstants.endOfToday
-        ).observeForever(historyObserver)
-        database.appDao().getEntryCalories(
-            AppConstants.endOf90DaysAgo, AppConstants.endOfToday
-        )
-            .observeForever(caloriesHistoryObserver)
-    }
+    /*
+        // When this ViewModal is initialized,
+        // tell the above created observer what has to be observed and how long
+        init {
+            database.appDao().getSugarEntries(
+                AppConstants.endOf90DaysAgo,
+                AppConstants.endOfToday
+            ).observeForever(historyObserver)
 
-    override fun onCleared() {
-        super.onCleared()
-        // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getEntries(
-            AppConstants.endOf90DaysAgo,
-            AppConstants.endOfToday
-        )
-            .removeObserver(historyObserver)
-        database.appDao().getEntryCalories(AppConstants.endOf90DaysAgo, AppConstants.endOfToday)
-            .removeObserver(caloriesHistoryObserver)
+        }
 
-    }
-    //Observer: END
+        override fun onCleared() {
+            super.onCleared()
+            // Stop observing at Dao of RoomDB when this ViewModel is cleared
+            database.appDao().getEntries(
+                AppConstants.endOf90DaysAgo,
+                AppConstants.endOfToday
+            )
+                .removeObserver(historyObserver)
+            database.appDao().getEntryCalories(AppConstants.endOf90DaysAgo, AppConstants.endOfToday)
+                .removeObserver(caloriesHistoryObserver)
+
+        }
+        //Observer: END
+
+     */
 
 
     //Actions: START

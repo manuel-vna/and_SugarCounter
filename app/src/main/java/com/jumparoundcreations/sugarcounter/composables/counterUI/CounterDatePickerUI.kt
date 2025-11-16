@@ -18,8 +18,6 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -36,14 +34,15 @@ import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 @Composable
 fun RowScope.DatePicker(
     counterVM: CounterVM,
+    datePickerShown: Boolean,
+    dateOfEntryEpochSec: Long,
     textColor: Color
 ) {
     val nowMillis = System.currentTimeMillis()
     val xDaysAgoMillis = nowMillis - TimeConstants.MONTH_ONE_IN_MILLISECONDS
-    val accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button)
 
-    val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
-    val datePickerShown by counterVM.datePickerShown.collectAsState()
+    //val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
+    //val datePickerShown by counterVM.datePickerShown.collectAsState()
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
         selectableDates = object : SelectableDates {
@@ -55,7 +54,7 @@ fun RowScope.DatePicker(
 
     ElevatedButton(
         counterVM = counterVM,
-        accessibilityDatePickerButton = accessibilityDatePickerButton,
+        accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button),
         textColor = textColor,
         datePickerShown = datePickerShown,
         dateOfEntryEpochSec = dateOfEntryEpochSec

@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
+import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 
@@ -30,7 +31,6 @@ fun CategoryBottomSheet() {
     val categoryBottomSheet by categoryVM.categoryBottomSheetShown.collectAsState()
     val clickedCategory by categoryVM.clickedCategory.collectAsState()
     val entrySugarForClickedCategory by categoryVM.entrySugarForClickedCategory.collectAsState()
-    val entryCaloriesForClickedCategory by categoryVM.entryCaloriesForClickedCategory.collectAsState()
 
     if (categoryBottomSheet) {
         ModalBottomSheet(
@@ -65,34 +65,13 @@ fun CategoryBottomSheet() {
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
                             text =
-                            if (entrySugarForClickedCategory.isPerHundred) stringResource(
+                                if (entrySugarForClickedCategory.entryType == GramCountMode.PerHundred) stringResource(
                                 R.string.category_bottom_sheet_per_hundred_gram,
-                                entrySugarForClickedCategory.perHundredGram
+                                    entrySugarForClickedCategory.gram
                             )
                             else stringResource(
                                 R.string.category_bottom_sheet_per_piece_gram,
-                                entrySugarForClickedCategory.perPieceGram
-                            )
-                        )
-                    }
-                }
-
-                if (entryCaloriesForClickedCategory.category.isNotEmpty()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                            text = stringResource(
-                                R.string.general_calories_lowercase
-                            )
-                        )
-                        Text(
-                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                            text = stringResource(
-                                id = R.string.category_bottom_sheet_calories,
-                                entryCaloriesForClickedCategory.caloriesTotal.toString()
+                                    entrySugarForClickedCategory.gram
                             )
                         )
                     }
@@ -115,33 +94,6 @@ fun CategoryBottomSheet() {
                             text = clickedCategory.barcodeNumber
                         )
                     }
-                }
-
-                if (
-                    entrySugarForClickedCategory.category.isNotEmpty() ||
-                    entryCaloriesForClickedCategory.category.isNotEmpty()
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                            text = stringResource(R.string.category_bottom_sheet_date)
-                        )
-
-                        Text(
-                            modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                            text =
-                            if (entrySugarForClickedCategory.currentTimestamp > entryCaloriesForClickedCategory.currentTimestamp)
-                                entrySugarForClickedCategory.date else entryCaloriesForClickedCategory.date
-                        )
-                    }
-                } else {
-                    Text(
-                        modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                        text = stringResource(R.string.category_bottom_sheet_no_entry_yet)
-                    )
                 }
 
                 Spacer(modifier = Modifier.padding(60.dp))

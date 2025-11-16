@@ -10,13 +10,19 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.sugarcounter.data.counterData.EntryStoringState
 import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.data.counterData.InputData
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.util.CounterSugarHelper
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
@@ -42,6 +48,9 @@ class CounterVM : ViewModel(), KoinComponent {
     // Timestamps: END
 
     //StateFlow: START
+
+    private val _entryStoringState = MutableStateFlow(EntryStoringState.Saved(InputData.Default))
+    val entryStoringState = _entryStoringState.asStateFlow()
 
     private val _sugarEntryDbRecent = MutableStateFlow(
         listOf(
@@ -117,18 +126,20 @@ class CounterVM : ViewModel(), KoinComponent {
         _categories.value = it.map { it.category }
     }
 
+    /*
     // Observer that is used to observe a method in the Dao which fetches a list of Entry items
-    private val todayObserverObject = Observer<List<Entry>> {
+    private val todayObserverObject = Observer<List<SugarEntry>> {
         val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
         _sugarEntryDbRecent.value = savedSugarCountGrouped
     }
+    */
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
         database.appDao().getAllCategories().observeForever(categoryObserver)
 
-        database.appDao().getEntries(startOfYesterday, endOfToday)
-            .observeForever(todayObserverObject)
+        //database.appDao().getEntries(startOfYesterday, endOfToday)
+        //.observeForever(todayObserverObject)
 
     }
 
@@ -137,24 +148,45 @@ class CounterVM : ViewModel(), KoinComponent {
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
         database.appDao().getAllCategories().removeObserver(categoryObserver)
 
-        database.appDao().getEntries(startOfYesterday, endOfToday)
-            .removeObserver(todayObserverObject)
+        //database.appDao().getEntries(startOfYesterday, endOfToday)
+        //.removeObserver(todayObserverObject)
     }
+
+    val savedSugarCountGrouped: StateFlow<List<EntryGroup>> =
+        database.appDao().getEntriesInTimeframe(startOfYesterday, endOfToday)
+            .map { entries ->
+                entries
+                    .groupBy { it.date }
+                    .map { (date, items) ->
+                        EntryGroup(
+                            date = date,
+                            dayDisplayFormat = HelperMethods.formatDateForDisplay(date),
+                            entryList = items.sortedBy { it.currentTimestamp }
+                        )
+                    }
+                    .sortedBy { it.date }
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
+            )
+
 
     //Saving an Entry: Start
     fun saveEntry(category: String) {
         if (_perPieceGram.value.isNotEmpty() || _perHundredGram.value.isNotEmpty()) {
-            CounterSugarHelper.saveSugarEntryInDatabase(
+            CounterSugarHelper.saveEntryInDatabase(
                 viewModelScope = viewModelScope,
                 sharedPrefsMain,
                 counterVM = this,
                 category = category,
                 dateOfEntryEpochSecValue = _dateOfEntryEpochSec.value,
-                gramCountModeValue = _gramCountMode.value,
-                perHundredGramValue = _perHundredGram.value,
-                perHundredQuantityValue = _perHundredQuantity.value,
-                perPieceGramValue = _perPieceGram.value,
-                perPieceAmountValue = _perPieceAmount.value
+                entryType = _gramCountMode.value,
+                perHundredGram = if (perHundredGram.value.isEmpty()) 0.0 else perHundredGram.value.toDouble(),
+                perHundredQuantity = if (perHundredQuantity.value.isEmpty()) 0.0 else _perHundredQuantity.value.toDouble(),
+                perPieceGram = if (perPieceGram.value.isEmpty()) 0.0 else _perPieceGram.value.toDouble(),
+                perPieceAmount = if (perPieceAmount.value.isEmpty()) 1.0 else _perPieceAmount.value.toDouble()
             )
         }
 
@@ -226,14 +258,14 @@ class CounterVM : ViewModel(), KoinComponent {
                         _isHundredTabIndex.value = 0
                     }
 
-                    entrySugarReply.perPieceGram != 0 -> {
-                        _perPieceGram.value = entrySugarReply.perPieceGram.toString()
+                    entrySugarReply.entryType == GramCountMode.PerPiece -> {
+                        _perPieceGram.value = entrySugarReply.gram.toString()
                         _perHundredGram.value = ""
                         _isHundredTabIndex.value = 1
                     }
 
-                    entrySugarReply.perHundredGram != 0 -> {
-                        _perHundredGram.value = entrySugarReply.perHundredGram.toString()
+                    entrySugarReply.entryType == GramCountMode.PerHundred -> {
+                        _perHundredGram.value = entrySugarReply.gram.toString()
                         _perPieceGram.value = ""
                         _isHundredTabIndex.value = 0
                     }

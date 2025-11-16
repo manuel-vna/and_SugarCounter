@@ -41,25 +41,17 @@ fun LineChart(
     context: Context,
     countMode: HelperMethods.CountMode,
     sugarEntryDbHistory: List<EntryGroup>,
-    caloriesEntryDbHistory: List<EntryGroup>,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     lateinit var graphDataList: List<GraphData>
     lateinit var lineGraphYAxisTag: List<String>
 
-    if (countMode == HelperMethods.CountMode.SUGAR) {
         graphDataList = getGraphDataList(sugarEntryDbHistory)
-
         // create array that tags the y axis of the graph with gram values:
         // 0g,10g,...,90g = 0 + 18 = 19 gram tags
         lineGraphYAxisTag = (0..18).map { i -> "${(18 - i) * 5}g" }
-    } else {
-        graphDataList = getGraphDataList(caloriesEntryDbHistory)
 
-        // Calories:
-        lineGraphYAxisTag = (0..18).map { i -> "${0 + (18 - i) * (250)}" }
-    }
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val thresholdLineColor = Color.Red
@@ -121,7 +113,7 @@ fun LineChart(
 
                 //Start: Vertical Drawing
                 var yAxisCount = 1
-                var previousTotalValue = 0
+                var previousTotalValue: Double = 0.0
                 graphDataList.forEach { it ->
 
                     // increase value of x-axis by each loop
@@ -315,12 +307,12 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
  */
 fun getHeightOfDataPoint(
     countMode: HelperMethods.CountMode,
-    valueTotal: Int,
+    valueTotal: Double,
     onePercentHeight: Float
 ): Float {
 
     val maximalValue: Int
-    var valueToSubtractFrom90Percent = 0
+    var valueToSubtractFrom90Percent: Double = 0.0
 
     when (countMode) {
         HelperMethods.CountMode.SUGAR -> {
@@ -336,7 +328,7 @@ fun getHeightOfDataPoint(
             // e.g.: 4500 / 50 = 90 or 500 / 50 = 10
         }
     }
-    return if (valueTotal <= maximalValue) {
+    return (if (valueTotal <= maximalValue) {
         // 90 = 90% height line graph, 10% height bottom date line
         onePercentHeight * (90 - valueToSubtractFrom90Percent)
     } else {
@@ -344,7 +336,7 @@ fun getHeightOfDataPoint(
         // sets the data point above the top x-axis
         onePercentHeight * -10
         // by having a minus value on the vertical axis
-    }
+    }) as Float
 }
 
 /**
@@ -379,7 +371,7 @@ fun DrawScope.drawTextLabelOfDataPoint(
     textMeasurer: TextMeasurer,
     styleSmall: TextStyle,
     onePercentWidth: Float,
-    previousTotalValue: Int,
+    previousTotalValue: Double,
     onePercentHeight: Float,
     heightDataPoint: Float,
     xAxisPointHorizontalLines: Float

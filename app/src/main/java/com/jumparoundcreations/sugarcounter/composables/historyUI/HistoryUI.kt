@@ -38,7 +38,6 @@ fun History(
     val historyVM = getKoin().get<HistoryVM>()
     val segmentedButtonSugarOrCaloriesIndex by historyVM.segmentedButtonSugarOrCaloriesIndex.collectAsState()
     val savedSugarCountGrouped by historyVM.savedHistory.collectAsState()
-    val caloriesEntryDbHistory by historyVM.caloriesEntryDbHistory.collectAsState()
     val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()
     val caloriesCounterActivated = sharedPrefsMain.getBoolean(
@@ -65,8 +64,7 @@ fun History(
         if (historyCardsScreenShown) {
             CardsScreen(
                 historyVM = historyVM,
-                savedSugarCountGrouped = savedSugarCountGrouped,
-                caloriesEntryDbHistory = caloriesEntryDbHistory
+                savedSugarCountGrouped = savedSugarCountGrouped
             )
         }
 
@@ -88,8 +86,7 @@ fun History(
                     } else {
                         HelperMethods.CountMode.CALORIES
                     },
-                    sugarEntryDbHistory = savedSugarCountGrouped,
-                    caloriesEntryDbHistory = caloriesEntryDbHistory
+                    sugarEntryDbHistory = savedSugarCountGrouped
                 )
             }
         }
