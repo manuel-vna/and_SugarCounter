@@ -10,10 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
-import com.jumparoundcreations.sugarcounter.data.counterData.EntryStoringState
 import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
-import com.jumparoundcreations.sugarcounter.data.counterData.InputData
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingStates
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.InputData
 import com.jumparoundcreations.sugarcounter.util.CounterSugarHelper
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +49,8 @@ class CounterVM : ViewModel(), KoinComponent {
 
     //StateFlow: START
 
-    private val _entryStoringState = MutableStateFlow(EntryStoringState.Saved(InputData.Default))
+    private val _entryStoringState =
+        MutableStateFlow(EntrySavingStates.SavingData(InputData.Default))
     val entryStoringState = _entryStoringState.asStateFlow()
 
     private val _sugarEntryDbRecent = MutableStateFlow(

@@ -33,7 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogSingleBtn
-import com.jumparoundcreations.sugarcounter.data.counterData.EntryStoringState
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
@@ -53,10 +53,10 @@ fun Counter(
     val entryStoringState by counterVM.entryStoringState.collectAsStateWithLifecycle()
 
     when (entryStoringState) {
-        EntryStoringState.Loading -> CircularProgressIndicator()
-        EntryStoringState.Error -> println("Error in saving entry data")
-        is EntryStoringState.Saved -> println("Saved")
-        EntryStoringState.Idle -> Unit
+        EntrySavingStates.Loading -> CircularProgressIndicator()
+        EntrySavingStates.Error -> println("Error in saving entry data")
+        is EntrySavingStates.SavingData -> println("SavingData")
+        EntrySavingStates.Idle -> Unit
     }
 
 
