@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -29,11 +28,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogSingleBtn
-import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingStates
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
@@ -47,18 +45,9 @@ fun Counter(
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
     val counterVM = getKoin().get<CounterVM>()
+    val entrySavingViewModel = getKoin().get<EntrySavingViewModel>()
 
     // States
-
-    val entryStoringState by counterVM.entryStoringState.collectAsStateWithLifecycle()
-
-    when (entryStoringState) {
-        EntrySavingStates.Loading -> CircularProgressIndicator()
-        EntrySavingStates.Error -> println("Error in saving entry data")
-        is EntrySavingStates.SavingData -> println("SavingData")
-        EntrySavingStates.Idle -> Unit
-    }
-
 
     val category by counterVM.categorySelected.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
@@ -99,9 +88,7 @@ fun Counter(
             Arrangement.Absolute.SpaceAround
         ) {
             DatePicker(
-                counterVM = counterVM,
-                datePickerShown = entryStoringState.data.datePickerShown,
-                dateOfEntryEpochSec = entryStoringState.data.dateOfEntryEpochSec,
+                entrySavingViewModel = entrySavingViewModel,
                 textColor = textColor,
             )
 

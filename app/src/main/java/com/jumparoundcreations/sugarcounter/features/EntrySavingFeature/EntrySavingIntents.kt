@@ -1,17 +1,8 @@
 package com.jumparoundcreations.sugarcounter.features.EntrySavingFeature
 
-sealed class EntrySavingIntents {
+sealed interface EntrySavingIntents {
 
-    object OpenAndCloseDatePicker : EntrySavingIntents()
-
-    object SaveSelectedDate : EntrySavingIntents()
-
-    object ScanBarcodeAction : EntrySavingIntents()
-
-    object OpenCategoryFieldAction : EntrySavingIntents()
-
-    data class SaveCategory(
-        val tbd: String
-    ) : EntrySavingIntents()
+    data object OpenAndCloseDatePicker : EntrySavingIntents
+    data class ChangeSelectedDate(val epochTime: Long) : EntrySavingIntents
 
 }

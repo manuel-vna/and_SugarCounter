@@ -8,24 +8,30 @@ import org.koin.core.component.KoinComponent
 
 class EntrySavingViewModel : ViewModel(), KoinComponent {
 
-    private val _entrySavingStates = MutableStateFlow<EntrySavingStates>(EntrySavingStates.Idle)
+    private val _entrySavingStates = MutableStateFlow(EntrySavingStates())
     val entrySavingStates = _entrySavingStates.asStateFlow()
 
-    fun actionChangeDatePickerVisibility(datePickerShownValue: Boolean) {
-        _entrySavingStates.update { current ->
-            if (current is EntrySavingStates.SavingData) {
-                current.copy(
-                    data = current.data.copy(
-                        datePickerShown = datePickerShownValue
-                    )
-                )
-            } else current
+    fun onAction(action: EntrySavingIntents) {
+        when (action) {
+            is EntrySavingIntents.OpenAndCloseDatePicker -> actionChangeDatePickerVisibility()
+            is EntrySavingIntents.ChangeSelectedDate -> actionChangeSelectedDate(action.epochTime)
         }
-
     }
 
-    fun saveEntry() {
-        //ToDo
+    fun actionChangeDatePickerVisibility() {
+        _entrySavingStates.update {
+            it.copy(
+                datePickerShown = it.datePickerShown.not()
+            )
+        }
+    }
+
+    fun actionChangeSelectedDate(epochSec: Long) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                dateOfEntryEpochSec = epochSec
+            )
+        }
     }
 
 

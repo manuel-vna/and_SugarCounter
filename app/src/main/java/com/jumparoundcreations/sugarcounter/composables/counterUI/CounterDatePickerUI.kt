@@ -12,12 +12,12 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,44 +25,43 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingIntents
+import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.util.GeneralConstants
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.util.TimeConstants
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
-@OptIn(ExperimentalMaterial3Api::class)
+//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RowScope.DatePicker(
-    counterVM: CounterVM,
-    datePickerShown: Boolean,
-    dateOfEntryEpochSec: Long,
+    entrySavingViewModel: EntrySavingViewModel,
     textColor: Color
 ) {
     val nowMillis = System.currentTimeMillis()
     val xDaysAgoMillis = nowMillis - TimeConstants.MONTH_ONE_IN_MILLISECONDS
+    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
 
-    //val dateOfEntryEpochSec by counterVM.dateOfEntryEpochSec.collectAsState()
-    //val datePickerShown by counterVM.datePickerShown.collectAsState()
     val datePickerState = rememberDatePickerState(
         initialDisplayMode = DisplayMode.Picker,
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis in (xDaysAgoMillis + 1)..<nowMillis
+                return utcTimeMillis in (xDaysAgoMillis + GeneralConstants.ONE_AS_INT)..<nowMillis
             }
         }
     )
 
     ElevatedButton(
-        counterVM = counterVM,
+        entrySavingViewModel = entrySavingViewModel,
         accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button),
         textColor = textColor,
-        datePickerShown = datePickerShown,
-        dateOfEntryEpochSec = dateOfEntryEpochSec
+        dateOfEntryEpochSec = entrySavingStates.dateOfEntryEpochSec
     )
 
-    if (datePickerShown) {
+    if (entrySavingStates.datePickerShown) {
         DatePickerDialog(
-            counterVM = counterVM,
+            entrySavingViewModel = entrySavingViewModel,
             datePickerState = datePickerState
         )
     }
@@ -70,10 +69,9 @@ fun RowScope.DatePicker(
 
 @Composable
 fun RowScope.ElevatedButton(
-    counterVM: CounterVM,
+    entrySavingViewModel: EntrySavingViewModel,
     accessibilityDatePickerButton: String,
     textColor: Color,
-    datePickerShown: Boolean,
     dateOfEntryEpochSec: Long
 ) {
     ElevatedButton(
@@ -84,7 +82,7 @@ fun RowScope.ElevatedButton(
                 contentDescription = accessibilityDatePickerButton
             },
         onClick = {
-            counterVM.actionChangeDatePickerVisibility(!datePickerShown)
+            entrySavingViewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
         },
         colors = elevatedButtonColors(
             contentColor = textColor
@@ -98,8 +96,8 @@ fun RowScope.ElevatedButton(
         )
         Text(
             text = HelperMethods.convertTimestampToDateString(
-                dateOfEntryEpochSec,
-                " EE dd.MM."
+                timestamp = dateOfEntryEpochSec,
+                format = TimeConstants.DATE_SHORT_DAY
             )
         )
     }
@@ -107,20 +105,22 @@ fun RowScope.ElevatedButton(
 
 @Composable
 fun DatePickerDialog(
-    counterVM: CounterVM,
+    entrySavingViewModel: EntrySavingViewModel,
     datePickerState: DatePickerState
 ) {
 
     DatePickerDialog(
         onDismissRequest = {
-            counterVM.actionChangeDatePickerVisibility(false)
+            entrySavingViewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
         },
         confirmButton = {
             Button(onClick = {
-                counterVM.actionChangeDatePickerVisibility(false)
+                entrySavingViewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
                 datePickerState.selectedDateMillis?.let {
-                    counterVM.actionChangeDateOfEntryM3(
-                        it / 1000
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.ChangeSelectedDate(
+                            epochTime = it / TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER
+                        )
                     )
                 }
             }) {
@@ -130,7 +130,7 @@ fun DatePickerDialog(
         dismissButton = {
             Button(
                 onClick = {
-                    counterVM.actionChangeDatePickerVisibility(false)
+                    entrySavingViewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
                 }
             ) {
                 Text(text = stringResource(id = R.string.generalCancel))
