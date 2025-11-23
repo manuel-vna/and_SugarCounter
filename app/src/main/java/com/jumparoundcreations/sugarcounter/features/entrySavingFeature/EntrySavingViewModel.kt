@@ -2,6 +2,7 @@ package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
@@ -63,13 +64,11 @@ class EntrySavingViewModel(
 
     fun actionScanBarcode() {
         viewModelScope.launch {
-            val result = scanBarcodeUseCase()
-
-            when (result) {
+            when (val result = scanBarcodeUseCase()) {
                 is ScanResult.FoundCategoryForBarcode -> {
                     actionSetBarcodeState(result.barcode)
                     actionSetCategoryForBarcode(result.category)
-                    //getEntryByCategory(result.category)
+                    getEntryByCategory(result.category)
                 }
 
                 is ScanResult.NoCategoryForBarcode -> {
@@ -103,45 +102,37 @@ class EntrySavingViewModel(
         }
     }
 
-    /*
+
     private fun getEntryByCategory(category: String) {
         viewModelScope.launch {
             when (val result = getEntryByCategoryUseCase(category)) {
 
                 is GetEntryByCategoryResult.NoEntryFound -> {
-                    actionNoDataForChosenCategorySnackbarShownChange(true)
+                    //actionNoDataForChosenCategorySnackbarShownChange(true)
                     _entrySavingStates.update { current ->
                         current.copy(
-                            // ToDo
+                            entryFieldGram = "",
+                            entryFieldQuantity = "",
+                            gramCountModeTabIndex = 0
                         )
                     }
-
-                    _perPieceGram.value = ""
-                    _perHundredGram.value = ""
-                    _isHundredTabIndex.value = 0
                 }
 
                 is GetEntryByCategoryResult.EntryFound -> {
                     val entry = result.entry
-
-                    when (entry.type) {
-                        GramCountMode.PerPiece -> {
-                            _perPieceGram.value = entry.gram.toString()
-                            _perHundredGram.value = ""
-                            _isHundredTabIndex.value = 1
-                        }
-
-                        GramCountMode.PerHundred -> {
-                            _perHundredGram.value = entry.gram.toString()
-                            _perPieceGram.value = ""
-                            _isHundredTabIndex.value = 0
-                        }
+                    _entrySavingStates.update { current ->
+                        current.copy(
+                            entryFieldGram = entry.gram.toString(),
+                            entryFieldQuantity = entry.quantity.toString(),
+                            gramCountModeTabIndex =
+                                if (entry.entryType == GramCountMode.PerHundred) 0 else 1
+                        )
                     }
                 }
             }
         }
     }
-     */
+
 
     private fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
         _entrySavingStates.update { current ->
