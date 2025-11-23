@@ -144,7 +144,11 @@ class EntrySavingViewModel(
      */
 
     private fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
-
+        _entrySavingStates.update { current ->
+            current.copy(
+                gramCountMode = gramCountMode
+            )
+        }
     }
 
     private fun actionChangeGramCountModeTabIndex(tabIndex: Int) {
@@ -156,11 +160,19 @@ class EntrySavingViewModel(
     }
 
     private fun actionChangeEntryFieldGram(entryFieldGram: Double) {
-
+        _entrySavingStates.update { current ->
+            current.copy(
+                entryFieldGram = entryFieldGram
+            )
+        }
     }
 
     private fun actionChangeEntryFieldQuantity(entryFieldQuantity: Double) {
-
+        _entrySavingStates.update { current ->
+            current.copy(
+                entryFieldQuantity = entryFieldQuantity
+            )
+        }
     }
 
 }

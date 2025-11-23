@@ -16,16 +16,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.jumparoundcreations.sugarcounter.composables.categoriesUI.Categories
-import com.jumparoundcreations.sugarcounter.composables.counterUI.Counter
-import com.jumparoundcreations.sugarcounter.composables.historyUI.History
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.FAQScreen
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.ImprintUI
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.OnboardingUI
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.PrivacyPolicyUI
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.Settings
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.SettingsThirdPartyLibrariesUI
-import com.jumparoundcreations.sugarcounter.composables.settingsUI.TermsAndConditionsUI
 
 
 @Composable
@@ -39,34 +29,54 @@ fun NavigationGraph(
         startDestination = BottomNavItem.SugarCounter.screenRoute
     ) {
         composable(route = BottomNavItem.SugarCounter.screenRoute) {
-            Counter(context, snackbarHostState)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.counterUI.Counter(
+                context,
+                snackbarHostState
+            )
         }
         composable(route = BottomNavItem.SugarHistory.screenRoute) {
-            History(context)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.historyUI.History(
+                context
+            )
         }
         composable(route = BottomNavItem.CategoryTitle.screenRoute) {
-            Categories()
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.categoriesUI.Categories()
         }
         composable(route = BottomNavItem.Settings.screenRoute) {
-            Settings(context, navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.Settings(
+                context,
+                navController
+            )
         }
         composable(route = NavItem.FAQ.screenRoute) {
-            FAQScreen(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.FAQScreen(
+                navController
+            )
         }
         composable(route = NavItem.ThirdPartyLibraries.screenRoute) {
-            SettingsThirdPartyLibrariesUI(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.SettingsThirdPartyLibrariesUI(
+                navController
+            )
         }
         composable(route = NavItem.TermsAndConditions.screenRoute) {
-            TermsAndConditionsUI(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.TermsAndConditionsUI(
+                navController
+            )
         }
         composable(route = NavItem.PrivacyPolicy.screenRoute) {
-            PrivacyPolicyUI(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.PrivacyPolicyUI(
+                navController
+            )
         }
         composable(route = NavItem.Imprint.screenRoute) {
-            ImprintUI(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.ImprintUI(
+                navController
+            )
         }
         composable(route = NavItem.Onboarding.screenRoute) {
-            OnboardingUI(navController)
+            _root_ide_package_.com.jumparoundcreations.sugarcounter.ui.components.settingsUI.OnboardingUI(
+                navController
+            )
         }
     }
 }

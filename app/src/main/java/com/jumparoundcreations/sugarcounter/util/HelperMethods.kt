@@ -107,7 +107,7 @@ class HelperMethods : KoinComponent {
                     it.gramTotal
                 }.reduce { sum, element -> sum + element }
             } else {
-                GeneralConstants.NULL_AS_DOUBLE
+                NumberConstants.NULL_AS_DOUBLE
             }
         }
 
