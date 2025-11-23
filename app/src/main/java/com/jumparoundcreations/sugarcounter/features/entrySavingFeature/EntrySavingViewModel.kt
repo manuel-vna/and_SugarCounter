@@ -2,7 +2,6 @@ package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
@@ -31,6 +30,12 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.ScanBarcode ->
                 actionScanBarcode()
+
+            is EntrySavingIntents.ChangeGramCountMode ->
+                actionChangeGramCountMode(action.gramCountMode)
+
+            is EntrySavingIntents.ChangeGramCountModeTabIndex ->
+                actionChangeGramCountModeTabIndex(action.tabIndex)
 
             is EntrySavingIntents.ChangeEntryFieldGram ->
                 actionChangeEntryFieldGram(action.entryFieldGram)
@@ -64,7 +69,7 @@ class EntrySavingViewModel(
                 is ScanResult.FoundCategoryForBarcode -> {
                     actionSetBarcodeState(result.barcode)
                     actionSetCategoryForBarcode(result.category)
-                    getEntryByCategory(result.category)
+                    //getEntryByCategory(result.category)
                 }
 
                 is ScanResult.NoCategoryForBarcode -> {
@@ -98,6 +103,7 @@ class EntrySavingViewModel(
         }
     }
 
+    /*
     private fun getEntryByCategory(category: String) {
         viewModelScope.launch {
             when (val result = getEntryByCategoryUseCase(category)) {
@@ -133,6 +139,19 @@ class EntrySavingViewModel(
                     }
                 }
             }
+        }
+    }
+     */
+
+    private fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
+
+    }
+
+    private fun actionChangeGramCountModeTabIndex(tabIndex: Int) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                gramCountModeTabIndex = tabIndex
+            )
         }
     }
 

@@ -123,7 +123,7 @@ fun Counter(
             )
         }
 
-        TabRow(entrySavingViewModel, counterVM)
+        TabRow(entrySavingViewModel)
 
         Row(
             modifier = Modifier

@@ -27,11 +27,12 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySav
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CounterTabItem
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.GeneralConstants
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
 
 @Composable
-fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
+fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
+
+    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsState()
 
     val tabItems = listOf(
         CounterTabItem(
@@ -50,26 +51,34 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
         )
     )
 
-    val selectedTabIndex by counterVM.isHundredTabIndex.collectAsState()
-    val pagerState = rememberPagerState {
-        tabItems.size
-    }
+    val pagerState = rememberPagerState { tabItems.size }
 
-    LaunchedEffect(key1 = selectedTabIndex) {
-        pagerState.animateScrollToPage(selectedTabIndex)
+    LaunchedEffect(key1 = entrySavingStates.gramCountModeTabIndex) {
+        pagerState.animateScrollToPage(entrySavingStates.gramCountModeTabIndex)
     }
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress)
-            counterVM.actionSetIsHundredTabIndex(pagerState.currentPage) //selectedTabIndex = pagerState.currentPage
+        //counterVM.actionSetIsHundredTabIndex(pagerState.currentPage) //selectedTabIndex = pagerState.currentPage
+            entrySavingViewModel.onAction(
+                action = EntrySavingIntents.ChangeGramCountModeTabIndex(
+                    tabIndex = pagerState.currentPage
+                )
+            )
     }
 
     Column {
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(selectedTabIndex = entrySavingStates.gramCountModeTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(
-                    selected = index == selectedTabIndex,
+                    selected = index == entrySavingStates.gramCountModeTabIndex,
                     onClick = {
-                        counterVM.actionSetIsHundredTabIndex(index) //selectedTabIndex = index
+                        //counterVM.actionSetIsHundredTabIndex(index) //selectedTabIndex = index
+                        entrySavingViewModel.onAction(
+                            action = EntrySavingIntents.ChangeGramCountModeTabIndex(
+                                tabIndex = index
+                            )
+                        )
+
                     },
                     text = {
                         Row(
@@ -77,7 +86,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
                             modifier = Modifier.padding(4.dp)
                         ) {
                             Icon(
-                                imageVector = if (index == selectedTabIndex) {
+                                imageVector = if (index == entrySavingStates.gramCountModeTabIndex) {
                                     item.selectedIcon
                                 } else item.unselectedIcon,
                                 contentDescription = item.contentDescription
@@ -104,17 +113,28 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
                             stringResource(R.string.accessibility_perPiece_textField_consumed),
                         onValueChangeGramField = { input ->
                             if (input.isDigitsOnly() && input.count() <= 3)
-                                counterVM.actionPerPieceGramChange(input)
+                                entrySavingViewModel.onAction(
+                                    action = EntrySavingIntents.ChangeEntryFieldGram(
+                                        entryFieldGram = input.toDouble()
+                                    )
+                                )
                         },
                         onValueChangeQuantityField = { input ->
-                            if (input.isDigitsOnly() && input.count() <= 2) counterVM.actionPerPieceAmountChange(
-                                input
-                            )
+                            if (input.isDigitsOnly() && input.count() <= 2)
+                                entrySavingViewModel.onAction(
+                                    action = EntrySavingIntents.ChangeEntryFieldQuantity(
+                                        entryFieldQuantity = input.toDouble()
+                                    )
+                                )
                         },
                         quantityFieldPlaceholder = GeneralConstants.ONE_AS_INT.toString(),
                     )
 
-                    counterVM.actionChangeGramCountMode(GramCountMode.PerPiece)
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.ChangeGramCountMode(
+                            gramCountMode = GramCountMode.PerPiece
+                        )
+                    )
 
                 } else {
 
@@ -148,12 +168,15 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
                         quantityFieldPlaceholder = stringResource(R.string.gram_unit_short),
                     )
 
-                    counterVM.actionChangeGramCountMode(GramCountMode.PerHundred)
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.ChangeGramCountMode(
+                            gramCountMode = GramCountMode.PerHundred
+                        )
+                    )
+
                 }
             }
         }
     }
-
-}
 
 }
