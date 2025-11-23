@@ -41,7 +41,7 @@ import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel
 

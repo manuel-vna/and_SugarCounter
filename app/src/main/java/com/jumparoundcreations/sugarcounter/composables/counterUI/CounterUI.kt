@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.composables.ShowAlertDialogSingleBtn
-import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
@@ -92,7 +92,10 @@ fun Counter(
                 textColor = textColor,
             )
 
-            Barcode(counterVM = counterVM, textColor = textColor)
+            Barcode(
+                entrySavingViewModel = entrySavingViewModel,
+                textColor = textColor
+            )
         }
 
         Row(
@@ -120,7 +123,7 @@ fun Counter(
             )
         }
 
-        TabRow(counterVM)
+        TabRow(entrySavingViewModel, counterVM)
 
         Row(
             modifier = Modifier

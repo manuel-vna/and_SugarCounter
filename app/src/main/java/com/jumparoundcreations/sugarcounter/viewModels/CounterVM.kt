@@ -10,8 +10,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.CounterSugarHelper
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers

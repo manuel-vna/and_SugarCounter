@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.composables.cardsUI.SharedCardItem
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel

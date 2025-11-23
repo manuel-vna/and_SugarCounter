@@ -1,6 +1,6 @@
 package com.jumparoundcreations.sugarcounter.data
 
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 
 interface IEntry {
     val id: Int

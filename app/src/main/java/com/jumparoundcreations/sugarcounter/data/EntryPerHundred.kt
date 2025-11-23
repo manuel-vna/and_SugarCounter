@@ -3,7 +3,7 @@ package com.jumparoundcreations.sugarcounter.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 
 @Entity(tableName = "entryPerHundred_table")
 data class EntryPerHundred(

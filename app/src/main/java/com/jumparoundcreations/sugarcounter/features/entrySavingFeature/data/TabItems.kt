@@ -1,4 +1,4 @@
-package com.jumparoundcreations.sugarcounter.data.counterData
+package com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

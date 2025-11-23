@@ -20,14 +20,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.counterData.CounterTabItem
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CounterTabItem
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
+import com.jumparoundcreations.sugarcounter.util.GeneralConstants
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
 
 @Composable
-fun TabRow(counterVM: CounterVM) {
+fun TabRow(entrySavingViewModel: EntrySavingViewModel, counterVM: CounterVM) {
 
     val tabItems = listOf(
         CounterTabItem(
@@ -91,14 +95,65 @@ fun TabRow(counterVM: CounterVM) {
             Row {
 
                 if (tabItems[index].gramCountMode == GramCountMode.PerPiece) {
-                    CounterPerPiece(counterVM = counterVM)
+
+                    CounterTabRowFieldsUI(
+                        entrySavingViewModel = entrySavingViewModel,
+                        accessibilityGramTextField =
+                            stringResource(R.string.accessibility_perPiece_textField),
+                        accessibilityGramTextFieldConsumed =
+                            stringResource(R.string.accessibility_perPiece_textField_consumed),
+                        onValueChangeGramField = { input ->
+                            if (input.isDigitsOnly() && input.count() <= 3)
+                                counterVM.actionPerPieceGramChange(input)
+                        },
+                        onValueChangeQuantityField = { input ->
+                            if (input.isDigitsOnly() && input.count() <= 2) counterVM.actionPerPieceAmountChange(
+                                input
+                            )
+                        },
+                        quantityFieldPlaceholder = GeneralConstants.ONE_AS_INT.toString(),
+                    )
+
                     counterVM.actionChangeGramCountMode(GramCountMode.PerPiece)
+
                 } else {
-                    CounterPerHundred(counterVM = counterVM)
+
+                    CounterTabRowFieldsUI(
+                        entrySavingViewModel = entrySavingViewModel,
+                        accessibilityGramTextField =
+                            stringResource(R.string.accessibility_perHundredGram_textField),
+                        accessibilityGramTextFieldConsumed =
+                            stringResource(R.string.accessibility_perHundredGram_textField_consumed),
+                        onValueChangeGramField =
+                            { input ->
+                                if (input.isDigitsOnly()) {
+                                    val number = input.toIntOrNull()
+                                    if (number != null && number in 1..100) {
+                                        entrySavingViewModel.onAction(
+                                            action = EntrySavingIntents.ChangeEntryFieldGram(
+                                                entryFieldGram = input.toDouble()
+                                            )
+                                        )
+                                    }
+                                }
+                            },
+                        onValueChangeQuantityField = { input ->
+                            if (input.isDigitsOnly() && input.count() <= 3)
+                                entrySavingViewModel.onAction(
+                                    action = EntrySavingIntents.ChangeEntryFieldQuantity(
+                                        entryFieldQuantity = input.toDouble()
+                                    )
+                                )
+                        },
+                        quantityFieldPlaceholder = stringResource(R.string.gram_unit_short),
+                    )
+
                     counterVM.actionChangeGramCountMode(GramCountMode.PerHundred)
                 }
             }
         }
     }
+
+}
 
 }

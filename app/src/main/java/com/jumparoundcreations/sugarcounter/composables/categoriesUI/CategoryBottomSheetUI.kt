@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 

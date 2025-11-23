@@ -8,7 +8,9 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
-import com.jumparoundcreations.sugarcounter.features.EntrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
@@ -22,7 +24,7 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
-    viewModel { EntrySavingViewModel() }
+    viewModel { EntrySavingViewModel(get(), get()) }
     viewModel { SettingsVM() }
     viewModel { CategoryVM() }
     viewModel { CardsVM() }
@@ -33,6 +35,8 @@ val appModule = module {
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
     single(named("privacyPolicy")) { provideHtmlContent(get(), R.raw.privacy_policy) }
     single(named("imprint")) { provideHtmlContent(get(), R.raw.imprint) }
+    single { ScanBarcodeUseCase() }
+    single { GetEntryByCategoryUseCase(get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

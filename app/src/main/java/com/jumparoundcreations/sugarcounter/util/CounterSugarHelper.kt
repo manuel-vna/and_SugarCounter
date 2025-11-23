@@ -3,8 +3,8 @@ package com.jumparoundcreations.sugarcounter.util
 import android.content.SharedPreferences
 import android.util.Log
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

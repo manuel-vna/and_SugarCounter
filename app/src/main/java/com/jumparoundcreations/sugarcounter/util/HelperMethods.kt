@@ -5,8 +5,8 @@ import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

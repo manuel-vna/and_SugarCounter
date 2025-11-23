@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.counterData.HistoryTabItem
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.HistoryTabItem
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 
 @Composable

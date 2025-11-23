@@ -2,6 +2,8 @@ package com.jumparoundcreations.sugarcounter.util
 
 import android.text.format.DateUtils
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import io.mockk.every
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
@@ -16,7 +18,7 @@ import org.junit.Test
 
 class HelperMethodsTest {
 
-    private lateinit var exampleListWithEntries: List<Entry>
+    private lateinit var exampleListWithEntries: List<SugarEntry>
 
     @get:Rule
     val mockkRule = MockKRule(this)
@@ -24,41 +26,35 @@ class HelperMethodsTest {
     @Before
     fun setup() {
         exampleListWithEntries = listOf(
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233571,
-                date = "2024-05-20",
+                currentTimestamp = 1763713602,
+                date = "2025-11-21",
                 category = "Duplo",
-                isPerHundred = false,
-                perHundredGram = 0,
-                perHundredQuantity = 0,
-                perPieceGram = 9,
-                perPieceAmount = 1,
-                gramTotal = 9
+                entryType = GramCountMode.PerPiece,
+                gram = 9.0,
+                quantity = 1.0,
+                gramTotal = 9.0
             ),
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233783,
-                date = "2024-05-20",
+                currentTimestamp = 1763540802,
+                date = "2025-11-19",
                 category = "Ritter Sport",
-                isPerHundred = true,
-                perHundredGram = 48,
-                perHundredQuantity = 33,
-                perPieceGram = 0,
-                perPieceAmount = 0,
-                gramTotal = 16
+                entryType = GramCountMode.PerHundred,
+                gram = 9.0,
+                quantity = 1.0,
+                gramTotal = 9.0
             ),
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233801,
-                date = "2024-05-20",
-                category = "Kinder Maxi King",
-                isPerHundred = false,
-                perHundredGram = 0,
-                perHundredQuantity = 0,
-                perPieceGram = 13,
-                perPieceAmount = 1,
-                gramTotal = 13
+                currentTimestamp = 1763281602,
+                date = "2025-11-16",
+                category = "Weingummi",
+                entryType = GramCountMode.PerPiece,
+                gram = 5.0,
+                quantity = 3.0,
+                gramTotal = 15.0
             )
         )
     }

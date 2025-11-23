@@ -3,8 +3,8 @@ package com.jumparoundcreations.sugarcounter.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

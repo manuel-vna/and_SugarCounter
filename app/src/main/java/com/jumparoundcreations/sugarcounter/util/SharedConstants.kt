@@ -1,6 +1,6 @@
 package com.jumparoundcreations.sugarcounter.util
 
-import com.jumparoundcreations.sugarcounter.data.counterData.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 
 object DatabaseConstants {
     const val DEFAULT_DATABASE_INT = 0
