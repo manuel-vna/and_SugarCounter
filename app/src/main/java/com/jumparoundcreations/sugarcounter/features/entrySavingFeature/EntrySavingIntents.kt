@@ -11,7 +11,7 @@ sealed interface EntrySavingIntents {
     data class ChangeGramCountMode(val gramCountMode: GramCountMode) : EntrySavingIntents
 
     data class ChangeGramCountModeTabIndex(val tabIndex: Int) : EntrySavingIntents
-    data class ChangeEntryFieldGram(val entryFieldGram: Double) : EntrySavingIntents
-    data class ChangeEntryFieldQuantity(val entryFieldQuantity: Double) : EntrySavingIntents
+    data class ChangeEntryFieldGram(val entryFieldGram: String) : EntrySavingIntents
+    data class ChangeEntryFieldQuantity(val entryFieldQuantity: String) : EntrySavingIntents
 
 }

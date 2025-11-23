@@ -112,11 +112,13 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                             stringResource(R.string.accessibility_perPiece_textField),
                         accessibilityGramTextFieldConsumed =
                             stringResource(R.string.accessibility_perPiece_textField_consumed),
+                        labelGramField = stringResource(R.string.gramSugar),
+                        labelQuantityField = stringResource(R.string.quantitySugar),
                         onValueChangeGramField = { input ->
                             if (input.isDigitsOnly() && input.count() <= 3)
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldGram(
-                                        entryFieldGram = input.toDouble()
+                                        entryFieldGram = input
                                     )
                                 )
                         },
@@ -124,7 +126,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                             if (input.isDigitsOnly() && input.count() <= 2)
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldQuantity(
-                                        entryFieldQuantity = input.toDouble()
+                                        entryFieldQuantity = input
                                     )
                                 )
                         },
@@ -145,12 +147,14 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                             stringResource(R.string.accessibility_perHundredGram_textField),
                         accessibilityGramTextFieldConsumed =
                             stringResource(R.string.accessibility_perHundredGram_textField_consumed),
+                        labelGramField = stringResource(R.string.gramPerHundredLabel),
+                        labelQuantityField = stringResource(R.string.amountSugar),
                         onValueChangeGramField =
                             { input ->
-                                if (InputFilters.filterDecimalOneDigit1to100(input)) {
+                                if (InputFilters.filterPercentageInput(input)) {
                                     entrySavingViewModel.onAction(
                                         action = EntrySavingIntents.ChangeEntryFieldGram(
-                                            entryFieldGram = input.toDouble()
+                                            entryFieldGram = input
                                         )
                                     )
                                 }
@@ -159,7 +163,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                             if (input.isDigitsOnly() && input.count() <= 3)
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldQuantity(
-                                        entryFieldQuantity = input.toDouble()
+                                        entryFieldQuantity = input
                                     )
                                 )
                         },

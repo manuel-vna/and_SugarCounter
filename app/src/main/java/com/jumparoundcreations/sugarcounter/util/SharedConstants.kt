@@ -14,6 +14,10 @@ object DatabaseConstants {
     val DEFAULT_GRAM_COUNT_MODE = GramCountMode.PerHundred
 }
 
+object GeneralConstants {
+    const val EMPTY_STRING = ""
+}
+
 object NumberConstants {
     const val COLOR_RGB_MULTIPLIER = 255
     const val NULL_AS_DOUBLE = 0.0

@@ -159,15 +159,16 @@ class EntrySavingViewModel(
         }
     }
 
-    private fun actionChangeEntryFieldGram(entryFieldGram: Double) {
+    private fun actionChangeEntryFieldGram(entryFieldGram: String) {
         _entrySavingStates.update { current ->
             current.copy(
                 entryFieldGram = entryFieldGram
             )
         }
+        // When saving: entryFieldGram.replace(',', '.').toDoubleOrNull()
     }
 
-    private fun actionChangeEntryFieldQuantity(entryFieldQuantity: Double) {
+    private fun actionChangeEntryFieldQuantity(entryFieldQuantity: String) {
         _entrySavingStates.update { current ->
             current.copy(
                 entryFieldQuantity = entryFieldQuantity

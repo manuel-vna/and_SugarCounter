@@ -4,11 +4,24 @@ class InputFilters {
 
     companion object {
 
-        fun filterDecimalOneDigit1to100(input: String): Boolean {
-            return true
-            //val regex = Regex("^(100(\\.0)?|([1-9]?[0-9](\\.[0-9])?))\$")
-            //return regex.matches(input)
+        fun filterPercentageInput(input: String): Boolean {
+            val regex = Regex("^(?:|[0-9]([0-9]?([.,]?[0-9]?)?)?)$")
+
+            if (!regex.matches(input)) return false
+            if (input.isBlank()) return true  // allow deleting everything
+
+            // Convert comma → dot
+            val normalized = input.replace(',', '.')
+
+            // Partial inputs like "10." or "10," should be allowed
+            if (normalized.last() == '.') return true
+            if (normalized == "100.") return true  // allow typing 100.
+
+            // Full number validation
+            val number = normalized.toDoubleOrNull() ?: return false
+            return number <= 100.0
         }
+
 
     }
 }

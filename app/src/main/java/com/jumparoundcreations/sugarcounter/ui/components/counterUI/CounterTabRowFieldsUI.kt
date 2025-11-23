@@ -31,13 +31,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
-import com.jumparoundcreations.sugarcounter.util.NumberConstants
+import com.jumparoundcreations.sugarcounter.util.GeneralConstants
 
 @Composable
 fun CounterTabRowFieldsUI(
     entrySavingViewModel: EntrySavingViewModel,
     accessibilityGramTextField: String,
     accessibilityGramTextFieldConsumed: String,
+    labelGramField: String,
+    labelQuantityField: String,
     onValueChangeGramField: (String) -> Unit,
     onValueChangeQuantityField: (String) -> Unit,
     quantityFieldPlaceholder: String
@@ -61,7 +63,7 @@ fun CounterTabRowFieldsUI(
 
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                text = stringResource(R.string.gramPerHundredLabel),
+                text = labelGramField,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -75,8 +77,7 @@ fun CounterTabRowFieldsUI(
                         MaterialTheme.colorScheme.secondaryContainer,
                     focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
-                value = if (entrySavingStates.entryFieldGram == NumberConstants.NULL_AS_DOUBLE) ""
-                else entrySavingStates.entryFieldGram.toString(),
+                value = entrySavingStates.entryFieldGram,
                 onValueChange = { input ->
                     onValueChangeGramField(input)
                 },
@@ -85,7 +86,7 @@ fun CounterTabRowFieldsUI(
                     IconButton(onClick = {
                         entrySavingViewModel.onAction(
                             action = EntrySavingIntents.ChangeEntryFieldGram(
-                                entryFieldGram = NumberConstants.NULL_AS_DOUBLE
+                                entryFieldGram = GeneralConstants.EMPTY_STRING
                             )
                         )
                     }) {
@@ -96,7 +97,7 @@ fun CounterTabRowFieldsUI(
                         )
                     }
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 placeholder = {
                     Text(
                         text = "g",
@@ -117,7 +118,7 @@ fun CounterTabRowFieldsUI(
             //val amountValue by counterVM.perHundredQuantity.collectAsState()
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                text = stringResource(R.string.amountSugar),
+                text = labelQuantityField,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -131,10 +132,7 @@ fun CounterTabRowFieldsUI(
                         MaterialTheme.colorScheme.secondaryContainer,
                     focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
-                value = if (
-                    entrySavingStates.entryFieldQuantity == NumberConstants.NULL_AS_DOUBLE
-                ) ""
-                else entrySavingStates.entryFieldQuantity.toString(),
+                value = entrySavingStates.entryFieldQuantity,
                 onValueChange = { input ->
                     onValueChangeQuantityField(input)
                 },
@@ -143,7 +141,7 @@ fun CounterTabRowFieldsUI(
                     IconButton(onClick = {
                         entrySavingViewModel.onAction(
                             action = EntrySavingIntents.ChangeEntryFieldQuantity(
-                                entryFieldQuantity = NumberConstants.NULL_AS_DOUBLE
+                                entryFieldQuantity = GeneralConstants.EMPTY_STRING
                             )
                         )
                     }) {
@@ -154,7 +152,7 @@ fun CounterTabRowFieldsUI(
                         )
                     }
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 placeholder = {
                     Text(
                         text = quantityFieldPlaceholder,
