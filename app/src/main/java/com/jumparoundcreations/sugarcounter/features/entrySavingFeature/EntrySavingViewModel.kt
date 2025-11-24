@@ -7,7 +7,10 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.Gra
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
+import com.jumparoundcreations.sugarcounter.ui.events.ScanUiEvents
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -17,6 +20,9 @@ class EntrySavingViewModel(
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase
 ) : ViewModel(), KoinComponent {
+
+    private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
+    val scanUiEvents = _scanUiEvents.asSharedFlow()
 
     private val _entrySavingStates = MutableStateFlow(EntrySavingStates())
     val entrySavingStates = _entrySavingStates.asStateFlow()
@@ -73,12 +79,12 @@ class EntrySavingViewModel(
 
                 is ScanResult.NoCategoryForBarcode -> {
                     actionSetBarcodeState(result.barcode)
-
+                    _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoCategoryForBarcode)
                     //_noBarcodeYetInfoTitle.value = true
                 }
 
                 is ScanResult.Failed -> {
-
+                    _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
                     //_noBarcodeYetInfoTitle.value = true
                     // optionally log or handle
                 }

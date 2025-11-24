@@ -160,6 +160,7 @@ fun Counter(
 
     CounterUserInformation(
         context = context,
+        entrySavingViewModel = entrySavingViewModel,
         snackbarHostState = snackbarHostState
     )
 
