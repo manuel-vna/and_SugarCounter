@@ -28,5 +28,10 @@ sealed interface EntrySavingIntents {
     data class ChangeGramCountModeTabIndex(val tabIndex: Int) : EntrySavingIntents
     data class ChangeEntryFieldGram(val entryFieldGram: String) : EntrySavingIntents
     data class ChangeEntryFieldQuantity(val entryFieldQuantity: String) : EntrySavingIntents
+    data object SaveSugarEntry : EntrySavingIntents
+
+    data object SaveCategory : EntrySavingIntents
+
+    data object ClearInputFields : EntrySavingIntents
 
 }

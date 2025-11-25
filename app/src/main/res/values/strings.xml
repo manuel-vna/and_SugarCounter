@@ -14,7 +14,7 @@
     <string name="categoryPlural">Categories</string>
     <string name="settingsTitle">Settings</string>
     <string name="categoryMaxInput">Maximum length: 40 characters</string>
-    <string name="categoryInputOnlyDescription">A category alone without a sugar or calories entry was added, as these were not specified.</string>
+    <string name="categoryInputOnlyDescription">Only a food category without a corresponding sugar entry was added, as no complete information was entered for this.</string>
     <string name="deleteCategroyAlertDescription">Do you really want to delete the following category name?</string>
     <string name="generalConfirm">Confirm</string>
     <string name="generalCancel">Cancel</string>

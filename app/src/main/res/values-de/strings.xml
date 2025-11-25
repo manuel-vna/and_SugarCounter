@@ -15,7 +15,7 @@
     <string name="categoryPlural">Kategorien</string>
     <string name="settingsTitle">Einstellungen</string>
     <string name="categoryMaxInput">Eingabebegrenzung: 40 Zeichen</string>
-    <string name="categoryInputOnlyDescription">Es wurde nur eine Kategorie ohne Zucker- oder Kalorieneintrag hinzugefügt, da diese nicht angegeben wurden.</string>
+    <string name="categoryInputOnlyDescription">Es wurde nur eine Lebensmittel-Kategorie ohne dazugehörigen Zuckereintrag hinzugefügt, da hierzu keine vollständigen Angaben eingegeben wurden.</string>
     <string name="deleteCategroyAlertDescription">Möchten Sie die nachfolgende Kategorie wirklich löschen?</string>
     <string name="generalConfirm">Bestätigen</string>
     <string name="generalCancel">Abbrechen</string>

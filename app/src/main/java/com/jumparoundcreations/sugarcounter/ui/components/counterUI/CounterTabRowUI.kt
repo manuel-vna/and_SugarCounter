@@ -113,7 +113,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         labelGramField = stringResource(R.string.gramSugar),
                         labelQuantityField = stringResource(R.string.quantitySugar),
                         onValueChangeGramField = { input ->
-                            if (input.isDigitsOnly() && input.count() <= 3)
+                            if (InputFilters.filterBlockingOverHundred(input))
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldGram(
                                         entryFieldGram = input
@@ -121,7 +121,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                                 )
                         },
                         onValueChangeQuantityField = { input ->
-                            if (input.isDigitsOnly() && input.count() <= 2)
+                            if (InputFilters.filterBlockingOverHundred(input))
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input
@@ -149,7 +149,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         labelQuantityField = stringResource(R.string.amountSugar),
                         onValueChangeGramField =
                             { input ->
-                                if (InputFilters.filterPerHundredGramField(input)) {
+                                if (InputFilters.filterBlockingOverHundred(input)) {
                                     entrySavingViewModel.onAction(
                                         action = EntrySavingIntents.ChangeEntryFieldGram(
                                             entryFieldGram = input
@@ -158,8 +158,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                                 }
                             },
                         onValueChangeQuantityField = { input ->
-                            //if (input.isDigitsOnly() && input.count() <= 3)
-                            if(InputFilters.filterPerHundredQuantityField(input))
+                            if(InputFilters.filterBlockingOverThousand(input))
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input

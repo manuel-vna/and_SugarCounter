@@ -69,6 +69,16 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.ChangeEntryFieldQuantity ->
                 actionChangeEntryFieldQuantity(action.entryFieldQuantity)
+
+            is EntrySavingIntents.SaveSugarEntry ->
+                actionSaveEntry()
+
+            is EntrySavingIntents.SaveCategory ->
+                actionSaveCategory()
+
+            is EntrySavingIntents.ClearInputFields ->
+                actionClearInputFields()
+
         }
     }
 
@@ -225,7 +235,6 @@ class EntrySavingViewModel(
                 entryFieldGram = entryFieldGram
             )
         }
-        // When saving: entryFieldGram.replace(',', '.').toDoubleOrNull()
     }
 
     private fun actionChangeEntryFieldQuantity(entryFieldQuantity: String) {
@@ -235,5 +244,22 @@ class EntrySavingViewModel(
             )
         }
     }
+
+    private fun actionSaveEntry() {
+        viewModelScope.launch {
+
+        }
+    }
+
+    private fun actionSaveCategory() {
+        viewModelScope.launch {
+
+        }
+    }
+
+    private fun actionClearInputFields() {
+
+    }
+
 
 }

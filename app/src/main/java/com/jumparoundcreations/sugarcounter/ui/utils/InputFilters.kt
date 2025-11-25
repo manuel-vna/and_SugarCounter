@@ -4,7 +4,7 @@ class InputFilters {
 
     companion object {
 
-        fun filterPerHundredGramField(input: String): Boolean {
+        fun filterBlockingOverHundred(input: String): Boolean {
             val regex = Regex("^(?:|[0-9]([0-9]?([.,]?[0-9]?)?)?)$")
 
             if (!regex.matches(input)) return false
@@ -22,7 +22,7 @@ class InputFilters {
             return number <= 100.0
         }
 
-        fun filterPerHundredQuantityField(input: String): Boolean {
+        fun filterBlockingOverThousand(input: String): Boolean {
             val regex = Regex("^([0-9]{0,3}([.,][0-9]?)?)$")
 
             if (!regex.matches(input)) return false

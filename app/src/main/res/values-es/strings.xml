@@ -15,7 +15,7 @@
     <string name="categoryPlural">Categorías</string>
     <string name="settingsTitle">Opciones</string>
     <string name="categoryMaxInput">Límite de entrada: 40 caracteres</string>
-    <string name="categoryInputOnlyDescription">Sólo se añadió una categoría sin entrada de azúcar o calorías, ya que éstas no estaban especificadas.</string>
+    <string name="categoryInputOnlyDescription">Solo se ha añadido una categoría de alimentos sin el correspondiente contenido en azúcar, ya que no se ha introducido la información completa al respecto.</string>
     <string name="deleteCategroyAlertDescription">¿Realmente desea eliminar la siguiente categoría?</string>
     <string name="generalConfirm">Confirme</string>
     <string name="generalCancel">Cancelar</string>
