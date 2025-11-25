@@ -100,7 +100,7 @@ fun CounterTabRowFieldsUI(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 placeholder = {
                     Text(
-                        text = "g",
+                        text = stringResource(R.string.gram_unit_short),
                         modifier = Modifier.clearAndSetSemantics {}
                     )
                 }

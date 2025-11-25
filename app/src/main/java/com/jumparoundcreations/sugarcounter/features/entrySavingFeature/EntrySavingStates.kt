@@ -16,6 +16,7 @@ data class EntrySavingStates(
     val gramCountModeTabIndex: Int = 0,
     val entryFieldGram: String = "",
     val entryFieldQuantity: String = "",
-    val savingProcessMissingEntryData: Boolean = false
+    val savingProcessMissingCategoryData: Boolean = false,
+    val savingProcessMissingSugarData: Boolean = false,
 )
 

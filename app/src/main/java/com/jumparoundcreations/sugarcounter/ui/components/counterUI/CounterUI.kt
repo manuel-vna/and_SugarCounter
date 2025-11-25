@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
@@ -134,15 +135,13 @@ fun Counter(
                 modifier = Modifier
                     .width(160.dp),
                 onClick = {
-                    counterVM.saveEntry(category)
-                    counterVM.categoryHandling(category)
+                    //counterVM.saveEntry(category)
+                    entrySavingViewModel.onAction(EntrySavingIntents.SaveSugarEntry)
+
+                    // counterVM.categoryHandling(category) ?
+
                     // clearing fields by an empty value / setting fields back to default
-                    counterVM.actionChangeSelectedCategory("")
-                    counterVM.actionPerPieceGramChange("")
-                    counterVM.actionPerPieceAmountChange("")
-                    counterVM.actionPerHundredChange("")
-                    counterVM.actionPerHundredQuantityChange("")
-                    counterVM.actionChangeCategoryFieldExpanded(false)
+                    entrySavingViewModel.onAction(EntrySavingIntents.ClearInputFields)
                     keyboardController?.hide()
                 },
             ) {

@@ -6,6 +6,7 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.Get
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.ui.events.ScanUiEvents
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -18,7 +19,8 @@ import org.koin.core.component.KoinComponent
 
 class EntrySavingViewModel(
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
-    private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase
+    private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase,
+    private val saveEntryInDatabaseUseCase: SaveEntryInDatabaseUseCase,
 ) : ViewModel(), KoinComponent {
 
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
@@ -75,6 +77,13 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.SaveCategory ->
                 actionSaveCategory()
+
+            is EntrySavingIntents.DismissNoCategoryDataEnteredAlert ->
+                actionDismissNoCategoryDataEnteredAlert()
+
+            is EntrySavingIntents.DismissNoSugarDataEnteredAlert ->
+                actionDismissNoSugarDataEnteredAlert()
+
 
             is EntrySavingIntents.ClearInputFields ->
                 actionClearInputFields()
@@ -247,27 +256,54 @@ class EntrySavingViewModel(
 
     private fun actionSaveEntry() {
 
-        if (
-            _entrySavingStates.value.entryFieldGram.isEmpty() &&
-            _entrySavingStates.value.entryFieldQuantity.isEmpty()
-        ) {
+        if (_entrySavingStates.value.categoryInField.isEmpty()) {
             _entrySavingStates.update { current ->
                 current.copy(
-                    savingProcessMissingEntryData = true
+                    savingProcessMissingCategoryData = true
+                )
+            }
+        } else if (_entrySavingStates.value.entryFieldGram.isEmpty()) {
+            _entrySavingStates.update { current ->
+                current.copy(
+                    savingProcessMissingSugarData = true
                 )
             }
         } else {
+            viewModelScope.launch {
+                saveEntryInDatabaseUseCase(entrySavingStates.value)
+            }
+        }
+    }
 
+    private fun actionDismissNoCategoryDataEnteredAlert() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                savingProcessMissingCategoryData = false
+            )
+        }
+    }
+
+    private fun actionDismissNoSugarDataEnteredAlert() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                savingProcessMissingSugarData = false
+            )
         }
     }
 
     private fun actionSaveCategory() {
-        viewModelScope.launch {
 
-        }
     }
 
     private fun actionClearInputFields() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                categoryInField = "",
+                entryFieldGram = "",
+                entryFieldQuantity = "",
+                gramCountModeTabIndex = 0
+            )
+        }
 
     }
 

@@ -34,4 +34,8 @@ sealed interface EntrySavingIntents {
 
     data object ClearInputFields : EntrySavingIntents
 
+    data object DismissNoCategoryDataEnteredAlert : EntrySavingIntents
+
+    data object DismissNoSugarDataEnteredAlert : EntrySavingIntents
+
 }

@@ -10,6 +10,7 @@ import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
@@ -24,7 +25,13 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
-    viewModel { EntrySavingViewModel(get(), get()) }
+    viewModel {
+        EntrySavingViewModel(
+            get(),
+            get(),
+            get()
+        )
+    }
     viewModel { SettingsVM() }
     viewModel { CategoryVM() }
     viewModel { CardsVM() }
@@ -37,6 +44,7 @@ val appModule = module {
     single(named("imprint")) { provideHtmlContent(get(), R.raw.imprint) }
     single { ScanBarcodeUseCase() }
     single { GetEntryByCategoryUseCase(get()) }
+    single { SaveEntryInDatabaseUseCase(get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

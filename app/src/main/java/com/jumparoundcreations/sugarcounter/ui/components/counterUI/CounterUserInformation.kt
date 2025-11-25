@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.jumparoundcreations.sugarcounter.R
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogSingleBtn
@@ -23,16 +24,40 @@ fun CounterUserInformation(
 
     val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsState()
 
-    //val alertDialog by counterVM.alertDialog.collectAsState()
-    //if (alertDialog) {
-    if (false) {
-
+    if (entrySavingStates.savingProcessMissingSugarData) {
         ShowAlertDialogSingleBtn(
             dialogTitle = stringResource(id = R.string.foodType),
             dialogDescription = stringResource(id = R.string.categoryInputOnlyDescription),
             confirmBtnText = stringResource(id = R.string.generalClose),
-            confirmBtnAction = { }, //counterVM.actionDismissAlertDialog() },
-            onDismissRequest = { }, //counterVM.actionDismissAlertDialog() }
+            confirmBtnAction = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.DismissNoSugarDataEnteredAlert
+                )
+            },
+            onDismissRequest = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.DismissNoSugarDataEnteredAlert
+                )
+            },
+        )
+
+    }
+
+    if (entrySavingStates.savingProcessMissingCategoryData) {
+        ShowAlertDialogSingleBtn(
+            dialogTitle = stringResource(id = R.string.foodType),
+            dialogDescription = "No data entered",
+            confirmBtnText = stringResource(id = R.string.generalClose),
+            confirmBtnAction = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.DismissNoCategoryDataEnteredAlert
+                )
+            },
+            onDismissRequest = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.DismissNoCategoryDataEnteredAlert
+                )
+            },
         )
 
     }
