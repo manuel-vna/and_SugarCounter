@@ -15,6 +15,7 @@ data class EntrySavingStates(
     val gramCountMode: GramCountMode = GramCountMode.PerHundred,
     val gramCountModeTabIndex: Int = 0,
     val entryFieldGram: String = "",
-    val entryFieldQuantity: String = ""
+    val entryFieldQuantity: String = "",
+    val savingProcessMissingEntryData: Boolean = false
 )
 

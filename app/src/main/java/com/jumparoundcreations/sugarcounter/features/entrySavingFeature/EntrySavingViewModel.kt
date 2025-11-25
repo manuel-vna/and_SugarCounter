@@ -246,7 +246,17 @@ class EntrySavingViewModel(
     }
 
     private fun actionSaveEntry() {
-        viewModelScope.launch {
+
+        if (
+            _entrySavingStates.value.entryFieldGram.isEmpty() &&
+            _entrySavingStates.value.entryFieldQuantity.isEmpty()
+        ) {
+            _entrySavingStates.update { current ->
+                current.copy(
+                    savingProcessMissingEntryData = true
+                )
+            }
+        } else {
 
         }
     }
