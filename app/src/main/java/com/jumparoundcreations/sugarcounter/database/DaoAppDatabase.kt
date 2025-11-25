@@ -45,7 +45,7 @@ interface DaoAppDatabase {
     fun deleteSpecificEntryRow(id: Int)
 
     @Query("""SELECT * FROM sugarEntriesTable WHERE category = :category ORDER BY id DESC LIMIT 1""")
-    suspend fun checkIfGramValueExistsForCategory(category: String): SugarEntry?
+    suspend fun checkIfEntryExistsForCategory(category: String): SugarEntry?
 
     @Query("""SELECT SUM(gramTotal) FROM sugarEntriesTable WHERE date = :dateString""")
     fun checkIfGramThresholdIsBreached(dateString: String): Int?

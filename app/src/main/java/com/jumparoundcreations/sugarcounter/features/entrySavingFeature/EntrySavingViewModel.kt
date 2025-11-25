@@ -27,6 +27,14 @@ class EntrySavingViewModel(
     private val _entrySavingStates = MutableStateFlow(EntrySavingStates())
     val entrySavingStates = _entrySavingStates.asStateFlow()
 
+    init {
+        _entrySavingStates.update { current ->
+            current.copy(
+                categoryListInDropdown = listOf("Duplo", "Snickers", "Weingummi", "Snack")
+            )
+        }
+    }
+
     fun onAction(action: EntrySavingIntents) {
         when (action) {
             is EntrySavingIntents.OpenAndCloseDatePicker ->
@@ -37,6 +45,18 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.ScanBarcode ->
                 actionScanBarcode()
+
+            is EntrySavingIntents.EditOfCategoryField ->
+                actionEditOfCategoryField(action.categoryInField, action.categoryDropdownExpanded)
+
+            is EntrySavingIntents.ExpandOrCollapseCategoryDropdown ->
+                actionExpandOrCollapseCategoryDropdown(action.categoryDropdownExpanded)
+
+            is EntrySavingIntents.EditOfCategoryWithinDropdown ->
+                actionEditOfCategoryWithinDropdown(
+                    action.categoryInDropdown,
+                    action.categoryDropdownExpanded
+                )
 
             is EntrySavingIntents.ChangeGramCountMode ->
                 actionChangeGramCountMode(action.gramCountMode)
@@ -80,6 +100,7 @@ class EntrySavingViewModel(
                 is ScanResult.NoCategoryForBarcode -> {
                     actionSetBarcodeState(result.barcode)
                     _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoCategoryForBarcode)
+                    //actionBarcodeNotPresentInDb()
                     //_noBarcodeYetInfoTitle.value = true
                 }
 
@@ -103,7 +124,7 @@ class EntrySavingViewModel(
     private fun actionSetCategoryForBarcode(category: String) {
         _entrySavingStates.update { current ->
             current.copy(
-                categorySelected = category
+                categoryInField = category
             )
         }
     }
@@ -139,6 +160,48 @@ class EntrySavingViewModel(
         }
     }
 
+    private fun actionBarcodeNotPresentInDb() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                barcodeNotPresentInDb = current.barcodeNotPresentInDb.not()
+            )
+        }
+    }
+
+    fun actionEditOfCategoryField(
+        categoryInField: String,
+        categoryDropdownExpanded: Boolean
+    ) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                categoryInField = categoryInField,
+                categoryDropdownExpanded = categoryDropdownExpanded
+            )
+        }
+    }
+
+    fun actionExpandOrCollapseCategoryDropdown(
+        categoryDropdownExpanded: Boolean
+    ) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                categoryDropdownExpanded = categoryDropdownExpanded
+            )
+        }
+    }
+
+    fun actionEditOfCategoryWithinDropdown(
+        categoryInDropdown: String,
+        categoryDropdownExpanded: Boolean
+    ) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                categoryInField = categoryInDropdown,
+                categoryDropdownExpanded = categoryDropdownExpanded
+            )
+        }
+        getEntryByCategory(categoryInDropdown)
+    }
 
     private fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
         _entrySavingStates.update { current ->

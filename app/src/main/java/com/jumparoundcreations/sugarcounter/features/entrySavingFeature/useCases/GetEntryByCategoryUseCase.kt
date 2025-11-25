@@ -9,7 +9,7 @@ class GetEntryByCategoryUseCase(
 ) {
 
     suspend operator fun invoke(category: String): GetEntryByCategoryResult {
-        val reply = database.appDao().checkIfGramValueExistsForCategory(category)
+        val reply = database.appDao().checkIfEntryExistsForCategory(category)
 
         return if (reply == null) {
             GetEntryByCategoryResult.NoEntryFound

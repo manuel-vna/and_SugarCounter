@@ -27,11 +27,9 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -42,26 +40,23 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.unit.toSize
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.util.NumberConstants
 
 @Composable
 
 fun RowScope.CategoryDropdownField(
     context: Context,
-    counterVM: CounterVM,
-    caloriesCounterActivated: Boolean,
+    entrySavingViewModel: EntrySavingViewModel,
     keyboardController: SoftwareKeyboardController?
 ) {
 
-    val category by counterVM.categorySelected.collectAsState()
-    val categories by counterVM.categories.collectAsState()
-    val categoryFieldExpanded by counterVM.categoryFieldExpanded.collectAsState()
-
-    val accessibility_category_input_field =
+    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
+    val accessibilityCategoryInputField =
         stringResource(R.string.accessibility_category_input_field)
-
 
     Column(
         modifier = Modifier.weight(2f)
@@ -83,18 +78,18 @@ fun RowScope.CategoryDropdownField(
                     shape = RoundedCornerShape(15.dp),
                     color = Color.Transparent
                 )
-                .onGloballyPositioned { coordinates ->
-                    counterVM.actionChangeCategoryFieldSize(coordinates.size.toSize())
-                }
                 .semantics {
-                    contentDescription = accessibility_category_input_field
+                    contentDescription = accessibilityCategoryInputField
                 },
-            value = category,
+            value = entrySavingStates.categoryInField,
             onValueChange = {
-                //limit input to x characters
-                if (it.count() <= 40) {
-                    counterVM.actionChangeSelectedCategory(it)
-                    counterVM.actionChangeCategoryFieldExpanded(true)
+                if (it.count() <= NumberConstants.CATEGORY_MAX_INPUT_CHARACTERS) {
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.EditOfCategoryField(
+                            categoryInField = it,
+                            categoryDropdownExpanded = true
+                        )
+                    )
                 } else {
                     Toast.makeText(
                         context,
@@ -117,7 +112,15 @@ fun RowScope.CategoryDropdownField(
             ),
             singleLine = true,
             trailingIcon = {
-                IconButton(onClick = { counterVM.actionChangeCategoryFieldExpanded(!categoryFieldExpanded) }) {
+                IconButton(onClick = {
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
+                            categoryDropdownExpanded =
+                                entrySavingStates.categoryDropdownExpanded.not()
+                        )
+                    )
+                }
+                ) {
                     Icon(
                         modifier = Modifier.size(24.dp),
                         imageVector = Icons.Rounded.KeyboardArrowDown,
@@ -127,17 +130,11 @@ fun RowScope.CategoryDropdownField(
             }
         )
 
-        AnimatedVisibility(visible = categoryFieldExpanded) {
+        AnimatedVisibility(visible = entrySavingStates.categoryDropdownExpanded) {
             Card(
-                modifier =
-                if (caloriesCounterActivated) {
-                    Modifier
-                        .padding(horizontal = 5.dp)
-                } else {
-                    Modifier
-                        .padding(horizontal = 5.dp)
-                        .fillMaxWidth()
-                },
+                modifier = Modifier
+                    .padding(horizontal = 5.dp)
+                    .fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
                 shape = RoundedCornerShape(10.dp),
@@ -147,28 +144,36 @@ fun RowScope.CategoryDropdownField(
                     modifier = Modifier.heightIn(max = 150.dp),
                 ) {
 
-                    if (category.isNotEmpty()) {
+                    if (entrySavingStates.categoryInField.isNotEmpty()) {
                         items(
-                            categories.filter {
+                            entrySavingStates.categoryListInDropdown.filter {
                                 it.lowercase()
-                                    .contains(category.lowercase())
+                                    .contains(entrySavingStates.categoryInField.lowercase())
                             }
                                 .sorted()
                         ) {
                             CategoryItems(title = it) { title ->
-                                counterVM.actionChangeSelectedCategory(title)
-                                counterVM.actionChangeCategoryFieldExpanded(false)
-                                counterVM.loadLastEntryForGivenCategory(keyboardController)
+                                entrySavingViewModel.onAction(
+                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                        categoryInDropdown = title,
+                                        categoryDropdownExpanded = false
+                                    )
+                                )
+                                keyboardController?.hide()
                             }
                         }
                     } else {
                         items(
-                            categories.sorted()
+                            entrySavingStates.categoryListInDropdown.sorted()
                         ) {
                             CategoryItems(title = it) { title ->
-                                counterVM.actionChangeSelectedCategory(title)
-                                counterVM.actionChangeCategoryFieldExpanded(false)
-                                counterVM.loadLastEntryForGivenCategory(keyboardController)
+                                entrySavingViewModel.onAction(
+                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                        categoryInDropdown = title,
+                                        categoryDropdownExpanded = false
+                                    )
+                                )
+                                keyboardController?.hide()
                             }
                         }
                     }
@@ -178,7 +183,7 @@ fun RowScope.CategoryDropdownField(
 
     } // Column
 
-}
+} // Composable: CategoryDropdownField
 
 @Composable
 fun CategoryItems(

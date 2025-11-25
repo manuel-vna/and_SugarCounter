@@ -8,6 +8,21 @@ sealed interface EntrySavingIntents {
     data class ChangeSelectedDate(val epochTime: Long) : EntrySavingIntents
     data object ScanBarcode : EntrySavingIntents
 
+    data class EditOfCategoryField(
+        val categoryInField: String,
+        val categoryDropdownExpanded: Boolean
+    ) : EntrySavingIntents
+
+    data class ExpandOrCollapseCategoryDropdown(
+        val categoryDropdownExpanded: Boolean
+    ) : EntrySavingIntents
+
+    data class EditOfCategoryWithinDropdown(
+        val categoryInDropdown: String,
+        val categoryDropdownExpanded: Boolean,
+
+        ) : EntrySavingIntents
+
     data class ChangeGramCountMode(val gramCountMode: GramCountMode) : EntrySavingIntents
 
     data class ChangeGramCountModeTabIndex(val tabIndex: Int) : EntrySavingIntents

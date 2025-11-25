@@ -26,6 +26,8 @@ object NumberConstants {
     const val ONE_AS_DOUBLE = 1.0
 
     const val HUNDRED_AS_DOUBLE = 100.0
+
+    const val CATEGORY_MAX_INPUT_CHARACTERS = 40
 }
 
 object TimeConstants {

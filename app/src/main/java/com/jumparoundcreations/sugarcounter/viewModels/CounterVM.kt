@@ -236,7 +236,7 @@ class CounterVM : ViewModel(), KoinComponent {
         viewModelScope.launch(Dispatchers.IO) {
 
             val entrySugarReply =
-                database.appDao().checkIfGramValueExistsForCategory(category)
+                database.appDao().checkIfEntryExistsForCategory(category)
 
             withContext(Dispatchers.Main) {
 

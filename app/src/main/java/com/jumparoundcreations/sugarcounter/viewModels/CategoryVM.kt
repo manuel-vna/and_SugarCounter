@@ -241,7 +241,7 @@ class CategoryVM : ViewModel(), KoinComponent {
     private fun retrieveLastEntriesForClickedCategory(clickedCategory: Category) {
         viewModelScope.launch(Dispatchers.IO) {
             val lastEntrySugar: SugarEntry? =
-                database.appDao().checkIfGramValueExistsForCategory(clickedCategory.category)
+                database.appDao().checkIfEntryExistsForCategory(clickedCategory.category)
             _entrySugarForClickedCategory.value = lastEntrySugar ?: SugarEntry(
                 id = DatabaseConstants.DEFAULT_DATABASE_INT,
                 currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,

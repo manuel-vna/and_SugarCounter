@@ -26,6 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
@@ -52,8 +53,10 @@ fun Counter(
         "caloriesCounterActivated",
         false
     )
+
+    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
     val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
-    val barcodeNumber by counterVM.barcodeNumber.collectAsState()
+    //val barcodeNumber by counterVM.barcodeNumber.collectAsState()
 
     //Keyboard
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -101,7 +104,8 @@ fun Counter(
             horizontalArrangement = Arrangement.Center
         ) {
             if (noBarcodeYetInfo) {
-                NoBarcodeYetInfo(counterVM, barcodeNumber)
+                //if (entrySavingStates.barcodeNotPresentInDb) {
+                NoBarcodeYetInfo(counterVM, entrySavingStates.barcodeNumber)
             }
         }
 
@@ -113,8 +117,7 @@ fun Counter(
 
             CategoryDropdownField(
                 context = context,
-                counterVM = counterVM,
-                caloriesCounterActivated = caloriesCounterActivated,
+                entrySavingViewModel = entrySavingViewModel,
                 keyboardController = keyboardController
             )
         }
