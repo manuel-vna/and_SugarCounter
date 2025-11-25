@@ -4,7 +4,7 @@ class InputFilters {
 
     companion object {
 
-        fun filterPercentageInput(input: String): Boolean {
+        fun filterPerHundredGramField(input: String): Boolean {
             val regex = Regex("^(?:|[0-9]([0-9]?([.,]?[0-9]?)?)?)$")
 
             if (!regex.matches(input)) return false
@@ -20,6 +20,24 @@ class InputFilters {
             // Full number validation
             val number = normalized.toDoubleOrNull() ?: return false
             return number <= 100.0
+        }
+
+        fun filterPerHundredQuantityField(input: String): Boolean {
+            val regex = Regex("^([0-9]{0,3}([.,][0-9]?)?)$")
+
+            if (!regex.matches(input)) return false
+            if (input.isBlank()) return true  // allow deleting everything
+
+            // Convert comma → dot
+            val normalized = input.replace(',', '.')
+
+            // Partial inputs like "10." or "10," should be allowed
+            if (normalized.last() == '.') return true
+            if (normalized == "1000.") return true  // allow typing 100.
+
+            // Full number validation
+            val number = normalized.toDoubleOrNull() ?: return false
+            return number <= 1000.0
         }
 
 

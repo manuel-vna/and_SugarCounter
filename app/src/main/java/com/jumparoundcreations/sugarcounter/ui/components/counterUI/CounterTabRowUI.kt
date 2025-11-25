@@ -9,8 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.BarChart
 import androidx.compose.material.icons.outlined.Dialpad
 import androidx.compose.material3.Icon
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,7 +59,6 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
     }
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress)
-        //counterVM.actionSetIsHundredTabIndex(pagerState.currentPage) //selectedTabIndex = pagerState.currentPage
             entrySavingViewModel.onAction(
                 action = EntrySavingIntents.ChangeGramCountModeTabIndex(
                     tabIndex = pagerState.currentPage
@@ -68,12 +67,11 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
     }
 
     Column {
-        TabRow(selectedTabIndex = entrySavingStates.gramCountModeTabIndex) {
+        PrimaryTabRow(selectedTabIndex = entrySavingStates.gramCountModeTabIndex) {
             tabItems.forEachIndexed { index, item ->
                 Tab(
                     selected = index == entrySavingStates.gramCountModeTabIndex,
                     onClick = {
-                        //counterVM.actionSetIsHundredTabIndex(index) //selectedTabIndex = index
                         entrySavingViewModel.onAction(
                             action = EntrySavingIntents.ChangeGramCountModeTabIndex(
                                 tabIndex = index
@@ -151,7 +149,7 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         labelQuantityField = stringResource(R.string.amountSugar),
                         onValueChangeGramField =
                             { input ->
-                                if (InputFilters.filterPercentageInput(input)) {
+                                if (InputFilters.filterPerHundredGramField(input)) {
                                     entrySavingViewModel.onAction(
                                         action = EntrySavingIntents.ChangeEntryFieldGram(
                                             entryFieldGram = input
@@ -160,7 +158,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                                 }
                             },
                         onValueChangeQuantityField = { input ->
-                            if (input.isDigitsOnly() && input.count() <= 3)
+                            //if (input.isDigitsOnly() && input.count() <= 3)
+                            if(InputFilters.filterPerHundredQuantityField(input))
                                 entrySavingViewModel.onAction(
                                     action = EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input
