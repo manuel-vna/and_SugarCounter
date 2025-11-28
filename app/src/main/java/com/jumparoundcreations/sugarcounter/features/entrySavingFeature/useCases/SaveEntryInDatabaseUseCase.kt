@@ -6,13 +6,14 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySav
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.util.NumberConstants
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase
 ) {
-    suspend operator fun invoke(state: EntrySavingStates) = withContext(Dispatchers.IO) {
+    //suspend operator fun invoke(state: EntrySavingStates) = withContext(Dispatchers.IO) {
+    suspend operator fun invoke(state: EntrySavingStates) {
+
+
         database.appDao().insertSugarEntry(
             SugarEntry(
                 currentTimestamp = state.dateOfEntryEpochSec,
@@ -27,14 +28,11 @@ class SaveEntryInDatabaseUseCase(
                 quantity = if (state.entryFieldQuantity.isEmpty()) NumberConstants.ONE_AS_DOUBLE
                 else state.entryFieldQuantity.toDouble(),
                 gramTotal = if (state.gramCountMode == GramCountMode.PerHundred) {
-                    ((state.entryFieldGram.toDouble() / NumberConstants.HUNDRED_AS_DOUBLE) *
-                            if (state.entryFieldQuantity.isEmpty()) NumberConstants.ONE_AS_DOUBLE
-                            else state.entryFieldQuantity.toDouble())
+                    (state.entryFieldGram.toDouble() / NumberConstants.HUNDRED_AS_DOUBLE) *
+                            state.entryFieldQuantity.toDouble()
                 } else {
-                    state.entryFieldGram.toDouble() * (
-                            if (state.entryFieldQuantity.isEmpty()) NumberConstants.ONE_AS_DOUBLE
-                            else state.entryFieldQuantity.toDouble()
-                            )
+                    state.entryFieldGram.toDouble() * state.entryFieldQuantity.toDouble()
+
                 },
             )
         )

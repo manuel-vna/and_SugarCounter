@@ -9,6 +9,7 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.ui.events.ScanUiEvents
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -262,14 +263,16 @@ class EntrySavingViewModel(
                     savingProcessMissingCategoryData = true
                 )
             }
-        } else if (_entrySavingStates.value.entryFieldGram.isEmpty()) {
+        } else if (_entrySavingStates.value.entryFieldGram.isEmpty() ||
+            _entrySavingStates.value.entryFieldQuantity.isEmpty()
+        ) {
             _entrySavingStates.update { current ->
                 current.copy(
                     savingProcessMissingSugarData = true
                 )
             }
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 saveEntryInDatabaseUseCase(entrySavingStates.value)
             }
         }
