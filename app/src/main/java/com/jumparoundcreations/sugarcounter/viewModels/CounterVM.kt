@@ -131,7 +131,7 @@ class CounterVM : ViewModel(), KoinComponent {
 
     // When this ViewModal is initialized, tell the above created observer what has to be observed and how long
     init {
-        database.appDao().getAllCategories().observeForever(categoryObserver)
+        //database.appDao().getAllCategories().observeForever(categoryObserver)
 
         //database.appDao().getEntries(startOfYesterday, endOfToday)
         //.observeForever(todayObserverObject)
@@ -141,7 +141,7 @@ class CounterVM : ViewModel(), KoinComponent {
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getAllCategories().removeObserver(categoryObserver)
+        //database.appDao().getAllCategories().removeObserver(categoryObserver)
 
         //database.appDao().getEntries(startOfYesterday, endOfToday)
         //.removeObserver(todayObserverObject)

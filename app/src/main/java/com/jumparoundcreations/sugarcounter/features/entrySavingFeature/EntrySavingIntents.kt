@@ -30,8 +30,6 @@ sealed interface EntrySavingIntents {
     data class ChangeEntryFieldQuantity(val entryFieldQuantity: String) : EntrySavingIntents
     data object SaveSugarEntry : EntrySavingIntents
 
-    data object SaveCategory : EntrySavingIntents
-
     data object ClearInputFields : EntrySavingIntents
 
     data object DismissNoCategoryDataEnteredAlert : EntrySavingIntents

@@ -146,6 +146,9 @@ interface DaoAppDatabase {
     @Query("""SELECT * FROM category_table""")
     fun getAllCategories(): LiveData<List<Category>>
 
+    @Query("""SELECT * FROM category_table""")
+    fun observeAllCategories(): Flow<List<Category>>
+
     @Query("""DELETE FROM category_table WHERE id = :id""")
     fun deleteSpecificCategory(id: Int)
 

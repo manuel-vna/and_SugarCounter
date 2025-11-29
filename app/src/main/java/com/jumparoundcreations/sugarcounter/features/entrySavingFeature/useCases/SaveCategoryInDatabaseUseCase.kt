@@ -8,7 +8,7 @@ class SaveCategoryInDatabaseUseCase(
     private val database: AppDatabase
 ) {
 
-    suspend operator fun invoke(state: EntrySavingStates) {
+    operator fun invoke(state: EntrySavingStates) {
 
         if (
             state.categoryListInDropdown.contains(state.categoryInField) &&

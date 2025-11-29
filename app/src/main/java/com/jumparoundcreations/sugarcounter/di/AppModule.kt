@@ -11,6 +11,7 @@ import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
@@ -35,7 +36,8 @@ val appModule = module {
             saveEntryInDatabaseUseCase = get(),
             saveCategoryInDatabaseUseCase = get(),
             checkUserInputUseCase = get(),
-            checkForDefaultSavingValuesUseCase = get()
+            checkForDefaultSavingValuesUseCase = get(),
+            displayAllCategoriesUseCase = get()
         )
     }
     viewModel { SettingsVM() }
@@ -54,6 +56,7 @@ val appModule = module {
     single { SaveCategoryInDatabaseUseCase(get()) }
     single { CheckUserInputUseCase() }
     single { CheckForDefaultSavingValuesUseCase() }
+    single { DisplayAllCategoriesUseCase(get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

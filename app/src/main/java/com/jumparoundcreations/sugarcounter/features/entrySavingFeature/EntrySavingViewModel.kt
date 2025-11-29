@@ -8,6 +8,7 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.Gra
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
@@ -30,7 +31,8 @@ class EntrySavingViewModel(
     private val saveEntryInDatabaseUseCase: SaveEntryInDatabaseUseCase,
     private val saveCategoryInDatabaseUseCase: SaveCategoryInDatabaseUseCase,
     private val checkUserInputUseCase: CheckUserInputUseCase,
-    private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase
+    private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase,
+    private val displayAllCategoriesUseCase: DisplayAllCategoriesUseCase
 ) : ViewModel(), KoinComponent {
 
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
@@ -38,14 +40,6 @@ class EntrySavingViewModel(
 
     private val _entrySavingStates = MutableStateFlow(EntrySavingStates())
     val entrySavingStates = _entrySavingStates.asStateFlow()
-
-    init {
-        _entrySavingStates.update { current ->
-            current.copy(
-                categoryListInDropdown = listOf("Duplo", "Snickers", "Weingummi", "Snack")
-            )
-        }
-    }
 
     fun onAction(action: EntrySavingIntents) {
         when (action) {
@@ -85,23 +79,33 @@ class EntrySavingViewModel(
             is EntrySavingIntents.SaveSugarEntry ->
                 actionSaveEntry()
 
-            is EntrySavingIntents.SaveCategory ->
-                actionSaveCategory()
-
             is EntrySavingIntents.DismissNoCategoryDataEnteredAlert ->
                 actionDismissNoCategoryDataEnteredAlert()
 
             is EntrySavingIntents.DismissNoSugarDataEnteredAlert ->
                 actionDismissNoSugarDataEnteredAlert()
 
-
             is EntrySavingIntents.ClearInputFields ->
                 actionClearInputFields()
-
         }
     }
 
-    fun actionChangeDatePickerVisibility() {
+    init {
+        observeAllCategories()
+    }
+
+    private fun observeAllCategories() {
+        viewModelScope.launch {
+            displayAllCategoriesUseCase().collect { list ->
+                val stringList = list.map { it.category }
+                _entrySavingStates.update { old ->
+                    old.copy(categoryListInDropdown = stringList)
+                }
+            }
+        }
+    }
+
+    private fun actionChangeDatePickerVisibility() {
         _entrySavingStates.update {
             it.copy(
                 datePickerShown = it.datePickerShown.not()
@@ -109,7 +113,7 @@ class EntrySavingViewModel(
         }
     }
 
-    fun actionChangeSelectedDate(epochSec: Long) {
+    private fun actionChangeSelectedDate(epochSec: Long) {
         _entrySavingStates.update { current ->
             current.copy(
                 dateOfEntryEpochSec = epochSec
@@ -117,7 +121,7 @@ class EntrySavingViewModel(
         }
     }
 
-    fun actionScanBarcode() {
+    private fun actionScanBarcode() {
         viewModelScope.launch {
             when (val result = scanBarcodeUseCase()) {
                 is ScanResult.FoundCategoryForBarcode -> {
@@ -168,8 +172,7 @@ class EntrySavingViewModel(
                     _entrySavingStates.update { current ->
                         current.copy(
                             entryFieldGram = "",
-                            entryFieldQuantity = "",
-                            gramCountModeTabIndex = 0
+                            entryFieldQuantity = ""
                         )
                     }
                 }
@@ -197,7 +200,7 @@ class EntrySavingViewModel(
         }
     }
 
-    fun actionEditOfCategoryField(
+    private fun actionEditOfCategoryField(
         categoryInField: String,
         categoryDropdownExpanded: Boolean
     ) {
@@ -209,7 +212,7 @@ class EntrySavingViewModel(
         }
     }
 
-    fun actionExpandOrCollapseCategoryDropdown(
+    private fun actionExpandOrCollapseCategoryDropdown(
         categoryDropdownExpanded: Boolean
     ) {
         _entrySavingStates.update { current ->
@@ -219,7 +222,7 @@ class EntrySavingViewModel(
         }
     }
 
-    fun actionEditOfCategoryWithinDropdown(
+    private fun actionEditOfCategoryWithinDropdown(
         categoryInDropdown: String,
         categoryDropdownExpanded: Boolean
     ) {
@@ -286,8 +289,11 @@ class EntrySavingViewModel(
             }
 
             CheckUserInputResult.NoGramDataGivenButCategoryGiven -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    saveCategoryInDatabaseUseCase(state = entrySavingStates.value)
+                viewModelScope.launch {
+                    val currentState = entrySavingStates.value
+                    withContext(Dispatchers.IO) {
+                        saveCategoryInDatabaseUseCase(state = currentState)
+                    }
                 }
                 actionSetBarcodeState(barcodeNumber = "")
                 _entrySavingStates.update { current ->
@@ -307,8 +313,8 @@ class EntrySavingViewModel(
                         saveEntryInDatabaseUseCase(currentState)
                         saveCategoryInDatabaseUseCase(currentState)
                     }
-                    actionSetBarcodeState(barcodeNumber = "")
                 }
+                actionSetBarcodeState(barcodeNumber = "")
             }
         }
 
@@ -330,10 +336,6 @@ class EntrySavingViewModel(
         }
     }
 
-    private fun actionSaveCategory() {
-
-    }
-
     private fun actionClearInputFields() {
         _entrySavingStates.update { current ->
             current.copy(
@@ -343,8 +345,6 @@ class EntrySavingViewModel(
                 gramCountModeTabIndex = 0
             )
         }
-
     }
-
 
 }
