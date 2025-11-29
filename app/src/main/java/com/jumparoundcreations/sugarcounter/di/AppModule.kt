@@ -9,7 +9,10 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
@@ -27,9 +30,12 @@ val appModule = module {
     single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
     viewModel {
         EntrySavingViewModel(
-            get(),
-            get(),
-            get()
+            scanBarcodeUseCase = get(),
+            getEntryByCategoryUseCase = get(),
+            saveEntryInDatabaseUseCase = get(),
+            saveCategoryInDatabaseUseCase = get(),
+            checkUserInputUseCase = get(),
+            checkForDefaultSavingValuesUseCase = get()
         )
     }
     viewModel { SettingsVM() }
@@ -45,6 +51,9 @@ val appModule = module {
     single { ScanBarcodeUseCase() }
     single { GetEntryByCategoryUseCase(get()) }
     single { SaveEntryInDatabaseUseCase(get()) }
+    single { SaveCategoryInDatabaseUseCase(get()) }
+    single { CheckUserInputUseCase() }
+    single { CheckForDefaultSavingValuesUseCase() }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

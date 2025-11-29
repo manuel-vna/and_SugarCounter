@@ -2,13 +2,18 @@ package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.ui.events.ScanUiEvents
+import com.jumparoundcreations.sugarcounter.util.EntrySavingConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +21,16 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 
 class EntrySavingViewModel(
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase,
     private val saveEntryInDatabaseUseCase: SaveEntryInDatabaseUseCase,
+    private val saveCategoryInDatabaseUseCase: SaveCategoryInDatabaseUseCase,
+    private val checkUserInputUseCase: CheckUserInputUseCase,
+    private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase
 ) : ViewModel(), KoinComponent {
 
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
@@ -257,25 +266,52 @@ class EntrySavingViewModel(
 
     private fun actionSaveEntry() {
 
-        if (_entrySavingStates.value.categoryInField.isEmpty()) {
+        if (checkForDefaultSavingValuesUseCase(entrySavingStates.value)) {
             _entrySavingStates.update { current ->
                 current.copy(
-                    savingProcessMissingCategoryData = true
+                    entryFieldQuantity = EntrySavingConstants.DEFAULT_PER_PIECE_VALUE
                 )
-            }
-        } else if (_entrySavingStates.value.entryFieldGram.isEmpty() ||
-            _entrySavingStates.value.entryFieldQuantity.isEmpty()
-        ) {
-            _entrySavingStates.update { current ->
-                current.copy(
-                    savingProcessMissingSugarData = true
-                )
-            }
-        } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                saveEntryInDatabaseUseCase(entrySavingStates.value)
             }
         }
+
+        val checkUserInputResult = checkUserInputUseCase(entrySavingStates.value)
+
+        when (checkUserInputResult) {
+            CheckUserInputResult.NoCategoryGiven -> {
+                _entrySavingStates.update { current ->
+                    current.copy(
+                        savingProcessMissingCategoryData = true
+                    )
+                }
+            }
+
+            CheckUserInputResult.NoGramDataGivenButCategoryGiven -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    saveCategoryInDatabaseUseCase(state = entrySavingStates.value)
+                }
+                actionSetBarcodeState(barcodeNumber = "")
+                _entrySavingStates.update { current ->
+                    current.copy(
+                        savingProcessMissingSugarData = true
+                    )
+                }
+            }
+
+            CheckUserInputResult.InputDataComplete -> {
+                viewModelScope.launch {
+                    // Reading the state on the main thread
+                    val currentState = entrySavingStates.value
+                    // Switching to IO AFTER capturing the correct state
+                    // Otherwise timing issues concerning state updates might appear
+                    withContext(Dispatchers.IO) {
+                        saveEntryInDatabaseUseCase(currentState)
+                        saveCategoryInDatabaseUseCase(currentState)
+                    }
+                    actionSetBarcodeState(barcodeNumber = "")
+                }
+            }
+        }
+
     }
 
     private fun actionDismissNoCategoryDataEnteredAlert() {

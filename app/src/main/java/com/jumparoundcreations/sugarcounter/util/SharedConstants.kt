@@ -23,6 +23,8 @@ object NumberConstants {
     const val NULL_AS_DOUBLE = 0.0
     const val ONE_AS_INT = 1
 
+    const val ONE_AS_STRING = "1"
+
     const val ONE_AS_DOUBLE = 1.0
 
     const val HUNDRED_AS_DOUBLE = 100.0
@@ -41,4 +43,9 @@ object TimeConstants {
 
 object TestData {
     const val TEST_BARCODE_NUMBER = "123456789"
+}
+
+object EntrySavingConstants {
+
+    const val DEFAULT_PER_PIECE_VALUE = "1"
 }

@@ -10,9 +10,8 @@ import com.jumparoundcreations.sugarcounter.util.NumberConstants
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase
 ) {
-    //suspend operator fun invoke(state: EntrySavingStates) = withContext(Dispatchers.IO) {
-    suspend operator fun invoke(state: EntrySavingStates) {
 
+    operator fun invoke(state: EntrySavingStates) {
 
         database.appDao().insertSugarEntry(
             SugarEntry(

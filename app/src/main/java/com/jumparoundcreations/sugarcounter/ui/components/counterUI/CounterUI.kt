@@ -135,11 +135,7 @@ fun Counter(
                 modifier = Modifier
                     .width(160.dp),
                 onClick = {
-                    //counterVM.saveEntry(category)
                     entrySavingViewModel.onAction(EntrySavingIntents.SaveSugarEntry)
-
-                    // counterVM.categoryHandling(category) ?
-
                     // clearing fields by an empty value / setting fields back to default
                     entrySavingViewModel.onAction(EntrySavingIntents.ClearInputFields)
                     keyboardController?.hide()
