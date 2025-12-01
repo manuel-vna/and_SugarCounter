@@ -81,14 +81,21 @@ fun CounterUserInformation(
             when (event) {
                 is ScanUiEvents.ScanResultNoCategoryForBarcode -> {
                     snackbarHostState.showSnackbar(
-                        message = context.getString(R.string.no_entry_found_for_given_category_Snackbar_text),
+                        message = "ToDo: ScanResultNoCategoryForBarcode",
                         duration = SnackbarDuration.Short
                     )
                 }
 
                 is ScanUiEvents.ScanResultFailed -> {
                     snackbarHostState.showSnackbar(
-                        message = "Scan failed",
+                        message = "ToDo: Scan failed",
+                        duration = SnackbarDuration.Short
+                    )
+                }
+
+                is ScanUiEvents.CategoryEditNoDataForChosenCategory -> {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.no_entry_found_for_given_category_Snackbar_text),
                         duration = SnackbarDuration.Short
                     )
                 }

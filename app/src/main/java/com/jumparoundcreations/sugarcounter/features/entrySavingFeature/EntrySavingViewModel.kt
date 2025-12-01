@@ -168,7 +168,7 @@ class EntrySavingViewModel(
             when (val result = getEntryByCategoryUseCase(category)) {
 
                 is GetEntryByCategoryResult.NoEntryFound -> {
-                    //actionNoDataForChosenCategorySnackbarShownChange(true)
+                    _scanUiEvents.emit(value = ScanUiEvents.CategoryEditNoDataForChosenCategory)
                     _entrySavingStates.update { current ->
                         current.copy(
                             entryFieldGram = "",
