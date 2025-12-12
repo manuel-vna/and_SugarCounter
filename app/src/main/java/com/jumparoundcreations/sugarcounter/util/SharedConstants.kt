@@ -16,14 +16,14 @@ object DatabaseConstants {
 
 object GeneralConstants {
     const val EMPTY_STRING = ""
+    const val STANDARD_GRAM_THRESHOLD = 50
+    const val KEY_GRAM_THRESHOLD = "gramThresholdValue"
 }
 
 object NumberConstants {
     const val COLOR_RGB_MULTIPLIER = 255
     const val NULL_AS_DOUBLE = 0.0
     const val ONE_AS_INT = 1
-
-    const val ONE_AS_STRING = "1"
 
     const val ONE_AS_DOUBLE = 1.0
 

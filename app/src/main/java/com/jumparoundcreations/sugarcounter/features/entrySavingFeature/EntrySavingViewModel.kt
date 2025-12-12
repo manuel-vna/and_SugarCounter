@@ -2,10 +2,14 @@ package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.ScanResult
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.UserThresholdBreachReaction
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
@@ -24,6 +28,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class EntrySavingViewModel(
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
@@ -32,8 +37,11 @@ class EntrySavingViewModel(
     private val saveCategoryInDatabaseUseCase: SaveCategoryInDatabaseUseCase,
     private val checkUserInputUseCase: CheckUserInputUseCase,
     private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase,
-    private val displayAllCategoriesUseCase: DisplayAllCategoriesUseCase
+    private val displayAllCategoriesUseCase: DisplayAllCategoriesUseCase,
+    private val checkDailyGramThresholdUseCase: CheckDailyGramThresholdUseCase
 ) : ViewModel(), KoinComponent {
+
+    val database by inject<AppDatabase>()
 
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
     val scanUiEvents = _scanUiEvents.asSharedFlow()
@@ -87,6 +95,11 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.ClearInputFields ->
                 actionClearInputFields()
+
+            is EntrySavingIntents.UserThresholdReaction ->
+                actionHandleUserThresholdBreachReaction(
+                    action.userThresholdBreachReaction
+                )
         }
     }
 
@@ -312,6 +325,15 @@ class EntrySavingViewModel(
                     withContext(Dispatchers.IO) {
                         saveEntryInDatabaseUseCase(currentState)
                         saveCategoryInDatabaseUseCase(currentState)
+                        val result = checkDailyGramThresholdUseCase(currentState)
+                        if (result is CheckThresholdResult.DailyThresholdBreached) {
+                            _entrySavingStates.update { current ->
+                                current.copy(
+                                    savingProcessDailyGramThreshold =
+                                        CheckThresholdResult.DailyThresholdBreached
+                                )
+                            }
+                        }
                     }
                 }
                 actionSetBarcodeState(barcodeNumber = "")
@@ -344,6 +366,31 @@ class EntrySavingViewModel(
                 entryFieldQuantity = "",
                 gramCountModeTabIndex = 0
             )
+        }
+    }
+
+    private fun actionHandleUserThresholdBreachReaction(
+        userThresholdBreachReaction: UserThresholdBreachReaction
+    ) {
+        when (userThresholdBreachReaction) {
+            is UserThresholdBreachReaction.DeleteLastEnteredEntry -> {
+                _entrySavingStates.update { current ->
+                    current.copy(
+                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries
+                    )
+                }
+                viewModelScope.launch(Dispatchers.IO) {
+                    database.appDao().deleteLastEntry()
+                }
+            }
+
+            is UserThresholdBreachReaction.KeepLastEnteredEntry -> {
+                _entrySavingStates.update { current ->
+                    current.copy(
+                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries
+                    )
+                }
+            }
         }
     }
 

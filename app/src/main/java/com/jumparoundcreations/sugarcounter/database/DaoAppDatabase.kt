@@ -48,7 +48,7 @@ interface DaoAppDatabase {
     suspend fun checkIfEntryExistsForCategory(category: String): SugarEntry?
 
     @Query("""SELECT SUM(gramTotal) FROM sugarEntriesTable WHERE date = :dateString""")
-    fun checkIfGramThresholdIsBreached(dateString: String): Int?
+    fun getGramSumForSpecificDate(dateString: String): Int?
 
     @Query("SELECT category FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime")
     fun getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime: Long): List<String>

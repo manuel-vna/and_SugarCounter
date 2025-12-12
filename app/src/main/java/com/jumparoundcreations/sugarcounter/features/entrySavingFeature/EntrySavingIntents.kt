@@ -1,6 +1,7 @@
 package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.UserThresholdBreachReaction
 
 sealed interface EntrySavingIntents {
 
@@ -35,5 +36,9 @@ sealed interface EntrySavingIntents {
     data object DismissNoCategoryDataEnteredAlert : EntrySavingIntents
 
     data object DismissNoSugarDataEnteredAlert : EntrySavingIntents
+
+    data class UserThresholdReaction(
+        val userThresholdBreachReaction: UserThresholdBreachReaction
+    ) : EntrySavingIntents
 
 }

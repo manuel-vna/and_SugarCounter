@@ -39,14 +39,14 @@ class ScanBarcodeUseCase : KoinComponent {
                     if (category.isNullOrEmpty()) {
                         cont.resume(
                             ScanResult.NoCategoryForBarcode(
-                                barcode.toString()
+                                barcode.rawValue.toString()
                             )
                         )
                     } else {
                         cont.resume(
                             ScanResult.FoundCategoryForBarcode(
                                 category,
-                                barcode.toString()
+                                barcode.rawValue.toString()
                             )
                         )
                     }

@@ -83,7 +83,7 @@ class CounterSugarHelper : KoinComponent {
                     dateOfEntryEpochSec,
                     "yyyy-MM-dd"
                 )
-                val databaseSum = database.appDao().checkIfGramThresholdIsBreached(dateString) ?: 0
+                val databaseSum = database.appDao().getGramSumForSpecificDate(dateString) ?: 0
                 Log.d("checkThresholdForSugarInput", "DatabaseSumSugar: $databaseSum")
 
                 withContext(Dispatchers.Main) {

@@ -1,7 +1,10 @@
 package com.jumparoundcreations.sugarcounter.features.entrySavingFeature
 
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
@@ -10,6 +13,7 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -26,7 +30,9 @@ class EntrySavingViewModelTest {
     private val saveCategoryInDatabaseUseCase = mockk<SaveCategoryInDatabaseUseCase>()
     private val checkUserInputUseCase = mockk<CheckUserInputUseCase>()
     private val checkForDefaultSavingValuesUseCase = mockk<CheckForDefaultSavingValuesUseCase>()
-    private val displayAllCategoriesUseCase = mockk<DisplayAllCategoriesUseCase>()
+    private val displayAllCategoriesUseCase = mockk<DisplayAllCategoriesUseCase>(relaxed = true)
+    private val checkDailyGramThresholdUseCase = mockk<CheckDailyGramThresholdUseCase>()
+
 
     private val category = mockk<Category>()
 
@@ -37,12 +43,13 @@ class EntrySavingViewModelTest {
         saveCategoryInDatabaseUseCase,
         checkUserInputUseCase,
         checkForDefaultSavingValuesUseCase,
-        displayAllCategoriesUseCase
+        displayAllCategoriesUseCase,
+        checkDailyGramThresholdUseCase
     )
 
     @Before
     fun setup() {
-        coEvery { displayAllCategoriesUseCase() } returns flowOf(listOf(category))
+        every { displayAllCategoriesUseCase() } returns flowOf(listOf(category))
     }
 
 
@@ -67,7 +74,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test EntrySavingIntents EditOfCategoryField and CategoryDropdownExpanded`() = runTest {
+    fun `test EntrySavingIntents EditOfCategoryField`() = runTest {
         val categoryInField = "Chocolate"
         val categoryDropdownExpanded = true
 
@@ -95,6 +102,42 @@ class EntrySavingViewModelTest {
             expected = categoryDropdownExpanded,
             actual = viewModel.entrySavingStates.value.categoryDropdownExpanded
         )
+    }
+
+    @Test
+    fun `test EntrySavingIntents EditOfCategoryWithinDropdown with EntryFound`() = runTest {
+        // Arrange
+        val categoryInDropdown = "Chocolate"
+        val gram = 8.0
+        val quantity = 2.0
+        val gramTotal = gram * quantity
+        val foundEntry = GetEntryByCategoryResult.EntryFound(
+            entry = SugarEntry(
+                id = 0,
+                currentTimestamp = 123456789L,
+                date = "2025-12-15",
+                category = "Chocolate",
+                entryType = GramCountMode.PerPiece,
+                gram = gram,
+                quantity = quantity,
+                gramTotal = gramTotal
+            )
+        )
+        coEvery { getEntryByCategoryUseCase(categoryInDropdown) } returns foundEntry
+
+        // Act
+        viewModel.onAction(
+            EntrySavingIntents.EditOfCategoryWithinDropdown(
+                categoryInDropdown = categoryInDropdown,
+                categoryDropdownExpanded = false
+            )
+        )
+
+        // Assert
+        assertEquals(categoryInDropdown, viewModel.entrySavingStates.value.categoryInField)
+        assertEquals(false, viewModel.entrySavingStates.value.categoryDropdownExpanded)
+        assertEquals(gram, viewModel.entrySavingStates.value.entryFieldGram.toDouble())
+        assertEquals(quantity, viewModel.entrySavingStates.value.entryFieldQuantity.toDouble())
     }
 
     @Test
@@ -130,6 +173,59 @@ class EntrySavingViewModelTest {
             expected = "",
             actual = viewModel.entrySavingStates.value.entryFieldQuantity
         )
-
     }
+
+    @Test
+    fun `test for adding a perPiece entry`() = runTest {
+        // Arrange
+        val perPieceTabIndex = 1
+        val perPiece = GramCountMode.PerPiece
+        val entryFieldGram = "45"
+        val entryFieldQuantity = "25"
+
+        //Act
+        viewModel.onAction(
+            EntrySavingIntents.ChangeGramCountModeTabIndex(
+                tabIndex = perPieceTabIndex
+            )
+        )
+        viewModel.onAction(
+            EntrySavingIntents.ChangeGramCountMode(
+                gramCountMode = perPiece
+            )
+        )
+        viewModel.onAction(
+            EntrySavingIntents.ChangeEntryFieldGram(
+                entryFieldGram = entryFieldGram
+
+            )
+        )
+        viewModel.onAction(
+            EntrySavingIntents.ChangeEntryFieldQuantity(
+                entryFieldQuantity = entryFieldQuantity
+
+            )
+        )
+
+        // Assert
+
+        assertEquals(
+            expected = perPieceTabIndex,
+            actual = viewModel.entrySavingStates.value.gramCountModeTabIndex
+        )
+
+        assertEquals(
+            expected = perPiece,
+            actual = viewModel.entrySavingStates.value.gramCountMode
+        )
+        assertEquals(
+            expected = entryFieldGram,
+            actual = viewModel.entrySavingStates.value.entryFieldGram
+        )
+        assertEquals(
+            expected = entryFieldQuantity,
+            actual = viewModel.entrySavingStates.value.entryFieldQuantity
+        )
+    }
+
 }

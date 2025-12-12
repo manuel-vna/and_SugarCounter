@@ -9,6 +9,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
@@ -37,7 +38,8 @@ val appModule = module {
             saveCategoryInDatabaseUseCase = get(),
             checkUserInputUseCase = get(),
             checkForDefaultSavingValuesUseCase = get(),
-            displayAllCategoriesUseCase = get()
+            displayAllCategoriesUseCase = get(),
+            checkDailyGramThresholdUseCase = get()
         )
     }
     viewModel { SettingsVM() }
@@ -57,6 +59,7 @@ val appModule = module {
     single { CheckUserInputUseCase() }
     single { CheckForDefaultSavingValuesUseCase() }
     single { DisplayAllCategoriesUseCase(get()) }
+    single { CheckDailyGramThresholdUseCase(get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

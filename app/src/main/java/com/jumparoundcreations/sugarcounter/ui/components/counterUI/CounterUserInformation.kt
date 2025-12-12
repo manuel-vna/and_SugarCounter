@@ -11,6 +11,8 @@ import androidx.compose.ui.res.stringResource
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.UserThresholdBreachReaction
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogSingleBtn
 import com.jumparoundcreations.sugarcounter.ui.events.ScanUiEvents
@@ -62,17 +64,35 @@ fun CounterUserInformation(
 
     }
 
-    //val alertDialogGramThreshold by counterVM.alertSugarThreshold.collectAsState()
-    //if (alertDialogGramThreshold) {
-    if (false) {
+    if (entrySavingStates.savingProcessDailyGramThreshold is
+                CheckThresholdResult.DailyThresholdBreached
+    ) {
         ShowAlertDialogDoubleBtn(
             dialogTitle = stringResource(id = R.string.alertSugarThresholdTitle),
             dialogDescription = stringResource(id = R.string.alertSugarThresholdDescription),
             confirmBtnText = stringResource(id = R.string.general_delete),
-            confirmBtnAction = { }, //counterVM.actionGramThresholdDeleteLastEntry() },
+            confirmBtnAction = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.UserThresholdReaction(
+                        userThresholdBreachReaction = UserThresholdBreachReaction.DeleteLastEnteredEntry
+                    )
+                )
+            },
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
-            dismissBtnAction = { }, // counterVM.actionGramThresholdKeepLastEntry() },
-            onDismissRequest = { }
+            dismissBtnAction = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.UserThresholdReaction(
+                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
+                    )
+                )
+            },
+            onDismissRequest = {
+                entrySavingViewModel.onAction(
+                    action = EntrySavingIntents.UserThresholdReaction(
+                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
+                    )
+                )
+            }
         )
     }
 

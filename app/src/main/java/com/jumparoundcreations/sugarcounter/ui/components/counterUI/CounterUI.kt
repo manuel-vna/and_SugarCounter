@@ -98,6 +98,9 @@ fun Counter(
             )
         }
 
+        /*
+        ToDo: Showing barcode that is not in the database yet.
+              Try this again when the CounterVM ViewModel is removed
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -109,6 +112,7 @@ fun Counter(
                 NoBarcodeYetInfo(counterVM, entrySavingStates.barcodeNumber)
             }
         }
+         */
 
         Row(
             modifier = Modifier

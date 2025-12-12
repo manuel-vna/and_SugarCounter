@@ -1,5 +1,6 @@
 package com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 
+import android.util.Log
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingStates
@@ -20,6 +21,14 @@ class SaveCategoryInDatabaseUseCase(
             categoryRow.barcodeNumber = state.barcodeNumber.trim()
             database.appDao().updateCategory(categoryRow)
 
+        } else if (
+            state.categoryListInDropdown.contains(state.categoryInField) &&
+            state.barcodeNumber.isEmpty()
+        ) {
+            Log.d(
+                "Category",
+                "Category '${state.categoryInField}' already exists"
+            )
         } else {
             database.appDao().insertCategory(
                 Category(
