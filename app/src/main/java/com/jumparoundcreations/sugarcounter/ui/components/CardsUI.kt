@@ -13,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,9 +23,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.components.cardsUI.SharedCardItem
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
@@ -41,6 +43,9 @@ fun ShowSharedCards(
 ) {
 
     val sharedVM: CardsVM = koinViewModel()
+    val entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel()
+
+    val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
         entryGroup.entryList
     )
@@ -109,6 +114,12 @@ fun ShowSharedCards(
                     .fillMaxWidth()
                     .clickable {
                         sharedVM.actionShowCardItem(it)
+
+                        entryListDisplayingViewModel.onAction(
+                            action = EntryListDisplayingIntents.OpenCardDetails(
+                                sugarEntry = it
+                            )
+                        )
                     },
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
@@ -175,11 +186,11 @@ fun ShowSharedCards(
     }
 
 // Card Item Bottom Sheet
-    val showCardItemBottomSheet by sharedVM.showCardItemBottomSheet.collectAsState()
-    val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
+    //val showCardItemBottomSheet by sharedVM.showCardItemBottomSheet.collectAsState()
+    //val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
 
-    if (showCardItemBottomSheet) {
-        SharedCardItem(entrySugar = cardItemToShowSugar)
+    if (entryListDisplayingStates.showCardItemBottomSheet) {
+        SharedCardItem(entrySugar = entryListDisplayingStates.entryInCardItem)
     }
 
 }

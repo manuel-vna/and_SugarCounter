@@ -8,6 +8,7 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
@@ -42,6 +43,7 @@ val appModule = module {
             checkDailyGramThresholdUseCase = get()
         )
     }
+    viewModel { EntryListDisplayingViewModel() }
     viewModel { SettingsVM() }
     viewModel { CategoryVM() }
     viewModel { CardsVM() }
