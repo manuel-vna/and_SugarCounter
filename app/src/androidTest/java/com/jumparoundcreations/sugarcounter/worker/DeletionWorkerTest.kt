@@ -10,8 +10,10 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.testing.WorkManagerTestInitHelper
+import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.database.DaoAppDatabase
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods.Companion.convertTimestampToDateString
 import io.mockk.every
 import io.mockk.mockk
@@ -89,36 +91,18 @@ class DeletionWorkerTest {
                     val caloriesValue = Random.nextInt(from = 200, until = 1200)
 
                     if (sugarTestData) {
-                        dao.insertEntry(
-                            Entry(
+                        dao.insertSugarEntry(
+                            SugarEntry(
                                 currentTimestamp = timestamp,
                                 date = convertTimestampToDateString(
                                     timestamp,
                                     "yyyy-MM-dd"
                                 ),
-                                category = "TestSugar",
-                                isPerHundred = true,
-                                perPieceGram = gramValue,
-                                perPieceAmount = 1,
-                                perHundredGram = 0,
-                                perHundredQuantity = 0,
-                                gramTotal = gramValue
-                            )
-                        )
-                    }
-
-                    if (caloriesTestData) {
-                        dao.insertEntryCalories(
-                            EntryCalories(
-                                currentTimestamp = timestamp,
-                                date = convertTimestampToDateString(
-                                    timestamp,
-                                    "yyyy-MM-dd"
-                                ),
-                                category = "TestCalories",
-                                caloriesPerPiece = 120,
-                                caloriesAmount = 2,
-                                caloriesTotal = caloriesValue
+                                category = "Test Sugar",
+                                entryType = GramCountMode.PerPiece,
+                                gram = 7.5,
+                                quantity = 2.0,
+                                gramTotal = 15.0
                             )
                         )
                     }

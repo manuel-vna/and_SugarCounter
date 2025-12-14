@@ -1,6 +1,5 @@
 package com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 
-import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
 

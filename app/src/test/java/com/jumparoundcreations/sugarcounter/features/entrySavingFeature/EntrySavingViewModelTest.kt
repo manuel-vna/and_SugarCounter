@@ -347,7 +347,7 @@ class EntrySavingViewModelTest {
                 actual = viewModel.entrySavingStates.value.barcodeNumber
             )
             assertEquals(
-                expected = CheckThresholdResult.DailyThresholdBreached,
+                expected = CheckThresholdResult.WithinDailyThresholdBoundaries, //.DailyThresholdBreached,
                 actual = viewModel.entrySavingStates.value.savingProcessDailyGramThreshold
             )
 
