@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.historyData.GraphData
-import com.jumparoundcreations.sugarcounter.ui.components.sharedUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import org.koin.compose.koinInject
 

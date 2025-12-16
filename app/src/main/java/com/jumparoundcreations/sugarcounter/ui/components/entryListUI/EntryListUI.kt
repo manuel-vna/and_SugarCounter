@@ -1,4 +1,4 @@
-package com.jumparoundcreations.sugarcounter.ui.components
+package com.jumparoundcreations.sugarcounter.ui.components.entryListUI
 
 import android.content.SharedPreferences
 import androidx.compose.foundation.BorderStroke
@@ -25,27 +25,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.components.cardsUI.SharedCardItem
+import com.jumparoundcreations.sugarcounter.components.cardsUI.EntryListItemUI
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
-import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 
 @Composable
-fun ShowSharedCards(
+fun EntryListUI(
     entryGroup: EntryGroup,
     backgroundColorPrimary: Boolean,
+    viewModel: EntryListDisplayingViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    val sharedVM: CardsVM = koinViewModel()
-    val entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel()
+    //val entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel()
 
-    val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val entryListDisplayingStates by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
         entryGroup.entryList
     )
@@ -113,9 +112,7 @@ fun ShowSharedCards(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        sharedVM.actionShowCardItem(it)
-
-                        entryListDisplayingViewModel.onAction(
+                        viewModel.onAction(
                             action = EntryListDisplayingIntents.OpenCardDetails(
                                 sugarEntry = it
                             )
@@ -190,7 +187,10 @@ fun ShowSharedCards(
     //val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
 
     if (entryListDisplayingStates.showCardItemBottomSheet) {
-        SharedCardItem(entrySugar = entryListDisplayingStates.entryInCardItem)
+        EntryListItemUI(
+            onAction = viewModel::onAction,
+            entrySugar = entryListDisplayingStates.entryInCardItem
+        )
     }
 
 }

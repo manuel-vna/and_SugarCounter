@@ -30,8 +30,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
-import com.jumparoundcreations.sugarcounter.ui.components.ShowSharedCards
-import com.jumparoundcreations.sugarcounter.ui.components.sharedUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 
 
@@ -49,7 +49,7 @@ fun CardsScreen(
 
             if (savedSugarCountGrouped.isNotEmpty()) {
                 items(savedSugarCountGrouped) {
-                    ShowSharedCards(
+                    EntryListUI(
                         entryGroup = it,
                         backgroundColorPrimary = false
                     )

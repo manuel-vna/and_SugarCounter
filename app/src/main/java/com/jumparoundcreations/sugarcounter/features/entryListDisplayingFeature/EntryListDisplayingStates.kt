@@ -15,9 +15,11 @@ data class EntryListDisplayingStates(
         quantity = 0.0,
         gramTotal = 0.0
     ),
+    val entryDeletionConfirmationDialogShown: Boolean = false,
     val valueCategory: String = "",
     val headingGram: String = "",
     val valueGram: String = "",
     val headingQuantity: String = "",
     val valueQuantity: String = ""
 )
+

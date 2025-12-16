@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.data.categoryData.CategoryStates
-import com.jumparoundcreations.sugarcounter.ui.components.sharedUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 

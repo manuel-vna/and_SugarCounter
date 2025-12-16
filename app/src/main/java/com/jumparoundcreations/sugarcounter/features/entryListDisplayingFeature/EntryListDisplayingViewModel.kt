@@ -15,21 +15,32 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
     fun onAction(action: EntryListDisplayingIntents) {
         when (action) {
             is EntryListDisplayingIntents.OpenCardDetails -> {
-                actionChangeCardDetailsVisibility(action.sugarEntry)
+                actionShowCardDetails(action.sugarEntry)
             }
 
-            is EntryListDisplayingIntents.Test -> {
+            is EntryListDisplayingIntents.LoadEntryDataIntoCardDetails -> {
+                actionLoadEntryDataIntoCardDetails(action.sugarEntry)
+            }
 
+            is EntryListDisplayingIntents.DismissCardDetails -> {
+                actionDismissCardDetails()
+            }
+
+            is EntryListDisplayingIntents.ShowDeleteEntryConfirmation -> {
+                actionShowDeleteEntryConfirmation()
+            }
+
+            is EntryListDisplayingIntents.DeleteEntry -> {
+                actionDeleteEntry(action.entryId)
             }
         }
     }
 
-    fun actionChangeCardDetailsVisibility(sugarEntry: SugarEntry) {
+    fun actionShowCardDetails(sugarEntry: SugarEntry) {
 
         _entryListDisplayingStates.update {
             it.copy(
-                showCardItemBottomSheet =
-                    it.showCardItemBottomSheet.not()
+                showCardItemBottomSheet = true
             )
         }
 
@@ -38,6 +49,37 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
                 entryInCardItem = sugarEntry
             )
         }
+    }
+
+    fun actionLoadEntryDataIntoCardDetails(sugarEntry: SugarEntry) {
+        _entryListDisplayingStates.update {
+            it.copy(
+                valueCategory = sugarEntry.category,
+                headingGram = "",
+                valueGram = sugarEntry.gram.toString(),
+                headingQuantity = "",
+                valueQuantity = sugarEntry.gram.toString()
+            )
+        }
+    }
+
+    fun actionDismissCardDetails() {
+        _entryListDisplayingStates.update {
+            it.copy(
+                showCardItemBottomSheet = false
+            )
+        }
+    }
+
+    fun actionShowDeleteEntryConfirmation() {
+        _entryListDisplayingStates.update {
+            it.copy(
+                entryDeletionConfirmationDialogShown = true
+            )
+        }
+    }
+
+    fun actionDeleteEntry(entryId: Int) {
 
     }
 

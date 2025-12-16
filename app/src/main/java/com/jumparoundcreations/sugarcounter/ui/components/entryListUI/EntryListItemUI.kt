@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
@@ -48,7 +49,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SharedCardItem(
+fun EntryListItemUI(
+    onAction: (EntryListDisplayingIntents) -> Unit,
     entrySugar: SugarEntry
 ) {
 
@@ -65,6 +67,8 @@ fun SharedCardItem(
     cardsVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
     cardsVM.actionChangeValueProportion(entrySugar.gram.toString())
     cardsVM.actionChangeValueConsumed(entrySugar.quantity.toString())
+
+    onAction(EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(entrySugar))
 
 
     ModalBottomSheet(
@@ -264,7 +268,12 @@ fun SharedCardItem(
                         //contentColor for text font statically because it fits light and dark mode
                     ),
                     onClick = {
-                        cardsVM.actionShowDialogEntryDeletionConfirmation(true)
+                        //cardsVM.actionShowDialogEntryDeletionConfirmation(true)
+                        onAction(
+                            EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
+                                isShown = true
+                            )
+                        )
                     }
                 ) {
                     Text(
@@ -275,8 +284,9 @@ fun SharedCardItem(
                     modifier = Modifier
                         .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
                         .weight(0.1f),
-
-                    onClick = { cardsVM.actionDismissCardItem() }
+                    onClick = {
+                        onAction(EntryListDisplayingIntents.DismissCardDetails)
+                    }
                 ) {
                     Text(
                         text = stringResource(R.string.generalCancel)
@@ -318,15 +328,40 @@ fun SharedCardItem(
             dialogDescription = stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
-                cardsVM.actionDeleteSpecificEntryRow(id = entrySugar.id)
-                cardsVM.actionShowDialogEntryDeletionConfirmation(false)
-                cardsVM.actionDismissCardItem()
+                //cardsVM.actionDeleteSpecificEntryRow(id = entrySugar.id)
+                onAction(
+                    EntryListDisplayingIntents.DeleteEntry(
+                        entryId = entrySugar.id
+                    )
+                )
+                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
+                onAction(
+                    EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
+                        isShown = true
+                    )
+                )
+                //cardsVM.actionDismissCardItem()
+                onAction(
+                    EntryListDisplayingIntents.DismissCardDetails
+                )
             },
             dismissBtnText = stringResource(R.string.generalCancel),
             dismissBtnAction = {
-                cardsVM.actionShowDialogEntryDeletionConfirmation(false)
+                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
+                onAction(
+                    EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
+                        isShown = false
+                    )
+                )
             },
-            onDismissRequest = { cardsVM.actionShowDialogEntryDeletionConfirmation(false) }
+            onDismissRequest = {
+                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
+                onAction(
+                    EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
+                        isShown = false
+                    )
+                )
+            }
         )
     }
 

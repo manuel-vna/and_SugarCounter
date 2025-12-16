@@ -22,7 +22,7 @@ import com.jumparoundcreations.sugarcounter.onboarding.OnboardingPage2
 import com.jumparoundcreations.sugarcounter.onboarding.OnboardingPage3
 import com.jumparoundcreations.sugarcounter.onboarding.OnboardingPage4
 import com.jumparoundcreations.sugarcounter.ui.components.SharedTopAppBar
-import com.jumparoundcreations.sugarcounter.ui.components.sharedUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import de.sldw.composeonboarding.ComposeOnboarding
 import de.sldw.composeonboarding.indicator.TextIndicator
 

@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jumparoundcreations.sugarcounter.ui.components.ShowSharedCards
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
 
@@ -20,7 +20,7 @@ fun CounterCardsAreaUI(
 
     Column {
         savedSugarCountGrouped.forEach {
-            ShowSharedCards(
+            EntryListUI(
                 entryGroup = it,
                 backgroundColorPrimary = false
             )

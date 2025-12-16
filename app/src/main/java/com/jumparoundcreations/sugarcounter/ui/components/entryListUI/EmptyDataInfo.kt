@@ -1,4 +1,4 @@
-package com.jumparoundcreations.sugarcounter.ui.components.sharedUI
+package com.jumparoundcreations.sugarcounter.ui.components.entryListUI
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
