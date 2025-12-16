@@ -22,6 +22,18 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
                 actionLoadEntryDataIntoCardDetails(action.sugarEntry)
             }
 
+            is EntryListDisplayingIntents.EditCategory -> {
+                actionEditCategory(action.newCategory)
+            }
+
+            is EntryListDisplayingIntents.EditGram -> {
+                actionEditGram(action.newGram)
+            }
+
+            is EntryListDisplayingIntents.EditQuantity -> {
+                actionEditQuantity(action.newQuantity)
+            }
+
             is EntryListDisplayingIntents.DismissCardDetails -> {
                 actionDismissCardDetails()
             }
@@ -55,10 +67,32 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
         _entryListDisplayingStates.update {
             it.copy(
                 valueCategory = sugarEntry.category,
-                headingGram = "",
                 valueGram = sugarEntry.gram.toString(),
-                headingQuantity = "",
-                valueQuantity = sugarEntry.gram.toString()
+                valueQuantity = sugarEntry.quantity.toString()
+            )
+        }
+    }
+
+    fun actionEditCategory(newCategory: String) {
+        _entryListDisplayingStates.update {
+            it.copy(
+                valueCategory = newCategory
+            )
+        }
+    }
+
+    fun actionEditGram(newGram: String) {
+        _entryListDisplayingStates.update {
+            it.copy(
+                valueGram = newGram
+            )
+        }
+    }
+
+    fun actionEditQuantity(newQuantity: String) {
+        _entryListDisplayingStates.update {
+            it.copy(
+                valueQuantity = newQuantity
             )
         }
     }

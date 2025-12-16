@@ -17,9 +17,7 @@ data class EntryListDisplayingStates(
     ),
     val entryDeletionConfirmationDialogShown: Boolean = false,
     val valueCategory: String = "",
-    val headingGram: String = "",
     val valueGram: String = "",
-    val headingQuantity: String = "",
     val valueQuantity: String = ""
 )
 

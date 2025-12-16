@@ -38,11 +38,11 @@ import org.koin.compose.koinInject
 fun EntryListUI(
     entryGroup: EntryGroup,
     backgroundColorPrimary: Boolean,
-    viewModel: EntryListDisplayingViewModel = koinViewModel(),
+    //viewModel: EntryListDisplayingViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    //val entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel()
+    val viewModel: EntryListDisplayingViewModel = koinViewModel()
 
     val entryListDisplayingStates by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
@@ -188,8 +188,8 @@ fun EntryListUI(
 
     if (entryListDisplayingStates.showCardItemBottomSheet) {
         EntryListItemUI(
+            states = entryListDisplayingStates,
             onAction = viewModel::onAction,
-            entrySugar = entryListDisplayingStates.entryInCardItem
         )
     }
 

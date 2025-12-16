@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
@@ -50,31 +50,28 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntryListItemUI(
+    states: EntryListDisplayingStates,
     onAction: (EntryListDisplayingIntents) -> Unit,
-    entrySugar: SugarEntry
 ) {
 
+    /*
+    onAction(
+        EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(
+            sugarEntry = states.entryInCardItem
+        )
+    )
+
+     */
+
     val cardsVM: CardsVM = koinViewModel()
-
-    val valueCategory by cardsVM.valueCategory.collectAsState()
-    val headingProportion by cardsVM.headingProportion.collectAsState()
-    val headingConsumed by cardsVM.headingConsumed.collectAsState()
-    val valueProportion by cardsVM.valueProportion.collectAsState()
-    val valueConsumed by cardsVM.valueConsumed.collectAsState()
-
-    cardsVM.actionChangeValueCategory(entrySugar.category)
-    cardsVM.actionChangeHeadingProportion(stringResource(id = R.string.gramSugar))
-    cardsVM.actionChangeHeadingConsumed(stringResource(id = R.string.quantitySugar))
-    cardsVM.actionChangeValueProportion(entrySugar.gram.toString())
-    cardsVM.actionChangeValueConsumed(entrySugar.quantity.toString())
-
-    onAction(EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(entrySugar))
 
 
     ModalBottomSheet(
         modifier = Modifier
             .navigationBarsPadding(),
-        onDismissRequest = { cardsVM.actionDismissCardItem() }
+        onDismissRequest = {
+            onAction(EntryListDisplayingIntents.DismissCardDetails)
+        }
     ) {
 
         Column(
@@ -117,11 +114,23 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = valueCategory,
-                        onValueChange = { cardsVM.actionChangeValueCategory(it) },
+                        value = states.valueCategory,
+                        onValueChange = {
+                            onAction(
+                                EntryListDisplayingIntents.EditCategory(
+                                    newCategory = it
+                                )
+                            )
+                        },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { cardsVM.actionChangeValueCategory("") }) {
+                            IconButton(onClick = {
+                                onAction(
+                                    EntryListDisplayingIntents.EditCategory(
+                                        newCategory = ""
+                                    )
+                                )
+                            }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -150,7 +159,10 @@ fun EntryListItemUI(
 
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = headingProportion,
+                        text = if (states.entryInCardItem.entryType == GramCountMode.PerHundred)
+                            stringResource(id = R.string.gramPerHundredLabel)
+                        else
+                            stringResource(id = R.string.gramSugar),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -161,18 +173,28 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = valueProportion,
+                        value = states.valueGram,
                         onValueChange = {
                             if (
                                 it.isDigitsOnly()
                                 &&
-                                it.count() <= if (entrySugar.entryType == GramCountMode.PerHundred) 2 else 4
+                                it.count() <= if (states.entryInCardItem.entryType == GramCountMode.PerHundred) 2 else 4
                             )
-                                cardsVM.actionChangeValueProportion(it)
+                                onAction(
+                                    EntryListDisplayingIntents.EditGram(
+                                        newGram = it
+                                    )
+                                )
                         },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { cardsVM.actionChangeValueProportion("") }) {
+                            IconButton(onClick = {
+                                onAction(
+                                    EntryListDisplayingIntents.EditGram(
+                                        newGram = ""
+                                    )
+                                )
+                            }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -195,7 +217,10 @@ fun EntryListItemUI(
 
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = headingConsumed,
+                        text = if (states.entryInCardItem.entryType == GramCountMode.PerHundred)
+                            stringResource(id = R.string.amountSugar)
+                        else
+                            stringResource(id = R.string.quantitySugar),
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Medium
                     )
@@ -206,15 +231,24 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = valueConsumed,
+                        value = states.valueQuantity,
                         onValueChange = {
-                            if (it.isDigitsOnly() && it.count() <= 3) cardsVM.actionChangeValueConsumed(
-                                it
-                            )
+                            if (it.isDigitsOnly() && it.count() <= 3)
+                                onAction(
+                                    EntryListDisplayingIntents.EditQuantity(
+                                        newQuantity = it
+                                    )
+                                )
                         },
                         singleLine = true,
                         trailingIcon = {
-                            IconButton(onClick = { cardsVM.actionChangeValueConsumed("") }) {
+                            IconButton(onClick = {
+                                onAction(
+                                    EntryListDisplayingIntents.EditQuantity(
+                                        newQuantity = ""
+                                    )
+                                )
+                            }) {
                                 Icon(
                                     modifier = Modifier.size(20.dp),
                                     imageVector = Icons.Rounded.Clear,
@@ -238,7 +272,7 @@ fun EntryListItemUI(
                     shape = RoundedCornerShape(12.dp),
                     onClick = {
                         cardsVM.actionReuseEntryForToday(
-                            entrySugar,
+                            states.entryInCardItem,
                         )
                         cardsVM.actionDismissCardItem()
                     }
@@ -307,7 +341,7 @@ fun EntryListItemUI(
                             valueConsumed
                         )
                          */
-                        cardsVM.actionDismissCardItem()
+                        onAction(EntryListDisplayingIntents.DismissCardDetails)
                     }
                 ) {
                     Text(
@@ -324,14 +358,14 @@ fun EntryListItemUI(
 
     if (dialogEntryDeletionConfirmation) {
         ShowAlertDialogDoubleBtn(
-            dialogTitle = entrySugar.category,
+            dialogTitle = states.entryInCardItem.category,
             dialogDescription = stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
                 //cardsVM.actionDeleteSpecificEntryRow(id = entrySugar.id)
                 onAction(
                     EntryListDisplayingIntents.DeleteEntry(
-                        entryId = entrySugar.id
+                        entryId = states.entryInCardItem.id
                     )
                 )
                 //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
