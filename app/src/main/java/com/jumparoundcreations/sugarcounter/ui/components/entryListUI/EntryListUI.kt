@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.components.cardsUI.EntryListItemUI
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
@@ -38,13 +37,12 @@ import org.koin.compose.koinInject
 fun EntryListUI(
     entryGroup: EntryGroup,
     backgroundColorPrimary: Boolean,
-    //viewModel: EntryListDisplayingViewModel = koinViewModel(),
+    viewModel: EntryListDisplayingViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    val viewModel: EntryListDisplayingViewModel = koinViewModel()
+    val states by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
 
-    val entryListDisplayingStates by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
         entryGroup.entryList
     )
@@ -183,12 +181,9 @@ fun EntryListUI(
     }
 
 // Card Item Bottom Sheet
-    //val showCardItemBottomSheet by sharedVM.showCardItemBottomSheet.collectAsState()
-    //val cardItemToShowSugar by sharedVM.cardItemToShowSugar.collectAsState()
-
-    if (entryListDisplayingStates.showCardItemBottomSheet) {
+    if (states.showCardItemBottomSheet) {
         EntryListItemUI(
-            states = entryListDisplayingStates,
+            states = states,
             onAction = viewModel::onAction,
         )
     }

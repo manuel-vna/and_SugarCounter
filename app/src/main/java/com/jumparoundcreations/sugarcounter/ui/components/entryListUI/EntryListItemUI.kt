@@ -1,4 +1,4 @@
-package com.jumparoundcreations.sugarcounter.components.cardsUI
+package com.jumparoundcreations.sugarcounter.ui.components.entryListUI
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -37,12 +38,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.text.isDigitsOnly
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
+import com.jumparoundcreations.sugarcounter.ui.utils.InputFilters
 import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import org.koin.androidx.compose.koinViewModel
 
@@ -54,14 +55,13 @@ fun EntryListItemUI(
     onAction: (EntryListDisplayingIntents) -> Unit,
 ) {
 
-    /*
-    onAction(
-        EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(
-            sugarEntry = states.entryInCardItem
+    LaunchedEffect(key1 = states.entryInCardItem.id) {
+        onAction(
+            EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(
+                sugarEntry = states.entryInCardItem
+            )
         )
-    )
-
-     */
+    }
 
     val cardsVM: CardsVM = koinViewModel()
 
@@ -175,16 +175,16 @@ fun EntryListItemUI(
                         ),
                         value = states.valueGram,
                         onValueChange = {
-                            if (
-                                it.isDigitsOnly()
-                                &&
-                                it.count() <= if (states.entryInCardItem.entryType == GramCountMode.PerHundred) 2 else 4
-                            )
+                            if (InputFilters.filterBlockingOverHundred(
+                                    input = it
+                                )
+                            ) {
                                 onAction(
                                     EntryListDisplayingIntents.EditGram(
                                         newGram = it
                                     )
                                 )
+                            }
                         },
                         singleLine = true,
                         trailingIcon = {
@@ -233,12 +233,33 @@ fun EntryListItemUI(
                         ),
                         value = states.valueQuantity,
                         onValueChange = {
-                            if (it.isDigitsOnly() && it.count() <= 3)
-                                onAction(
-                                    EntryListDisplayingIntents.EditQuantity(
-                                        newQuantity = it
-                                    )
-                                )
+                            when (states.entryInCardItem.entryType) {
+                                GramCountMode.PerHundred -> {
+                                    if (InputFilters.filterBlockingOverThousand(
+                                            input = it
+                                        )
+                                    ) {
+                                        onAction(
+                                            EntryListDisplayingIntents.EditQuantity(
+                                                newQuantity = it
+                                            )
+                                        )
+                                    }
+                                }
+
+                                GramCountMode.PerPiece -> {
+                                    if (InputFilters.filterBlockingOverHundred(
+                                            input = it
+                                        )
+                                    ) {
+                                        onAction(
+                                            EntryListDisplayingIntents.EditQuantity(
+                                                newQuantity = it
+                                            )
+                                        )
+                                    }
+                                }
+                            }
                         },
                         singleLine = true,
                         trailingIcon = {
@@ -302,7 +323,6 @@ fun EntryListItemUI(
                         //contentColor for text font statically because it fits light and dark mode
                     ),
                     onClick = {
-                        //cardsVM.actionShowDialogEntryDeletionConfirmation(true)
                         onAction(
                             EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
                                 isShown = true
@@ -362,26 +382,22 @@ fun EntryListItemUI(
             dialogDescription = stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
-                //cardsVM.actionDeleteSpecificEntryRow(id = entrySugar.id)
                 onAction(
                     EntryListDisplayingIntents.DeleteEntry(
                         entryId = states.entryInCardItem.id
                     )
                 )
-                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
                         isShown = true
                     )
                 )
-                //cardsVM.actionDismissCardItem()
                 onAction(
                     EntryListDisplayingIntents.DismissCardDetails
                 )
             },
             dismissBtnText = stringResource(R.string.generalCancel),
             dismissBtnAction = {
-                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
                         isShown = false
@@ -389,7 +405,6 @@ fun EntryListItemUI(
                 )
             },
             onDismissRequest = {
-                //cardsVM.actionShowDialogEntryDeletionConfirmation(false)
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
                         isShown = false

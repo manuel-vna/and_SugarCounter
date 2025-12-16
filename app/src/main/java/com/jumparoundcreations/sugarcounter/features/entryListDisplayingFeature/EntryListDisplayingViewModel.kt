@@ -48,6 +48,14 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
         }
     }
 
+    init {
+        groupEntriesPerDay()
+    }
+
+    fun groupEntriesPerDay() {
+
+    }
+
     fun actionShowCardDetails(sugarEntry: SugarEntry) {
 
         _entryListDisplayingStates.update {
