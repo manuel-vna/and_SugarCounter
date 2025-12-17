@@ -62,7 +62,7 @@ fun SettingsActivateCaloriesCounter(
                 // HistoryUI: set the segmentedButton to the selection 'Sugar'
                 historyVM.actionChangeSegmentedButtonSugarOrCaloriesIndex(0)
                 // CounterUI: set the segmentedButton to the selection 'Sugar'
-                counterVM.actionChangeSegmentedButtonIndex(0)
+                //counterVM.actionChangeSegmentedButtonIndex(0)
             }
         )
     }

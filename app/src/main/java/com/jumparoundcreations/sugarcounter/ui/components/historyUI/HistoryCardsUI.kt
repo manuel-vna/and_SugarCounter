@@ -4,15 +4,12 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.FloatingActionButton
@@ -29,16 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.EntryGroup
-import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
+import com.jumparoundcreations.sugarcounter.data.Screens
 import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 
 
 @Composable
 fun CardsScreen(
-    historyVM: HistoryVM,
-    savedSugarCountGrouped: List<EntryGroup>,
+    historyVM: HistoryVM
 ) {
 
     val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
@@ -46,27 +41,12 @@ fun CardsScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
-
-            if (savedSugarCountGrouped.isNotEmpty()) {
-                items(savedSugarCountGrouped) {
+            item {
                     EntryListUI(
-                        entryGroup = it,
+                        currentScreen = Screens.HISTORY,
                         backgroundColorPrimary = false
                     )
                 }
-            } else {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillParentMaxHeight()
-                            .fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
-                    }
-                }
-            }
         }
 
         Row(

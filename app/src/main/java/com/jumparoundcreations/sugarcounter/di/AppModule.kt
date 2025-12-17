@@ -9,6 +9,10 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.EditDatabaseEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.GetEntryGroupPerDayUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.CheckForDefaultSavingValuesUseCase
@@ -18,7 +22,6 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
-import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
@@ -43,10 +46,16 @@ val appModule = module {
             checkDailyGramThresholdUseCase = get()
         )
     }
-    viewModel { EntryListDisplayingViewModel() }
+    viewModel {
+        EntryListDisplayingViewModel(
+            getEntryGroupPerDayUseCase = get(),
+            deleteEntryUseCase = get(),
+            editDatabaseEntryUseCase = get(),
+            reuseEntryForTodayUseCase = get()
+        )
+    }
     viewModel { SettingsVM() }
     viewModel { CategoryVM() }
-    viewModel { CardsVM() }
     single { CounterVM() }
     single { HistoryVM() }
     single { provideSharedPrefsMain(androidApplication()) }
@@ -62,6 +71,10 @@ val appModule = module {
     single { CheckForDefaultSavingValuesUseCase() }
     single { DisplayAllCategoriesUseCase(get()) }
     single { CheckDailyGramThresholdUseCase(get()) }
+    single { GetEntryGroupPerDayUseCase(get()) }
+    single { DeleteEntryUseCase(get()) }
+    single { EditDatabaseEntryUseCase(get()) }
+    single { ReuseEntryForTodayUseCase(get()) }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

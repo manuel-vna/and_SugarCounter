@@ -63,8 +63,7 @@ fun History(
         //Card Screen
         if (historyCardsScreenShown) {
             CardsScreen(
-                historyVM = historyVM,
-                savedSugarCountGrouped = savedSugarCountGrouped
+                historyVM = historyVM
             )
         }
 

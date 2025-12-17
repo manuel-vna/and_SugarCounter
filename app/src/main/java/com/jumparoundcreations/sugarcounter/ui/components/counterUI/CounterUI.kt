@@ -28,8 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
+import com.jumparoundcreations.sugarcounter.data.Screens
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
@@ -47,7 +49,6 @@ fun Counter(
 
     // States
 
-    val category by counterVM.categorySelected.collectAsState()
     val interactionSource = remember { MutableInteractionSource() }
     // SharedPreferences: Calories Counter: Activation state retrieved from sharedPrefsMain
     val caloriesCounterActivated = sharedPrefsMain.getBoolean(
@@ -75,7 +76,12 @@ fun Counter(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = {
-                    counterVM.actionChangeCategoryFieldExpanded(false)
+                    //counterVM.actionChangeCategoryFieldExpanded(false)
+                    entrySavingViewModel.onAction(
+                        action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
+                            categoryDropdownExpanded = false
+                        )
+                    )
                 }
             )
             .verticalScroll(rememberScrollState())
@@ -154,8 +160,9 @@ fun Counter(
 
         }
 
-        CounterCardsAreaUI(
-            counterVM,
+        EntryListUI(
+            currentScreen = Screens.COUNTER,
+            backgroundColorPrimary = false
         )
 
     }

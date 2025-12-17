@@ -8,7 +8,6 @@ import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.util.DatabaseConstants
-import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -87,8 +86,8 @@ class HistoryVM : ViewModel(), KoinComponent {
 
     //Observer: START
     private val historyObserver = Observer<List<SugarEntry>> {
-        val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
-        _savedHistory.value = savedSugarCountGrouped
+        //val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
+        //_savedHistory.value = savedSugarCountGrouped
     }
 
 

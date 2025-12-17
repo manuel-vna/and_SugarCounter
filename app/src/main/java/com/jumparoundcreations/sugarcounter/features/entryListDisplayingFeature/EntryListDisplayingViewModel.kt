@@ -1,13 +1,26 @@
 package com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.EditDatabaseEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.GetEntryGroupPerDayUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
+import com.jumparoundcreations.sugarcounter.util.TimeConstants
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
-class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
+class EntryListDisplayingViewModel(
+    val getEntryGroupPerDayUseCase: GetEntryGroupPerDayUseCase,
+    val deleteEntryUseCase: DeleteEntryUseCase,
+    val editDatabaseEntryUseCase: EditDatabaseEntryUseCase,
+    val reuseEntryForTodayUseCase: ReuseEntryForTodayUseCase
+) : ViewModel(), KoinComponent {
 
     private val _entryListDisplayingStates = MutableStateFlow(EntryListDisplayingStates())
     val entryListDisplayingStates = _entryListDisplayingStates.asStateFlow()
@@ -39,21 +52,56 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
             }
 
             is EntryListDisplayingIntents.ShowDeleteEntryConfirmation -> {
-                actionShowDeleteEntryConfirmation()
+                actionShowDeleteEntryConfirmation(action.isShown)
             }
 
             is EntryListDisplayingIntents.DeleteEntry -> {
                 actionDeleteEntry(action.entryId)
             }
+
+            is EntryListDisplayingIntents.EditEntryInDB -> {
+                actionEditEntryInDB()
+            }
+
+            is EntryListDisplayingIntents.ReuseEntryForToday -> {
+                actionReuseEntryForToday()
+            }
         }
     }
 
     init {
-        groupEntriesPerDay()
+        groupEntriesPerDayCounter()
+        groupEntriesPerDayHistory()
     }
 
-    fun groupEntriesPerDay() {
+    fun groupEntriesPerDayCounter() {
+        viewModelScope.launch {
+            getEntryGroupPerDayUseCase(
+                timeFrameBeginning =
+                    TimeConstants.ONE_DAY_IN_SECONDS
+            ).collect { entryGroupListCounter ->
+                _entryListDisplayingStates.update {
+                    it.copy(
+                        entriesGroupedPerDayCounter = entryGroupListCounter
+                    )
+                }
+            }
+        }
+    }
 
+    fun groupEntriesPerDayHistory() {
+        viewModelScope.launch {
+            getEntryGroupPerDayUseCase(
+                timeFrameBeginning =
+                    TimeConstants.NINETY_DAYS_IN_SECONDS
+            ).collect { entryGroupListHistory ->
+                _entryListDisplayingStates.update {
+                    it.copy(
+                        entriesGroupedPerDayHistory = entryGroupListHistory
+                    )
+                }
+            }
+        }
     }
 
     fun actionShowCardDetails(sugarEntry: SugarEntry) {
@@ -113,16 +161,39 @@ class EntryListDisplayingViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun actionShowDeleteEntryConfirmation() {
+    fun actionShowDeleteEntryConfirmation(isShown: Boolean) {
         _entryListDisplayingStates.update {
             it.copy(
-                entryDeletionConfirmationDialogShown = true
+                entryDeletionConfirmationDialogShown = isShown
             )
         }
     }
 
     fun actionDeleteEntry(entryId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteEntryUseCase(entryId)
+        }
+    }
 
+    fun actionEditEntryInDB() {
+        viewModelScope.launch(Dispatchers.IO) {
+            editDatabaseEntryUseCase(
+                sugarEntryID = _entryListDisplayingStates.value.entryInCardItem.id,
+                sugarEntryType = _entryListDisplayingStates.value.entryInCardItem.entryType,
+                newCategory = _entryListDisplayingStates.value.valueCategory,
+                newGram = _entryListDisplayingStates.value.valueGram.toDouble(),
+                oldCategory = _entryListDisplayingStates.value.entryInCardItem.category,
+                newQuantity = _entryListDisplayingStates.value.valueQuantity.toDouble()
+            )
+        }
+    }
+
+    fun actionReuseEntryForToday() {
+        viewModelScope.launch(Dispatchers.IO) {
+            reuseEntryForTodayUseCase(
+                entrySugar = _entryListDisplayingStates.value.entryInCardItem
+            )
+        }
     }
 
 

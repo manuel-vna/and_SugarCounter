@@ -62,14 +62,8 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime""")
     fun deleteEntriesSugarOlderThanN(deletionPointInTime: Long)
 
-    //#######################
-
-
-    /*
-
-    //On the timeline startPoint is further to the left/in the past than endPoint
     @Query(
-        "UPDATE entry_table SET category = :newCategory WHERE category = :oldCategory AND " +
+        "UPDATE sugarEntriesTable SET category = :newCategory WHERE category = :oldCategory AND " +
                 "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
     )
     fun updateEntrySugarCategoryOfLastXDays(
@@ -79,11 +73,15 @@ interface DaoAppDatabase {
         endPoint: Long
     )
 
+    //#######################
+
+
+    /*
+
+
     //On the timeline startPoint is further to the left/in the past than endPoint
     @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntries(startPoint: Long, endPoint: Long): LiveData<List<Entry>>
-
-
 
 
     @Query("""DELETE FROM entry_table WHERE id = :id""")

@@ -37,6 +37,10 @@ object TimeConstants {
     const val MONTH_ONE_IN_MILLISECONDS = 2629743000
     const val DAY_ONE_IN_MILLISECONDS = 86400000
 
+    const val ONE_DAY_IN_SECONDS = 86400L
+    const val NINETY_DAYS_IN_SECONDS = 7776000L
+
+
     const val DATE_SHORT_DAY = " EE dd.MM."
 
 }

@@ -120,6 +120,15 @@ class HelperMethods : KoinComponent {
             return context.resources.configuration.uiMode
         }
 
+        fun getStartOfTodayAsLong(): Long {
+            return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+        }
+
+        fun getEndOfTodayAsLong(): Long {
+            return LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault())
+                .toEpochSecond() - 1
+        }
+
 
         /**
          * This method creates test data and is only called for that purpose

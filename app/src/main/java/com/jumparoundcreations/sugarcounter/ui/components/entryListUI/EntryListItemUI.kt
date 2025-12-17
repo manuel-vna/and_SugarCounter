@@ -28,8 +28,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,8 +42,6 @@ import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.sugarcounter.ui.utils.InputFilters
-import com.jumparoundcreations.sugarcounter.viewModels.CardsVM
-import org.koin.androidx.compose.koinViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,9 +58,6 @@ fun EntryListItemUI(
             )
         )
     }
-
-    val cardsVM: CardsVM = koinViewModel()
-
 
     ModalBottomSheet(
         modifier = Modifier
@@ -292,10 +285,8 @@ fun EntryListItemUI(
                 ElevatedButton(
                     shape = RoundedCornerShape(12.dp),
                     onClick = {
-                        cardsVM.actionReuseEntryForToday(
-                            states.entryInCardItem,
-                        )
-                        cardsVM.actionDismissCardItem()
+                        onAction(EntryListDisplayingIntents.ReuseEntryForToday)
+                        onAction(EntryListDisplayingIntents.DismissCardDetails)
                     }
                 ) {
                     Text(
@@ -351,16 +342,7 @@ fun EntryListItemUI(
                         .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
                         .weight(0.1F),
                     onClick = {
-                        /*
-                        cardsVM.actionEditDatabaseEntry(
-                            isEntrySugar,
-                            entrySugar,
-                            entryCalories,
-                            valueCategory,
-                            valueProportion,
-                            valueConsumed
-                        )
-                         */
+                        onAction(EntryListDisplayingIntents.EditEntryInDB)
                         onAction(EntryListDisplayingIntents.DismissCardDetails)
                     }
                 ) {
@@ -374,9 +356,8 @@ fun EntryListItemUI(
     }
 
 
-    val dialogEntryDeletionConfirmation by cardsVM.dialogEntryDeletionConfirmation.collectAsState()
 
-    if (dialogEntryDeletionConfirmation) {
+    if (states.entryDeletionConfirmationDialogShown) {
         ShowAlertDialogDoubleBtn(
             dialogTitle = states.entryInCardItem.category,
             dialogDescription = stringResource(id = R.string.general_delete_question),
@@ -389,12 +370,10 @@ fun EntryListItemUI(
                 )
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
-                        isShown = true
+                        isShown = false
                     )
                 )
-                onAction(
-                    EntryListDisplayingIntents.DismissCardDetails
-                )
+                onAction(EntryListDisplayingIntents.DismissCardDetails)
             },
             dismissBtnText = stringResource(R.string.generalCancel),
             dismissBtnAction = {

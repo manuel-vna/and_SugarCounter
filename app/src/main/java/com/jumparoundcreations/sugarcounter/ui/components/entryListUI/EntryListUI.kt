@@ -4,7 +4,9 @@ import android.content.SharedPreferences
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -25,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.data.Screens
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
@@ -35,7 +37,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun EntryListUI(
-    entryGroup: EntryGroup,
+    currentScreen: Screens,
     backgroundColorPrimary: Boolean,
     viewModel: EntryListDisplayingViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject()
@@ -43,141 +45,166 @@ fun EntryListUI(
 
     val states by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
 
-    val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
-        entryGroup.entryList
-    )
-    var thresholdValue = 0
-
-    if (entryGroup.entryList.isNotEmpty()) {
-        thresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
+    val entryGroupList = if (currentScreen == Screens.COUNTER) {
+        states.entriesGroupedPerDayCounter
+    } else {
+        states.entriesGroupedPerDayHistory
     }
 
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp, bottom = 12.dp),
-        border = if (totalGramPerDayBlock > thresholdValue) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.error)
-        } else {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-        },
-        colors = CardDefaults.cardColors(
-            containerColor = if (backgroundColorPrimary)
-                MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.surface,
-        )
-    ) {
-
-        Row(
+    if (currentScreen == Screens.HISTORY && states.entriesGroupedPerDayHistory.isEmpty()) {
+        Column(
             modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(bottom = 12.dp),
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            Text(
-                modifier = Modifier.padding(top = 6.dp), text = when (
-                    entryGroup.dayDisplayFormat) {
-                    "TODAY" -> stringResource(R.string.timestampToday)
-                    "YESTERDAY" -> stringResource(
-                        R.string.timestampYesterday
-                    )
-
-                    else -> entryGroup.dayDisplayFormat
-                }, fontWeight = FontWeight.Bold, fontSize = 20.sp, fontStyle = FontStyle.Italic
-            )
-
+            EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
         }
+    } else {
+        Column {
+            entryGroupList.forEach { entryGroup ->
 
-        entryGroup.entryList.forEach {
+                val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
+                    entryGroup.entryList
+                )
+                var thresholdValue = 0
 
-            var firstColumnText = ""
-            val secondColumnText = it.category
-            var thirdColumnText = ""
+                if (entryGroup.entryList.isNotEmpty()) {
+                    thresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
+                }
 
-            firstColumnText = if (it.entryType == GramCountMode.PerHundred) {
-                it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
-            } else {
-                it.quantity.toString() +
-                        stringResource(id = R.string.sugar_card_multiplier_expression) +
-                        it.gram.toString() +
-                        stringResource(id = R.string.gram_unit_short)
-            }
-            thirdColumnText =
-                it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        viewModel.onAction(
-                            action = EntryListDisplayingIntents.OpenCardDetails(
-                                sugarEntry = it
-                            )
-                        )
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp, bottom = 12.dp),
+                    border = if (totalGramPerDayBlock > thresholdValue) {
+                        BorderStroke(2.dp, MaterialTheme.colorScheme.error)
+                    } else {
+                        BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
                     },
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(3f),
-                    textAlign = TextAlign.Start,
-                    text = firstColumnText,
-
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (backgroundColorPrimary)
+                            MaterialTheme.colorScheme.surface
+                        else MaterialTheme.colorScheme.surface,
                     )
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 2.dp)
-                        .weight(8f),
-                    textAlign = TextAlign.Center,
-                    text = secondColumnText,
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .weight(2f),
-                    textAlign = TextAlign.End,
-                    text = thirdColumnText,
-                )
+                ) {
+
+                    Row(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(bottom = 12.dp),
+                    ) {
+
+                        Text(
+                            modifier = Modifier.padding(top = 6.dp),
+                            text = when (
+                                entryGroup.dayDisplayFormat) {
+                                "TODAY" -> stringResource(R.string.timestampToday)
+                                "YESTERDAY" -> stringResource(
+                                    R.string.timestampYesterday
+                                )
+
+                                else -> entryGroup.dayDisplayFormat
+                            },
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp,
+                            fontStyle = FontStyle.Italic
+                        )
+
+                    }
+
+                    entryGroup.entryList.forEach {
+
+                        var firstColumnText = ""
+                        val secondColumnText = it.category
+                        var thirdColumnText = ""
+
+                        firstColumnText = if (it.entryType == GramCountMode.PerHundred) {
+                            it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
+                        } else {
+                            it.quantity.toString() +
+                                    stringResource(id = R.string.sugar_card_multiplier_expression) +
+                                    it.gram.toString() +
+                                    stringResource(id = R.string.gram_unit_short)
+                        }
+                        thirdColumnText =
+                            it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
+
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    viewModel.onAction(
+                                        action = EntryListDisplayingIntents.OpenCardDetails(
+                                            sugarEntry = it
+                                        )
+                                    )
+                                },
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                                    .weight(3f),
+                                textAlign = TextAlign.Start,
+                                text = firstColumnText,
+
+                                )
+                            Text(
+                                modifier = Modifier
+                                    .padding(horizontal = 2.dp)
+                                    .weight(8f),
+                                textAlign = TextAlign.Center,
+                                text = secondColumnText,
+                            )
+                            Text(
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .weight(2f),
+                                textAlign = TextAlign.End,
+                                text = thirdColumnText,
+                            )
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.End)
+                            .padding(top = 12.dp, bottom = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+
+                        Icon(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            painter = if (totalGramPerDayBlock <= thresholdValue)
+                                painterResource(id = R.drawable.baseline_check_circle_outline_24)
+                            else painterResource(
+                                id = R.drawable.baseline_remove_circle_outline_24
+                            ),
+                            tint = if (totalGramPerDayBlock > thresholdValue)
+                                MaterialTheme.colorScheme.error
+                            else MaterialTheme.colorScheme.secondary,
+                            contentDescription = stringResource(R.string.accessibility_card_status),
+                        )
+
+                        Text(
+                            modifier = Modifier.padding(end = 8.dp),
+                            text =
+                                stringResource(id = R.string.totalAmountSugar) +
+                                        stringResource(id = R.string.general_colon_character) +
+                                        stringResource(id = R.string.general_whitespace_character) +
+                                        HelperMethods.calculateTotalGramPerDayBlock(
+                                            entryGroup.entryList
+                                        ),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                }
             }
         }
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.End)
-                .padding(top = 12.dp, bottom = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-
-            Icon(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                painter = if (totalGramPerDayBlock <= thresholdValue)
-                    painterResource(id = R.drawable.baseline_check_circle_outline_24)
-                else painterResource(
-                    id = R.drawable.baseline_remove_circle_outline_24
-                ),
-                tint = if (totalGramPerDayBlock > thresholdValue)
-                    MaterialTheme.colorScheme.error
-                else MaterialTheme.colorScheme.secondary,
-                contentDescription = stringResource(R.string.accessibility_card_status),
-            )
-
-            Text(
-                modifier = Modifier.padding(end = 8.dp),
-                text =
-                    stringResource(id = R.string.totalAmountSugar) +
-                            stringResource(id = R.string.general_colon_character) +
-                            stringResource(id = R.string.general_whitespace_character) +
-                            HelperMethods.calculateTotalGramPerDayBlock(
-                                entryGroup.entryList
-                            ),
-                fontWeight = FontWeight.Bold
-            )
-        }
-
     }
 
 // Card Item Bottom Sheet
@@ -187,7 +214,6 @@ fun EntryListUI(
             onAction = viewModel::onAction,
         )
     }
-
 }
 
 

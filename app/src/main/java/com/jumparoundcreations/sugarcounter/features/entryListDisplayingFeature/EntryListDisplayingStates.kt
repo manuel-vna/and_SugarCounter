@@ -1,5 +1,6 @@
 package com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature
 
+import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 
@@ -18,6 +19,8 @@ data class EntryListDisplayingStates(
     val entryDeletionConfirmationDialogShown: Boolean = false,
     val valueCategory: String = "",
     val valueGram: String = "",
-    val valueQuantity: String = ""
+    val valueQuantity: String = "",
+    val entriesGroupedPerDayCounter: List<EntryGroup> = listOf(),
+    val entriesGroupedPerDayHistory: List<EntryGroup> = listOf()
 )
 

@@ -11,4 +11,8 @@ sealed interface EntryListDisplayingIntents {
     data object DismissCardDetails : EntryListDisplayingIntents
     class ShowDeleteEntryConfirmation(val isShown: Boolean) : EntryListDisplayingIntents
     class DeleteEntry(val entryId: Int) : EntryListDisplayingIntents
+    data object EditEntryInDB : EntryListDisplayingIntents
+
+    data object ReuseEntryForToday : EntryListDisplayingIntents
+
 }
