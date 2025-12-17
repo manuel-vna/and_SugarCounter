@@ -37,9 +37,6 @@ fun Settings(
         modifier = Modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-        item { SettingsActivateCaloriesCounter(settingsVM) }
-
         item { Spacer(modifier = Modifier.height(16.dp)) }
 
         item { SettingsSharedSliderThreshold(settingsVM = settingsVM) }

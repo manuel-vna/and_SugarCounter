@@ -1,0 +1,26 @@
+package com.jumparoundcreations.sugarcounter.data
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
+
+@Entity(tableName = "sugarEntriesTable")
+data class SugarEntryIntTemp(
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+    @ColumnInfo(name = "currentTimestamp")
+    val currentTimestamp: Long,
+    @ColumnInfo(name = "date")
+    val date: String,
+    @ColumnInfo(name = "category")
+    val category: String,
+    @ColumnInfo(name = "entryType")
+    val entryType: GramCountMode,
+    @ColumnInfo(name = "gram")
+    val gram: Int,
+    @ColumnInfo(name = "quantity")
+    val quantity: Int,
+    @ColumnInfo(name = "gramTotal")
+    val gramTotal: Int
+)

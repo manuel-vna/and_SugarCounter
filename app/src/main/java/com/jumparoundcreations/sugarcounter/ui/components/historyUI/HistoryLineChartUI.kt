@@ -30,7 +30,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.data.EntryGroup
+import com.jumparoundcreations.sugarcounter.data.EntryGroupIntTemp
 import com.jumparoundcreations.sugarcounter.data.historyData.GraphData
 import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
@@ -39,18 +39,17 @@ import org.koin.compose.koinInject
 @Composable
 fun LineChart(
     context: Context,
-    countMode: HelperMethods.CountMode,
-    sugarEntryDbHistory: List<EntryGroup>,
+    sugarEntryDbHistory: List<EntryGroupIntTemp>, //List<EntryGroup>,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
     lateinit var graphDataList: List<GraphData>
     lateinit var lineGraphYAxisTag: List<String>
 
-        graphDataList = getGraphDataList(sugarEntryDbHistory)
-        // create array that tags the y axis of the graph with gram values:
-        // 0g,10g,...,90g = 0 + 18 = 19 gram tags
-        lineGraphYAxisTag = (0..18).map { i -> "${(18 - i) * 5}g" }
+    graphDataList = getGraphDataList(sugarEntryDbHistory)
+    // create array that tags the y axis of the graph with gram values:
+    // 0g,10g,...,90g = 0 + 18 = 19 gram tags
+    lineGraphYAxisTag = (0..18).map { i -> "${(18 - i) * 5}g" }
 
 
     val backgroundColor = MaterialTheme.colorScheme.background
@@ -103,7 +102,6 @@ fun LineChart(
 
                 drawThresholdLine(
                     sharedPrefsMain = sharedPrefsMain,
-                    countMode = countMode,
                     onePercentHeight = onePercentHeight,
                     thresholdLineColor = thresholdLineColor,
                     oneWidthSection = oneWidthSection,
@@ -113,7 +111,7 @@ fun LineChart(
 
                 //Start: Vertical Drawing
                 var yAxisCount = 1
-                var previousTotalValue: Double = 0.0
+                var previousTotalValue: Int = 0
                 graphDataList.forEach { it ->
 
                     // increase value of x-axis by each loop
@@ -136,7 +134,6 @@ fun LineChart(
                     )
 
                     val heightDataPoint = getHeightOfDataPoint(
-                        countMode,
                         it.valueTotal,
                         onePercentHeight
                     )
@@ -225,7 +222,6 @@ fun LineChart(
  */
 fun DrawScope.drawThresholdLine(
     sharedPrefsMain: SharedPreferences,
-    countMode: HelperMethods.CountMode,
     onePercentHeight: Float,
     thresholdLineColor: Color,
     oneWidthSection: Float,
@@ -233,16 +229,8 @@ fun DrawScope.drawThresholdLine(
     barWidthPix: Float
 ) {
 
-    val thresholdLineHeight: Float = if (countMode == HelperMethods.CountMode.SUGAR) {
+    val thresholdLineHeight: Float =
         onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 50))
-    } else {
-        // dividing the kcal value by 50 brings ito the the scale of 100
-        onePercentHeight * (90 - sharedPrefsMain.getInt(
-            "caloriesThresholdValue",
-            1500
-        ) / 50
-                )
-    }
 
     drawLine(
         color = thresholdLineColor,
@@ -306,28 +294,16 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
  * @return heightGramDataPoint: Float
  */
 fun getHeightOfDataPoint(
-    countMode: HelperMethods.CountMode,
-    valueTotal: Double,
+    valueTotal: Int,
     onePercentHeight: Float
 ): Float {
 
     val maximalValue: Int
-    var valueToSubtractFrom90Percent: Double = 0.0
+    var valueToSubtractFrom90Percent: Int = 0
 
-    when (countMode) {
-        HelperMethods.CountMode.SUGAR -> {
-            maximalValue = 100 // gram sugar
-            valueToSubtractFrom90Percent = valueTotal
-        }
+    maximalValue = 100 // gram sugar
+    valueToSubtractFrom90Percent = valueTotal
 
-        HelperMethods.CountMode.CALORIES -> {
-            maximalValue = 4750 // kilo calories
-            // dividing the kcal value by 50 brings ito the the scale of 100
-            valueToSubtractFrom90Percent =
-                valueTotal / 50
-            // e.g.: 4500 / 50 = 90 or 500 / 50 = 10
-        }
-    }
     return (if (valueTotal <= maximalValue) {
         // 90 = 90% height line graph, 10% height bottom date line
         onePercentHeight * (90 - valueToSubtractFrom90Percent)
@@ -371,7 +347,7 @@ fun DrawScope.drawTextLabelOfDataPoint(
     textMeasurer: TextMeasurer,
     styleSmall: TextStyle,
     onePercentWidth: Float,
-    previousTotalValue: Double,
+    previousTotalValue: Int, //Double
     onePercentHeight: Float,
     heightDataPoint: Float,
     xAxisPointHorizontalLines: Float
@@ -459,11 +435,11 @@ fun DrawScope.drawHorizontalLinesForMatrix(
 //END: Methods called from within CANVAS()
 
 
-fun getGraphDataList(entryList: List<EntryGroup>): List<GraphData> {
+fun getGraphDataList(entryList: List<EntryGroupIntTemp>): List<GraphData> {
     val returnList = entryList.take(60).mapIndexed { id, entryGroup ->
         GraphData(
             id = id,
-            valueTotal = HelperMethods.calculateTotalGramPerDayBlock(
+            valueTotal = HelperMethods.calculateTotalGramPerDayBlockTemp(
                 entryGroup.entryList
             ),
             day = HelperMethods.convertTimestampToDateString(

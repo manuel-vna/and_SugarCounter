@@ -1,6 +1,5 @@
 package com.jumparoundcreations.sugarcounter.viewModels
 
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.sugarcounter.data.EntryGroup
@@ -81,42 +80,7 @@ class HistoryVM : ViewModel(), KoinComponent {
             _savedHistory.value
         )
 
-
     //SateFlows: END
-
-    //Observer: START
-    private val historyObserver = Observer<List<SugarEntry>> {
-        //val savedSugarCountGrouped = HelperMethods.groupCounterItemsInGroupsByDay(it)
-        //_savedHistory.value = savedSugarCountGrouped
-    }
-
-
-    /*
-        // When this ViewModal is initialized,
-        // tell the above created observer what has to be observed and how long
-        init {
-            database.appDao().getSugarEntries(
-                AppConstants.endOf90DaysAgo,
-                AppConstants.endOfToday
-            ).observeForever(historyObserver)
-
-        }
-
-        override fun onCleared() {
-            super.onCleared()
-            // Stop observing at Dao of RoomDB when this ViewModel is cleared
-            database.appDao().getEntries(
-                AppConstants.endOf90DaysAgo,
-                AppConstants.endOfToday
-            )
-                .removeObserver(historyObserver)
-            database.appDao().getEntryCalories(AppConstants.endOf90DaysAgo, AppConstants.endOfToday)
-                .removeObserver(caloriesHistoryObserver)
-
-        }
-        //Observer: END
-
-     */
 
 
     //Actions: START
