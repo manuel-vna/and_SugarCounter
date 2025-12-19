@@ -12,7 +12,9 @@ sealed interface EntryListDisplayingIntents {
     class ShowDeleteEntryConfirmation(val isShown: Boolean) : EntryListDisplayingIntents
     class DeleteEntry(val entryId: Int) : EntryListDisplayingIntents
     data object EditEntryInDB : EntryListDisplayingIntents
-
     data object ReuseEntryForToday : EntryListDisplayingIntents
+    data object ChangeSearchFieldShown : EntryListDisplayingIntents
+    class ChangeSearchTextFieldText(val newText: String) : EntryListDisplayingIntents
+    data object FilterEntryListInHistory : EntryListDisplayingIntents
 
 }

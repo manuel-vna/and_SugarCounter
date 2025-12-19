@@ -11,6 +11,7 @@ import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.EditDatabaseEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.FilterEntriesBySearchFieldUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
@@ -51,7 +52,8 @@ val appModule = module {
             getEntryGroupPerDayUseCase = get(),
             deleteEntryUseCase = get(),
             editDatabaseEntryUseCase = get(),
-            reuseEntryForTodayUseCase = get()
+            reuseEntryForTodayUseCase = get(),
+            filterEntriesBySearchFieldUseCase = get()
         )
     }
     viewModel { SettingsVM() }
@@ -75,6 +77,7 @@ val appModule = module {
     single { DeleteEntryUseCase(get()) }
     single { EditDatabaseEntryUseCase(get()) }
     single { ReuseEntryForTodayUseCase(get()) }
+    single { FilterEntriesBySearchFieldUseCase() }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

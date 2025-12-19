@@ -21,6 +21,9 @@ data class EntryListDisplayingStates(
     val valueGram: String = "",
     val valueQuantity: String = "",
     val entriesGroupedPerDayCounter: List<EntryGroup> = listOf(),
-    val entriesGroupedPerDayHistory: List<EntryGroup> = listOf()
+    val entriesGroupedPerDayHistory: List<EntryGroup> = listOf(),
+    val entriesGroupedPerDayUnfilteredHistory: List<EntryGroup> = listOf(),
+    val searchFieldShown: Boolean = false,
+    val searchFieldText: String = "",
 )
 

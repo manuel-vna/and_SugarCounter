@@ -22,20 +22,19 @@ import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.
 import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.sugarcounter.util.toIntModel
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
-import org.koin.compose.getKoin
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun History(
     context: Context,
+    entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+    historyViewModel: HistoryVM = koinViewModel()
 ) {
 
-    val viewModel = getKoin().get<EntryListDisplayingViewModel>()
-    val entryListDisplayingStates by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
-
-    val historyVM = getKoin().get<HistoryVM>()
-    val historyChartScreenShown by historyVM.historyChartScreenShown.collectAsState()
-    val historyCardsScreenShown by historyVM.historyCardsScreenShown.collectAsState()
+    val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
+    val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
     val configuration = LocalConfiguration.current
     val isLandscape =
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -44,14 +43,15 @@ fun History(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
 
-        HistoryTabRowUI(historyVM)
+        HistoryTabRowUI(historyViewModel)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         //Card Screen
         if (historyCardsScreenShown) {
             CardsScreen(
-                historyVM = historyVM
+                onAction = entryListDisplayingViewModel::onAction,
+                states = entryListDisplayingStates
             )
         }
 

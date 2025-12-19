@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.EditDatabaseEntryUseCase
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.FilterEntriesBySearchFieldUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.sugarcounter.util.TimeConstants
@@ -19,7 +20,8 @@ class EntryListDisplayingViewModel(
     val getEntryGroupPerDayUseCase: GetEntryGroupPerDayUseCase,
     val deleteEntryUseCase: DeleteEntryUseCase,
     val editDatabaseEntryUseCase: EditDatabaseEntryUseCase,
-    val reuseEntryForTodayUseCase: ReuseEntryForTodayUseCase
+    val reuseEntryForTodayUseCase: ReuseEntryForTodayUseCase,
+    val filterEntriesBySearchFieldUseCase: FilterEntriesBySearchFieldUseCase
 ) : ViewModel(), KoinComponent {
 
     private val _entryListDisplayingStates = MutableStateFlow(EntryListDisplayingStates())
@@ -66,6 +68,19 @@ class EntryListDisplayingViewModel(
             is EntryListDisplayingIntents.ReuseEntryForToday -> {
                 actionReuseEntryForToday()
             }
+
+            is EntryListDisplayingIntents.ChangeSearchFieldShown -> {
+                actionChangeSearchFieldShown()
+            }
+
+            is EntryListDisplayingIntents.ChangeSearchTextFieldText -> {
+                actionChangeSearchTextFieldText(action.newText)
+            }
+
+            is EntryListDisplayingIntents.FilterEntryListInHistory -> {
+                actionFilterEntryListInHistory()
+            }
+
         }
     }
 
@@ -97,7 +112,8 @@ class EntryListDisplayingViewModel(
             ).collect { entryGroupListHistory ->
                 _entryListDisplayingStates.update {
                     it.copy(
-                        entriesGroupedPerDayHistory = entryGroupListHistory
+                        entriesGroupedPerDayHistory = entryGroupListHistory,
+                        entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory
                     )
                 }
             }
@@ -196,5 +212,34 @@ class EntryListDisplayingViewModel(
         }
     }
 
+
+    fun actionChangeSearchFieldShown() {
+        _entryListDisplayingStates.update {
+            it.copy(
+                searchFieldShown = _entryListDisplayingStates.value.searchFieldShown.not()
+            )
+        }
+    }
+
+    fun actionChangeSearchTextFieldText(newText: String) {
+        _entryListDisplayingStates.update {
+            it.copy(
+                searchFieldText = newText
+            )
+        }
+    }
+
+    fun actionFilterEntryListInHistory() {
+        val filteredEntryList = filterEntriesBySearchFieldUseCase(
+            searchFieldText = _entryListDisplayingStates.value.searchFieldText,
+            entryList = _entryListDisplayingStates.value.entriesGroupedPerDayUnfilteredHistory
+        )
+        _entryListDisplayingStates.update {
+            it.copy(
+                entriesGroupedPerDayHistory = filteredEntryList
+
+            )
+        }
+    }
 
 }

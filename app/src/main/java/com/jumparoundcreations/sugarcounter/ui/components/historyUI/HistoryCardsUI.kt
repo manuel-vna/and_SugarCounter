@@ -19,34 +19,31 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.data.Screens
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
+import com.jumparoundcreations.sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
-import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 
 
 @Composable
 fun CardsScreen(
-    historyVM: HistoryVM
+    onAction: (EntryListDisplayingIntents) -> Unit,
+    states: EntryListDisplayingStates
 ) {
-
-    val historyCardSearchFieldShown by historyVM.historyCardSearchFieldShown.collectAsState()
-    val historyCardSearchFieldText by historyVM.historyCardSearchFieldText.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
-                    EntryListUI(
-                        currentScreen = Screens.HISTORY,
-                        backgroundColorPrimary = false
-                    )
-                }
+                EntryListUI(
+                    currentScreen = Screens.HISTORY,
+                    backgroundColorPrimary = false
+                )
+            }
         }
 
         Row(
@@ -55,8 +52,8 @@ fun CardsScreen(
         ) {
             FloatingActionButton(
                 onClick = {
-                    historyVM.actionChangeHistoryCardSearchFieldShown(
-                        historyCardSearchFieldShown.not()
+                    onAction(
+                        EntryListDisplayingIntents.ChangeSearchFieldShown
                     )
                 },
                 modifier = Modifier.padding(16.dp),
@@ -69,13 +66,20 @@ fun CardsScreen(
             }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = historyCardSearchFieldShown,
+                visible = states.searchFieldShown,
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
             ) {
                 OutlinedTextField(
-                    value = historyCardSearchFieldText,
-                    onValueChange = { historyVM.actionChangeHistoryCardSearchFieldText(it) },
+                    value = states.searchFieldText,
+                    onValueChange = {
+                        onAction(
+                            EntryListDisplayingIntents.ChangeSearchTextFieldText(
+                                newText = it
+                            )
+                        )
+                        onAction(EntryListDisplayingIntents.FilterEntryListInHistory)
+                    },
                     label = { Text("Search") },
                     modifier = Modifier
                         .fillMaxWidth()

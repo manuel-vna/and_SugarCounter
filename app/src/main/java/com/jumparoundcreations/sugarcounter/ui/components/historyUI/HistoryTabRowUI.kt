@@ -24,7 +24,9 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.His
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 
 @Composable
-fun HistoryTabRowUI(historyVM: HistoryVM) {
+fun HistoryTabRowUI(
+    historyVM: HistoryVM
+) {
 
     val historyTabItems = listOf(
         HistoryTabItem(
@@ -70,7 +72,6 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
                     } else {
                         historyVM.actionHideHistoryCardsScreen()
                         historyVM.actionShowHistoryChartScreen()
-                        historyVM.actionChangeHistoryCardSearchFieldText("")
                     }
 
                 },
