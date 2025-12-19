@@ -115,7 +115,6 @@ fun CounterTabRowFieldsUI(
             Arrangement.SpaceEvenly
         ) {
 
-            //val amountValue by counterVM.perHundredQuantity.collectAsState()
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = labelQuantityField,

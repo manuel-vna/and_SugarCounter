@@ -24,8 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,8 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.sugarcounter.R
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingIntents
+import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 
 
 @Composable
@@ -77,7 +75,11 @@ fun RowScope.Barcode(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
+fun BarcodeInfoSheet(
+    onAction: (EntrySavingIntents) -> Unit,
+    states: EntrySavingStates,
+    barcodeNumber: String
+) {
 
     Card(
         colors = CardDefaults.cardColors(
@@ -89,7 +91,10 @@ fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
         ) {
 
             IconButton(
-                onClick = { counterVM.actionChangeNOBarcodeInfoYetDescription(true) }) {
+                onClick = {
+                    onAction(EntrySavingIntents.ChangeBarcodeInfoSheetShown)
+                }
+            ) {
                 Icon(
                     modifier = Modifier
                         .size(22.dp),
@@ -105,7 +110,9 @@ fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
             )
 
             IconButton(
-                onClick = { counterVM.removeLastBarcodeInput() }) {
+                onClick = {
+                    onAction(EntrySavingIntents.ClearBarcodeData)
+                }) {
                 Icon(
                     modifier = Modifier
                         .size(22.dp),
@@ -116,11 +123,10 @@ fun NoBarcodeYetInfo(counterVM: CounterVM, barcodeNumber: String) {
         }
     }
 
-    val noBarcodeInfoYetDescription by counterVM.noBarcodeYetInfoDescription.collectAsState()
-    if (noBarcodeInfoYetDescription) {
+    if (states.barcodeInfoSheetShown) {
         ModalBottomSheet(
             onDismissRequest = {
-                counterVM.actionChangeNOBarcodeInfoYetDescription(false)
+                onAction(EntrySavingIntents.ChangeBarcodeInfoSheetShown)
             }
         ) {
             Column(

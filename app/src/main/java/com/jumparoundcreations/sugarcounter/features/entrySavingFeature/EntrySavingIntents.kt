@@ -8,7 +8,8 @@ sealed interface EntrySavingIntents {
     data object OpenAndCloseDatePicker : EntrySavingIntents
     data class ChangeSelectedDate(val epochTime: Long) : EntrySavingIntents
     data object ScanBarcode : EntrySavingIntents
-
+    data object ClearBarcodeData : EntrySavingIntents
+    data object ChangeBarcodeInfoSheetShown : EntrySavingIntents
     data class EditOfCategoryField(
         val categoryInField: String,
         val categoryDropdownExpanded: Boolean

@@ -24,7 +24,6 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.sugarcounter.viewModels.CategoryVM
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import com.jumparoundcreations.sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.sugarcounter.viewModels.SettingsVM
 import org.koin.android.ext.koin.androidApplication
@@ -58,8 +57,7 @@ val appModule = module {
     }
     viewModel { SettingsVM() }
     viewModel { CategoryVM() }
-    single { CounterVM() }
-    single { HistoryVM() }
+    viewModel { HistoryVM() }
     single { provideSharedPrefsMain(androidApplication()) }
     single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
     single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }

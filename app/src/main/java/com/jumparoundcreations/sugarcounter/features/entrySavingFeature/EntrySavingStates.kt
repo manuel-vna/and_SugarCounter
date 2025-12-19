@@ -9,6 +9,7 @@ data class EntrySavingStates(
     val dateOfEntryEpochSec: Long = System.currentTimeMillis() / 1000,
     val barcodeNumber: String = "",
     val barcodeNotPresentInDb: Boolean = false,
+    val barcodeInfoSheetShown: Boolean = false,
     val categoryInField: String = "",
     val categoryInDropdown: String = "",
     val categoryListInDropdown: List<String> = listOf(),

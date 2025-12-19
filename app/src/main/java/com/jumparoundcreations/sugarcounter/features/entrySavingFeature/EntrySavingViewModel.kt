@@ -60,6 +60,12 @@ class EntrySavingViewModel(
             is EntrySavingIntents.ScanBarcode ->
                 actionScanBarcode()
 
+            is EntrySavingIntents.ClearBarcodeData ->
+                actionClearBarcodeData()
+
+            is EntrySavingIntents.ChangeBarcodeInfoSheetShown ->
+                actionChangeBarcodeInfoSheetShown()
+
             is EntrySavingIntents.EditOfCategoryField ->
                 actionEditOfCategoryField(action.categoryInField, action.categoryDropdownExpanded)
 
@@ -146,14 +152,11 @@ class EntrySavingViewModel(
                 is ScanResult.NoCategoryForBarcode -> {
                     actionSetBarcodeState(result.barcode)
                     _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoCategoryForBarcode)
-                    //actionBarcodeNotPresentInDb()
-                    //_noBarcodeYetInfoTitle.value = true
+                    actionBarcodeNotPresentInDb()
                 }
 
                 is ScanResult.Failed -> {
                     _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
-                    //_noBarcodeYetInfoTitle.value = true
-                    // optionally log or handle
                 }
             }
         }
@@ -174,7 +177,6 @@ class EntrySavingViewModel(
             )
         }
     }
-
 
     private fun getEntryByCategory(category: String) {
         viewModelScope.launch {
@@ -209,6 +211,24 @@ class EntrySavingViewModel(
         _entrySavingStates.update { current ->
             current.copy(
                 barcodeNotPresentInDb = current.barcodeNotPresentInDb.not()
+            )
+        }
+    }
+
+    fun actionClearBarcodeData() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                barcodeNumber = "",
+                barcodeNotPresentInDb = false,
+                barcodeInfoSheetShown = false
+            )
+        }
+    }
+
+    fun actionChangeBarcodeInfoSheetShown() {
+        _entrySavingStates.update { current ->
+            current.copy(
+                barcodeInfoSheetShown = _entrySavingStates.value.barcodeInfoSheetShown.not()
             )
         }
     }
@@ -330,11 +350,17 @@ class EntrySavingViewModel(
                             _entrySavingStates.update { current ->
                                 current.copy(
                                     savingProcessDailyGramThreshold =
-                                        CheckThresholdResult.DailyThresholdBreached
+                                        CheckThresholdResult.DailyThresholdBreached,
                                 )
                             }
                         }
                     }
+                }
+                _entrySavingStates.update { current ->
+                    current.copy(
+                        barcodeNotPresentInDb = false,
+                        categoryDropdownExpanded = false
+                    )
                 }
                 actionSetBarcodeState(barcodeNumber = "")
             }

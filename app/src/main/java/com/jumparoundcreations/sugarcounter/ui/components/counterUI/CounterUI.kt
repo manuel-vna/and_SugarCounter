@@ -15,7 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -32,25 +31,19 @@ import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySav
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListUI
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
-import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
-import org.koin.compose.getKoin
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun Counter(
     context: Context,
     snackbarHostState: SnackbarHostState,
+    entrySavingViewModel: EntrySavingViewModel = koinViewModel()
 ) {
-    val counterVM = getKoin().get<CounterVM>()
-    val entrySavingViewModel = getKoin().get<EntrySavingViewModel>()
 
     // States
-
     val interactionSource = remember { MutableInteractionSource() }
-
     val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
-    val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()
-    //val barcodeNumber by counterVM.barcodeNumber.collectAsState()
 
     //Keyboard
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -68,7 +61,6 @@ fun Counter(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = {
-                    //counterVM.actionChangeCategoryFieldExpanded(false)
                     entrySavingViewModel.onAction(
                         action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
                             categoryDropdownExpanded = false
@@ -96,21 +88,20 @@ fun Counter(
             )
         }
 
-        /*
-        ToDo: Showing barcode that is not in the database yet.
-              Try this again when the CounterVM ViewModel is removed
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 6.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            if (noBarcodeYetInfo) {
-                //if (entrySavingStates.barcodeNotPresentInDb) {
-                NoBarcodeYetInfo(counterVM, entrySavingStates.barcodeNumber)
+            if (entrySavingStates.barcodeNotPresentInDb) {
+                BarcodeInfoSheet(
+                    onAction = entrySavingViewModel::onAction,
+                    states = entrySavingStates,
+                    barcodeNumber = entrySavingStates.barcodeNumber
+                )
             }
         }
-         */
 
         Row(
             modifier = Modifier

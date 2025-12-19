@@ -48,13 +48,13 @@ currentTimestamp: Long, controlled by DatePickerDilaog() composable
 date: String, controlled by HelperMethods.formatDateToString(),
 category: String. Maximum amount of characters controlled by the according CounterUI.TextField()
 composable method. (same as Category.category)
-isPerHundred: Boolean controlled by logic in CounterVM implementation
+isPerHundred: Boolean
 perPieceGram: String, checks if string character is digit and checks that input is not more than 3
 characters
 perPieceAmount: " "
 perHundredGram: " "
 perHundredQuantity: " "
-gramTotal: Int calculated value by logic of CounterVM
+gramTotal: Int
 )
 
 Category(
