@@ -205,9 +205,4 @@ class HelperMethods : KoinComponent {
         LATER
     }
 
-    enum class CountMode {
-        SUGAR,
-        CALORIES
-    }
-
 }

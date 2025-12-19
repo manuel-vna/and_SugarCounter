@@ -49,13 +49,11 @@ class SettingsVMTest : KoinTest {
         //Check
         assertTrue(settingsVM.faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
-        assertTrue(settingsVM.caloriesThresholdSlider.value == 0F)
         assertTrue(settingsVM.gramThresholdDialogCheck.value == false)
         assertTrue(settingsVM.exportProgressIndicator.value == 0.1f)
         assertTrue(settingsVM.exportProgressIndicatorShown.value == false)
         assertTrue(settingsVM.dataSuccessfullyExportedShown.value == false)
         assertTrue(settingsVM.exportSuccessfully.value == true)
-        assertTrue(settingsVM.caloriesCounterActivated.value == false)
         assertTrue(settingsVM.bottomSheetsSettings.value == BottomSheetsSettings.NONE)
         assertTrue(settingsVM.entriesDeletionActivated.value == false)
     }
@@ -96,21 +94,6 @@ class SettingsVMTest : KoinTest {
         }
     }
 
-    @Test
-    fun check_state_caloriesThresholdSlider() {
-        runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-            settingsVM.caloriesThresholdSlider.test {
-                //Check
-                assertEquals(0F, awaitItem())
-                //Action
-                settingsVM.actionUpdateCaloriesThresholdSlider(800F)
-                //Check
-                assertEquals(800F, awaitItem())
-            }
-        }
-    }
 
     @Test
     fun check_state_gramThresholdDialogCheck() {
@@ -209,26 +192,6 @@ class SettingsVMTest : KoinTest {
         }
     }
 
-    @Test
-    fun check_state_caloriesCounterActivated() {
-        runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
-            settingsVM.caloriesCounterActivated.test {
-                //Check for Initial value
-                assertEquals(false, awaitItem())
-                //Action
-                settingsVM.actionChangeCaloriesCounterGeneral(true)
-                //Check
-                assertEquals(true, awaitItem())
-                //Action
-                settingsVM.actionChangeCaloriesCounterGeneral(false)
-                //Check
-                assertEquals(false, awaitItem())
-            }
-        }
-    }
 
     @Test
     fun check_state_entriesDeletionBottomSheetShown() {

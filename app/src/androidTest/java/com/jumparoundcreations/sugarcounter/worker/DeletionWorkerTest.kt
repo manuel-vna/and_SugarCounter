@@ -79,7 +79,6 @@ class DeletionWorkerTest {
         val timestampInSeconds = oneYearAgo
         val yearsTimespan = 1
         val sugarTestData = true
-        val caloriesTestData = true
 
         runBlocking {
             var timestamp = timestampInSeconds.toLong()
@@ -88,7 +87,6 @@ class DeletionWorkerTest {
 
                 repeat((1..4).random()) {
                     val gramValue = Random.nextInt(from = 1, until = 20)
-                    val caloriesValue = Random.nextInt(from = 200, until = 1200)
 
                     if (sugarTestData) {
                         dao.insertSugarEntry(

@@ -1,7 +1,6 @@
 package com.jumparoundcreations.sugarcounter.ui.components.counterUI
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -35,14 +34,12 @@ import com.jumparoundcreations.sugarcounter.ui.components.entryListUI.EntryListU
 import com.jumparoundcreations.sugarcounter.util.HelperMethods
 import com.jumparoundcreations.sugarcounter.viewModels.CounterVM
 import org.koin.compose.getKoin
-import org.koin.compose.koinInject
 
 
 @Composable
 fun Counter(
     context: Context,
     snackbarHostState: SnackbarHostState,
-    sharedPrefsMain: SharedPreferences = koinInject()
 ) {
     val counterVM = getKoin().get<CounterVM>()
     val entrySavingViewModel = getKoin().get<EntrySavingViewModel>()
@@ -50,11 +47,6 @@ fun Counter(
     // States
 
     val interactionSource = remember { MutableInteractionSource() }
-    // SharedPreferences: Calories Counter: Activation state retrieved from sharedPrefsMain
-    val caloriesCounterActivated = sharedPrefsMain.getBoolean(
-        "caloriesCounterActivated",
-        false
-    )
 
     val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
     val noBarcodeYetInfo by counterVM.noBarcodeYetInfoTitle.collectAsState()

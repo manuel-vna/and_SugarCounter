@@ -214,7 +214,7 @@ fun LineChart(
 //START: Methods called from within CANVAS()
 
 /**
- * Draws a line that marks the limit of gram or calories that the user chose
+ * Draws a line that marks the limit of gram that the user chose
  * 90 is subtracted from the users threshold choice since the graph has 9*10 areas.
  * The subtraction is needed because the 0,0-point is in the top-left of the graph.
  * * The 10th 10-area is used by x-axis text (Friday, 01.07.2024,...)

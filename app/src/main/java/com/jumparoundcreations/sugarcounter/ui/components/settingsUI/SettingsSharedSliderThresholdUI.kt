@@ -28,17 +28,12 @@ import com.jumparoundcreations.sugarcounter.viewModels.SettingsVM
 fun SettingsSharedSliderThreshold(
     settingsVM: SettingsVM
 ) {
-    val caloriesCounterActivated by settingsVM.caloriesCounterActivated.collectAsState()
     val gramThresholdSlider by settingsVM.gramThresholdSlider.collectAsState()
-    val caloriesThresholdSlider by settingsVM.caloriesThresholdSlider.collectAsState()
 
     val title = stringResource(id = R.string.settings_threshold_title)
     val titleSugar = stringResource(id = R.string.general_sugar)
-    val titleCalories = stringResource(R.string.general_calories_uppercase)
     val gramSliderValueRange = 0f..100f
-    val caloriesSliderValueRange = 500f..4000f
     val unitOfMeasureGram = stringResource(id = R.string.general_gram)
-    val unitOfMeasureKcal = stringResource(id = R.string.general_kcal)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -75,27 +70,6 @@ fun SettingsSharedSliderThreshold(
             onValueChange = { settingsVM.actionUpdateGramThresholdSlider(it) },
             valueRange = gramSliderValueRange
         )
-        if (caloriesCounterActivated) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                Text(text = titleCalories)
-                Text(
-                    modifier = Modifier.padding(end = 6.dp),
-                    text = "${caloriesThresholdSlider.toInt()} $unitOfMeasureKcal"
-                )
-            }
-            val calories = stringResource(R.string.general_calories_lowercase)
-            Slider(
-                modifier = Modifier.semantics {
-                    contentDescription = "${caloriesThresholdSlider.toInt()} ${calories}"
-                },
-                value = caloriesThresholdSlider,
-                onValueChange = { settingsVM.actionUpdateCaloriesThresholdSlider(it) },
-                valueRange = caloriesSliderValueRange,
-            )
-        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -114,23 +88,13 @@ fun SettingsSharedSliderThreshold(
     if (gramThresholdDialogCheck) {
 
         ShowAlertDialogDoubleBtn(
-            dialogTitle = if (caloriesCounterActivated) {
-                gramThresholdSlider.toInt().toString() +
-                        " " +
-                        stringResource(id = R.string.gram_unit_short) +
-                        stringResource(id = R.string.general_conjunction) +
-                        caloriesThresholdSlider.toInt().toString() +
-                        " " +
-                        stringResource(id = R.string.calories_unit_short)
-            } else {
-                gramThresholdSlider.toInt().toString() + " " + stringResource(R.string.general_gram)
-            },
+            dialogTitle = gramThresholdSlider.toInt()
+                .toString() + " " + stringResource(R.string.general_gram),
             dialogDescription = stringResource(id = R.string.settings_threshold_dialog_title),
             confirmBtnText = stringResource(id = R.string.generalConfirm),
             confirmBtnAction = {
                 settingsVM.actionGramThresholdDialogCheck(false)
                 settingsVM.actionUpdateGramThresholdSharedPref()
-                settingsVM.actionUpdateCaloriesThresholdSharedPref()
             },
             dismissBtnText = stringResource(id = R.string.generalCancel),
             dismissBtnAction = { settingsVM.actionGramThresholdDialogCheck(false) },

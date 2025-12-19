@@ -19,7 +19,6 @@ import org.koin.core.component.inject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlin.math.roundToInt
 
 class SettingsVM : ViewModel(), KoinComponent {
 
@@ -32,9 +31,6 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     private val _gramThresholdSlider = MutableStateFlow(0F)
     val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
-
-    private val _caloriesThresholdSlider = MutableStateFlow(0F)
-    val caloriesThresholdSlider = _caloriesThresholdSlider.asStateFlow()
 
     private val _gramThresholdDialogCheck = MutableStateFlow(false)
     val gramThresholdDialogCheck = _gramThresholdDialogCheck.asStateFlow()
@@ -50,9 +46,6 @@ class SettingsVM : ViewModel(), KoinComponent {
 
     private val _exportSuccessfully = MutableStateFlow(true)
     val exportSuccessfully = _exportSuccessfully.asStateFlow()
-
-    private val _caloriesCounterActivated = MutableStateFlow(loadShaPrefCaloriesCounterSwitch())
-    val caloriesCounterActivated = _caloriesCounterActivated.asStateFlow()
 
     private val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
     val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
@@ -79,22 +72,8 @@ class SettingsVM : ViewModel(), KoinComponent {
         }
     }
 
-    fun actionUpdateCaloriesThresholdSharedPref() {
-        sharedPrefsMain.edit {
-            putInt(
-                "caloriesThresholdValue",
-                _caloriesThresholdSlider.value.toInt()
-            )
-        }
-    }
-
     fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
         _gramThresholdSlider.value = sliderPosition
-    }
-
-    fun actionUpdateCaloriesThresholdSlider(sliderPosition: Float) {
-        val sliderPositionRoundedToTen = (sliderPosition / 10).roundToInt() * 10
-        _caloriesThresholdSlider.value = sliderPositionRoundedToTen.toFloat()
     }
 
     fun actionGramThresholdDialogCheck(isShown: Boolean) {
@@ -105,10 +84,6 @@ class SettingsVM : ViewModel(), KoinComponent {
         _gramThresholdSlider.value = sharedPrefsMain.getInt(
             "gramThresholdValue",
             50
-        ).toFloat()
-        _caloriesThresholdSlider.value = sharedPrefsMain.getInt(
-            "caloriesThresholdValue",
-            2250
         ).toFloat()
     }
 
@@ -179,23 +154,6 @@ class SettingsVM : ViewModel(), KoinComponent {
         _exportSuccessfully.value = wasSuccessful
     }
 
-    fun actionChangeCaloriesCounterGeneral(isActivated: Boolean) {
-        _caloriesCounterActivated.value = isActivated
-
-        //Save activation boolean in SharedPreferences
-        sharedPrefsMain.edit {
-            putBoolean(
-                "caloriesCounterActivated",
-                _caloriesCounterActivated.value
-            )
-        }
-    }
-
-    /*
-    fun actionChangeCaloriesCounterSwitch(isActivated: Boolean) {
-        _caloriesCounterActivated.value = isActivated
-    }
-     */
 
     fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
         _entriesDeletionActivated.value = isActivated
@@ -218,12 +176,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     //Actions: END
 
     // Loading Shared Preferences: START
-    private fun loadShaPrefCaloriesCounterSwitch(): Boolean {
-        return sharedPrefsMain.getBoolean(
-            "caloriesCounterActivated",
-            false
-        )
-    }
 
     private fun loadShaPrefEntriesDeletionSwitch(): Boolean {
         return sharedPrefsMain.getBoolean(
