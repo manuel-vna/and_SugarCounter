@@ -10,16 +10,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import kotlin.test.assertNotEquals
 
-@RunWith(JUnit4::class)
+
 class SettingsVMTest : KoinTest {
+
+    private lateinit var settingsVM: SettingsVM
 
     private val mockkSharedPrefsMain: SharedPreferences = mockk(relaxed = true)
 
@@ -34,6 +34,7 @@ class SettingsVMTest : KoinTest {
                 }
             )
         }
+        settingsVM = SettingsVM()
     }
 
     @After
@@ -43,9 +44,6 @@ class SettingsVMTest : KoinTest {
 
     @Test
     fun check_initialisations_of_state_flows() {
-        //Arrange
-        val settingsVM = SettingsVM()
-
         //Check
         assertTrue(settingsVM.faqExpandedId.value == -1L)
         assertTrue(settingsVM.gramThresholdSlider.value == 0F)
@@ -61,8 +59,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_faqSingleSelectMode() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
             settingsVM.faqExpandedId.test {
                 //Check
                 assertEquals(-1L, awaitItem())
@@ -81,8 +77,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_gramThresholdSlider() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
             settingsVM.gramThresholdSlider.test {
                 //Check
                 assertEquals(0F, awaitItem())
@@ -98,10 +92,7 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_gramThresholdDialogCheck() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
             settingsVM.gramThresholdDialogCheck.test {
-
                 //Check
                 assertEquals(false, awaitItem())
                 //Action
@@ -115,9 +106,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_exportProgressIndicator() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.exportProgressIndicator.test {
                 //Check
                 assertEquals(0.1f, awaitItem())
@@ -144,9 +132,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_exportProgressIndicatorShown() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.exportProgressIndicatorShown.test {
                 //Check for Initial value
                 assertEquals(false, awaitItem())
@@ -161,9 +146,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_dataSuccessfullyExportedShown() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.dataSuccessfullyExportedShown.test {
                 //Check for Initial value
                 assertEquals(false, awaitItem())
@@ -178,9 +160,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_exportSuccessfully() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.exportSuccessfully.test {
                 //Check for Initial value
                 assertEquals(true, awaitItem())
@@ -196,9 +175,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_entriesDeletionBottomSheetShown() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.bottomSheetsSettings.test {
                 //Check for Initial value
                 assertEquals(BottomSheetsSettings.NONE, awaitItem())
@@ -213,9 +189,6 @@ class SettingsVMTest : KoinTest {
     @Test
     fun check_state_entriesDeletionActivated() {
         runTest {
-            //Arrange
-            val settingsVM = SettingsVM()
-
             settingsVM.entriesDeletionActivated.test {
                 //Check for Initial value
                 assertEquals(false, awaitItem())

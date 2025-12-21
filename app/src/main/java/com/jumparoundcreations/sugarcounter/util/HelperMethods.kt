@@ -3,7 +3,6 @@ package com.jumparoundcreations.sugarcounter.util
 
 import android.content.Context
 import android.text.format.DateUtils
-import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.data.SugarEntryIntTemp
 import com.jumparoundcreations.sugarcounter.data.settingsData.ExportData.database
@@ -31,49 +30,6 @@ class HelperMethods : KoinComponent {
             } catch (e: Exception) {
                 date // fallback
             }
-        }
-
-        fun groupCounterItemsInGroupsByDay(savedEntries: List<SugarEntry>): List<EntryGroup> {
-
-            lateinit var todayOrYesterday: TodayOrYesterday
-            val tempGroupedEntriesByDay =
-                mutableMapOf<Pair<String, String>, MutableList<SugarEntry>>()
-            val groupedEntriesByDay = mutableListOf<EntryGroup>()
-
-            // This intermediate step prepares the data for further processing
-            // It creates group entries within a map, grouped by day.
-            for (item in savedEntries) {
-                todayOrYesterday = timestampIsTodayOrYesterday(item.currentTimestamp)
-                val date = item.date
-                val dayDisplayFormat =
-                    if (todayOrYesterday == TodayOrYesterday.LATER) convertTimestampToDateString(
-                        item.currentTimestamp,
-                        "EEEE (dd.MM.)"
-                    ) else todayOrYesterday.name
-
-
-                tempGroupedEntriesByDay.computeIfAbsent(
-                    Pair(
-                        date,
-                        dayDisplayFormat
-                    )
-                ) { mutableListOf() }.add(item)
-            }
-
-            // Move grouped data of map (data type: Map<Pair<String, String>, List<Entry>>) into a List<EntryGroup>
-            // This data structure makes it easier to work with the data
-            tempGroupedEntriesByDay.toList()
-                .sortedByDescending { it.first.first }.forEach {
-                    groupedEntriesByDay.add(
-                        EntryGroup(
-                            date = it.first.first,
-                            dayDisplayFormat = it.first.second,
-                            entryList = it.second
-                        )
-                    )
-                }
-
-            return groupedEntriesByDay
         }
 
         fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {

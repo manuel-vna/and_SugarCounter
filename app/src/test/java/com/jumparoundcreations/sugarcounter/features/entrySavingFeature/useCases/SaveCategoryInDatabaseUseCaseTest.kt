@@ -1,5 +1,6 @@
 package com.jumparoundcreations.sugarcounter.features.entrySavingFeature.useCases
 
+import android.util.Log
 import com.jumparoundcreations.sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.sugarcounter.database.AppDatabase
 import com.jumparoundcreations.sugarcounter.database.DaoAppDatabase
@@ -9,6 +10,7 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -93,7 +95,10 @@ class SaveCategoryInDatabaseUseCaseTest {
 
     @Test
     fun `invoke does nothing when category exists and barcode is empty`() = runTest {
+
         // Arrange
+        mockkStatic(Log::class)
+        every { Log.d(any(), any()) } returns 0
         val existingCategoryName = "Yogurt"
         val state = EntrySavingStates(
             categoryInField = existingCategoryName,

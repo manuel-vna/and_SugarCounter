@@ -1,7 +1,6 @@
 package com.jumparoundcreations.sugarcounter.util
 
 import android.text.format.DateUtils
-import com.jumparoundcreations.sugarcounter.data.EntryGroup
 import com.jumparoundcreations.sugarcounter.data.SugarEntry
 import com.jumparoundcreations.sugarcounter.features.entrySavingFeature.data.GramCountMode
 import io.mockk.every
@@ -41,10 +40,10 @@ class HelperMethodsTest {
                 currentTimestamp = 1763540802,
                 date = "2025-11-19",
                 category = "Ritter Sport",
-                entryType = GramCountMode.PerHundred,
-                gram = 9.0,
-                quantity = 1.0,
-                gramTotal = 9.0
+                entryType = GramCountMode.PerPiece,
+                gram = 6.0,
+                quantity = 2.0,
+                gramTotal = 12.0
             ),
             SugarEntry(
                 id = 0,
@@ -59,49 +58,6 @@ class HelperMethodsTest {
         )
     }
 
-    @Test
-    fun groupCounterItemsInGroupsByDayMatch() {
-        //Prepare
-        mockkStatic(DateUtils::class)
-        mockk<DateUtils>()
-        every { DateUtils.isToday(any()) } returns false
-
-        val entryGroupControl = listOf(
-            EntryGroup(
-                date = "2024-05-20",
-                dayDisplayFormat = "Monday (20.05.)",
-                entryList = exampleListWithEntries
-            )
-        )
-        //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(
-            exampleListWithEntries
-        )
-        //Validate
-        assertEquals(entryGroupControl, entryGroup)
-    }
-
-    @Test
-    fun groupCounterItemsInGroupsByDayNoMatch() {
-        //Prepare
-        mockkStatic(DateUtils::class)
-        mockk<DateUtils>()
-        every { DateUtils.isToday(any()) } returns false
-
-        val entryGroupControl = listOf(
-            EntryGroup(
-                date = "2023-05-20", // date is different
-                dayDisplayFormat = "Monday (20.05.)",
-                entryList = exampleListWithEntries
-            )
-        )
-        //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(
-            exampleListWithEntries
-        )
-        //Validate
-        assertNotEquals(entryGroupControl, entryGroup)
-    }
 
     @Test
     fun timestampIsTodayOrYesterday_checkToday() {
@@ -156,10 +112,10 @@ class HelperMethodsTest {
     @Test
     fun calculateTotalGramPerDayBlock() {
 
-        // gramTotal = 9 + 16 + 13 = 32
+        // gramTotal = (1 x 9.0) + (2 x 6.0) + (3 x 5.0) = 36
         val totalGramPerDayBlock =
             HelperMethods.calculateTotalGramPerDayBlock(exampleListWithEntries)
-        assertEquals(totalGramPerDayBlock, 38)
+        assertEquals(totalGramPerDayBlock, 36.0, 0.001)
     }
 
 }
