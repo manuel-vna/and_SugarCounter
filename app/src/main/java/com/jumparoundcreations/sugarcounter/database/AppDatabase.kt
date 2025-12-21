@@ -72,7 +72,7 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("DROP TABLE entry_table")
 
                 // Drop the calories table since this feature is discontinued
-                db.execSQL("DROP TABLE entry_calories")
+                //db.execSQL("DROP TABLE entry_calories")
             }
         }
 
