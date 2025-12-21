@@ -7,7 +7,7 @@ class FilterEntriesBySearchFieldUseCase {
     operator fun invoke(searchFieldText: String, entryList: List<EntryGroup>): List<EntryGroup> {
         return entryList.filter { entryGroup ->
             entryGroup.entryList.any { entry ->
-                entry.category.contains(searchFieldText)
+                entry.category.lowercase().contains(searchFieldText.lowercase())
             }
         }
     }

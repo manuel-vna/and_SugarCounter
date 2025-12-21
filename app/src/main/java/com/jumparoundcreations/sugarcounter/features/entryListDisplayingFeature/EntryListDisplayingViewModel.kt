@@ -110,6 +110,7 @@ class EntryListDisplayingViewModel(
                 timeFrameBeginning =
                     TimeConstants.NINETY_DAYS_IN_SECONDS
             ).collect { entryGroupListHistory ->
+                println("entryGroupListHistory: $entryGroupListHistory")
                 _entryListDisplayingStates.update {
                     it.copy(
                         entriesGroupedPerDayHistory = entryGroupListHistory,
