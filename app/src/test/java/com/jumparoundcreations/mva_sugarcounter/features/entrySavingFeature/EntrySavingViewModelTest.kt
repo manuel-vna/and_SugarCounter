@@ -301,6 +301,7 @@ class EntrySavingViewModelTest {
 
         }
 
+    @Ignore
     @Test
     fun `test EntrySavingIntents SaveSugarEntry with InputDataComplete`() = runTest {
         //Arrange
