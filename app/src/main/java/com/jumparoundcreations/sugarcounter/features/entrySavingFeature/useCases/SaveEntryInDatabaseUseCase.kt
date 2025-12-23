@@ -20,7 +20,7 @@ class SaveEntryInDatabaseUseCase(
                     state.dateOfEntryEpochSec,
                     "yyyy-MM-dd"
                 ),
-                category = state.categoryInField,
+                category = state.categoryInField.trim(),
                 entryType = state.gramCountMode,
                 gram = if (state.entryFieldGram.isEmpty()) NumberConstants.ONE_AS_DOUBLE
                 else state.entryFieldGram.toDouble(),
