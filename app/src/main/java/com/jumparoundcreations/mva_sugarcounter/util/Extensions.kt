@@ -4,6 +4,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntryIntTemp
+import kotlin.math.round
 
 fun SugarEntry.toIntModel(): SugarEntryIntTemp =
     SugarEntryIntTemp(
@@ -26,3 +27,6 @@ fun EntryGroup.toIntModel(): EntryGroupIntTemp =
 
 fun List<EntryGroup>.toIntModel(): List<EntryGroupIntTemp> =
     map { it.toIntModel() }
+
+fun Double.roundToOneDecimal(): Double =
+    round(this * 10) / 10

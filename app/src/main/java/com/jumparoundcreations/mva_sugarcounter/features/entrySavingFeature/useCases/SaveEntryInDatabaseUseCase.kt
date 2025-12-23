@@ -6,6 +6,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.Entr
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
+import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
 
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase
@@ -27,10 +28,11 @@ class SaveEntryInDatabaseUseCase(
                 quantity = if (state.entryFieldQuantity.isEmpty()) NumberConstants.ONE_AS_DOUBLE
                 else state.entryFieldQuantity.toDouble(),
                 gramTotal = if (state.gramCountMode == GramCountMode.PerHundred) {
-                    (state.entryFieldGram.toDouble() / NumberConstants.HUNDRED_AS_DOUBLE) *
-                            state.entryFieldQuantity.toDouble()
+                    ((state.entryFieldGram.toDouble() / NumberConstants.HUNDRED_AS_DOUBLE) *
+                            state.entryFieldQuantity.toDouble()).roundToOneDecimal()
                 } else {
-                    state.entryFieldGram.toDouble() * state.entryFieldQuantity.toDouble()
+                    (state.entryFieldGram.toDouble() * state.entryFieldQuantity.toDouble()
+                            ).roundToOneDecimal()
 
                 },
             )
