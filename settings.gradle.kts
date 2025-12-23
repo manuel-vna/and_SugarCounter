@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "SugarCounter"
+rootProject.name = "mva_SugarCounter"
 include(":app")
  

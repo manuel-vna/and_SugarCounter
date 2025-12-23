@@ -1,6 +1,6 @@
 ## SugarCounter
 
-v1.2.1_39
+v1.3.0_41
 
 This is a test app within a real-scenario environment by having the app available in the Google Play
 Store.
