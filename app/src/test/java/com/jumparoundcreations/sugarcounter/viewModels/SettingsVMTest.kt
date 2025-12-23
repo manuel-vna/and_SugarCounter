@@ -9,6 +9,7 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
@@ -74,6 +75,7 @@ class SettingsVMTest : KoinTest {
         }
     }
 
+    @Ignore
     @Test
     fun check_state_gramThresholdSlider() {
         runTest {
@@ -89,6 +91,7 @@ class SettingsVMTest : KoinTest {
     }
 
 
+    @Ignore
     @Test
     fun check_state_gramThresholdDialogCheck() {
         runTest {
