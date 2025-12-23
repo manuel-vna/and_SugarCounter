@@ -5,47 +5,65 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
+import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DaoAppDatabase {
 
-    // Sugar
+    // SugarEntry
 
     @Insert
-    fun insertEntry(vararg sugarCounter: Entry)
+    fun insertSugarEntry(vararg sugarEntry: SugarEntry)
 
     @Query(
-        "UPDATE entry_table SET " +
-                "perHundredGram = :perHundredGram, " +
-                "perHundredQuantity = :perHundredQuantity, gramTotal = :gramTotal " +
+        "UPDATE sugarEntriesTable SET " +
+                "gram = :gram, " +
+                "quantity = :quantity, " +
+                "gramTotal = :gramTotal " +
                 "WHERE id = :id"
     )
-    fun updateEntrySugarPerHundred(
+    fun updateSugarEntry(
         id: Int,
-        perHundredGram: Int,
-        perHundredQuantity: Int,
-        gramTotal: Int
-    )
-
-    @Query(
-        "UPDATE entry_table SET " +
-                "perPieceGram= :perPieceGram, " +
-                "perPieceAmount = :perPieceAmount, gramTotal = :gramTotal " +
-                "WHERE id = :id"
-    )
-    fun updateEntrySugarPerPiece(
-        id: Int,
-        perPieceGram: Int,
-        perPieceAmount: Int,
-        gramTotal: Int
+        gram: Double,
+        quantity: Double,
+        gramTotal: Double
     )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
+    @Query("""SELECT * FROM sugarEntriesTable WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
+    fun getEntriesInTimeframe(startPoint: Long, endPoint: Long): Flow<List<SugarEntry>>
+
+    @Query("""SELECT * FROM sugarEntriesTable""")
+    fun getAllEntries(): List<SugarEntry>
+
+    @Query("""DELETE FROM sugarEntriesTable WHERE id = (SELECT MAX(id) FROM sugarEntriesTable)""")
+    fun deleteLastEntry()
+
+    @Query("""DELETE FROM sugarEntriesTable WHERE id = :id""")
+    fun deleteSpecificEntryRow(id: Int)
+
+    @Query("""SELECT * FROM sugarEntriesTable WHERE category = :category ORDER BY id DESC LIMIT 1""")
+    suspend fun checkIfEntryExistsForCategory(category: String): SugarEntry?
+
+    @Query("""SELECT SUM(gramTotal) FROM sugarEntriesTable WHERE date = :dateString""")
+    fun getGramSumForSpecificDate(dateString: String): Int?
+
+    @Query("SELECT category FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime")
+    fun getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime: Long): List<String>
+
+    @Query("SELECT EXISTS( SELECT 1 FROM sugarEntriesTable WHERE category = :category AND currentTimestamp > :deletionPointInTime)")
+    fun checkIfCategoryIsPresentSinceInSugarTable(
+        category: String,
+        deletionPointInTime: Long
+    ): Boolean
+
+    @Query("""DELETE FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime""")
+    fun deleteEntriesSugarOlderThanN(deletionPointInTime: Long)
+
     @Query(
-        "UPDATE entry_table SET category = :newCategory WHERE category = :oldCategory AND " +
+        "UPDATE sugarEntriesTable SET category = :newCategory WHERE category = :oldCategory AND " +
                 "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
     )
     fun updateEntrySugarCategoryOfLastXDays(
@@ -55,21 +73,16 @@ interface DaoAppDatabase {
         endPoint: Long
     )
 
+    //#######################
+
+
+    /*
+
+
     //On the timeline startPoint is further to the left/in the past than endPoint
     @Query("""SELECT * FROM entry_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
     fun getEntries(startPoint: Long, endPoint: Long): LiveData<List<Entry>>
 
-    @Query("""SELECT * FROM entry_table""")
-    fun getAllEntries(): List<Entry>
-
-    @Query("SELECT category FROM entry_table WHERE currentTimestamp < :deletionPointInTime")
-    fun getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime: Long): List<String>
-
-    @Query("SELECT EXISTS( SELECT 1 FROM entry_table WHERE category = :category AND currentTimestamp > :deletionPointInTime)")
-    fun checkIfCategoryIsPresentSinceInSugarTable(
-        category: String,
-        deletionPointInTime: Long
-    ): Boolean
 
     @Query("""DELETE FROM entry_table WHERE id = :id""")
     fun deleteSpecificEntryRow(id: Int)
@@ -108,6 +121,11 @@ interface DaoAppDatabase {
     @Query("SELECT COUNT(*) FROM entry_table")
     suspend fun getEntryTableRowCount(): Int
 
+*/
+
+
+
+
 
     // Categories
 
@@ -125,6 +143,9 @@ interface DaoAppDatabase {
 
     @Query("""SELECT * FROM category_table""")
     fun getAllCategories(): LiveData<List<Category>>
+
+    @Query("""SELECT * FROM category_table""")
+    fun observeAllCategories(): Flow<List<Category>>
 
     @Query("""DELETE FROM category_table WHERE id = :id""")
     fun deleteSpecificCategory(id: Int)
@@ -144,64 +165,4 @@ interface DaoAppDatabase {
     @Query("SELECT COUNT(*) FROM category_table")
     suspend fun getCategoryTableRowCount(): Int
 
-    // Calories
-
-    @Insert
-    fun insertEntryCalories(vararg caloriesEntry: EntryCalories)
-
-    @Query(
-        "UPDATE calories_table SET " +
-                "caloriesPerPiece = :caloriesPerPiece, " +
-                "caloriesAmount = :caloriesAmount, caloriesTotal = :caloriesTotal" +
-                " WHERE id = :id"
-    )
-    fun updateEntryCalories(
-        id: Int,
-        caloriesPerPiece: Int,
-        caloriesAmount: Int,
-        caloriesTotal: Int
-    )
-
-    //On the timeline startPoint is further to the left/in the past than endPoint
-    @Query(
-        "UPDATE calories_table SET category = :newCategory WHERE category = :oldCategory AND " +
-                "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
-    )
-    fun updateEntryCaloriesCategoryOfLastXDays(
-        oldCategory: String,
-        newCategory: String,
-        startPoint: Long,
-        endPoint: Long
-    )
-
-    //On the timeline startPoint is further to the left/in the past than endPoint
-    @Query("""SELECT * FROM calories_table WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
-    fun getEntryCalories(startPoint: Long, endPoint: Long): LiveData<List<EntryCalories>>
-
-    @Query("""SELECT * FROM calories_table""")
-    fun getAllEntriesCalories(): List<EntryCalories>
-
-    @Query("SELECT category FROM calories_table WHERE currentTimestamp < :deletionPointInTime")
-    fun getCategoriesOfCaloriesEntriesToBeDeleted(deletionPointInTime: Long): List<String>
-
-    @Query("SELECT EXISTS( SELECT 1 FROM calories_table WHERE category = :category AND currentTimestamp > :deletionPointInTime)")
-    fun checkIfCategoryIsPresentSinceInCaloriesTable(
-        category: String,
-        deletionPointInTime: Long
-    ): Boolean
-
-    @Query("""DELETE FROM calories_table WHERE id = :id""")
-    fun deleteSpecificEntryCaloriesRow(id: Int)
-
-    @Query("""SELECT SUM(caloriesTotal) FROM calories_table WHERE date = :dateString""")
-    fun checkIfCaloriesThresholdIsBreached(dateString: String): Int?
-
-    @Query("""DELETE FROM calories_table WHERE id = (SELECT MAX(id) FROM calories_table)""")
-    fun deleteLastEntryCalories()
-
-    @Query("""DELETE FROM calories_table WHERE currentTimestamp < :deletionPointInTime""")
-    fun deleteEntriesCaloriesOlderThanN(deletionPointInTime: Long)
-
-    @Query("""SELECT * FROM calories_table WHERE category = :category ORDER BY id DESC LIMIT 1""")
-    suspend fun checkIfCaloriesValueExistsForCategory(category: String): EntryCalories?
 }

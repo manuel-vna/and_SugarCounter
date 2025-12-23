@@ -88,7 +88,7 @@ assembleDebug:
     - mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${CI_COMMIT_SHORT_SHA}-debug.apk # renames the apk-file with
   artifacts:
     paths:
-      - app/build/outputs/ # place artifcts in this directory
+      - app/build/outputs/ # place artifacts in this directory
     name: "sugarCounterFiles-${CI_COMMIT_REF_NAME}" #name of the build-zip-file
     expire_in: 1 week
   rules:

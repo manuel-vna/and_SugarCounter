@@ -1,8 +1,8 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
 import android.text.format.DateUtils
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
+import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import io.mockk.every
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
@@ -17,7 +17,7 @@ import org.junit.Test
 
 class HelperMethodsTest {
 
-    private lateinit var exampleListWithEntries: List<Entry>
+    private lateinit var exampleListWithEntries: List<SugarEntry>
 
     @get:Rule
     val mockkRule = MockKRule(this)
@@ -25,84 +25,39 @@ class HelperMethodsTest {
     @Before
     fun setup() {
         exampleListWithEntries = listOf(
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233571,
-                date = "2024-05-20",
+                currentTimestamp = 1763713602,
+                date = "2025-11-21",
                 category = "Duplo",
-                isPerHundred = false,
-                perHundredGram = 0,
-                perHundredQuantity = 0,
-                perPieceGram = 9,
-                perPieceAmount = 1,
-                gramTotal = 9
+                entryType = GramCountMode.PerPiece,
+                gram = 9.0,
+                quantity = 1.0,
+                gramTotal = 9.0
             ),
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233783,
-                date = "2024-05-20",
+                currentTimestamp = 1763540802,
+                date = "2025-11-19",
                 category = "Ritter Sport",
-                isPerHundred = true,
-                perHundredGram = 48,
-                perHundredQuantity = 33,
-                perPieceGram = 0,
-                perPieceAmount = 0,
-                gramTotal = 16
+                entryType = GramCountMode.PerPiece,
+                gram = 6.0,
+                quantity = 2.0,
+                gramTotal = 12.0
             ),
-            Entry(
+            SugarEntry(
                 id = 0,
-                currentTimestamp = 1716233801,
-                date = "2024-05-20",
-                category = "Kinder Maxi King",
-                isPerHundred = false,
-                perHundredGram = 0,
-                perHundredQuantity = 0,
-                perPieceGram = 13,
-                perPieceAmount = 1,
-                gramTotal = 13
+                currentTimestamp = 1763281602,
+                date = "2025-11-16",
+                category = "Weingummi",
+                entryType = GramCountMode.PerPiece,
+                gram = 5.0,
+                quantity = 3.0,
+                gramTotal = 15.0
             )
         )
     }
 
-    @Test
-    fun groupCounterItemsInGroupsByDayMatch() {
-        //Prepare
-        mockkStatic(DateUtils::class)
-        mockk<DateUtils>()
-        every { DateUtils.isToday(any()) } returns false
-
-        val entryGroupControl = listOf(
-            EntryGroup(
-                date = "2024-05-20",
-                dayDisplayFormat = "Monday (20.05.)",
-                entryList = exampleListWithEntries
-            )
-        )
-        //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(exampleListWithEntries)
-        //Validate
-        assertEquals(entryGroupControl, entryGroup)
-    }
-
-    @Test
-    fun groupCounterItemsInGroupsByDayNoMatch() {
-        //Prepare
-        mockkStatic(DateUtils::class)
-        mockk<DateUtils>()
-        every { DateUtils.isToday(any()) } returns false
-
-        val entryGroupControl = listOf(
-            EntryGroup(
-                date = "2023-05-20", // date is different
-                dayDisplayFormat = "Monday (20.05.)",
-                entryList = exampleListWithEntries
-            )
-        )
-        //Action
-        val entryGroup = HelperMethods.groupCounterItemsInGroupsByDay(exampleListWithEntries)
-        //Validate
-        assertNotEquals(entryGroupControl, entryGroup)
-    }
 
     @Test
     fun timestampIsTodayOrYesterday_checkToday() {
@@ -111,8 +66,9 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any()) } returns true
 
+        // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801)
         assertEquals(timeString, HelperMethods.TodayOrYesterday.TODAY)
     }
 
@@ -124,8 +80,9 @@ class HelperMethodsTest {
         mockk<DateUtils>()
         every { DateUtils.isToday(any()) } returns false
 
+        // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801) // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
+            HelperMethods.timestampIsTodayOrYesterday(1715801801)
         assertEquals(timeString, HelperMethods.TodayOrYesterday.LATER)
     }
 
@@ -135,22 +92,30 @@ class HelperMethodsTest {
     fun formatDateToString() {
         val timestamp: Long = 1735495200 //= GMT: Sunday, December 29, 2024 18:00:00
 
-        val dateString = HelperMethods.convertTimestampToDateString(timestamp, "yyyy-MM-dd")
+        val dateString = HelperMethods.convertTimestampToDateString(
+            timestamp,
+            "yyyy-MM-dd"
+        )
         assertEquals(dateString, "2024-12-29")
         // "yyyy" represents the calendar year.
 
-        val dateString2 = HelperMethods.convertTimestampToDateString(timestamp, "YYYY-MM-dd")
+        val dateString2 = HelperMethods.convertTimestampToDateString(
+            timestamp,
+            "YYYY-MM-dd"
+        )
+        // Not equal because it returns 2025-12-29 since "YYYY"
+        // represents the year associated with the ISO week date system.
         assertNotEquals(dateString2, "2024-12-29")
-        // not equal because it returns 2025-12-29 since "YYYY" represents the year associated with the ISO week date system.
+
     }
 
     @Test
     fun calculateTotalGramPerDayBlock() {
 
-        // gramTotal = 9 + 16 + 13 = 32
+        // gramTotal = (1 x 9.0) + (2 x 6.0) + (3 x 5.0) = 36
         val totalGramPerDayBlock =
             HelperMethods.calculateTotalGramPerDayBlock(exampleListWithEntries)
-        assertEquals(totalGramPerDayBlock, 38)
+        assertEquals(totalGramPerDayBlock, 36.0, 0.001)
     }
 
 }

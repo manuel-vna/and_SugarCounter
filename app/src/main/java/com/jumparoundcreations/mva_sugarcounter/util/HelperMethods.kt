@@ -3,16 +3,16 @@ package com.jumparoundcreations.mva_sugarcounter.util
 
 import android.content.Context
 import android.text.format.DateUtils
-import com.jumparoundcreations.mva_sugarcounter.data.Entry
-import com.jumparoundcreations.mva_sugarcounter.data.EntryCalories
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.IEntry
+import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
+import com.jumparoundcreations.mva_sugarcounter.data.SugarEntryIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -22,53 +22,25 @@ class HelperMethods : KoinComponent {
 
     companion object {
 
-        fun <T : IEntry> groupCounterItemsInGroupsByDay(savedEntries: List<T>): List<EntryGroup> {
-
-            lateinit var todayOrYesterday: TodayOrYesterday
-            val tempGroupedEntriesByDay =
-                mutableMapOf<Pair<String, String>, MutableList<T>>()
-            val groupedEntriesByDay = mutableListOf<EntryGroup>()
-
-            // This intermediate step prepares the data for further processing
-            // It creates group entries within a map, grouped by day.
-            for (item in savedEntries) {
-                todayOrYesterday = timestampIsTodayOrYesterday(item.currentTimestamp)
-                val date = item.date
-                val dayDisplayFormat =
-                    if (todayOrYesterday == TodayOrYesterday.LATER) convertTimestampToDateString(
-                        item.currentTimestamp,
-                        "EEEE (dd.MM.)"
-                    ) else todayOrYesterday.name
-
-
-                tempGroupedEntriesByDay.computeIfAbsent(
-                    Pair(
-                        date,
-                        dayDisplayFormat
-                    )
-                ) { mutableListOf() }.add(item)
+        fun formatDateForDisplay(date: String): String {
+            return try {
+                val input = LocalDate.parse(date)
+                val formatter = DateTimeFormatter.ofPattern("EEEE (dd.MM.)")
+                input.format(formatter)
+            } catch (e: Exception) {
+                date // fallback
             }
-
-            // Move grouped data of map (data type: Map<Pair<String, String>, List<Entry>>) into a List<EntryGroup>
-            // This data structure makes it easier to work with the data
-            tempGroupedEntriesByDay.toList()
-                .sortedByDescending { it.first.first }.forEach {
-                    groupedEntriesByDay.add(
-                        EntryGroup(
-                            date = it.first.first,
-                            dayDisplayFormat = it.first.second,
-                            entryList = it.second
-                        )
-                    )
-                }
-
-            return groupedEntriesByDay
         }
 
         fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
-            return if (DateUtils.isToday(currentTimestamp * 1000)) {
+            return if (DateUtils.isToday(currentTimestamp * TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER)) {
                 TodayOrYesterday.TODAY
-            } else if (DateUtils.isToday(currentTimestamp * 1000 + 86400000)) {
+            } else if (DateUtils.isToday(
+                    currentTimestamp *
+                            TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER +
+                            TimeConstants.DAY_ONE_IN_MILLISECONDS
+                )
+            ) {
                 TodayOrYesterday.YESTERDAY
             } else {
                 TodayOrYesterday.LATER
@@ -86,17 +58,24 @@ class HelperMethods : KoinComponent {
         }
 
 
-        fun <T : IEntry> calculateTotalGramPerDayBlock(valueList: List<T>): Int {
-            if (valueList.isNotEmpty()) {
-                return valueList.map {
-                    when (it) {
-                        is Entry -> it.gramTotal
-                        is EntryCalories -> it.caloriesTotal
-                        else -> return 0
-                    }
+        fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double {
+            return if (valueList.isNotEmpty()) {
+                valueList.map {
+                    it.gramTotal
                 }.reduce { sum, element -> sum + element }
             } else {
-                return 0
+                NumberConstants.NULL_AS_DOUBLE
+            }
+        }
+
+        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryIntTemp>): Int {
+            return if (valueList.isNotEmpty()) {
+                valueList.map {
+                    it.gramTotal
+                }.reduce { sum, element -> sum + element }
+            } else {
+                0
+
             }
         }
 
@@ -107,6 +86,15 @@ class HelperMethods : KoinComponent {
         fun checkForUIMode(context: Context): Int {
             //darkMode == 33 and brightMode = 17
             return context.resources.configuration.uiMode
+        }
+
+        fun getStartOfTodayAsLong(): Long {
+            return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
+        }
+
+        fun getEndOfTodayAsLong(): Long {
+            return LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault())
+                .toEpochSecond() - 1
         }
 
 
@@ -120,8 +108,6 @@ class HelperMethods : KoinComponent {
         fun actionAddTestData(
             timestampInSeconds: Int,
             yearsTimespan: Int,
-            sugarTestData: Boolean,
-            caloriesTestData: Boolean
         ) {
             GlobalScope.launch(Dispatchers.IO) {
                 var timestamp = timestampInSeconds.toLong() //1600617740.toLong()
@@ -129,43 +115,38 @@ class HelperMethods : KoinComponent {
                     timestamp += 86400
 
                     repeat((1..4).random()) {
-                        val gramValue = Random.nextInt(from = 1, until = 20)
-                        val caloriesValue = Random.nextInt(from = 200, until = 1200)
+                        val gramValue = Random.nextDouble(from = 1.0, until = 10.0)
+                        val quantityValue = Random.nextDouble(from = 1.0, until = 8.0)
 
-                        if (sugarTestData) {
-                            database.appDao().insertEntry(
-                                Entry(
-                                    currentTimestamp = timestamp,
-                                    date = convertTimestampToDateString(
-                                        timestamp,
-                                        "yyyy-MM-dd"
-                                    ),
-                                    category = "TestSugar",
-                                    isPerHundred = true,
-                                    perPieceGram = gramValue,
-                                    perPieceAmount = 1,
-                                    perHundredGram = 0,
-                                    perHundredQuantity = 0,
-                                    gramTotal = gramValue
-                                )
+                        database.appDao().insertSugarEntry(
+                            SugarEntry(
+                                date = convertTimestampToDateString(
+                                    timestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                currentTimestamp = timestamp,
+                                category = "TestSugar",
+                                entryType = GramCountMode.PerHundred,
+                                gram = gramValue,
+                                quantity = quantityValue,
+                                gramTotal = gramValue
                             )
-                        }
+                        )
 
-                        if (caloriesTestData) {
-                            database.appDao().insertEntryCalories(
-                                EntryCalories(
-                                    currentTimestamp = timestamp,
-                                    date = convertTimestampToDateString(
-                                        timestamp,
-                                        "yyyy-MM-dd"
-                                    ),
-                                    category = "TestCalories",
-                                    caloriesPerPiece = 120,
-                                    caloriesAmount = 2,
-                                    caloriesTotal = caloriesValue
-                                )
+                        database.appDao().insertSugarEntry(
+                            SugarEntry(
+                                date = convertTimestampToDateString(
+                                    timestamp,
+                                    "yyyy-MM-dd"
+                                ),
+                                currentTimestamp = timestamp,
+                                category = "TestSugar",
+                                entryType = GramCountMode.PerHundred,
+                                gram = gramValue,
+                                quantity = quantityValue,
+                                gramTotal = gramValue
                             )
-                        }
+                        )
                     }
 
                 }
@@ -178,11 +159,6 @@ class HelperMethods : KoinComponent {
         TODAY,
         YESTERDAY,
         LATER
-    }
-
-    enum class CountMode {
-        SUGAR,
-        CALORIES
     }
 
 }
