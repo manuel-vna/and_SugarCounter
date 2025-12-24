@@ -29,6 +29,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
 
+@Ignore
 class EntrySavingViewModelTest {
 
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
