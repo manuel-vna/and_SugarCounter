@@ -1,14 +1,28 @@
-name: Tests
+name: Android Unit Tests
 
-on: [ push ]
+on:
+  push:
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-      - run: ./gradlew -Pci --console=plain :app:testDebug
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --no-daemon
