@@ -17,8 +17,12 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -39,10 +43,16 @@ class EntrySavingViewModelTest {
 
     private val category = mockk<Category>()
     private lateinit var viewModel: EntrySavingViewModel
+    private lateinit var testDispatcher: TestDispatcher
 
 
     @Before
     fun setup() {
+
+        // set a test Main dispatcher before creating the ViewModel
+        testDispatcher = StandardTestDispatcher()
+        Dispatchers.setMain(testDispatcher)
+
         viewModel = EntrySavingViewModel(
             mockScanBarcodeUseCase,
             getEntryByCategoryUseCase,
