@@ -112,7 +112,7 @@ fun getAppGitVersion(): String {
 }
 
 fun getAppVersionCode(gitVersion: String): Int {
-    var versionCode = "0"
+    var versionCode = "1"
     val pattern = Pattern.compile("v.*_([0-9]+)-.*")
     val matcher = pattern.matcher(gitVersion)
     if (matcher.matches()) {
