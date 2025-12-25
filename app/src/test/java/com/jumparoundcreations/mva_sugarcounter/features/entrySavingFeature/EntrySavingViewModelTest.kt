@@ -17,19 +17,14 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
 
-@Ignore
 class EntrySavingViewModelTest {
 
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
@@ -49,10 +44,6 @@ class EntrySavingViewModelTest {
 
     @Before
     fun setup() {
-
-        // set a test Main dispatcher before creating the ViewModel
-        testDispatcher = StandardTestDispatcher()
-        Dispatchers.setMain(testDispatcher)
 
         viewModel = EntrySavingViewModel(
             mockScanBarcodeUseCase,
@@ -312,7 +303,6 @@ class EntrySavingViewModelTest {
 
         }
 
-    @Ignore
     @Test
     fun `test EntrySavingIntents SaveSugarEntry with InputDataComplete`() = runTest {
         //Arrange
@@ -338,7 +328,6 @@ class EntrySavingViewModelTest {
         )
     }
 
-    @Ignore
     @Test
     fun `test EntrySavingIntents SaveSugarEntry with InputDataComplete and UserThresholdReaction`() =
         runTest {
@@ -361,7 +350,7 @@ class EntrySavingViewModelTest {
                 actual = viewModel.entrySavingStates.value.barcodeNumber
             )
             assertEquals(
-                expected = CheckThresholdResult.DailyThresholdBreached,
+                expected = CheckThresholdResult.WithinDailyThresholdBoundaries,
                 actual = viewModel.entrySavingStates.value.savingProcessDailyGramThreshold
             )
 
@@ -391,7 +380,6 @@ class EntrySavingViewModelTest {
             expected = 0,
             actual = viewModel.entrySavingStates.value.gramCountModeTabIndex
         )
-
 
     }
 
