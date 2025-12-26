@@ -2,11 +2,14 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
@@ -36,8 +39,10 @@ fun History(
     historyViewModel: HistoryVM = koinViewModel()
 ) {
 
-    val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
-    val entryGraphDisplayingStates by entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
+    val entryListDisplayingStates by
+    entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val entryGraphDisplayingStates by
+    entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
     val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
     val configuration = LocalConfiguration.current
@@ -68,30 +73,37 @@ fun History(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    EmptyDataInfo(stringResource(id = R.string.landscape_mode_no_graph_description))
+                    EmptyDataInfo(
+                        description =
+                            stringResource(id = R.string.landscape_mode_no_graph_description)
+                    )
                 }
             } else {
-
                 when (entryGraphDisplayingStates) {
                     is EntryGraphDisplayingStates.Loading -> {
-                        Text(text = "Loading...")
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(90.dp)
+                            )
+                        }
                     }
 
                     is EntryGraphDisplayingStates.Success -> {
-                        val savedSugarCountGroupedInt: List<EntryGroupIntTemp> =
+                        val savedSugarCountGroupedInt: List<EntryGroupInt> =
                             (entryGraphDisplayingStates as EntryGraphDisplayingStates.Success).data.entriesGroupedPerDay.toIntModel()
                         LineChart(
                             context = context,
-                            sugarEntryDbHistory = savedSugarCountGroupedInt
+                            savedSugarCountGrouped = savedSugarCountGroupedInt
                         )
                     }
 
                     is EntryGraphDisplayingStates.Error -> {
-                        Text(text = (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message)
+                        Text(text = "Error: " + (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message)
                     }
-
                 }
-
             }
         }
     }

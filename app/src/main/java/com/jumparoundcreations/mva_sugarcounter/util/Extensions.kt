@@ -1,13 +1,13 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
-import com.jumparoundcreations.mva_sugarcounter.data.SugarEntryIntTemp
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.SugarEntryInt
 import kotlin.math.round
 
-fun SugarEntry.toIntModel(): SugarEntryIntTemp =
-    SugarEntryIntTemp(
+fun SugarEntry.toIntModel(): SugarEntryInt =
+    SugarEntryInt(
         id = id,
         currentTimestamp = currentTimestamp,
         date = date,
@@ -18,14 +18,14 @@ fun SugarEntry.toIntModel(): SugarEntryIntTemp =
         gramTotal = gramTotal.toInt()
     )
 
-fun EntryGroup.toIntModel(): EntryGroupIntTemp =
-    EntryGroupIntTemp(
+fun EntryGroup.toIntModel(): EntryGroupInt =
+    EntryGroupInt(
         date = date,
         dayDisplayFormat = dayDisplayFormat,
         entryList = entryList.map { it.toIntModel() }
     )
 
-fun List<EntryGroup>.toIntModel(): List<EntryGroupIntTemp> =
+fun List<EntryGroup>.toIntModel(): List<EntryGroupInt> =
     map { it.toIntModel() }
 
 fun Double.roundToOneDecimal(): Double =

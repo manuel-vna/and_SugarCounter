@@ -27,9 +27,7 @@ class EntryGraphDisplayingViewModel(
 
     fun getEntriesGroupedPerDay() {
         viewModelScope.launch {
-
-            //delay(5_000L)
-
+            //delay(5_000L) // for testing purposes
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
                     TimeConstants.YEAR_ONE_IN_SECONDS

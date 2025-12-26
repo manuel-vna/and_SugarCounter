@@ -4,8 +4,8 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
-import com.jumparoundcreations.mva_sugarcounter.data.SugarEntryIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.SugarEntryInt
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -68,7 +68,7 @@ class HelperMethods : KoinComponent {
             }
         }
 
-        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryIntTemp>): Int {
+        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryInt>): Int {
             return if (valueList.isNotEmpty()) {
                 valueList.map {
                     it.gramTotal
