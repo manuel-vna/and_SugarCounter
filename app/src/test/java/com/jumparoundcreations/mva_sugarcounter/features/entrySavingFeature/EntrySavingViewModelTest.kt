@@ -18,7 +18,6 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -39,7 +38,6 @@ class EntrySavingViewModelTest {
 
     private val category = mockk<Category>()
     private lateinit var viewModel: EntrySavingViewModel
-    private lateinit var testDispatcher: TestDispatcher
 
 
     @Before

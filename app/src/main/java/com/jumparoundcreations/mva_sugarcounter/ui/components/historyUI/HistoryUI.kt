@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
@@ -29,10 +32,12 @@ import org.koin.androidx.compose.koinViewModel
 fun History(
     context: Context,
     entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+    entryGraphDisplayingViewModel: EntryGraphDisplayingViewModel = koinViewModel(),
     historyViewModel: HistoryVM = koinViewModel()
 ) {
 
     val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val entryGraphDisplayingStates by entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
     val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
     val configuration = LocalConfiguration.current
@@ -66,12 +71,27 @@ fun History(
                     EmptyDataInfo(stringResource(id = R.string.landscape_mode_no_graph_description))
                 }
             } else {
-                val savedSugarCountGroupedInt: List<EntryGroupIntTemp> =
-                    entryListDisplayingStates.entriesGroupedPerDayHistory.toIntModel()
-                LineChart(
-                    context = context,
-                    sugarEntryDbHistory = savedSugarCountGroupedInt
-                )
+
+                when (entryGraphDisplayingStates) {
+                    is EntryGraphDisplayingStates.Loading -> {
+                        Text(text = "Loading...")
+                    }
+
+                    is EntryGraphDisplayingStates.Success -> {
+                        val savedSugarCountGroupedInt: List<EntryGroupIntTemp> =
+                            (entryGraphDisplayingStates as EntryGraphDisplayingStates.Success).data.entriesGroupedPerDay.toIntModel()
+                        LineChart(
+                            context = context,
+                            sugarEntryDbHistory = savedSugarCountGroupedInt
+                        )
+                    }
+
+                    is EntryGraphDisplayingStates.Error -> {
+                        Text(text = (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message)
+                    }
+
+                }
+
             }
         }
     }

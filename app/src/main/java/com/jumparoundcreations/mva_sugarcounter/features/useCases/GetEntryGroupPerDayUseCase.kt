@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases
+package com.jumparoundcreations.mva_sugarcounter.features.useCases
 
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
@@ -21,7 +21,7 @@ class GetEntryGroupPerDayUseCase(
                     .map { (date, items) ->
                         EntryGroup(
                             date = date,
-                            dayDisplayFormat = HelperMethods.formatDateForDisplay(date),
+                            dayDisplayFormat = HelperMethods.Companion.formatDateForDisplay(date),
                             entryList = items.sortedBy { it.currentTimestamp }
                         )
                     }

@@ -8,11 +8,11 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.EditDatabaseEntryUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.FilterEntriesBySearchFieldUseCase
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.CheckDailyGramThresholdUseCase
@@ -23,6 +23,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
+import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
@@ -53,6 +54,11 @@ val appModule = module {
             editDatabaseEntryUseCase = get(),
             reuseEntryForTodayUseCase = get(),
             filterEntriesBySearchFieldUseCase = get()
+        )
+    }
+    viewModel {
+        EntryGraphDisplayingViewModel(
+            getEntryGroupPerDayUseCase = get()
         )
     }
     viewModel { SettingsVM() }
