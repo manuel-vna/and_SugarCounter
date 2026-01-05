@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.onboarding
+package com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

@@ -24,6 +24,7 @@ import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
@@ -59,10 +60,32 @@ fun History(
 
         //Card Screen
         if (historyCardsScreenShown) {
-            CardsScreen(
-                onAction = entryListDisplayingViewModel::onAction,
-                states = entryListDisplayingStates
-            )
+            when (entryListDisplayingStates) {
+                is EntryListDisplayingStates.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(90.dp)
+                        )
+                    }
+                }
+
+                is EntryListDisplayingStates.Success -> {
+                    CardsScreen(
+                        onAction = entryListDisplayingViewModel::onAction,
+                        data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data
+                    )
+                }
+
+                is EntryListDisplayingStates.Error -> {
+                    Text(
+                        text = "Error: " +
+                                (entryListDisplayingStates as EntryGraphDisplayingStates.Error).message
+                    )
+                }
+            }
         }
 
         // Line Chart Screen
@@ -101,7 +124,10 @@ fun History(
                     }
 
                     is EntryGraphDisplayingStates.Error -> {
-                        Text(text = "Error: " + (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message)
+                        Text(
+                            text = "Error: " +
+                                    (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message
+                        )
                     }
                 }
             }

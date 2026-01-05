@@ -17,10 +17,6 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.AppLanguage
-import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage1
-import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage2
-import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage3
-import com.jumparoundcreations.mva_sugarcounter.onboarding.OnboardingPage4
 import com.jumparoundcreations.mva_sugarcounter.ui.components.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import de.sldw.composeonboarding.ComposeOnboarding

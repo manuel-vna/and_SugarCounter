@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
@@ -47,14 +47,14 @@ import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntryListItemUI(
-    states: EntryListDisplayingStates,
+    data: SuccessData,
     onAction: (EntryListDisplayingIntents) -> Unit,
 ) {
 
-    LaunchedEffect(key1 = states.entryInCardItem.id) {
+    LaunchedEffect(key1 = data.entryInCardItem.id) {
         onAction(
             EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(
-                sugarEntry = states.entryInCardItem
+                sugarEntry = data.entryInCardItem
             )
         )
     }
@@ -107,7 +107,7 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = states.valueCategory,
+                        value = data.valueCategory,
                         onValueChange = {
                             onAction(
                                 EntryListDisplayingIntents.EditCategory(
@@ -152,7 +152,7 @@ fun EntryListItemUI(
 
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = if (states.entryInCardItem.entryType == GramCountMode.PerHundred)
+                        text = if (data.entryInCardItem.entryType == GramCountMode.PerHundred)
                             stringResource(id = R.string.gramPerHundredLabel)
                         else
                             stringResource(id = R.string.gramSugar),
@@ -166,7 +166,7 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = states.valueGram,
+                        value = data.valueGram,
                         onValueChange = {
                             if (InputFilters.filterBlockingOverHundred(
                                     input = it
@@ -210,7 +210,7 @@ fun EntryListItemUI(
 
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = if (states.entryInCardItem.entryType == GramCountMode.PerHundred)
+                        text = if (data.entryInCardItem.entryType == GramCountMode.PerHundred)
                             stringResource(id = R.string.amountSugar)
                         else
                             stringResource(id = R.string.quantitySugar),
@@ -224,9 +224,9 @@ fun EntryListItemUI(
                                 MaterialTheme.colorScheme.secondaryContainer,
                             focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
                         ),
-                        value = states.valueQuantity,
+                        value = data.valueQuantity,
                         onValueChange = {
-                            when (states.entryInCardItem.entryType) {
+                            when (data.entryInCardItem.entryType) {
                                 GramCountMode.PerHundred -> {
                                     if (InputFilters.filterBlockingOverThousand(
                                             input = it
@@ -357,15 +357,15 @@ fun EntryListItemUI(
 
 
 
-    if (states.entryDeletionConfirmationDialogShown) {
+    if (data.entryDeletionConfirmationDialogShown) {
         ShowAlertDialogDoubleBtn(
-            dialogTitle = states.entryInCardItem.category,
+            dialogTitle = data.entryInCardItem.category,
             dialogDescription = stringResource(id = R.string.general_delete_question),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
                 onAction(
                     EntryListDisplayingIntents.DeleteEntry(
-                        entryId = states.entryInCardItem.id
+                        entryId = data.entryInCardItem.id
                     )
                 )
                 onAction(
