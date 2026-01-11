@@ -152,7 +152,7 @@ fun EntryListUI(
                             Text(
                                 modifier = Modifier
                                     .padding(horizontal = 2.dp)
-                                    .weight(8f),
+                                    .weight(6f),
                                 textAlign = TextAlign.Center,
                                 text = secondColumnText,
                             )
