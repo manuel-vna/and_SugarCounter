@@ -21,7 +21,7 @@ class GetEntryGroupPerDayUseCase(
                     .map { (date, items) ->
                         EntryGroup(
                             date = date,
-                            dayDisplayFormat = HelperMethods.Companion.formatDateForDisplay(date),
+                            dayDisplayFormat = HelperMethods.formatDateForDisplay(date),
                             entryList = items.sortedBy { it.currentTimestamp }
                         )
                     }

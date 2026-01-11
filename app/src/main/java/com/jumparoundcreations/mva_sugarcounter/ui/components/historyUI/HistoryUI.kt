@@ -82,7 +82,7 @@ fun History(
                 is EntryListDisplayingStates.Error -> {
                     Text(
                         text = "Error: " +
-                                (entryListDisplayingStates as EntryGraphDisplayingStates.Error).message
+                                (entryListDisplayingStates as EntryListDisplayingStates.Error).message
                     )
                 }
             }
