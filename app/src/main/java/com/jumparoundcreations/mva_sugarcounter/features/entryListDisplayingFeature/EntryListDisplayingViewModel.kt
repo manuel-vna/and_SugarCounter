@@ -10,7 +10,6 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -84,7 +83,6 @@ class EntryListDisplayingViewModel(
             is EntryListDisplayingIntents.FilterEntryListInHistory -> {
                 actionFilterEntryListInHistory()
             }
-
         }
     }
 
@@ -106,7 +104,6 @@ class EntryListDisplayingViewModel(
                 }
             }
                 .collect { entryGroupListCounter ->
-                    delay(timeMillis = 5000L) // For testing: TO BE REMOVED
                     _entryListDisplayingStates.update {
                         EntryListDisplayingStates.Success(
                             data = SuccessData(
@@ -119,6 +116,9 @@ class EntryListDisplayingViewModel(
     }
 
     fun groupEntriesPerDayHistory() {
+        _entryListDisplayingStates.update {
+            EntryListDisplayingStates.Loading
+        }
         viewModelScope.launch {
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
@@ -132,11 +132,11 @@ class EntryListDisplayingViewModel(
             }
                 .collect { entryGroupListHistory ->
                     println("entryGroupListHistory: $entryGroupListHistory")
-                    delay(timeMillis = 5000L) // For testing: TO BE REMOVED
                     _entryListDisplayingStates.update {
                         EntryListDisplayingStates.Success(
                             data = SuccessData(
-                                entriesGroupedPerDayHistory = entryGroupListHistory
+                                entriesGroupedPerDayHistory = entryGroupListHistory,
+                                entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory
                             )
                         )
                     }
@@ -148,7 +148,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         showCardItemBottomSheet = true,
                         entryInCardItem = sugarEntry
                     )
@@ -163,7 +163,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         valueCategory = sugarEntry.category,
                         valueGram = sugarEntry.gram.toString(),
                         valueQuantity = sugarEntry.quantity.toString()
@@ -179,7 +179,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         valueCategory = newCategory
                     )
                 )
@@ -193,7 +193,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         valueGram = newGram
                     )
                 )
@@ -207,7 +207,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         valueQuantity = newQuantity
                     )
                 )
@@ -221,7 +221,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         showCardItemBottomSheet = false
                     )
                 )
@@ -235,7 +235,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         entryDeletionConfirmationDialogShown = isShown
                     )
                 )
@@ -281,7 +281,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         searchFieldShown = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.searchFieldShown.not()
                     )
                 )
@@ -295,7 +295,7 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data = SuccessData(
+                    data = current.data.copy(
                         searchFieldText = newText
                     )
                 )
@@ -314,7 +314,7 @@ class EntryListDisplayingViewModel(
             _entryListDisplayingStates.update { current ->
                 if (current is EntryListDisplayingStates.Success) {
                     current.copy(
-                        data = SuccessData(
+                        data = current.data.copy(
                             entriesGroupedPerDayHistory = filteredEntryList
                         )
                     )
