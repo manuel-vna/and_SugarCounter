@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
-import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
@@ -177,7 +176,7 @@ fun Counter(
             is EntryListDisplayingStates.Error -> {
                 Text(
                     text = "Error: " +
-                            (entryListDisplayingStates as EntryGraphDisplayingStates.Error).message
+                            (entryListDisplayingStates as EntryListDisplayingStates.Error).message
                 )
             }
         }

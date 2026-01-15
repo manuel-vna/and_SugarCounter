@@ -30,3 +30,7 @@ fun List<EntryGroup>.toIntModel(): List<EntryGroupInt> =
 
 fun Double.roundToOneDecimal(): Double =
     round(this * 10) / 10
+
+fun String.toDoubleFormatted(): Double {
+    return this.replace(",", ".").toDouble()
+}

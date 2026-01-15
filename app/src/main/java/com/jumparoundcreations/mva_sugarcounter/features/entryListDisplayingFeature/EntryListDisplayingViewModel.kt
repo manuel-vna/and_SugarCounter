@@ -104,21 +104,26 @@ class EntryListDisplayingViewModel(
                 }
             }
                 .collect { entryGroupListCounter ->
-                    _entryListDisplayingStates.update {
-                        EntryListDisplayingStates.Success(
-                            data = SuccessData(
-                                entriesGroupedPerDayCounter = entryGroupListCounter
+                    _entryListDisplayingStates.update { current ->
+                        if (current is EntryListDisplayingStates.Success) {
+                            current.copy(
+                                data = current.data.copy(
+                                    entriesGroupedPerDayCounter = entryGroupListCounter
+                                )
                             )
-                        )
+                        } else {
+                            EntryListDisplayingStates.Success(
+                                data = SuccessData(
+                                    entriesGroupedPerDayCounter = entryGroupListCounter
+                                )
+                            )
+                        }
                     }
                 }
         }
     }
 
     fun groupEntriesPerDayHistory() {
-        _entryListDisplayingStates.update {
-            EntryListDisplayingStates.Loading
-        }
         viewModelScope.launch {
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
@@ -131,14 +136,22 @@ class EntryListDisplayingViewModel(
                 }
             }
                 .collect { entryGroupListHistory ->
-                    println("entryGroupListHistory: $entryGroupListHistory")
-                    _entryListDisplayingStates.update {
-                        EntryListDisplayingStates.Success(
-                            data = SuccessData(
-                                entriesGroupedPerDayHistory = entryGroupListHistory,
-                                entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory
+                    _entryListDisplayingStates.update { current ->
+                        if (current is EntryListDisplayingStates.Success) {
+                            current.copy(
+                                data = current.data.copy(
+                                    entriesGroupedPerDayHistory = entryGroupListHistory,
+                                    entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory
+                                )
                             )
-                        )
+                        } else {
+                            EntryListDisplayingStates.Success(
+                                data = SuccessData(
+                                    entriesGroupedPerDayHistory = entryGroupListHistory,
+                                    entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory
+                                )
+                            )
+                        }
                     }
                 }
         }
