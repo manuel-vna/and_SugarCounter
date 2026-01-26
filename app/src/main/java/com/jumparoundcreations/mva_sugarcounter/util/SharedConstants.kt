@@ -38,7 +38,6 @@ object TimeConstants {
     const val DAY_ONE_IN_MILLISECONDS = 86400000
     const val ONE_DAY_IN_SECONDS = 86400L
     const val NINETY_DAYS_IN_SECONDS = 7776000L
-
     const val YEAR_ONE_IN_SECONDS = 31536000L
 
 

@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
@@ -87,12 +88,11 @@ class EntryListDisplayingViewModel(
     }
 
     init {
-        groupEntriesPerDayCounter()
         groupEntriesPerDayHistory()
     }
 
     fun groupEntriesPerDayCounter() {
-        viewModelScope.launch {
+        viewModelScope.launch() {
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
                     TimeConstants.ONE_DAY_IN_SECONDS
@@ -124,18 +124,29 @@ class EntryListDisplayingViewModel(
     }
 
     fun groupEntriesPerDayHistory() {
-        viewModelScope.launch {
+
+        //_entryListDisplayingStates.value = EntryListDisplayingStates.Loading
+
+
+        _entryListDisplayingStates.update {
+            EntryListDisplayingStates.Loading
+        }
+
+
+        viewModelScope.launch(Dispatchers.IO) {
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
-                    TimeConstants.NINETY_DAYS_IN_SECONDS
-            ).catch { throwable ->
+                    2629743 //TimeConstants.YEAR_ONE_IN_SECONDS
+            )
+                //.flowOn(Dispatchers.IO)
+                .catch { throwable ->
                 _entryListDisplayingStates.update {
                     EntryListDisplayingStates.Error(
                         message = throwable.localizedMessage ?: "Unknown error"
                     )
                 }
             }
-                .collect { entryGroupListHistory ->
+                .collectLatest { entryGroupListHistory ->
                     _entryListDisplayingStates.update { current ->
                         if (current is EntryListDisplayingStates.Success) {
                             current.copy(

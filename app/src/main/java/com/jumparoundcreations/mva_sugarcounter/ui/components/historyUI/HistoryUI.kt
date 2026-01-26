@@ -35,7 +35,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun History(
     context: Context,
-    entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+    entryListDisplayingViewModel: EntryListDisplayingViewModel,
     entryGraphDisplayingViewModel: EntryGraphDisplayingViewModel = koinViewModel(),
     historyViewModel: HistoryVM = koinViewModel()
 ) {

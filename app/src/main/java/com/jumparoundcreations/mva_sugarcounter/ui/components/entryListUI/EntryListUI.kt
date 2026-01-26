@@ -33,6 +33,8 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun EntryListUI(
@@ -60,7 +62,26 @@ fun EntryListUI(
         }
     } else {
         Column {
+
+            var previousMonth: YearMonth? = null
+
             entryGroupList.forEach { entryGroup ->
+
+                if (currentScreen != Screens.COUNTER) {
+                    val currentMonth: YearMonth =
+                        HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
+                    if (previousMonth == null || currentMonth != previousMonth) {
+                        Text(
+                            text = currentMonth.format(
+                                DateTimeFormatter.ofPattern("MMMM uuuu")
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 4.dp)
+                        )
+                    }
+                    previousMonth = currentMonth
+                }
 
                 val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
                     entryGroup.entryList

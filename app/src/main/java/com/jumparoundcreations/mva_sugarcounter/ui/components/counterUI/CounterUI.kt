@@ -46,7 +46,7 @@ fun Counter(
     context: Context,
     snackbarHostState: SnackbarHostState,
     entrySavingViewModel: EntrySavingViewModel = koinViewModel(),
-    entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+    entryListDisplayingViewModel: EntryListDisplayingViewModel,
 ) {
 
     // States
