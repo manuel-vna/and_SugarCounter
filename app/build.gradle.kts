@@ -103,12 +103,23 @@ tasks.register("ensureSchemaFolder") {
 }
 
 fun getAppGitVersion(): String {
-    // ProviderFactory.exec() is from Gradle 8.12+ the recommended Gradle API for executing shell commands within a Gradle build script.
-    val gitVersion = providers.exec {
-        commandLine("git", "describe", "--tags", "--long", "--always")
-    }.standardOutput.asText.get().trim()
-    println("Git version: $gitVersion")
-    return gitVersion
+    return try {
+        val output = providers.exec {
+            commandLine("git", "describe", "--tags", "--long", "--always")
+            isIgnoreExitValue = true
+        }
+        val version = output.standardOutput.asText.get().trim()
+        if (output.result.get().exitValue != 0) {
+            println("Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.")
+            ""
+        } else {
+            println("Git version: $version")
+            version
+        }
+    } catch (e: Exception) {
+        println("Retrieving version code by git command failed : ${e.message}. Falling back to default version.")
+        ""
+    }
 }
 
 fun getAppVersionCode(gitVersion: String): Int {
