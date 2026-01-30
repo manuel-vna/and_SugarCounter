@@ -24,6 +24,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class EntrySavingViewModelTest {
 
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
