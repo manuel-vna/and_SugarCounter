@@ -21,6 +21,7 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class EntryGraphDisplayingViewModelTest {
 
     private lateinit var viewModel: EntryGraphDisplayingViewModel
