@@ -88,6 +88,7 @@ class EntryListDisplayingViewModel(
     }
 
     init {
+        groupEntriesPerDayCounter()
         groupEntriesPerDayHistory()
     }
 
@@ -125,20 +126,14 @@ class EntryListDisplayingViewModel(
 
     fun groupEntriesPerDayHistory() {
 
-        //_entryListDisplayingStates.value = EntryListDisplayingStates.Loading
-
-
         _entryListDisplayingStates.update {
             EntryListDisplayingStates.Loading
         }
 
-
         viewModelScope.launch(Dispatchers.IO) {
             getEntryGroupPerDayUseCase(
-                timeFrameBeginning =
-                    2629743 //TimeConstants.YEAR_ONE_IN_SECONDS
+                timeFrameBeginning = TimeConstants.NINETY_DAYS_IN_SECONDS
             )
-                //.flowOn(Dispatchers.IO)
                 .catch { throwable ->
                 _entryListDisplayingStates.update {
                     EntryListDisplayingStates.Error(
