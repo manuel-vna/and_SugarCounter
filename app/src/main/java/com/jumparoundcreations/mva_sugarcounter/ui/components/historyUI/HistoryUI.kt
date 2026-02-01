@@ -75,7 +75,8 @@ fun History(
                 is EntryListDisplayingStates.Success -> {
                     CardsScreen(
                         onAction = entryListDisplayingViewModel::onAction,
-                        data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data
+                        data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
+                        viewModel = entryListDisplayingViewModel
                     )
                 }
 
