@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases
+package com.jumparoundcreations.mva_sugarcounter.features.useCases
 
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase

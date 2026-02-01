@@ -90,7 +90,7 @@
     <string name="export_data_error_message">Leider konnten die Zuckereinträge nicht in einer Datei gespeichert werden. Bitte erneut versuchen.</string>
     <string name="no_entry_found_for_given_category_Snackbar_text">Für diese Kategorie konnte kein Eintrag gefunden werden.</string>
     <string name="sugar_card_relation_expression">\u0020à\u0020</string>
-    <string name="sugar_card_multiplier_expression">\u0020x\u0020</string>
+    <string name="sugar_card_multiplier_expression">x</string>
     <string name="settings_entries_deletion_button_title">Datenbereinigung</string>
     <string name="settings_entries_deletion_bottom_sheet_description_switch">Automatische Löschung</string>
     <string name="deletion_period_half_year">1/2 Jahr</string>

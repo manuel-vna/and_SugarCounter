@@ -4,7 +4,14 @@ import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 
-data class EntryListDisplayingStates(
+
+sealed class EntryListDisplayingStates {
+    object Loading : EntryListDisplayingStates()
+    data class Success(val data: SuccessData) : EntryListDisplayingStates()
+    data class Error(val message: String) : EntryListDisplayingStates()
+}
+
+data class SuccessData(
     val showCardItemBottomSheet: Boolean = false,
     val entryInCardItem: SugarEntry = SugarEntry(
         id = 0,

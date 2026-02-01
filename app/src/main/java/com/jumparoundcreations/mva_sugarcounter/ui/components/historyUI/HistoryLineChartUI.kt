@@ -30,8 +30,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.GraphData
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.compose.koinInject
@@ -39,18 +39,14 @@ import org.koin.compose.koinInject
 @Composable
 fun LineChart(
     context: Context,
-    sugarEntryDbHistory: List<EntryGroupIntTemp>, //List<EntryGroup>,
+    savedSugarCountGrouped: List<EntryGroupInt>,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    lateinit var graphDataList: List<GraphData>
-    lateinit var lineGraphYAxisTag: List<String>
-
-    graphDataList = getGraphDataList(sugarEntryDbHistory)
+    val graphDataList: List<GraphData> = getGraphDataList(savedSugarCountGrouped)
     // create array that tags the y axis of the graph with gram values:
     // 0g,10g,...,90g = 0 + 18 = 19 gram tags
-    lineGraphYAxisTag = (0..18).map { i -> "${(18 - i) * 5}g" }
-
+    val lineGraphYAxisTag: List<String> = (0..18).map { i -> "${(18 - i) * 5}g" }
 
     val backgroundColor = MaterialTheme.colorScheme.background
     val thresholdLineColor = Color.Red
@@ -435,7 +431,7 @@ fun DrawScope.drawHorizontalLinesForMatrix(
 //END: Methods called from within CANVAS()
 
 
-fun getGraphDataList(entryList: List<EntryGroupIntTemp>): List<GraphData> {
+fun getGraphDataList(entryList: List<EntryGroupInt>): List<GraphData> {
     val returnList = entryList.take(60).mapIndexed { id, entryGroup ->
         GraphData(
             id = id,

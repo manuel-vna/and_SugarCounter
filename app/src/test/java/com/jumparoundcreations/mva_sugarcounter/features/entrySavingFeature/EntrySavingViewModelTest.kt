@@ -25,6 +25,7 @@ import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class EntrySavingViewModelTest {
 
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
@@ -43,6 +44,7 @@ class EntrySavingViewModelTest {
 
     @Before
     fun setup() {
+
         viewModel = EntrySavingViewModel(
             mockScanBarcodeUseCase,
             getEntryByCategoryUseCase,
@@ -61,7 +63,7 @@ class EntrySavingViewModelTest {
 
 
     @Test
-    fun `test EntrySavingIntents OpenAndCloseDatePicker and ChangeSelectedDate`() = runTest {
+    fun testEntrySavingIntentsOpenAndCloseDatePickerandChangeSelectedDate() = runTest {
 
         viewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
         assertEquals(true, viewModel.entrySavingStates.value.datePickerShown)
@@ -81,7 +83,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test EntrySavingIntents EditOfCategoryField`() = runTest {
+    fun testEntrySavingIntentsEditOfCategoryField() = runTest {
         val categoryInField = "Chocolate"
         val categoryDropdownExpanded = true
 
@@ -112,7 +114,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test EntrySavingIntents EditOfCategoryWithinDropdown with EntryFound`() = runTest {
+    fun testEntrySavingIntentsEditOfCategoryWithinDropdownwithEntryFound() = runTest {
         // Arrange
         val categoryInDropdown = "Chocolate"
         val gram = 8.0
@@ -148,7 +150,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test EntrySavingIntents EditOfCategoryWithinDropdown with NoEntryFound`() = runTest {
+    fun testEntrySavingIntentsEditOfCategoryWithinDropdownwithNoEntryFound() = runTest {
 
         //Arrange
         val categoryInDropdown = "Chocolate"
@@ -183,7 +185,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test for adding a perPiece entry`() = runTest {
+    fun testforaddingaperPieceentry() = runTest {
         // Arrange
         val perPieceTabIndex = 1
         val perPiece = GramCountMode.PerPiece
@@ -236,7 +238,7 @@ class EntrySavingViewModelTest {
     }
 
     @Test
-    fun `test EntrySavingIntents SaveSugarEntry with NoCategoryGiven and DismissNoCategoryDataEnteredAlert`() =
+    fun testEntrySavingIntentsSaveSugarEntrywithNoCategoryGivenandDismissNoCategoryDataEnteredAlert() =
         runTest {
             //Arrange
             every { checkForDefaultSavingValuesUseCase(any()) } returns false
@@ -266,7 +268,7 @@ class EntrySavingViewModelTest {
         }
 
     @Test
-    fun `test EntrySavingIntents SaveSugarEntry with NoGramDataGivenButCategoryGiven and DismissNoSugarDataEnteredAlert`() =
+    fun testEntrySavingIntentsSaveSugarEntrywithNoGramDataGivenButCategoryGivenandDismissNoSugarDataEnteredAlert() =
         runTest {
             //Arrange
             every { checkForDefaultSavingValuesUseCase(any()) } returns true
@@ -303,7 +305,7 @@ class EntrySavingViewModelTest {
 
     @Ignore
     @Test
-    fun `test EntrySavingIntents SaveSugarEntry with InputDataComplete`() = runTest {
+    fun testEntrySavingIntentsSaveSugarEntrywithInputDataComplete() = runTest {
         //Arrange
         every { checkForDefaultSavingValuesUseCase(any()) } returns false
         every { checkUserInputUseCase(any()) } returns
@@ -327,16 +329,15 @@ class EntrySavingViewModelTest {
         )
     }
 
-    @Ignore
     @Test
-    fun `test EntrySavingIntents SaveSugarEntry with InputDataComplete and UserThresholdReaction`() =
+    fun testEntrySavingIntentsSaveSugarEntrywithInputDataCompleteandUserThresholdReaction() =
         runTest {
             //Arrange
             every { checkForDefaultSavingValuesUseCase(any()) } returns false
             every { checkUserInputUseCase(any()) } returns
                     CheckUserInputResult.InputDataComplete
             every { checkDailyGramThresholdUseCase(any()) } returns
-                    CheckThresholdResult.DailyThresholdBreached
+                    CheckThresholdResult.WithinDailyThresholdBoundaries
 
 
             //Act
@@ -350,14 +351,14 @@ class EntrySavingViewModelTest {
                 actual = viewModel.entrySavingStates.value.barcodeNumber
             )
             assertEquals(
-                expected = CheckThresholdResult.DailyThresholdBreached,
+                expected = CheckThresholdResult.WithinDailyThresholdBoundaries,
                 actual = viewModel.entrySavingStates.value.savingProcessDailyGramThreshold
             )
 
         }
 
     @Test
-    fun `test EntrySavingIntents ClearInputFields`() = runTest {
+    fun testEntrySavingIntentsClearInputFields() = runTest {
         //Act
         viewModel.onAction(
             action = EntrySavingIntents.ClearInputFields
@@ -380,7 +381,6 @@ class EntrySavingViewModelTest {
             expected = 0,
             actual = viewModel.entrySavingStates.value.gramCountModeTabIndex
         )
-
 
     }
 

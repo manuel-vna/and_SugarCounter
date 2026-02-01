@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.data
+package com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 
 @Entity(tableName = "sugarEntriesTable")
-data class SugarEntryIntTemp(
+data class SugarEntryInt(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     @ColumnInfo(name = "currentTimestamp")

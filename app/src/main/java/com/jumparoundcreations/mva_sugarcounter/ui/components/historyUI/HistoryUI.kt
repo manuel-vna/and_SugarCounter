@@ -2,11 +2,15 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -17,7 +21,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.data.EntryGroupIntTemp
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
@@ -28,11 +35,15 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun History(
     context: Context,
-    entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+    entryListDisplayingViewModel: EntryListDisplayingViewModel,
+    entryGraphDisplayingViewModel: EntryGraphDisplayingViewModel = koinViewModel(),
     historyViewModel: HistoryVM = koinViewModel()
 ) {
 
-    val entryListDisplayingStates by entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val entryListDisplayingStates by
+    entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+    val entryGraphDisplayingStates by
+    entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
     val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
     val configuration = LocalConfiguration.current
@@ -49,10 +60,32 @@ fun History(
 
         //Card Screen
         if (historyCardsScreenShown) {
-            CardsScreen(
-                onAction = entryListDisplayingViewModel::onAction,
-                states = entryListDisplayingStates
-            )
+            when (entryListDisplayingStates) {
+                is EntryListDisplayingStates.Loading -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(90.dp)
+                        )
+                    }
+                }
+
+                is EntryListDisplayingStates.Success -> {
+                    CardsScreen(
+                        onAction = entryListDisplayingViewModel::onAction,
+                        data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data
+                    )
+                }
+
+                is EntryListDisplayingStates.Error -> {
+                    Text(
+                        text = "Error: " +
+                                (entryListDisplayingStates as EntryListDisplayingStates.Error).message
+                    )
+                }
+            }
         }
 
         // Line Chart Screen
@@ -63,15 +96,40 @@ fun History(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    EmptyDataInfo(stringResource(id = R.string.landscape_mode_no_graph_description))
+                    EmptyDataInfo(
+                        description =
+                            stringResource(id = R.string.landscape_mode_no_graph_description)
+                    )
                 }
             } else {
-                val savedSugarCountGroupedInt: List<EntryGroupIntTemp> =
-                    entryListDisplayingStates.entriesGroupedPerDayHistory.toIntModel()
-                LineChart(
-                    context = context,
-                    sugarEntryDbHistory = savedSugarCountGroupedInt
-                )
+                when (entryGraphDisplayingStates) {
+                    is EntryGraphDisplayingStates.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(90.dp)
+                            )
+                        }
+                    }
+
+                    is EntryGraphDisplayingStates.Success -> {
+                        val savedSugarCountGroupedInt: List<EntryGroupInt> =
+                            (entryGraphDisplayingStates as EntryGraphDisplayingStates.Success).data.entriesGroupedPerDay.toIntModel()
+                        LineChart(
+                            context = context,
+                            savedSugarCountGrouped = savedSugarCountGroupedInt
+                        )
+                    }
+
+                    is EntryGraphDisplayingStates.Error -> {
+                        Text(
+                            text = "Error: " +
+                                    (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message
+                        )
+                    }
+                }
             }
         }
     }

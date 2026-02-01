@@ -15,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,33 +24,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
+import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun EntryListUI(
     currentScreen: Screens,
     backgroundColorPrimary: Boolean,
+    data: SuccessData,
     viewModel: EntryListDisplayingViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
-    val states by viewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
-
     val entryGroupList = if (currentScreen == Screens.COUNTER) {
-        states.entriesGroupedPerDayCounter
+        data.entriesGroupedPerDayCounter
     } else {
-        states.entriesGroupedPerDayHistory
+        data.entriesGroupedPerDayHistory
     }
 
-    if (currentScreen == Screens.HISTORY && states.entriesGroupedPerDayHistory.isEmpty()) {
+    if (currentScreen == Screens.HISTORY && data.entriesGroupedPerDayHistory.isEmpty()) {
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -62,7 +62,26 @@ fun EntryListUI(
         }
     } else {
         Column {
+
+            var previousMonth: YearMonth? = null
+
             entryGroupList.forEach { entryGroup ->
+
+                if (currentScreen != Screens.COUNTER) {
+                    val currentMonth: YearMonth =
+                        HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
+                    if (previousMonth == null || currentMonth != previousMonth) {
+                        Text(
+                            text = currentMonth.format(
+                                DateTimeFormatter.ofPattern("MMMM uuuu")
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 4.dp)
+                        )
+                    }
+                    previousMonth = currentMonth
+                }
 
                 val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
                     entryGroup.entryList
@@ -154,7 +173,7 @@ fun EntryListUI(
                             Text(
                                 modifier = Modifier
                                     .padding(horizontal = 2.dp)
-                                    .weight(8f),
+                                    .weight(6f),
                                 textAlign = TextAlign.Center,
                                 text = secondColumnText,
                             )
@@ -208,9 +227,9 @@ fun EntryListUI(
     }
 
 // Card Item Bottom Sheet
-    if (states.showCardItemBottomSheet) {
+    if (data.showCardItemBottomSheet) {
         EntryListItemUI(
-            states = states,
+            data = data,
             onAction = viewModel::onAction,
         )
     }

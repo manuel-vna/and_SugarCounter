@@ -26,14 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListUI
 
 
 @Composable
 fun CardsScreen(
     onAction: (EntryListDisplayingIntents) -> Unit,
-    states: EntryListDisplayingStates
+    data: SuccessData
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -41,9 +41,11 @@ fun CardsScreen(
             item {
                 EntryListUI(
                     currentScreen = Screens.HISTORY,
-                    backgroundColorPrimary = false
+                    backgroundColorPrimary = false,
+                    data = data
                 )
             }
+
         }
 
         Row(
@@ -66,12 +68,12 @@ fun CardsScreen(
             }
 
             androidx.compose.animation.AnimatedVisibility(
-                visible = states.searchFieldShown,
+                visible = data.searchFieldShown,
                 enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
                 exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
             ) {
                 OutlinedTextField(
-                    value = states.searchFieldText,
+                    value = data.searchFieldText,
                     onValueChange = {
                         onAction(
                             EntryListDisplayingIntents.ChangeSearchTextFieldText(

@@ -16,6 +16,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.ui.components.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI.History
@@ -26,27 +27,32 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Privacy
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.SettingsThirdPartyLibrariesUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.TermsAndConditionsUI
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
-    context: Context
-) {
+    context: Context,
+    entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
+
+    ) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.SugarCounter.screenRoute
     ) {
         composable(route = BottomNavItem.SugarCounter.screenRoute) {
             Counter(
-                context,
-                snackbarHostState
+                context = context,
+                snackbarHostState = snackbarHostState,
+                entryListDisplayingViewModel = entryListDisplayingViewModel
             )
         }
         composable(route = BottomNavItem.SugarHistory.screenRoute) {
             History(
-                context
+                context = context,
+                entryListDisplayingViewModel = entryListDisplayingViewModel
             )
         }
         composable(route = BottomNavItem.CategoryTitle.screenRoute) {

@@ -4,8 +4,8 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
-import com.jumparoundcreations.mva_sugarcounter.data.SugarEntryIntTemp
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData.database
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.SugarEntryInt
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import java.time.Instant
 import java.time.LocalDate
+import java.time.YearMonth
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -57,6 +58,10 @@ class HelperMethods : KoinComponent {
             return formatter.format(instant)
         }
 
+        fun yearMonthFromIsoDate(dateStr: String): YearMonth {
+            val ld = LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE)
+            return YearMonth.of(ld.year, ld.month)
+        }
 
         fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double {
             return if (valueList.isNotEmpty()) {
@@ -68,7 +73,7 @@ class HelperMethods : KoinComponent {
             }
         }
 
-        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryIntTemp>): Int {
+        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryInt>): Int {
             return if (valueList.isNotEmpty()) {
                 valueList.map {
                     it.gramTotal
@@ -110,13 +115,15 @@ class HelperMethods : KoinComponent {
             yearsTimespan: Int,
         ) {
             GlobalScope.launch(Dispatchers.IO) {
-                var timestamp = timestampInSeconds.toLong() //1600617740.toLong()
+                var timestamp = timestampInSeconds.toLong()
                 repeat((365 * yearsTimespan)) {
                     timestamp += 86400
 
                     repeat((1..4).random()) {
-                        val gramValue = Random.nextDouble(from = 1.0, until = 10.0)
-                        val quantityValue = Random.nextDouble(from = 1.0, until = 8.0)
+                        val gramValue =
+                            Random.nextDouble(from = 1.0, until = 10.0).roundToOneDecimal()
+                        val quantityValue =
+                            Random.nextDouble(from = 1.0, until = 8.0).roundToOneDecimal()
 
                         database.appDao().insertSugarEntry(
                             SugarEntry(
@@ -125,22 +132,7 @@ class HelperMethods : KoinComponent {
                                     "yyyy-MM-dd"
                                 ),
                                 currentTimestamp = timestamp,
-                                category = "TestSugar",
-                                entryType = GramCountMode.PerHundred,
-                                gram = gramValue,
-                                quantity = quantityValue,
-                                gramTotal = gramValue
-                            )
-                        )
-
-                        database.appDao().insertSugarEntry(
-                            SugarEntry(
-                                date = convertTimestampToDateString(
-                                    timestamp,
-                                    "yyyy-MM-dd"
-                                ),
-                                currentTimestamp = timestamp,
-                                category = "TestSugar",
+                                category = "TestSugar$it",
                                 entryType = GramCountMode.PerHundred,
                                 gram = gramValue,
                                 quantity = quantityValue,
@@ -148,7 +140,6 @@ class HelperMethods : KoinComponent {
                             )
                         )
                     }
-
                 }
             }
         }
