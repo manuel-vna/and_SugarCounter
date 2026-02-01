@@ -169,7 +169,8 @@ fun Counter(
                 EntryListUI(
                     currentScreen = Screens.COUNTER,
                     backgroundColorPrimary = false,
-                    data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data
+                    data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
+                    viewModel = entryListDisplayingViewModel
                 )
             }
 

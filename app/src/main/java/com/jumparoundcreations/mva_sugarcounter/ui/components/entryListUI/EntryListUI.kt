@@ -31,7 +31,6 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -41,7 +40,7 @@ fun EntryListUI(
     currentScreen: Screens,
     backgroundColorPrimary: Boolean,
     data: SuccessData,
-    viewModel: EntryListDisplayingViewModel = koinViewModel(),
+    viewModel: EntryListDisplayingViewModel,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
