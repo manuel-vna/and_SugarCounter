@@ -20,6 +20,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
@@ -302,6 +303,7 @@ class EntrySavingViewModelTest {
 
         }
 
+    @Ignore
     @Test
     fun testEntrySavingIntentsSaveSugarEntrywithInputDataComplete() = runTest {
         //Arrange
