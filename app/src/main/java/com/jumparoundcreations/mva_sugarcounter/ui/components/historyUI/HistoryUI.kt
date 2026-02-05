@@ -1,6 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
+import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
@@ -73,6 +75,15 @@ fun History(
                 }
 
                 is EntryListDisplayingStates.Success -> {
+                    BackHandler(
+                        enabled =
+                            (entryListDisplayingStates as EntryListDisplayingStates.Success).data.searchFieldShown
+                    ) {
+                        entryListDisplayingViewModel.onAction(
+                            action = EntryListDisplayingIntents.CloseSearchFieldAndClearText
+                        )
+                    }
+
                     CardsScreen(
                         onAction = entryListDisplayingViewModel::onAction,
                         data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
@@ -135,8 +146,3 @@ fun History(
         }
     }
 }
-
-
-
-
-
