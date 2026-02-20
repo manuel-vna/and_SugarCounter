@@ -4,6 +4,7 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
+import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
 
 class EditDatabaseEntryUseCase(
     val database: AppDatabase
@@ -23,9 +24,9 @@ class EditDatabaseEntryUseCase(
             gram = newGram,
             quantity = newQuantity,
             gramTotal = if (sugarEntryType == GramCountMode.PerHundred) {
-                (newGram / 100) * newQuantity
+                ((newGram / 100) * newQuantity).roundToOneDecimal()
             } else {
-                newGram * newQuantity
+                (newGram * newQuantity).roundToOneDecimal()
             }
         )
 
