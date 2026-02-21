@@ -213,8 +213,10 @@ fun EntryListUI(
                                 stringResource(id = R.string.totalAmountSugar) +
                                         stringResource(id = R.string.general_colon_character) +
                                         stringResource(id = R.string.general_whitespace_character) +
-                                        HelperMethods.calculateTotalGramPerDayBlock(
-                                            entryGroup.entryList
+                                        "%.1f".format(
+                                            HelperMethods.calculateTotalGramPerDayBlock(
+                                                entryGroup.entryList
+                                            )
                                         ),
                             fontWeight = FontWeight.Bold
                         )
