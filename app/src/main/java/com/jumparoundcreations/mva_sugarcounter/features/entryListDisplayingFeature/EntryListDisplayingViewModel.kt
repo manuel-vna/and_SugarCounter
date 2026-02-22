@@ -84,6 +84,10 @@ class EntryListDisplayingViewModel(
             is EntryListDisplayingIntents.FilterEntryListInHistory -> {
                 actionFilterEntryListInHistory()
             }
+
+            is EntryListDisplayingIntents.CloseSearchFieldAndClearText -> {
+                actionCloseSearchFieldAndClearText()
+            }
         }
     }
 
@@ -340,6 +344,22 @@ class EntryListDisplayingViewModel(
                 } else {
                     current
                 }
+            }
+        }
+    }
+
+    fun actionCloseSearchFieldAndClearText() {
+        _entryListDisplayingStates.update { current ->
+            if (current is EntryListDisplayingStates.Success) {
+                current.copy(
+                    data = current.data.copy(
+                        searchFieldShown = false,
+                        searchFieldText = "",
+                        entriesGroupedPerDayHistory = current.data.entriesGroupedPerDayUnfilteredHistory
+                    )
+                )
+            } else {
+                current
             }
         }
     }
