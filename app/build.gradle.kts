@@ -6,8 +6,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.aboutLibraries)
     id("kotlin-kapt")
-    id("com.mikepenz.aboutlibraries.plugin")
     id("androidx.room")
     id("de.mannodermaus.android-junit5")
 }
