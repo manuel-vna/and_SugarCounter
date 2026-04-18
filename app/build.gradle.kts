@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
     alias(libs.plugins.aboutLibraries)
+    alias(libs.plugins.ktlint)
     id("kotlin-kapt")
     id("androidx.room")
     id("de.mannodermaus.android-junit5")
