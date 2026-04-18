@@ -19,11 +19,11 @@ val versionCodeValue = getAppVersionCode(gitVersion)
 val versionNameValue = getAppVersionNameValue(gitVersion)
 
 android {
-    namespace = "com.jumparoundcreations.sugarcounter"
+    namespace = "com.jumparoundcreations.mva_sugarcounter"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.jumparoundcreations.sugarcounter"
+        applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
         targetSdk = 36
         versionCode = versionCodeValue // e.g. 1
@@ -104,16 +104,27 @@ tasks.register("ensureSchemaFolder") {
 }
 
 fun getAppGitVersion(): String {
-    // ProviderFactory.exec() is from Gradle 8.12+ the recommended Gradle API for executing shell commands within a Gradle build script.
-    val gitVersion = providers.exec {
-        commandLine("git", "describe", "--tags", "--long", "--always")
-    }.standardOutput.asText.get().trim()
-    println("Git version: $gitVersion")
-    return gitVersion
+    return try {
+        val output = providers.exec {
+            commandLine("git", "describe", "--tags", "--long", "--always")
+            isIgnoreExitValue = true
+        }
+        val version = output.standardOutput.asText.get().trim()
+        if (output.result.get().exitValue != 0) {
+            println("Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.")
+            ""
+        } else {
+            println("Git version: $version")
+            version
+        }
+    } catch (e: Exception) {
+        println("Retrieving version code by git command failed : ${e.message}. Falling back to default version.")
+        ""
+    }
 }
 
 fun getAppVersionCode(gitVersion: String): Int {
-    var versionCode = ""
+    var versionCode = "1"
     val pattern = Pattern.compile("v.*_([0-9]+)-.*")
     val matcher = pattern.matcher(gitVersion)
     if (matcher.matches()) {
@@ -124,7 +135,7 @@ fun getAppVersionCode(gitVersion: String): Int {
 }
 
 fun getAppVersionNameValue(gitVersion: String): String {
-    var versionName = ""
+    var versionName = "v0.0.0"
     val pattern = Pattern.compile("(v[0-9.]+)_.*")
     val matcher = pattern.matcher(gitVersion)
     if (matcher.matches()) {
