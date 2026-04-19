@@ -21,7 +21,7 @@ class CustomTypeConverter {
     }
 
     @TypeConverter
-    fun longToDate(value: Long): Date{
+    fun longToDate(value: Long): Date {
         return Date(value)
     }
 }
