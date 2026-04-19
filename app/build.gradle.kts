@@ -145,6 +145,12 @@ fun getAppVersionNameValue(gitVersion: String): String {
     return versionName
 }
 
+detekt {
+    buildUponDefaultConfig = true
+    autoCorrect = true
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+}
+
 //noinspection UseTomlInstead
 dependencies {
 
@@ -199,5 +205,6 @@ dependencies {
     testRuntimeOnly(libs.junit.vintage.engine) // for usage of junit4 along junit5, remove when no more junit4 tests exist
     testRuntimeOnly(libs.junit.jupiter.engine)
     ksp(libs.androidx.room.compiler)
+    detektPlugins(libs.detekt.formatting)
 
 }
