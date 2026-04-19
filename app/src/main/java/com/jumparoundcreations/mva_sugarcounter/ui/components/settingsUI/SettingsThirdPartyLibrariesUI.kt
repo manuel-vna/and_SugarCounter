@@ -7,8 +7,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.jumparoundcreations.sugarcounter.R
-import com.jumparoundcreations.sugarcounter.ui.components.SharedTopAppBar
+import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.ui.components.SharedTopAppBar
 import com.mikepenz.aboutlibraries.ui.compose.android.produceLibraries
 import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
