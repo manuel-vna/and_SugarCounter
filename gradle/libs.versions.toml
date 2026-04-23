@@ -9,6 +9,7 @@ composeRuntime = "1.10.2"
 coreKtx = "1.17.0"
 coroutinesTest = "1.10.2"
 detekt = "1.23.8"
+detektCompose = "0.4.24"
 gmsScanner = "16.1.0"
 espressoCore = "3.7.0"
 googleAccompanist = "0.37.3"
@@ -71,6 +72,7 @@ androidx-work = { group = "androidx.work", name = "work-runtime-ktx", version.re
 androidx-work-testing = { group = "androidx.work", name = "work-testing", version.ref = "workManager" }
 app-cash-turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 github-vanpra-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "vanpraDatetime" }
 gms-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "gmsScanner" }
 google-accompanist = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "googleAccompanist" }

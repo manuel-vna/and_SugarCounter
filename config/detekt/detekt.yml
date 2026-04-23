@@ -334,6 +334,8 @@ naming:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**' ]
     functionPattern: '[a-z][a-zA-Z0-9]*'
+    ignoreAnnotated:
+      - Composable
     excludeClassPattern: '$^'
   FunctionParameterNaming:
     active: true
@@ -373,7 +375,7 @@ naming:
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
-    active: true
+    active: false
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
   TopLevelPropertyNaming:
     active: true
@@ -664,7 +666,7 @@ style:
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
-    active: true
+    active: false
   NoTabs:
     active: false
   NullableBooleanCheck:
@@ -797,7 +799,7 @@ style:
       - 'java.util.*'
 
 formatting:
-  active: true
+  active: false
   android: false
   autoCorrect: true
   AnnotationOnSeparateLine:
@@ -1064,3 +1066,106 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+
+Compose:
+  ComposableAnnotationNaming:
+    active: true
+
+  ComposableNaming:
+    active: true
+    # allowedComposableFunctionNames: .*Presenter,.*MoleculePresenter
+
+  ComposableParamOrder:
+    active: true
+
+  CompositionLocalAllowlist:
+    active: true
+    # allowedCompositionLocals: LocalSomething,LocalSomethingElse
+
+  CompositionLocalNaming:
+    active: true
+
+  ContentEmitterReturningValues:
+    active: true
+
+  ContentTrailingLambda:
+    active: true
+
+  ContentSlotReused:
+    active: true
+
+  DefaultsVisibility:
+    active: true
+
+  LambdaParameterEventTrailing:
+    active: true
+
+  LambdaParameterInRestartableEffect:
+    active: true
+
+  Material2:
+    active: false
+
+  ModifierClickableOrder:
+    active: true
+
+  ModifierComposed:
+    active: true
+
+  ModifierMissing:
+    active: true
+    checkModifiersForVisibility: only_public
+
+  ModifierNaming:
+    active: true
+
+  ModifierNotUsedAtRoot:
+    active: true
+
+  ModifierReused:
+    active: true
+
+  ModifierWithoutDefault:
+    active: true
+
+  MultipleEmitters:
+    active: true
+
+  MutableParams:
+    active: true
+
+  MutableStateAutoboxing:
+    active: true
+
+  MutableStateParam:
+    active: true
+
+  ParameterNaming:
+    active: true
+    allowedLambdaParameterNames: onClick,onDismiss,onValueChange,onCheckedChange
+
+  PreviewAnnotationNaming:
+    active: true
+
+  PreviewNaming:
+    active: false
+
+  PreviewPublic:
+    active: true
+
+  RememberMissing:
+    active: true
+
+  RememberContentMissing:
+    active: true
+
+  UnstableCollections:
+    active: false
+
+  ViewModelForwarding:
+    active: true
+    allowedStateHolderNames: .*ViewModel,.*Presenter
+    allowedForwarding: .*Content
+
+  ViewModelInjection:
+    active: true

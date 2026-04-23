@@ -147,8 +147,13 @@ fun getAppVersionNameValue(gitVersion: String): String {
 
 detekt {
     buildUponDefaultConfig = true
+    allRules = true
     autoCorrect = true
     config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "17"
 }
 
 //noinspection UseTomlInstead
@@ -206,5 +211,6 @@ dependencies {
     testRuntimeOnly(libs.junit.jupiter.engine)
     ksp(libs.androidx.room.compiler)
     detektPlugins(libs.detekt.formatting)
+    detektPlugins(libs.detekt.compose)
 
 }
