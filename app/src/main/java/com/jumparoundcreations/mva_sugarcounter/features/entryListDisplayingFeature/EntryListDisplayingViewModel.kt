@@ -278,12 +278,24 @@ class EntryListDisplayingViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
                 editDatabaseEntryUseCase(
-                    sugarEntryID = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.id,
-                    sugarEntryType = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.entryType,
-                    newCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueCategory,
-                    newGram = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGram.toDouble(),
-                    oldCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.category,
-                    newQuantity = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueQuantity.toDouble()
+                    sugarEntryID =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.entryInCardItem.id,
+                    sugarEntryType =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.entryInCardItem.entryType,
+                    newCategory =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.valueCategory,
+                    newGram =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.valueGram.toDouble(),
+                    oldCategory =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.entryInCardItem.category,
+                    newQuantity =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.valueQuantity.toDouble()
                 )
             }
         }
@@ -293,7 +305,9 @@ class EntryListDisplayingViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
                 reuseEntryForTodayUseCase(
-                    entrySugar = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem
+                    entrySugar =
+                        (_entryListDisplayingStates.value as
+                                EntryListDisplayingStates.Success).data.entryInCardItem
                 )
             }
         }
@@ -305,7 +319,9 @@ class EntryListDisplayingViewModel(
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
                     data = current.data.copy(
-                        searchFieldShown = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.searchFieldShown.not()
+                        searchFieldShown =
+                            (_entryListDisplayingStates.value as
+                                    EntryListDisplayingStates.Success).data.searchFieldShown.not()
                     )
                 )
             } else {
@@ -331,8 +347,12 @@ class EntryListDisplayingViewModel(
     fun actionFilterEntryListInHistory() {
         if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
             val filteredEntryList = filterEntriesBySearchFieldUseCase(
-                searchFieldText = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.searchFieldText,
-                entryList = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entriesGroupedPerDayUnfilteredHistory
+                searchFieldText =
+                    (_entryListDisplayingStates.value as
+                            EntryListDisplayingStates.Success).data.searchFieldText,
+                entryList =
+                    (_entryListDisplayingStates.value as
+                            EntryListDisplayingStates.Success).data.entriesGroupedPerDayUnfilteredHistory
             )
             _entryListDisplayingStates.update { current ->
                 if (current is EntryListDisplayingStates.Success) {
