@@ -16,7 +16,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,15 +26,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.util.GeneralConstants
 
 @Composable
 fun CounterTabRowFieldsUI(
-    entrySavingViewModel: EntrySavingViewModel,
+    onAction: (EntrySavingIntents) -> Unit,
+    entrySavingStates: EntrySavingStates,
     accessibilityGramTextField: String,
     accessibilityGramTextFieldConsumed: String,
     labelGramField: String,
@@ -44,8 +43,6 @@ fun CounterTabRowFieldsUI(
     onValueChangeQuantityField: (String) -> Unit,
     quantityFieldPlaceholder: String
 ) {
-
-    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -84,8 +81,8 @@ fun CounterTabRowFieldsUI(
                 singleLine = true,
                 trailingIcon = {
                     IconButton(onClick = {
-                        entrySavingViewModel.onAction(
-                            action = EntrySavingIntents.ChangeEntryFieldGram(
+                        onAction(
+                            EntrySavingIntents.ChangeEntryFieldGram(
                                 entryFieldGram = GeneralConstants.EMPTY_STRING
                             )
                         )
@@ -138,8 +135,8 @@ fun CounterTabRowFieldsUI(
                 singleLine = true,
                 trailingIcon = {
                     IconButton(onClick = {
-                        entrySavingViewModel.onAction(
-                            action = EntrySavingIntents.ChangeEntryFieldQuantity(
+                        onAction(
+                            EntrySavingIntents.ChangeEntryFieldQuantity(
                                 entryFieldQuantity = GeneralConstants.EMPTY_STRING
                             )
                         )

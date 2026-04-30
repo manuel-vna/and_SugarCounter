@@ -4,6 +4,7 @@ class InputFilters {
 
     companion object {
 
+        @Suppress("ReturnCount")
         fun filterBlockingOverHundred(input: String): Boolean {
             val regex = Regex("^(?:|[0-9]([0-9]?([.,]?[0-9]?)?)?)$")
 
@@ -22,6 +23,7 @@ class InputFilters {
             return number <= 100.0
         }
 
+        @Suppress("ReturnCount")
         fun filterBlockingOverThousand(input: String): Boolean {
             val regex = Regex("^([0-9]{0,3}([.,][0-9]?)?)$")
 

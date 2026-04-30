@@ -14,15 +14,13 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CounterTabItem
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
@@ -30,9 +28,10 @@ import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 
 @Composable
-fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
-
-    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsState()
+fun TabRow(
+    onAction: (EntrySavingIntents) -> Unit,
+    entrySavingStates: EntrySavingStates
+) {
 
     val tabItems = listOf(
         CounterTabItem(
@@ -58,8 +57,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
     }
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
         if (!pagerState.isScrollInProgress)
-            entrySavingViewModel.onAction(
-                action = EntrySavingIntents.ChangeGramCountModeTabIndex(
+            onAction(
+                EntrySavingIntents.ChangeGramCountModeTabIndex(
                     tabIndex = pagerState.currentPage
                 )
             )
@@ -71,8 +70,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                 Tab(
                     selected = index == entrySavingStates.gramCountModeTabIndex,
                     onClick = {
-                        entrySavingViewModel.onAction(
-                            action = EntrySavingIntents.ChangeGramCountModeTabIndex(
+                        onAction(
+                            EntrySavingIntents.ChangeGramCountModeTabIndex(
                                 tabIndex = index
                             )
                         )
@@ -104,7 +103,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                 if (tabItems[index].gramCountMode == GramCountMode.PerPiece) {
 
                     CounterTabRowFieldsUI(
-                        entrySavingViewModel = entrySavingViewModel,
+                        onAction = onAction,
+                        entrySavingStates = entrySavingStates,
                         accessibilityGramTextField =
                             stringResource(R.string.accessibility_perPiece_textField),
                         accessibilityGramTextFieldConsumed =
@@ -113,16 +113,16 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         labelQuantityField = stringResource(R.string.quantitySugar),
                         onValueChangeGramField = { input ->
                             if (InputFilters.filterBlockingOverHundred(input))
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.ChangeEntryFieldGram(
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldGram(
                                         entryFieldGram = input
                                     )
                                 )
                         },
                         onValueChangeQuantityField = { input ->
                             if (InputFilters.filterBlockingOverHundred(input))
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.ChangeEntryFieldQuantity(
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input
                                     )
                                 )
@@ -130,8 +130,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         quantityFieldPlaceholder = NumberConstants.ONE_AS_INT.toString(),
                     )
 
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.ChangeGramCountMode(
+                    onAction(
+                        EntrySavingIntents.ChangeGramCountMode(
                             gramCountMode = GramCountMode.PerPiece
                         )
                     )
@@ -139,7 +139,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                 } else {
 
                     CounterTabRowFieldsUI(
-                        entrySavingViewModel = entrySavingViewModel,
+                        onAction = onAction,
+                        entrySavingStates = entrySavingStates,
                         accessibilityGramTextField =
                             stringResource(R.string.accessibility_perHundredGram_textField),
                         accessibilityGramTextFieldConsumed =
@@ -149,8 +150,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         onValueChangeGramField =
                             { input ->
                                 if (InputFilters.filterBlockingOverHundred(input)) {
-                                    entrySavingViewModel.onAction(
-                                        action = EntrySavingIntents.ChangeEntryFieldGram(
+                                    onAction(
+                                        EntrySavingIntents.ChangeEntryFieldGram(
                                             entryFieldGram = input
                                         )
                                     )
@@ -158,8 +159,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                             },
                         onValueChangeQuantityField = { input ->
                             if(InputFilters.filterBlockingOverThousand(input))
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.ChangeEntryFieldQuantity(
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input
                                     )
                                 )
@@ -167,8 +168,8 @@ fun TabRow(entrySavingViewModel: EntrySavingViewModel) {
                         quantityFieldPlaceholder = stringResource(R.string.gram_unit_short),
                     )
 
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.ChangeGramCountMode(
+                    onAction(
+                        EntrySavingIntents.ChangeGramCountMode(
                             gramCountMode = GramCountMode.PerHundred
                         )
                     )

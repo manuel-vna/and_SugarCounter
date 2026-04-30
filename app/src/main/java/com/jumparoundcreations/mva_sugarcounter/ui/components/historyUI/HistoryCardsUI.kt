@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListUI
 
@@ -34,8 +33,7 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryL
 @Composable
 fun CardsScreen(
     onAction: (EntryListDisplayingIntents) -> Unit,
-    data: SuccessData,
-    viewModel: EntryListDisplayingViewModel
+    data: SuccessData
 ) {
 
     Box(modifier = Modifier.fillMaxSize()) {

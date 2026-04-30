@@ -32,7 +32,12 @@ interface DaoAppDatabase {
     )
 
     //On the timeline startPoint is further to the left/in the past than endPoint
-    @Query("""SELECT * FROM sugarEntriesTable WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint """)
+    @Query(
+        """
+        SELECT * FROM sugarEntriesTable 
+        WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint 
+        """
+    )
     fun getEntriesInTimeframe(startPoint: Long, endPoint: Long): Flow<List<SugarEntry>>
 
     @Query("""SELECT * FROM sugarEntriesTable""")
@@ -44,7 +49,13 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM sugarEntriesTable WHERE id = :id""")
     fun deleteSpecificEntryRow(id: Int)
 
-    @Query("""SELECT * FROM sugarEntriesTable WHERE category = :category ORDER BY id DESC LIMIT 1""")
+    @Query(
+        """
+        SELECT * FROM sugarEntriesTable 
+        WHERE category = :category 
+        ORDER BY id DESC LIMIT 1
+        """
+    )
     suspend fun checkIfEntryExistsForCategory(category: String): SugarEntry?
 
     @Query("""SELECT SUM(gramTotal) FROM sugarEntriesTable WHERE date = :dateString""")
@@ -53,7 +64,14 @@ interface DaoAppDatabase {
     @Query("SELECT category FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime")
     fun getCategoriesOfSugarEntriesToBeDeleted(deletionPointInTime: Long): List<String>
 
-    @Query("SELECT EXISTS( SELECT 1 FROM sugarEntriesTable WHERE category = :category AND currentTimestamp > :deletionPointInTime)")
+    @Query(
+        """
+        SELECT EXISTS(
+            SELECT 1 FROM sugarEntriesTable 
+            WHERE category = :category AND currentTimestamp > :deletionPointInTime
+        )
+        """
+    )
     fun checkIfCategoryIsPresentSinceInSugarTable(
         category: String,
         deletionPointInTime: Long
@@ -63,8 +81,11 @@ interface DaoAppDatabase {
     fun deleteEntriesSugarOlderThanN(deletionPointInTime: Long)
 
     @Query(
-        "UPDATE sugarEntriesTable SET category = :newCategory WHERE category = :oldCategory AND " +
-                "(currentTimestamp > :startPoint AND currentTimestamp < :endPoint)"
+        """
+        UPDATE sugarEntriesTable SET category = :newCategory 
+        WHERE category = :oldCategory AND 
+        (currentTimestamp > :startPoint AND currentTimestamp < :endPoint)
+        """
     )
     fun updateEntrySugarCategoryOfLastXDays(
         oldCategory: String,

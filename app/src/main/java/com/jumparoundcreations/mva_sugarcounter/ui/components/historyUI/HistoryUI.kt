@@ -62,7 +62,8 @@ fun History(
 
         //Card Screen
         if (historyCardsScreenShown) {
-            when (entryListDisplayingStates) {
+            val states = entryListDisplayingStates
+            when (states) {
                 is EntryListDisplayingStates.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
@@ -76,8 +77,7 @@ fun History(
 
                 is EntryListDisplayingStates.Success -> {
                     BackHandler(
-                        enabled =
-                            (entryListDisplayingStates as EntryListDisplayingStates.Success).data.searchFieldShown
+                        enabled = states.data.searchFieldShown
                     ) {
                         entryListDisplayingViewModel.onAction(
                             action = EntryListDisplayingIntents.CloseSearchFieldAndClearText
@@ -86,16 +86,12 @@ fun History(
 
                     CardsScreen(
                         onAction = entryListDisplayingViewModel::onAction,
-                        data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
-                        viewModel = entryListDisplayingViewModel
+                        data = states.data
                     )
                 }
 
                 is EntryListDisplayingStates.Error -> {
-                    Text(
-                        text = "Error: " +
-                                (entryListDisplayingStates as EntryListDisplayingStates.Error).message
-                    )
+                    Text(text = "Error: ${states.message}")
                 }
             }
         }
@@ -114,7 +110,8 @@ fun History(
                     )
                 }
             } else {
-                when (entryGraphDisplayingStates) {
+                val states = entryGraphDisplayingStates
+                when (states) {
                     is EntryGraphDisplayingStates.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
@@ -128,7 +125,7 @@ fun History(
 
                     is EntryGraphDisplayingStates.Success -> {
                         val savedSugarCountGroupedInt: List<EntryGroupInt> =
-                            (entryGraphDisplayingStates as EntryGraphDisplayingStates.Success).data.entriesGroupedPerDay.toIntModel()
+                            states.data.entriesGroupedPerDay.toIntModel()
                         LineChart(
                             context = context,
                             savedSugarCountGrouped = savedSugarCountGroupedInt
@@ -136,10 +133,7 @@ fun History(
                     }
 
                     is EntryGraphDisplayingStates.Error -> {
-                        Text(
-                            text = "Error: " +
-                                    (entryGraphDisplayingStates as EntryGraphDisplayingStates.Error).message
-                        )
+                        Text(text = "Error: ${states.message}")
                     }
                 }
             }

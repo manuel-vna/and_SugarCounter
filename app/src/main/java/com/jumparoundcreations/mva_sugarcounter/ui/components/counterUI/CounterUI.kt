@@ -128,7 +128,10 @@ fun Counter(
             )
         }
 
-        TabRow(entrySavingViewModel)
+        TabRow(
+            onAction = entrySavingViewModel::onAction,
+            entrySavingStates = entrySavingStates
+        )
 
         Row(
             modifier = Modifier
