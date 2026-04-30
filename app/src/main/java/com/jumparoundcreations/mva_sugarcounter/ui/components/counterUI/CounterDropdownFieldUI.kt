@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -40,21 +39,20 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 @Composable
 
 fun RowScope.CategoryDropdownField(
     context: Context,
-    entrySavingViewModel: EntrySavingViewModel,
+    onAction: (EntrySavingIntents) -> Unit,
+    entrySavingStates: EntrySavingStates,
     keyboardController: SoftwareKeyboardController?
 ) {
 
-    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
     val accessibilityCategoryInputField =
         stringResource(R.string.accessibility_category_input_field)
 
@@ -84,8 +82,8 @@ fun RowScope.CategoryDropdownField(
             value = entrySavingStates.categoryInField,
             onValueChange = {
                 if (it.count() <= NumberConstants.CATEGORY_MAX_INPUT_CHARACTERS) {
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.EditOfCategoryField(
+                    onAction(
+                        EntrySavingIntents.EditOfCategoryField(
                             categoryInField = it,
                             categoryDropdownExpanded = true
                         )
@@ -113,8 +111,8 @@ fun RowScope.CategoryDropdownField(
             singleLine = true,
             trailingIcon = {
                 IconButton(onClick = {
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
+                    onAction(
+                        EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
                             categoryDropdownExpanded =
                                 entrySavingStates.categoryDropdownExpanded.not()
                         )
@@ -153,8 +151,8 @@ fun RowScope.CategoryDropdownField(
                                 .sorted()
                         ) {
                             CategoryItems(title = it) { title ->
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                onAction(
+                                    EntrySavingIntents.EditOfCategoryWithinDropdown(
                                         categoryInDropdown = title,
                                         categoryDropdownExpanded = false
                                     )
@@ -167,8 +165,8 @@ fun RowScope.CategoryDropdownField(
                             entrySavingStates.categoryListInDropdown.sorted()
                         ) {
                             CategoryItems(title = it) { title ->
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                onAction(
+                                    EntrySavingIntents.EditOfCategoryWithinDropdown(
                                         categoryInDropdown = title,
                                         categoryDropdownExpanded = false
                                     )

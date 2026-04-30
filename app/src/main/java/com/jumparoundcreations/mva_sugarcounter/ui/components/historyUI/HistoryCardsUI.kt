@@ -45,7 +45,7 @@ fun CardsScreen(
                     currentScreen = Screens.HISTORY,
                     backgroundColorPrimary = false,
                     data = data,
-                    viewModel = viewModel
+                    onAction = onAction
                 )
             }
 

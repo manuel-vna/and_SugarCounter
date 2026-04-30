@@ -88,12 +88,13 @@ fun Counter(
             Arrangement.Absolute.SpaceAround
         ) {
             DatePicker(
-                entrySavingViewModel = entrySavingViewModel,
+                onAction = entrySavingViewModel::onAction,
+                entrySavingStates = entrySavingStates,
                 textColor = textColor,
             )
 
             Barcode(
-                entrySavingViewModel = entrySavingViewModel,
+                onAction = entrySavingViewModel::onAction,
                 textColor = textColor
             )
         }
@@ -121,7 +122,8 @@ fun Counter(
 
             CategoryDropdownField(
                 context = context,
-                entrySavingViewModel = entrySavingViewModel,
+                onAction = entrySavingViewModel::onAction,
+                entrySavingStates = entrySavingStates,
                 keyboardController = keyboardController
             )
         }
@@ -170,7 +172,7 @@ fun Counter(
                     currentScreen = Screens.COUNTER,
                     backgroundColorPrimary = false,
                     data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
-                    viewModel = entryListDisplayingViewModel
+                    onAction = entryListDisplayingViewModel::onAction
                 )
             }
 
@@ -186,8 +188,10 @@ fun Counter(
 
     CounterUserInformation(
         context = context,
-        entrySavingViewModel = entrySavingViewModel,
-        snackbarHostState = snackbarHostState
+        entrySavingStates = entrySavingStates,
+        onAction = entrySavingViewModel::onAction,
+        scanUiEvents = entrySavingViewModel.scanUiEvents,
+        snackbarHostState = snackbarHostState,
     )
 
 }

@@ -5,26 +5,25 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.UserThresholdBreachReaction
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogSingleBtn
 import com.jumparoundcreations.mva_sugarcounter.ui.events.ScanUiEvents
+import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun CounterUserInformation(
     context: Context,
-    entrySavingViewModel: EntrySavingViewModel,
+    entrySavingStates: EntrySavingStates,
+    onAction: (EntrySavingIntents) -> Unit,
+    scanUiEvents: Flow<ScanUiEvents>,
     snackbarHostState: SnackbarHostState,
 ) {
-
-    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsState()
 
     if (entrySavingStates.savingProcessMissingSugarData) {
         ShowAlertDialogSingleBtn(
@@ -32,17 +31,12 @@ fun CounterUserInformation(
             dialogDescription = stringResource(id = R.string.categoryInputOnlyDescription),
             confirmBtnText = stringResource(id = R.string.generalClose),
             confirmBtnAction = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.DismissNoSugarDataEnteredAlert
-                )
+                onAction(EntrySavingIntents.DismissNoSugarDataEnteredAlert)
             },
             onDismissRequest = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.DismissNoSugarDataEnteredAlert
-                )
+                onAction(EntrySavingIntents.DismissNoSugarDataEnteredAlert)
             },
         )
-
     }
 
     if (entrySavingStates.savingProcessMissingCategoryData) {
@@ -51,17 +45,12 @@ fun CounterUserInformation(
             dialogDescription = "No data entered",
             confirmBtnText = stringResource(id = R.string.generalClose),
             confirmBtnAction = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.DismissNoCategoryDataEnteredAlert
-                )
+                onAction(EntrySavingIntents.DismissNoCategoryDataEnteredAlert)
             },
             onDismissRequest = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.DismissNoCategoryDataEnteredAlert
-                )
+                onAction(EntrySavingIntents.DismissNoCategoryDataEnteredAlert)
             },
         )
-
     }
 
     if (entrySavingStates.savingProcessDailyGramThreshold is
@@ -72,23 +61,23 @@ fun CounterUserInformation(
             dialogDescription = stringResource(id = R.string.alertSugarThresholdDescription),
             confirmBtnText = stringResource(id = R.string.general_delete),
             confirmBtnAction = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.UserThresholdReaction(
+                onAction(
+                    EntrySavingIntents.UserThresholdReaction(
                         userThresholdBreachReaction = UserThresholdBreachReaction.DeleteLastEnteredEntry
                     )
                 )
             },
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.UserThresholdReaction(
+                onAction(
+                    EntrySavingIntents.UserThresholdReaction(
                         userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
                     )
                 )
             },
             onDismissRequest = {
-                entrySavingViewModel.onAction(
-                    action = EntrySavingIntents.UserThresholdReaction(
+                onAction(
+                    EntrySavingIntents.UserThresholdReaction(
                         userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
                     )
                 )
@@ -97,7 +86,7 @@ fun CounterUserInformation(
     }
 
     LaunchedEffect(snackbarHostState) {
-        entrySavingViewModel.scanUiEvents.collect { event ->
+        scanUiEvents.collect { event ->
             when (event) {
                 is ScanUiEvents.ScanResultNoCategoryForBarcode -> {
                     snackbarHostState.showSnackbar(
@@ -122,6 +111,5 @@ fun CounterUserInformation(
             }
         }
     }
-
 
 }

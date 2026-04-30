@@ -36,12 +36,11 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
 
 
 @Composable
 fun RowScope.Barcode(
-    entrySavingViewModel: EntrySavingViewModel,
+    onAction: (EntrySavingIntents) -> Unit,
     textColor: Color
 ) {
 
@@ -54,7 +53,7 @@ fun RowScope.Barcode(
             .semantics {
                 contentDescription = accessibilityScanBarcodeButton
             },
-        onClick = { entrySavingViewModel.onAction(EntrySavingIntents.ScanBarcode) },
+        onClick = { onAction(EntrySavingIntents.ScanBarcode) },
         colors = elevatedButtonColors(
             contentColor = textColor
         ),

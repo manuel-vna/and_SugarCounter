@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
@@ -40,7 +39,7 @@ fun EntryListUI(
     currentScreen: Screens,
     backgroundColorPrimary: Boolean,
     data: SuccessData,
-    viewModel: EntryListDisplayingViewModel,
+    onAction: (EntryListDisplayingIntents) -> Unit,
     sharedPrefsMain: SharedPreferences = koinInject()
 ) {
 
@@ -152,8 +151,8 @@ fun EntryListUI(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-                                    viewModel.onAction(
-                                        action = EntryListDisplayingIntents.OpenCardDetails(
+                                    onAction(
+                                        EntryListDisplayingIntents.OpenCardDetails(
                                             sugarEntry = it
                                         )
                                     )
@@ -231,7 +230,7 @@ fun EntryListUI(
     if (data.showCardItemBottomSheet) {
         EntryListItemUI(
             data = data,
-            onAction = viewModel::onAction,
+            onAction = onAction,
         )
     }
 }
