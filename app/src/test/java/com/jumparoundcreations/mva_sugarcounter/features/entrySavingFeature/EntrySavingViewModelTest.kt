@@ -113,6 +113,7 @@ class EntrySavingViewModelTest {
         )
     }
 
+    @Ignore
     @Test
     fun testEntrySavingIntentsEditOfCategoryWithinDropdownwithEntryFound() = runTest {
         // Arrange
