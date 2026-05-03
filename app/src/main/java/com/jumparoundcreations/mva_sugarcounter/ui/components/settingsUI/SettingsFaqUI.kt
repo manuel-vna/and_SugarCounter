@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.Faq
-import com.jumparoundcreations.mva_sugarcounter.data.settingsData.faqDataList
+import com.jumparoundcreations.mva_sugarcounter.data.settingsData.FaqDataList
 import com.jumparoundcreations.mva_sugarcounter.ui.components.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
@@ -62,7 +62,7 @@ fun FAQScreen(navController: NavController) {
         )
 
         LazyColumn {
-            items(items = faqDataList.faqs, key = { it.id }) { faq ->
+            items(items = FaqDataList.faqs, key = { it.id }) { faq ->
                 FaqItem(
                     isExpanded = expandedId == faq.id,
                     onItemClick = { id ->

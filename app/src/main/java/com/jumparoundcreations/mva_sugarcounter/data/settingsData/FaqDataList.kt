@@ -2,7 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.data.settingsData
 
 import com.jumparoundcreations.mva_sugarcounter.R
 
-object faqDataList {
+object FaqDataList {
 
     val faqs = listOf(
         Faq(
