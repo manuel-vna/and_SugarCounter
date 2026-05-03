@@ -2,7 +2,6 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>ClassNaming:FaqDataList.kt$faqDataList</ID>
     <ID>ComposableParamOrder:CounterUI.kt$Counter</ID>
     <ID>ComposableParamOrder:Theme.kt$SugarCounterTheme</ID>
     <ID>CyclomaticComplexMethod:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$fun onAction(action: EntryListDisplayingIntents)</ID>
