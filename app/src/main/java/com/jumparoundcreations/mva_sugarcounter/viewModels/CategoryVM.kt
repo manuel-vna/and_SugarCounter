@@ -150,9 +150,9 @@ class CategoryVM : ViewModel(), KoinComponent {
 
     //Observer _categories: START
     // Observer that is used to observe Dao of RoomDB
-    private val categoriesObserver = Observer<List<Category>> { it ->
+    private val categoriesObserver = Observer<List<Category>> { listOfCategories ->
         val sortedCategories =
-            it.filter { it.category.isNotBlank() }
+            listOfCategories.filter { it.category.isNotBlank() }
                 .groupBy(keySelector = { it.category.uppercase().first() })
                 .toSortedMap()
         _categories.value = sortedCategories

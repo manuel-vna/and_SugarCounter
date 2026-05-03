@@ -108,7 +108,7 @@ fun LineChart(
                 //Start: Vertical Drawing
                 var yAxisCount = 1
                 var previousTotalValue: Int = 0
-                graphDataList.forEach { it ->
+                graphDataList.forEach { graphData ->
 
                     // increase value of x-axis by each loop
                     val xAxisPointVerticalLines = oneWidthSection * (yAxisCount)
@@ -122,7 +122,7 @@ fun LineChart(
 
                     drawEntryDatesUnderVerticalLines(
                         textMeasurer,
-                        it,
+                        graphData,
                         styleSmall,
                         xAxisPointVerticalLines,
                         onePercentWidth,
@@ -130,7 +130,7 @@ fun LineChart(
                     )
 
                     val heightDataPoint = getHeightOfDataPoint(
-                        it.valueTotal,
+                        graphData.valueTotal,
                         onePercentHeight
                     )
 
@@ -143,7 +143,7 @@ fun LineChart(
                     )
 
                     drawTextLabelOfDataPoint(
-                        it,
+                        graphData,
                         textMeasurer,
                         styleSmall,
                         onePercentWidth,
@@ -153,7 +153,7 @@ fun LineChart(
                         xAxisPointHorizontalLines
                     )
 
-                    previousTotalValue = it.valueTotal
+                    previousTotalValue = graphData.valueTotal
                     yAxisCount++
                 }
                 //END: Vertical Drawing

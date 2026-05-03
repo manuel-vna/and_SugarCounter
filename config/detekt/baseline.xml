@@ -1,390 +1,209 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-    <ManuallySuppressedIssues />
-    <CurrentIssues>
-        <ID>ClassNaming:FaqDataList.kt$faqDataList</ID>
-        <ID>ComposableParamOrder:CounterUI.kt$Counter</ID>
-        <ID>ComposableParamOrder:Theme.kt$SugarCounterTheme</ID>
-        <ID>CyclomaticComplexMethod:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$fun
-            onAction(action: EntryListDisplayingIntents)
-        </ID>
-        <ID>CyclomaticComplexMethod:EntryListUI.kt$@Composable fun EntryListUI( currentScreen:
-            Screens, backgroundColorPrimary: Boolean, data: SuccessData, viewModel:
-            EntryListDisplayingViewModel, sharedPrefsMain: SharedPreferences = koinInject() )
-        </ID>
-        <ID>CyclomaticComplexMethod:EntrySavingViewModel.kt$EntrySavingViewModel$fun
-            onAction(action: EntrySavingIntents)
-        </ID>
-        <ID>EmptyDefaultConstructor:MainApplication.kt$MainApplication$()</ID>
-        <ID>EmptyKtFile:SettingsDonationUI.kt$.SettingsDonationUI.kt</ID>
-        <ID>
-            ExplicitItLambdaParameter:CategoryVM.kt$CategoryVM${ it -&gt; val sortedCategories = it.filter { it.category.isNotBlank() }
-            .groupBy(keySelector = { it.category.uppercase().first() }) .toSortedMap()
-            _categories.value = sortedCategories }
-        </ID>
-        <ID>
-            ExplicitItLambdaParameter:HistoryLineChartUI.kt${ it -&gt; // increase value of x-axis by each loop val xAxisPointVerticalLines = oneWidthSection * (yAxisCount) drawVerticalLinesForMatrix( drawColor, xAxisPointVerticalLines, oneHeightSection, barWidthPix ) drawEntryDatesUnderVerticalLines( textMeasurer, it, styleSmall, xAxisPointVerticalLines, onePercentWidth, oneHeightSection ) val heightDataPoint = getHeightOfDataPoint( it.valueTotal, onePercentHeight ) val xAxisPointHorizontalLines = drawDataPoint( oneWidthSection, yAxisCount, path, lineGraphColor, heightDataPoint ) drawTextLabelOfDataPoint( it, textMeasurer, styleSmall, onePercentWidth, previousTotalValue, onePercentHeight, heightDataPoint, xAxisPointHorizontalLines ) previousTotalValue = it.valueTotal yAxisCount++ }
-        </ID>
-        <ID>LambdaParameterInRestartableEffect:EntryListItemUI.kt$onAction</ID>
-        <ID>LongMethod:CategoryBottomSheetUI.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable
-            fun CategoryBottomSheet()
-        </ID>
-        <ID>LongMethod:CategoryUI.kt$@Composable fun CategoryList( categoryVM: CategoryVM,
-            categories: Map&lt;Char, List&lt;Category&gt;&gt;, deletionCheckboxes: CategoryStates,
-            scrollState: LazyListState )
-        </ID>
-        <ID>LongMethod:CounterBarcodeScannerUI.kt$@OptIn(ExperimentalMaterial3Api::class)
-            @Composable fun BarcodeInfoSheet( onAction: (EntrySavingIntents) -&gt; Unit, states:
-            EntrySavingStates, barcodeNumber: String )
-        </ID>
-        <ID>LongMethod:CounterDropdownFieldUI.kt$@Composable fun RowScope.CategoryDropdownField(
-            context: Context, entrySavingViewModel: EntrySavingViewModel, keyboardController:
-            SoftwareKeyboardController? )
-        </ID>
-        <ID>LongMethod:CounterTabRowFieldsUI.kt$@Composable fun CounterTabRowFieldsUI(
-            entrySavingViewModel: EntrySavingViewModel, accessibilityGramTextField: String,
-            accessibilityGramTextFieldConsumed: String, labelGramField: String, labelQuantityField:
-            String, onValueChangeGramField: (String) -&gt; Unit, onValueChangeQuantityField:
-            (String) -&gt; Unit, quantityFieldPlaceholder: String )
-        </ID>
-        <ID>LongMethod:CounterTabRowUI.kt$@Composable fun TabRow(entrySavingViewModel:
-            EntrySavingViewModel)
-        </ID>
-        <ID>LongMethod:CounterUI.kt$@Composable fun Counter( context: Context, snackbarHostState:
-            SnackbarHostState, entrySavingViewModel: EntrySavingViewModel = koinViewModel(),
-            entryListDisplayingViewModel: EntryListDisplayingViewModel, )
-        </ID>
-        <ID>LongMethod:CounterUserInformation.kt$@Composable fun CounterUserInformation( context:
-            Context, entrySavingViewModel: EntrySavingViewModel, snackbarHostState:
-            SnackbarHostState, )
-        </ID>
-        <ID>LongMethod:EntryListItemUI.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun
-            EntryListItemUI( data: SuccessData, onAction: (EntryListDisplayingIntents) -&gt; Unit, )
-        </ID>
-        <ID>LongMethod:EntryListUI.kt$@Composable fun EntryListUI( currentScreen: Screens,
-            backgroundColorPrimary: Boolean, data: SuccessData, viewModel:
-            EntryListDisplayingViewModel, sharedPrefsMain: SharedPreferences = koinInject() )
-        </ID>
-        <ID>LongMethod:HistoryLineChartUI.kt$@Composable fun LineChart( context: Context,
-            savedSugarCountGrouped: List&lt;EntryGroupInt&gt;, sharedPrefsMain: SharedPreferences =
-            koinInject() )
-        </ID>
-        <ID>LongMethod:HistoryUI.kt$@Composable fun History( context: Context,
-            entryListDisplayingViewModel: EntryListDisplayingViewModel,
-            entryGraphDisplayingViewModel: EntryGraphDisplayingViewModel = koinViewModel(),
-            historyViewModel: HistoryVM = koinViewModel() )
-        </ID>
-        <ID>LongMethod:SettingsColorScheme.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable
-            fun SettingsColorScheme(settingsVM: SettingsVM)
-        </ID>
-        <ID>LongMethod:SettingsEntriesDeletion.kt$@OptIn(ExperimentalMaterial3Api::class)
-            @Composable fun SettingsEntriesDeletion(settingsVM: SettingsVM)
-        </ID>
-        <ID>LongMethod:SettingsExportDataUI.kt$@SuppressLint("NewApi", "API level check is handled
-            via a Boolean in actionExportEntries()") @OptIn(ExperimentalMaterial3Api::class)
-            @Composable fun SettingsPostExportBottomSheet( context: Context, settingsVM: SettingsVM,
-            descriptionText: String, buttonIcon: Int, )
-        </ID>
-        <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage1$@Composable override fun
-            Content(paddingValues: PaddingValues)
-        </ID>
-        <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage2$@Composable override fun
-            Content(paddingValues: PaddingValues)
-        </ID>
-        <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage3$@Composable override fun
-            Content(paddingValues: PaddingValues)
-        </ID>
-        <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage4$@Composable override fun
-            Content(paddingValues: PaddingValues)
-        </ID>
-        <ID>LongMethod:SettingsSharedSliderThresholdUI.kt$@Composable fun
-            SettingsSharedSliderThreshold( settingsVM: SettingsVM )
-        </ID>
-        <ID>LongMethod:SettingsUI.kt$@Composable fun Settings( context: Context, navController:
-            NavController, )
-        </ID>
-        <ID>LongParameterList:CounterTabRowFieldsUI.kt$( entrySavingViewModel: EntrySavingViewModel,
-            accessibilityGramTextField: String, accessibilityGramTextFieldConsumed: String,
-            labelGramField: String, labelQuantityField: String, onValueChangeGramField: (String) -&gt;
-            Unit, onValueChangeQuantityField: (String) -&gt; Unit, quantityFieldPlaceholder: String
-            )
-        </ID>
-        <ID>LongParameterList:EditDatabaseEntryUseCase.kt$EditDatabaseEntryUseCase$( sugarEntryID:
-            Int, sugarEntryType: GramCountMode, oldCategory: String, newCategory: String, newGram:
-            Double, newQuantity: Double, )
-        </ID>
-        <ID>LongParameterList:EntrySavingViewModel.kt$EntrySavingViewModel$( private val
-            scanBarcodeUseCase: ScanBarcodeUseCase, private val getEntryByCategoryUseCase:
-            GetEntryByCategoryUseCase, private val saveEntryInDatabaseUseCase:
-            SaveEntryInDatabaseUseCase, private val saveCategoryInDatabaseUseCase:
-            SaveCategoryInDatabaseUseCase, private val checkUserInputUseCase: CheckUserInputUseCase,
-            private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase,
-            private val displayAllCategoriesUseCase: DisplayAllCategoriesUseCase, private val
-            checkDailyGramThresholdUseCase: CheckDailyGramThresholdUseCase )
-        </ID>
-        <ID>LongParameterList:HistoryLineChartUI.kt$( graphDataElement: GraphData, textMeasurer:
-            TextMeasurer, styleSmall: TextStyle, onePercentWidth: Float, previousTotalValue: Int,
-            //Double onePercentHeight: Float, heightDataPoint: Float, xAxisPointHorizontalLines:
-            Float )
-        </ID>
-        <ID>LongParameterList:HistoryLineChartUI.kt$( horizontalLinesCount: Int, drawColor: Color,
-            oneWidthSection: Float, oneHeightSection: Float, sizeGraphDataList: Int, barWidthPix:
-            Float )
-        </ID>
-        <ID>LongParameterList:HistoryLineChartUI.kt$( lineGraphYAxisTag: List&lt;String&gt;,
-            onePercentWidth: Float, oneHeightSection: Float, onePercentHeight: Float, textMeasurer:
-            TextMeasurer, styleBig: TextStyle, styleSmall: TextStyle )
-        </ID>
-        <ID>LongParameterList:HistoryLineChartUI.kt$( sharedPrefsMain: SharedPreferences,
-            onePercentHeight: Float, thresholdLineColor: Color, oneWidthSection: Float,
-            sizeGraphDataList: Int, barWidthPix: Float )
-        </ID>
-        <ID>LongParameterList:HistoryLineChartUI.kt$( textMeasurer: TextMeasurer, graphDataElement:
-            GraphData, styleSmall: TextStyle, xAxisPointVerticalLines: Float, onePercentWidth:
-            Float, oneHeightSection: Float )
-        </ID>
-        <ID>LongParameterList:SharedAlertDialogDoubleBtnUI.kt$( dialogTitle: String,
-            dialogDescription: String, confirmBtnText: String, confirmBtnAction: () -&gt; Unit,
-            dismissBtnText: String, dismissBtnAction: () -&gt; Unit, onDismissRequest: () -&gt; Unit
-            )
-        </ID>
-        <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$10</ID>
-        <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$11</ID>
-        <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$8</ID>
-        <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$9</ID>
-        <ID>MagicNumber:CategoryVM.kt$CategoryVM$150</ID>
-        <ID>MagicNumber:Color.kt$0xFF625b71</ID>
-        <ID>MagicNumber:Color.kt$0xff365854</ID>
-        <ID>MagicNumber:Color.kt$0xff4a4b7b</ID>
-        <ID>MagicNumber:Color.kt$0xffa81712</ID>
-        <ID>MagicNumber:Color.kt$0xffc0f4ee</ID>
-        <ID>MagicNumber:Color.kt$0xffe3e4fd</ID>
-        <ID>MagicNumber:CounterUI.kt$33</ID>
-        <ID>MagicNumber:EntryListItemUI.kt$0.1F</ID>
-        <ID>MagicNumber:EntryListItemUI.kt$0.1f</ID>
-        <ID>MagicNumber:EntryListUI.kt$3f</ID>
-        <ID>MagicNumber:EntryListUI.kt$50</ID>
-        <ID>MagicNumber:EntryListUI.kt$6f</ID>
-        <ID>MagicNumber:EntrySavingStates.kt$EntrySavingStates$1000</ID>
-        <ID>MagicNumber:ExportData.kt$ExportData$10</ID>
-        <ID>MagicNumber:Extensions.kt$10</ID>
-        <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$365</ID>
-        <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$4</ID>
-        <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$86400</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$10</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$100</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$18</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$20</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$33</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$5</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$50</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$6</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$60</ID>
-        <ID>MagicNumber:HistoryLineChartUI.kt$90</ID>
-        <ID>MagicNumber:InputFilters.kt$InputFilters.Companion$100.0</ID>
-        <ID>MagicNumber:InputFilters.kt$InputFilters.Companion$1000.0</ID>
-        <ID>MagicNumber:ReuseEntryForTodayUseCase.kt$ReuseEntryForTodayUseCase$1000</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$3</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$4</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$5</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$6</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$7</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$8</ID>
-        <ID>MagicNumber:SettingsEntriesDeletion.kt$8f</ID>
-        <ID>MagicNumber:SettingsExportDataUI.kt$0.5F</ID>
-        <ID>MagicNumber:SettingsExportDataUI.kt$0.5f</ID>
-        <ID>MagicNumber:SettingsFaqUI.kt$33</ID>
-        <ID>MagicNumber:SettingsImprintUI.kt$255</ID>
-        <ID>MagicNumber:SettingsPrivacyPolicyUI.kt$255</ID>
-        <ID>MagicNumber:SettingsSharedSliderThresholdUI.kt$100f</ID>
-        <ID>MagicNumber:SettingsVM.kt$SettingsVM$0.1f</ID>
-        <ID>MagicNumber:SettingsVM.kt$SettingsVM$3</ID>
-        <ID>MagicNumber:SettingsVM.kt$SettingsVM$50</ID>
-        <ID>MatchingDeclarationName:FaqDataList.kt$faqDataList</ID>
-        <ID>MaxLineLength:DaoAppDatabase.kt$DaoAppDatabase$@Query("SELECT EXISTS( SELECT 1 FROM
-            sugarEntriesTable WHERE category = :category AND currentTimestamp &gt;
-            :deletionPointInTime)")
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$entryList =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.entriesGroupedPerDayUnfilteredHistory
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$entrySugar =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.entryInCardItem
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$newCategory =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.valueCategory
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$newGram =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.valueGram.toDouble()
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$newQuantity =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.valueQuantity.toDouble()
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$oldCategory =
-            (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.entryInCardItem.category
-        </ID>
-        <ID>
-            MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$searchFieldShown
-            = (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.searchFieldShown.not()
-        </ID>
-        <ID>
-            MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$searchFieldText
-            = (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.searchFieldText
-        </ID>
-        <ID>MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$sugarEntryID
-            = (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.entryInCardItem.id
-        </ID>
-        <ID>
-            MaxLineLength:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$sugarEntryType
-            = (_entryListDisplayingStates.value as
-            EntryListDisplayingStates.Success).data.entryInCardItem.entryType
-        </ID>
-        <ID>MaxLineLength:HistoryUI.kt$(entryGraphDisplayingStates as
-            EntryGraphDisplayingStates.Success).data.entriesGroupedPerDay.toIntModel()
-        </ID>
-        <ID>MaxLineLength:SettingsExportDataUI.kt$if</ID>
-        <ID>ModifierMissing:CategoryScrollHelperUI.kt$ScrollToSpecificLetter</ID>
-        <ID>ModifierMissing:CategoryUI.kt$CategoryList</ID>
-        <ID>ModifierMissing:CounterBarcodeScannerUI.kt$Barcode</ID>
-        <ID>ModifierMissing:CounterBarcodeScannerUI.kt$BarcodeInfoSheet</ID>
-        <ID>ModifierMissing:CounterDatePickerUI.kt$ElevatedButton</ID>
-        <ID>ModifierMissing:CounterDropdownFieldUI.kt$CategoryDropdownField</ID>
-        <ID>ModifierMissing:CounterDropdownFieldUI.kt$CategoryItems</ID>
-        <ID>ModifierMissing:CounterTabRowFieldsUI.kt$CounterTabRowFieldsUI</ID>
-        <ID>ModifierMissing:CounterTabRowUI.kt$TabRow</ID>
-        <ID>ModifierMissing:CounterUI.kt$Counter</ID>
-        <ID>ModifierMissing:EmptyDataInfo.kt$EmptyDataInfo</ID>
-        <ID>ModifierMissing:EntryListUI.kt$EntryListUI</ID>
-        <ID>ModifierMissing:HistoryCardsUI.kt$CardsScreen</ID>
-        <ID>ModifierMissing:HistoryLineChartUI.kt$LineChart</ID>
-        <ID>ModifierMissing:HistoryTabRowUI.kt$HistoryTabRowUI</ID>
-        <ID>ModifierMissing:HistoryUI.kt$History</ID>
-        <ID>ModifierMissing:MainScreenView.kt$MainScreenView</ID>
-        <ID>ModifierMissing:MainScreenView.kt$NavigationSideBar</ID>
-        <ID>ModifierMissing:NavigationComponents.kt$BottomNavigation</ID>
-        <ID>ModifierMissing:SettingsExportDataUI.kt$ExportProgressIndicator</ID>
-        <ID>ModifierMissing:SettingsFaqUI.kt$FAQScreen</ID>
-        <ID>ModifierMissing:SettingsFaqUI.kt$FaqItem</ID>
-        <ID>ModifierMissing:SettingsImprintUI.kt$ImprintUI</ID>
-        <ID>ModifierMissing:SettingsIntroductionUI.kt$OnboardingUI</ID>
-        <ID>ModifierMissing:SettingsPrivacyPolicyUI.kt$PrivacyPolicyUI</ID>
-        <ID>ModifierMissing:SettingsSectionBoxUI.kt$SettingsSectionBoxUI</ID>
-        <ID>ModifierMissing:SettingsSharedSliderThresholdUI.kt$SettingsSharedSliderThreshold</ID>
-        <ID>ModifierMissing:SettingsTermsAndConditionsUI.kt$TermsAndConditionsUI</ID>
-        <ID>ModifierMissing:SettingsThirdPartyLibrariesUI.kt$SettingsThirdPartyLibrariesUI</ID>
-        <ID>ModifierMissing:SettingsUI.kt$Settings</ID>
-        <ID>ModifierMissing:SettingsUI.kt$SettingsVersionCode</ID>
-        <ID>ModifierMissing:SharedTopAppBar.kt$SharedTopAppBar</ID>
-        <ID>MultipleEmitters:CategoryScrollHelperUI.kt$ScrollToSpecificLetter</ID>
-        <ID>MultipleEmitters:EmptyDataInfo.kt$EmptyDataInfo</ID>
-        <ID>MultipleEmitters:SettingsSectionBoxUI.kt$SettingsSectionBoxUI</ID>
-        <ID>MultipleEmitters:SettingsSharedSliderThresholdUI.kt$SettingsSharedSliderThreshold</ID>
-        <ID>MultipleEmitters:SettingsUI.kt$SettingsVersionCode</ID>
-        <ID>NestedBlockDepth:ExportData.kt$ExportData$@RequiresApi(Build.VERSION_CODES.Q) fun
-            exportEntriesViaMediaStore( context: Context, allEntries: List&lt;SugarEntry&gt;,
-            fileName: String, settingsVM: SettingsVM, header: String )
-        </ID>
-        <ID>PrintStackTrace:ExportData.kt$ExportData$e</ID>
-        <ID>ReturnCount:InputFilters.kt$InputFilters.Companion$fun filterBlockingOverHundred(input:
-            String): Boolean
-        </ID>
-        <ID>ReturnCount:InputFilters.kt$InputFilters.Companion$fun filterBlockingOverThousand(input:
-            String): Boolean
-        </ID>
-        <ID>SwallowedException:HelperMethods.kt$HelperMethods.Companion$e: Exception</ID>
-        <ID>TooGenericExceptionCaught:HelperMethods.kt$HelperMethods.Companion$e: Exception</ID>
-        <ID>
-            TooGenericExceptionThrown:EntryGraphDisplayingViewModelTest.kt$EntryGraphDisplayingViewModelTest$throw
-            RuntimeException("Test error")
-        </ID>
-        <ID>TooManyFunctions:DaoAppDatabase.kt$DaoAppDatabase</ID>
-        <ID>TooManyFunctions:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel :
-            ViewModelKoinComponent
-        </ID>
-        <ID>TooManyFunctions:EntrySavingViewModel.kt$EntrySavingViewModel : ViewModelKoinComponent
-        </ID>
-        <ID>TooManyFunctions:HelperMethods.kt$HelperMethods$Companion</ID>
-        <ID>TooManyFunctions:SettingsVM.kt$SettingsVM : ViewModelKoinComponent</ID>
-        <ID>UtilityClassWithPublicConstructor:InputFilters.kt$InputFilters</ID>
-        <ID>VariableNaming:EntryGraphDisplayingViewModel.kt$EntryGraphDisplayingViewModel$val
-            _entryGraphDisplayingStates = MutableStateFlow&lt;EntryGraphDisplayingStates&gt;( value
-            = EntryGraphDisplayingStates.Loading )
-        </ID>
-        <ID>ViewModelForwarding:CounterDatePickerUI.kt$DatePickerDialog( entrySavingViewModel =
-            entrySavingViewModel, datePickerState = datePickerState )
-        </ID>
-        <ID>ViewModelForwarding:CounterDatePickerUI.kt$ElevatedButton( entrySavingViewModel =
-            entrySavingViewModel, accessibilityDatePickerButton =
-            stringResource(R.string.accessibility_date_picker_button), textColor = textColor,
-            dateOfEntryEpochSec = entrySavingStates.dateOfEntryEpochSec )
-        </ID>
-        <ID>ViewModelForwarding:CounterTabRowUI.kt$CounterTabRowFieldsUI( entrySavingViewModel =
-            entrySavingViewModel, accessibilityGramTextField =
-            stringResource(R.string.accessibility_perHundredGram_textField),
-            accessibilityGramTextFieldConsumed =
-            stringResource(R.string.accessibility_perHundredGram_textField_consumed), labelGramField
-            = stringResource(R.string.gramPerHundredLabel), labelQuantityField =
-            stringResource(R.string.amountSugar), onValueChangeGramField = { input -&gt; if
-            (InputFilters.filterBlockingOverHundred(input)) { entrySavingViewModel.onAction( action
-            = EntrySavingIntents.ChangeEntryFieldGram( entryFieldGram = input ) ) } },
-            onValueChangeQuantityField = { input -&gt;
-            if(InputFilters.filterBlockingOverThousand(input)) entrySavingViewModel.onAction( action
-            = EntrySavingIntents.ChangeEntryFieldQuantity( entryFieldQuantity = input ) ) },
-            quantityFieldPlaceholder = stringResource(R.string.gram_unit_short), )
-        </ID>
-        <ID>ViewModelForwarding:CounterTabRowUI.kt$CounterTabRowFieldsUI( entrySavingViewModel =
-            entrySavingViewModel, accessibilityGramTextField =
-            stringResource(R.string.accessibility_perPiece_textField),
-            accessibilityGramTextFieldConsumed =
-            stringResource(R.string.accessibility_perPiece_textField_consumed), labelGramField =
-            stringResource(R.string.gramSugar), labelQuantityField =
-            stringResource(R.string.quantitySugar), onValueChangeGramField = { input -&gt; if
-            (InputFilters.filterBlockingOverHundred(input)) entrySavingViewModel.onAction( action =
-            EntrySavingIntents.ChangeEntryFieldGram( entryFieldGram = input ) ) },
-            onValueChangeQuantityField = { input -&gt; if
-            (InputFilters.filterBlockingOverHundred(input)) entrySavingViewModel.onAction( action =
-            EntrySavingIntents.ChangeEntryFieldQuantity( entryFieldQuantity = input ) ) },
-            quantityFieldPlaceholder = NumberConstants.ONE_AS_INT.toString(), )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$Barcode( entrySavingViewModel = entrySavingViewModel,
-            textColor = textColor )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$CategoryDropdownField( context = context,
-            entrySavingViewModel = entrySavingViewModel, keyboardController = keyboardController )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$CounterUserInformation( context = context,
-            entrySavingViewModel = entrySavingViewModel, snackbarHostState = snackbarHostState )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$DatePicker( entrySavingViewModel =
-            entrySavingViewModel, textColor = textColor, )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$EntryListUI( currentScreen = Screens.COUNTER,
-            backgroundColorPrimary = false, data = (entryListDisplayingStates as
-            EntryListDisplayingStates.Success).data, viewModel = entryListDisplayingViewModel )
-        </ID>
-        <ID>ViewModelForwarding:CounterUI.kt$TabRow(entrySavingViewModel)</ID>
-        <ID>ViewModelForwarding:HistoryCardsUI.kt$EntryListUI( currentScreen = Screens.HISTORY,
-            backgroundColorPrimary = false, data = data, viewModel = viewModel )
-        </ID>
-        <ID>ViewModelForwarding:HistoryUI.kt$CardsScreen( onAction =
-            entryListDisplayingViewModel::onAction, data = (entryListDisplayingStates as
-            EntryListDisplayingStates.Success).data, viewModel = entryListDisplayingViewModel )
-        </ID>
-        <ID>ViewModelForwarding:NavigationComponents.kt$Counter( context = context,
-            snackbarHostState = snackbarHostState, entryListDisplayingViewModel =
-            entryListDisplayingViewModel )
-        </ID>
-        <ID>ViewModelForwarding:NavigationComponents.kt$History( context = context,
-            entryListDisplayingViewModel = entryListDisplayingViewModel )
-        </ID>
-    </CurrentIssues>
+  <ManuallySuppressedIssues />
+  <CurrentIssues>
+    <ID>ClassNaming:FaqDataList.kt$faqDataList</ID>
+    <ID>ComposableParamOrder:CounterUI.kt$Counter</ID>
+    <ID>ComposableParamOrder:Theme.kt$SugarCounterTheme</ID>
+    <ID>CyclomaticComplexMethod:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel$fun
+      onAction(action: EntryListDisplayingIntents)
+    </ID>
+    <ID>CyclomaticComplexMethod:EntryListUI.kt$@Composable fun EntryListUI( currentScreen: Screens,
+      backgroundColorPrimary: Boolean, data: SuccessData, onAction: (EntryListDisplayingIntents) -&gt;
+      Unit, sharedPrefsMain: SharedPreferences = koinInject() )
+    </ID>
+    <ID>CyclomaticComplexMethod:EntrySavingViewModel.kt$EntrySavingViewModel$fun onAction(action:
+      EntrySavingIntents)
+    </ID>
+    <ID>EmptyDefaultConstructor:MainApplication.kt$MainApplication$()</ID>
+    <ID>EmptyKtFile:SettingsDonationUI.kt$.SettingsDonationUI.kt</ID>
+    <ID>LambdaParameterInRestartableEffect:CounterTabRowUI.kt$onAction</ID>
+    <ID>LambdaParameterInRestartableEffect:EntryListItemUI.kt$onAction</ID>
+    <ID>LongMethod:CounterDropdownFieldUI.kt$@Composable fun RowScope.CategoryDropdownField(
+      context: Context, onAction: (EntrySavingIntents) -&gt; Unit, entrySavingStates:
+      EntrySavingStates, keyboardController: SoftwareKeyboardController? )
+    </ID>
+    <ID>LongMethod:CounterTabRowUI.kt$@Composable fun TabRow( onAction: (EntrySavingIntents) -&gt;
+      Unit, entrySavingStates: EntrySavingStates )
+    </ID>
+    <ID>LongMethod:CounterUI.kt$@Composable fun Counter( context: Context, snackbarHostState:
+      SnackbarHostState, entrySavingViewModel: EntrySavingViewModel = koinViewModel(),
+      entryListDisplayingViewModel: EntryListDisplayingViewModel, )
+    </ID>
+    <ID>LongMethod:EntryListItemUI.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun
+      EntryListItemUI( data: SuccessData, onAction: (EntryListDisplayingIntents) -&gt; Unit, )
+    </ID>
+    <ID>LongMethod:EntryListUI.kt$@Composable fun EntryListUI( currentScreen: Screens,
+      backgroundColorPrimary: Boolean, data: SuccessData, onAction: (EntryListDisplayingIntents) -&gt;
+      Unit, sharedPrefsMain: SharedPreferences = koinInject() )
+    </ID>
+    <ID>LongMethod:HistoryLineChartUI.kt$@Composable fun LineChart( context: Context,
+      savedSugarCountGrouped: List&lt;EntryGroupInt&gt;, sharedPrefsMain: SharedPreferences =
+      koinInject() )
+    </ID>
+    <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage1$@Composable override fun
+      Content(paddingValues: PaddingValues)
+    </ID>
+    <ID>LongMethod:SettingsIntroductionPagesUI.kt$OnboardingPage2$@Composable override fun
+      Content(paddingValues: PaddingValues)
+    </ID>
+    <ID>LongParameterList:CounterTabRowFieldsUI.kt$( onAction: (EntrySavingIntents) -&gt; Unit,
+      entrySavingStates: EntrySavingStates, accessibilityGramTextField: String,
+      accessibilityGramTextFieldConsumed: String, labelGramField: String, labelQuantityField:
+      String, onValueChangeGramField: (String) -&gt; Unit, onValueChangeQuantityField: (String) -&gt;
+      Unit, quantityFieldPlaceholder: String )
+    </ID>
+    <ID>LongParameterList:EditDatabaseEntryUseCase.kt$EditDatabaseEntryUseCase$( sugarEntryID: Int,
+      sugarEntryType: GramCountMode, oldCategory: String, newCategory: String, newGram: Double,
+      newQuantity: Double, )
+    </ID>
+    <ID>LongParameterList:EntrySavingViewModel.kt$EntrySavingViewModel$( private val
+      scanBarcodeUseCase: ScanBarcodeUseCase, private val getEntryByCategoryUseCase:
+      GetEntryByCategoryUseCase, private val saveEntryInDatabaseUseCase: SaveEntryInDatabaseUseCase,
+      private val saveCategoryInDatabaseUseCase: SaveCategoryInDatabaseUseCase, private val
+      checkUserInputUseCase: CheckUserInputUseCase, private val checkForDefaultSavingValuesUseCase:
+      CheckForDefaultSavingValuesUseCase, private val displayAllCategoriesUseCase:
+      DisplayAllCategoriesUseCase, private val checkDailyGramThresholdUseCase:
+      CheckDailyGramThresholdUseCase )
+    </ID>
+    <ID>LongParameterList:HistoryLineChartUI.kt$( graphDataElement: GraphData, textMeasurer:
+      TextMeasurer, styleSmall: TextStyle, onePercentWidth: Float, previousTotalValue: Int, //Double
+      onePercentHeight: Float, heightDataPoint: Float, xAxisPointHorizontalLines: Float )
+    </ID>
+    <ID>LongParameterList:HistoryLineChartUI.kt$( horizontalLinesCount: Int, drawColor: Color,
+      oneWidthSection: Float, oneHeightSection: Float, sizeGraphDataList: Int, barWidthPix: Float )
+    </ID>
+    <ID>LongParameterList:HistoryLineChartUI.kt$( lineGraphYAxisTag: List&lt;String&gt;,
+      onePercentWidth: Float, oneHeightSection: Float, onePercentHeight: Float, textMeasurer:
+      TextMeasurer, styleBig: TextStyle, styleSmall: TextStyle )
+    </ID>
+    <ID>LongParameterList:HistoryLineChartUI.kt$( sharedPrefsMain: SharedPreferences,
+      onePercentHeight: Float, thresholdLineColor: Color, oneWidthSection: Float, sizeGraphDataList:
+      Int, barWidthPix: Float )
+    </ID>
+    <ID>LongParameterList:HistoryLineChartUI.kt$( textMeasurer: TextMeasurer, graphDataElement:
+      GraphData, styleSmall: TextStyle, xAxisPointVerticalLines: Float, onePercentWidth: Float,
+      oneHeightSection: Float )
+    </ID>
+    <ID>LongParameterList:SharedAlertDialogDoubleBtnUI.kt$( dialogTitle: String, dialogDescription:
+      String, confirmBtnText: String, confirmBtnAction: () -&gt; Unit, dismissBtnText: String,
+      dismissBtnAction: () -&gt; Unit, onDismissRequest: () -&gt; Unit )
+    </ID>
+    <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$10</ID>
+    <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$11</ID>
+    <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$8</ID>
+    <ID>MagicNumber:AppDatabase.kt$AppDatabase.Companion.&lt;no name provided&gt;$9</ID>
+    <ID>MagicNumber:CategoryVM.kt$CategoryVM$150</ID>
+    <ID>MagicNumber:Color.kt$0xFF625b71</ID>
+    <ID>MagicNumber:Color.kt$0xff365854</ID>
+    <ID>MagicNumber:Color.kt$0xff4a4b7b</ID>
+    <ID>MagicNumber:Color.kt$0xffa81712</ID>
+    <ID>MagicNumber:Color.kt$0xffc0f4ee</ID>
+    <ID>MagicNumber:Color.kt$0xffe3e4fd</ID>
+    <ID>MagicNumber:CounterUI.kt$33</ID>
+    <ID>MagicNumber:EntryListItemUI.kt$0.1F</ID>
+    <ID>MagicNumber:EntryListItemUI.kt$0.1f</ID>
+    <ID>MagicNumber:EntryListUI.kt$3f</ID>
+    <ID>MagicNumber:EntryListUI.kt$50</ID>
+    <ID>MagicNumber:EntryListUI.kt$6f</ID>
+    <ID>MagicNumber:EntrySavingStates.kt$EntrySavingStates$1000</ID>
+    <ID>MagicNumber:ExportData.kt$ExportData$10</ID>
+    <ID>MagicNumber:Extensions.kt$10</ID>
+    <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$365</ID>
+    <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$4</ID>
+    <ID>MagicNumber:HelperMethods.kt$HelperMethods.Companion$86400</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$10</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$100</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$18</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$20</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$33</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$5</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$50</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$6</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$60</ID>
+    <ID>MagicNumber:HistoryLineChartUI.kt$90</ID>
+    <ID>MagicNumber:InputFilters.kt$InputFilters.Companion$100.0</ID>
+    <ID>MagicNumber:InputFilters.kt$InputFilters.Companion$1000.0</ID>
+    <ID>MagicNumber:ReuseEntryForTodayUseCase.kt$ReuseEntryForTodayUseCase$1000</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$3</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$4</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$5</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$6</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$7</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$8</ID>
+    <ID>MagicNumber:SettingsEntriesDeletion.kt$8f</ID>
+    <ID>MagicNumber:SettingsExportDataUI.kt$0.5F</ID>
+    <ID>MagicNumber:SettingsExportDataUI.kt$0.5f</ID>
+    <ID>MagicNumber:SettingsFaqUI.kt$33</ID>
+    <ID>MagicNumber:SettingsImprintUI.kt$255</ID>
+    <ID>MagicNumber:SettingsPrivacyPolicyUI.kt$255</ID>
+    <ID>MagicNumber:SettingsSharedSliderThresholdUI.kt$100f</ID>
+    <ID>MagicNumber:SettingsVM.kt$SettingsVM$0.1f</ID>
+    <ID>MagicNumber:SettingsVM.kt$SettingsVM$3</ID>
+    <ID>MagicNumber:SettingsVM.kt$SettingsVM$50</ID>
+    <ID>MatchingDeclarationName:FaqDataList.kt$faqDataList</ID>
+    <ID>MaxLineLength:SettingsExportDataUI.kt$if</ID>
+    <ID>ModifierMissing:CategoryScrollHelperUI.kt$ScrollToSpecificLetter</ID>
+    <ID>ModifierMissing:CategoryUI.kt$CategoryList</ID>
+    <ID>ModifierMissing:CounterBarcodeScannerUI.kt$Barcode</ID>
+    <ID>ModifierMissing:CounterBarcodeScannerUI.kt$BarcodeInfoSheet</ID>
+    <ID>ModifierMissing:CounterDatePickerUI.kt$ElevatedButton</ID>
+    <ID>ModifierMissing:CounterDropdownFieldUI.kt$CategoryDropdownField</ID>
+    <ID>ModifierMissing:CounterDropdownFieldUI.kt$CategoryItems</ID>
+    <ID>ModifierMissing:CounterTabRowFieldsUI.kt$CounterTabRowFieldsUI</ID>
+    <ID>ModifierMissing:CounterTabRowUI.kt$TabRow</ID>
+    <ID>ModifierMissing:CounterUI.kt$Counter</ID>
+    <ID>ModifierMissing:EmptyDataInfo.kt$EmptyDataInfo</ID>
+    <ID>ModifierMissing:EntryListUI.kt$EntryListUI</ID>
+    <ID>ModifierMissing:HistoryCardsUI.kt$CardsScreen</ID>
+    <ID>ModifierMissing:HistoryLineChartUI.kt$LineChart</ID>
+    <ID>ModifierMissing:HistoryTabRowUI.kt$HistoryTabRowUI</ID>
+    <ID>ModifierMissing:HistoryUI.kt$History</ID>
+    <ID>ModifierMissing:MainScreenView.kt$MainScreenView</ID>
+    <ID>ModifierMissing:MainScreenView.kt$NavigationSideBar</ID>
+    <ID>ModifierMissing:NavigationComponents.kt$BottomNavigation</ID>
+    <ID>ModifierMissing:SettingsExportDataUI.kt$ExportProgressIndicator</ID>
+    <ID>ModifierMissing:SettingsFaqUI.kt$FAQScreen</ID>
+    <ID>ModifierMissing:SettingsFaqUI.kt$FaqItem</ID>
+    <ID>ModifierMissing:SettingsImprintUI.kt$ImprintUI</ID>
+    <ID>ModifierMissing:SettingsIntroductionUI.kt$OnboardingUI</ID>
+    <ID>ModifierMissing:SettingsPrivacyPolicyUI.kt$PrivacyPolicyUI</ID>
+    <ID>ModifierMissing:SettingsSectionBoxUI.kt$SettingsSectionBoxUI</ID>
+    <ID>ModifierMissing:SettingsSharedSliderThresholdUI.kt$SettingsSharedSliderThreshold</ID>
+    <ID>ModifierMissing:SettingsTermsAndConditionsUI.kt$TermsAndConditionsUI</ID>
+    <ID>ModifierMissing:SettingsThirdPartyLibrariesUI.kt$SettingsThirdPartyLibrariesUI</ID>
+    <ID>ModifierMissing:SettingsUI.kt$Settings</ID>
+    <ID>ModifierMissing:SettingsUI.kt$SettingsVersionCode</ID>
+    <ID>ModifierMissing:SharedTopAppBar.kt$SharedTopAppBar</ID>
+    <ID>MultipleEmitters:CategoryScrollHelperUI.kt$ScrollToSpecificLetter</ID>
+    <ID>MultipleEmitters:EmptyDataInfo.kt$EmptyDataInfo</ID>
+    <ID>MultipleEmitters:SettingsSectionBoxUI.kt$SettingsSectionBoxUI</ID>
+    <ID>MultipleEmitters:SettingsSharedSliderThresholdUI.kt$SettingsSharedSliderThreshold</ID>
+    <ID>MultipleEmitters:SettingsUI.kt$SettingsVersionCode</ID>
+    <ID>NestedBlockDepth:ExportData.kt$ExportData$@RequiresApi(Build.VERSION_CODES.Q) fun
+      exportEntriesViaMediaStore( context: Context, allEntries: List&lt;SugarEntry&gt;, fileName:
+      String, settingsVM: SettingsVM, header: String )
+    </ID>
+    <ID>PrintStackTrace:ExportData.kt$ExportData$e</ID>
+    <ID>SwallowedException:HelperMethods.kt$HelperMethods.Companion$e: Exception</ID>
+    <ID>TooGenericExceptionCaught:HelperMethods.kt$HelperMethods.Companion$e: Exception</ID>
+    <ID>
+      TooGenericExceptionThrown:EntryGraphDisplayingViewModelTest.kt$EntryGraphDisplayingViewModelTest$throw
+      RuntimeException("Test error")
+    </ID>
+    <ID>TooManyFunctions:DaoAppDatabase.kt$DaoAppDatabase</ID>
+    <ID>TooManyFunctions:EntryListDisplayingViewModel.kt$EntryListDisplayingViewModel :
+      ViewModelKoinComponent
+    </ID>
+    <ID>TooManyFunctions:EntrySavingViewModel.kt$EntrySavingViewModel : ViewModelKoinComponent</ID>
+    <ID>TooManyFunctions:HelperMethods.kt$HelperMethods$Companion</ID>
+    <ID>TooManyFunctions:SettingsVM.kt$SettingsVM : ViewModelKoinComponent</ID>
+    <ID>UtilityClassWithPublicConstructor:InputFilters.kt$InputFilters</ID>
+    <ID>ViewModelForwarding:NavigationComponents.kt$Counter( context = context, snackbarHostState =
+      snackbarHostState, entryListDisplayingViewModel = entryListDisplayingViewModel )
+    </ID>
+    <ID>ViewModelForwarding:NavigationComponents.kt$History( context = context,
+      entryListDisplayingViewModel = entryListDisplayingViewModel )
+    </ID>
+  </CurrentIssues>
 </SmellBaseline>
