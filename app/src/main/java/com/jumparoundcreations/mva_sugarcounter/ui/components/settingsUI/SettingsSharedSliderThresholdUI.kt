@@ -28,7 +28,7 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 fun SettingsSharedSliderThreshold(
     settingsVM: SettingsVM
 ) {
-    val gramThresholdSlider by settingsVM.gramThresholdSlider.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
 
     val title = stringResource(id = R.string.settings_threshold_title)
     val titleSugar = stringResource(id = R.string.general_sugar)
@@ -57,16 +57,16 @@ fun SettingsSharedSliderThreshold(
             Text(text = titleSugar)
             Text(
                 modifier = Modifier.padding(end = 6.dp),
-                text = "${gramThresholdSlider.toInt()} $unitOfMeasureGram"
+                text = "${settingsStates.gramThresholdSlider.toInt()} $unitOfMeasureGram"
             )
         }
 
         val gram = stringResource(R.string.general_gram)
         Slider(
             modifier = Modifier.semantics {
-                contentDescription = "${gramThresholdSlider.toInt()} ${gram}"
+                contentDescription = "${settingsStates.gramThresholdSlider.toInt()} ${gram}"
             },
-            value = gramThresholdSlider,
+            value = settingsStates.gramThresholdSlider,
             onValueChange = { settingsVM.actionUpdateGramThresholdSlider(it) },
             valueRange = gramSliderValueRange
         )
@@ -84,11 +84,10 @@ fun SettingsSharedSliderThreshold(
         }
     }
 
-    val gramThresholdDialogCheck by settingsVM.gramThresholdDialogCheck.collectAsState()
-    if (gramThresholdDialogCheck) {
+    if (settingsStates.gramThresholdDialogCheck) {
 
         ShowAlertDialogDoubleBtn(
-            dialogTitle = gramThresholdSlider.toInt()
+            dialogTitle = settingsStates.gramThresholdSlider.toInt()
                 .toString() + " " + stringResource(R.string.general_gram),
             dialogDescription = stringResource(id = R.string.settings_threshold_dialog_title),
             confirmBtnText = stringResource(id = R.string.generalConfirm),

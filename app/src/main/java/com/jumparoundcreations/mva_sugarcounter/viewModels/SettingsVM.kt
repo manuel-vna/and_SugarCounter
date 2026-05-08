@@ -10,9 +10,11 @@ import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsStates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -25,70 +27,50 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>()
 
-    //SateFlows: START
-    private val _faqExpandedId = MutableStateFlow(-1L)
-    var faqExpandedId = _faqExpandedId.asStateFlow()
-
-    private val _gramThresholdSlider = MutableStateFlow(0F)
-    val gramThresholdSlider = _gramThresholdSlider.asStateFlow()
-
-    private val _gramThresholdDialogCheck = MutableStateFlow(false)
-    val gramThresholdDialogCheck = _gramThresholdDialogCheck.asStateFlow()
-
-    private val _exportProgressIndicator = MutableStateFlow(0.1f)
-    val exportProgressIndicator = _exportProgressIndicator.asStateFlow()
-
-    private val _exportProgressIndicatorShown = MutableStateFlow(false)
-    val exportProgressIndicatorShown = _exportProgressIndicatorShown.asStateFlow()
-
-    private val _dataSuccessfullyExportedShown = MutableStateFlow(false)
-    val dataSuccessfullyExportedShown = _dataSuccessfullyExportedShown.asStateFlow()
-
-    private val _exportSuccessfully = MutableStateFlow(true)
-    val exportSuccessfully = _exportSuccessfully.asStateFlow()
-
-    private val _entriesDeletionActivated = MutableStateFlow(loadShaPrefEntriesDeletionSwitch())
-    val entriesDeletionActivated = _entriesDeletionActivated.asStateFlow()
-
-    private val _dynamicColorActivated = MutableStateFlow(loadShaPrefColorSchemeSwitch())
-    val dynamicColorActivated = _dynamicColorActivated.asStateFlow()
-
-    private val _bottomSheetsSettings = MutableStateFlow(BottomSheetsSettings.NONE)
-    val bottomSheetsSettings = _bottomSheetsSettings.asStateFlow()
-
-    private val _deletionWorkerSlider = MutableStateFlow(loadShaPrefEntriesDeletionSwitchValue())
-    val deletionWorkerSlider = _deletionWorkerSlider.asStateFlow()
-    //SateFlows: END
+    //StateFlow: START
+    private val _settingsStates = MutableStateFlow(
+        SettingsStates(
+            entriesDeletionActivated = loadShaPrefEntriesDeletionSwitch(),
+            dynamicColorActivated = loadShaPrefColorSchemeSwitch(),
+            deletionWorkerSlider = loadShaPrefEntriesDeletionSwitchValue()
+        )
+    )
+    val settingsStates = _settingsStates.asStateFlow()
+    //StateFlow: END
 
     //Actions: START
 
     fun actionChangeExpandedId(id: Long) {
-        _faqExpandedId.value = id
+        _settingsStates.update { it.copy(faqExpandedId = id) }
     }
 
     fun actionUpdateGramThresholdSharedPref() {
         sharedPrefsMain.edit {
-            putInt("gramThresholdValue", _gramThresholdSlider.value.toInt())
+            putInt("gramThresholdValue", _settingsStates.value.gramThresholdSlider.toInt())
         }
     }
 
     fun actionUpdateGramThresholdSlider(sliderPosition: Float) {
-        _gramThresholdSlider.value = sliderPosition
+        _settingsStates.update { it.copy(gramThresholdSlider = sliderPosition) }
     }
 
     fun actionGramThresholdDialogCheck(isShown: Boolean) {
-        _gramThresholdDialogCheck.value = isShown
+        _settingsStates.update { it.copy(gramThresholdDialogCheck = isShown) }
     }
 
     fun actionResetThresholdSliderValuesToSharedPref() {
-        _gramThresholdSlider.value = sharedPrefsMain.getInt(
-            "gramThresholdValue",
-            50
-        ).toFloat()
+        _settingsStates.update {
+            it.copy(
+                gramThresholdSlider = sharedPrefsMain.getInt(
+                    "gramThresholdValue",
+                    50
+                ).toFloat()
+            )
+        }
     }
 
     fun actionUpdateDeletionWorkerSlider(sliderPosition: Float) {
-        _deletionWorkerSlider.value = sliderPosition.toInt()
+        _settingsStates.update { it.copy(deletionWorkerSlider = sliderPosition.toInt()) }
         sharedPrefsMain.edit {
             putInt("automaticDeletionValue", sliderPosition.toInt())
         }
@@ -138,25 +120,25 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionIncrementExportProgressIndicator() {
-        _exportProgressIndicator.value += 0.1f
-        println("ProgressIndicator: ${exportProgressIndicator.value}")
+        _settingsStates.update { it.copy(exportProgressIndicator = it.exportProgressIndicator + 0.1f) }
+        println("ProgressIndicator: ${_settingsStates.value.exportProgressIndicator}")
     }
 
     fun actionChangExportProgressIndicatorVisibility(isShown: Boolean) {
-        _exportProgressIndicatorShown.value = isShown
+        _settingsStates.update { it.copy(exportProgressIndicatorShown = isShown) }
     }
 
     fun actionChangeExportBottomSheetVisibility(isShown: Boolean) {
-        _dataSuccessfullyExportedShown.value = isShown
+        _settingsStates.update { it.copy(dataSuccessfullyExportedShown = isShown) }
     }
 
     fun actionChangeExportSuccessfully(wasSuccessful: Boolean) {
-        _exportSuccessfully.value = wasSuccessful
+        _settingsStates.update { it.copy(exportSuccessfully = wasSuccessful) }
     }
 
 
     fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
-        _entriesDeletionActivated.value = isActivated
+        _settingsStates.update { it.copy(entriesDeletionActivated = isActivated) }
 
         sharedPrefsMain.edit {
             putBoolean("entriesDeletionActivated", isActivated)
@@ -164,13 +146,13 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     fun actionChangeDynamicColorActivated(isActivated: Boolean) {
-        _dynamicColorActivated.value = isActivated
+        _settingsStates.update { it.copy(dynamicColorActivated = isActivated) }
 
         sharedPrefsMain.edit { putBoolean("dynamicColorActivated", isActivated) }
     }
 
     fun actionChangeBottomSheetsSetting(shownSheet: BottomSheetsSettings) {
-        _bottomSheetsSettings.value = shownSheet
+        _settingsStates.update { it.copy(bottomSheetsSettings = shownSheet) }
     }
 
     //Actions: END

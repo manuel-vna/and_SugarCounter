@@ -29,11 +29,10 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 @Composable
 fun SettingsColorScheme(settingsVM: SettingsVM) {
 
-    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
-    val dynamicColorActivated by settingsVM.dynamicColorActivated.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (bottomSheetsSettings == BottomSheetsSettings.COLOR_SCHEME) {
+    if (settingsStates.bottomSheetsSettings == BottomSheetsSettings.COLOR_SCHEME) {
 
         ModalBottomSheet(
             sheetState = sheetState,
@@ -64,7 +63,7 @@ fun SettingsColorScheme(settingsVM: SettingsVM) {
                         .fillMaxWidth()
                         .clickable {
                             settingsVM.actionChangeDynamicColorActivated(
-                                dynamicColorActivated.not()
+                                settingsStates.dynamicColorActivated.not()
                             )
                         },
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -73,7 +72,7 @@ fun SettingsColorScheme(settingsVM: SettingsVM) {
                     Text(text = stringResource(id = R.string.settings_use_dynamic_colors_from_os))
 
                     Switch(
-                        checked = dynamicColorActivated,
+                        checked = settingsStates.dynamicColorActivated,
                         onCheckedChange = { settingsVM.actionChangeDynamicColorActivated(it) }
                     )
                 }

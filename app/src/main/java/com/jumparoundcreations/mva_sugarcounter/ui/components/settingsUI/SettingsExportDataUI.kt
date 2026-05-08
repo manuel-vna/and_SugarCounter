@@ -57,7 +57,7 @@ fun SettingsPostExportBottomSheet(
     buttonIcon: Int,
 ) {
 
-    val bottomSheetsSettings = settingsVM.bottomSheetsSettings.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
 
     val requestPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -66,7 +66,7 @@ fun SettingsPostExportBottomSheet(
         }
     )
 
-    if (bottomSheetsSettings.value == BottomSheetsSettings.DATA_PRE_EXPORT) {
+    if (settingsStates.bottomSheetsSettings == BottomSheetsSettings.DATA_PRE_EXPORT) {
         ModalBottomSheet(
             onDismissRequest = {
                 settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
@@ -157,15 +157,14 @@ fun SettingsPostExportBottomSheet(
 @Composable
 fun ExportProgressIndicator(settingsVM: SettingsVM) {
 
-    val exportProgressIndicator by settingsVM.exportProgressIndicator.collectAsState()
-    val exportProgressIndicatorShown by settingsVM.exportProgressIndicatorShown.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
 
-    if (exportProgressIndicatorShown) {
+    if (settingsStates.exportProgressIndicatorShown) {
         LinearProgressIndicator(
             modifier = Modifier
                 .zIndex(1f),
             progress = {
-                exportProgressIndicator
+                settingsStates.exportProgressIndicator
             }
         )
     }
@@ -175,10 +174,9 @@ fun ExportProgressIndicator(settingsVM: SettingsVM) {
 @Composable
 fun SettingsPostExportBottomSheet(context: Context) {
     val settingsVM: SettingsVM = koinViewModel()
-    val dataSuccessfullyExportedShown by settingsVM.dataSuccessfullyExportedShown.collectAsState()
-    val exportSuccessful by settingsVM.exportSuccessfully.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
 
-    if (dataSuccessfullyExportedShown) {
+    if (settingsStates.dataSuccessfullyExportedShown) {
         ModalBottomSheet(
             onDismissRequest = {
                 settingsVM.actionChangeExportBottomSheetVisibility(isShown = false)
@@ -191,7 +189,7 @@ fun SettingsPostExportBottomSheet(context: Context) {
                 horizontalAlignment = Alignment.CenterHorizontally
 
             ) {
-                if (exportSuccessful) {
+                if (settingsStates.exportSuccessfully) {
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
                         textAlign = TextAlign.Center,

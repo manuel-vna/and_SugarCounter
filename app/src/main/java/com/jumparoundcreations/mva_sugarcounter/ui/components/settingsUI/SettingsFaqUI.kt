@@ -38,7 +38,7 @@ fun FAQScreen(navController: NavController) {
 
     val context = LocalContext.current
     val settingsVM: SettingsVM = koinViewModel()
-    val expandedId by settingsVM.faqExpandedId.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
 
     val darkMode = HelperMethods.checkForUIMode(context)
     var fontColor = Color.Black
@@ -64,9 +64,9 @@ fun FAQScreen(navController: NavController) {
         LazyColumn {
             items(items = FaqDataList.faqs, key = { it.id }) { faq ->
                 FaqItem(
-                    isExpanded = expandedId == faq.id,
+                    isExpanded = settingsStates.faqExpandedId == faq.id,
                     onItemClick = { id ->
-                        settingsVM.actionChangeExpandedId(if (id == expandedId) -1L else id)
+                        settingsVM.actionChangeExpandedId(if (id == settingsStates.faqExpandedId) -1L else id)
                     },
                     faq = faq,
                     fontColor

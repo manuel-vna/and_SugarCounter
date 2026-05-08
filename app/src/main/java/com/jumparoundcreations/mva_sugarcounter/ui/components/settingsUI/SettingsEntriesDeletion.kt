@@ -32,9 +32,7 @@ import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 @Composable
 fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
 
-    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
-    val entriesDeletionActivated by settingsVM.entriesDeletionActivated.collectAsState()
-    val deletionWorkerSlider by settingsVM.deletionWorkerSlider.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     val deletionWorkerSliderValueRange = 0f..8f
@@ -50,7 +48,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
         8 to stringResource(R.string.deletion_period_eight_years),
     )
 
-    if (bottomSheetsSettings == BottomSheetsSettings.ENTRIES_DELETION) {
+    if (settingsStates.bottomSheetsSettings == BottomSheetsSettings.ENTRIES_DELETION) {
 
         ModalBottomSheet(
             sheetState = sheetState,
@@ -81,7 +79,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                         .fillMaxWidth()
                         .clickable {
                             settingsVM.actionChangeEntriesDeletionActivated(
-                                entriesDeletionActivated.not()
+                                settingsStates.entriesDeletionActivated.not()
                             )
                         }
                         .padding(bottom = 12.dp),
@@ -91,12 +89,12 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                     Text(text = stringResource(id = R.string.settings_entries_deletion_bottom_sheet_description_switch))
 
                     Switch(
-                        checked = entriesDeletionActivated,
+                        checked = settingsStates.entriesDeletionActivated,
                         onCheckedChange = { settingsVM.actionChangeEntriesDeletionActivated(it) }
                     )
                 }
 
-                if (entriesDeletionActivated) {
+                if (settingsStates.entriesDeletionActivated) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
@@ -104,9 +102,9 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                         val gram = stringResource(R.string.general_gram)
                         Slider(
                             modifier = Modifier.semantics {
-                                contentDescription = "${deletionWorkerSlider.toInt()} ${gram}"
+                                contentDescription = "${settingsStates.deletionWorkerSlider} ${gram}"
                             },
-                            value = deletionWorkerSlider.toFloat(),
+                            value = settingsStates.deletionWorkerSlider.toFloat(),
                             onValueChange = { settingsVM.actionUpdateDeletionWorkerSlider(it) },
                             valueRange = deletionWorkerSliderValueRange,
                             steps = 7
@@ -118,7 +116,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                     ) {
                         Text(
                             modifier = Modifier.padding(end = 12.dp),
-                            text = deletionWorkerSliderValueRangeMap[deletionWorkerSlider] ?: "0"
+                            text = deletionWorkerSliderValueRangeMap[settingsStates.deletionWorkerSlider] ?: "0"
                         )
                     }
                     Row(
@@ -129,7 +127,7 @@ fun SettingsEntriesDeletion(settingsVM: SettingsVM) {
                             modifier = Modifier.padding(top = 16.dp),
                             text = stringResource(
                                 id = R.string.settings_entries_deletion_description,
-                                deletionWorkerSliderValueRangeMap[deletionWorkerSlider].toString()
+                                deletionWorkerSliderValueRangeMap[settingsStates.deletionWorkerSlider].toString()
                             )
                         )
                     }
