@@ -10,9 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsEffect
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsStates
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -27,7 +30,6 @@ class SettingsVM : ViewModel(), KoinComponent {
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>()
 
-    //StateFlow: START
     private val _settingsStates = MutableStateFlow(
         SettingsStates(
             entriesDeletionActivated = loadShaPrefEntriesDeletionSwitch(),
@@ -36,7 +38,9 @@ class SettingsVM : ViewModel(), KoinComponent {
         )
     )
     val settingsStates = _settingsStates.asStateFlow()
-    //StateFlow: END
+
+    private val _settingsEffects = MutableSharedFlow<SettingsEffect>(replay = 0)
+    val settingsEffects = _settingsEffects.asSharedFlow()
 
     //Actions: START
 
@@ -156,6 +160,16 @@ class SettingsVM : ViewModel(), KoinComponent {
     }
 
     //Actions: END
+
+    // Effects START
+
+    fun emitEffect(effect: SettingsEffect) {
+        viewModelScope.launch {
+            _settingsEffects.emit(effect)
+        }
+    }
+
+    // Effects END
 
     // Loading Shared Preferences: START
 

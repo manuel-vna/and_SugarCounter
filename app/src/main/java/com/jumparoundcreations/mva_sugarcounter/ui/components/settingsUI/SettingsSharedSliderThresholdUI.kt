@@ -20,6 +20,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsEffect
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsSnackbarMessage
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
@@ -94,10 +96,32 @@ fun SettingsSharedSliderThreshold(
             confirmBtnAction = {
                 settingsVM.actionGramThresholdDialogCheck(false)
                 settingsVM.actionUpdateGramThresholdSharedPref()
+                settingsVM.emitEffect(
+                    SettingsEffect.ShowSnackbar(
+                        SettingsSnackbarMessage.GramThresholdChangeSuccess(
+                            settingsStates.gramThresholdSlider.toString()
+                        )
+                    )
+                )
             },
             dismissBtnText = stringResource(id = R.string.generalCancel),
-            dismissBtnAction = { settingsVM.actionGramThresholdDialogCheck(false) },
-            onDismissRequest = { settingsVM.actionGramThresholdDialogCheck(false) }
+            dismissBtnAction = {
+                effectGramThresholdChangeCanceled(settingsVM)
+                settingsVM.actionGramThresholdDialogCheck(false)
+                //effectGramThresholdChangeCanceled()
+            },
+            onDismissRequest = {
+                settingsVM.actionGramThresholdDialogCheck(false)
+                effectGramThresholdChangeCanceled(settingsVM)
+            }
         )
     }
+}
+
+fun effectGramThresholdChangeCanceled(settingsVM: SettingsVM) {
+    settingsVM.emitEffect(
+        SettingsEffect.ShowSnackbar(
+            SettingsSnackbarMessage.GramThresholdChangeCanceled
+        )
+    )
 }

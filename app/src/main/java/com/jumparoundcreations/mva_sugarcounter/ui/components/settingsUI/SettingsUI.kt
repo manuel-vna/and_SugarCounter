@@ -24,7 +24,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun Settings(
+fun SettingsUI(
     context: Context,
     navController: NavController,
 ) {

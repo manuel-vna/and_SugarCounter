@@ -147,4 +147,6 @@
     <string name="accessibility_delete_categories">Löschen von ausgewählten Kategorien</string>
     <string name="accessibility_number_of_entries">Anzahl der Einträge</string>
     <string name="accessibility_card_status">Status dieser Karte</string>
+    <string name="snackbar_threshold_change_success">Neue Obergrenze geändert zu: %1$s</string>
+    <string name="snackbar_threshold_change_cancel">Änderung der Obergrenze abgeebrochen</string>
 </resources>

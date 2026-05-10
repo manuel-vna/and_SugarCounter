@@ -147,4 +147,6 @@
     <string name="accessibility_delete_categories">Borrar categorías seleccionadas</string>
     <string name="accessibility_number_of_entries">Número de entradas</string>
     <string name="accessibility_card_status">Estado de la tarjeta</string>
+    <string name="snackbar_threshold_change_success">El nuevo umbral se ha modificado correctamente a: %1$s</string>
+    <string name="snackbar_threshold_change_cancel">Se ha suspendido la modificación del límite máximo</string>
 </resources>

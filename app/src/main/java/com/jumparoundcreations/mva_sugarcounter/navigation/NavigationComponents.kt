@@ -17,6 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsRoute
 import com.jumparoundcreations.mva_sugarcounter.ui.components.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.ui.components.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI.History
@@ -24,7 +25,6 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.FAQScre
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.ImprintUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.OnboardingUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.PrivacyPolicyUI
-import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.SettingsThirdPartyLibrariesUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.TermsAndConditionsUI
 import org.koin.androidx.compose.koinViewModel
@@ -59,9 +59,10 @@ fun NavigationGraph(
             Categories()
         }
         composable(route = BottomNavItem.Settings.screenRoute) {
-            Settings(
-                context,
-                navController
+            SettingsRoute(
+                context = context,
+                navController = navController,
+                snackbarHostState = snackbarHostState
             )
         }
         composable(route = NavItem.FAQ.screenRoute) {
