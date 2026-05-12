@@ -40,7 +40,7 @@ import androidx.compose.ui.zIndex
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
 

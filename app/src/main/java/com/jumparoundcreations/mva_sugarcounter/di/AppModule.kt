@@ -23,10 +23,10 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named

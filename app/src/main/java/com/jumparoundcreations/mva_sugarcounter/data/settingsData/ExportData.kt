@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File

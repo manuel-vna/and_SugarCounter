@@ -27,9 +27,9 @@ import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.Faq
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.FaqDataList
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.ui.components.SharedTopAppBar
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
 

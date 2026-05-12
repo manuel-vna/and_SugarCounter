@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

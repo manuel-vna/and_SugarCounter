@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.viewModels
+package com.jumparoundcreations.mva_sugarcounter.features.settingsFeature
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -10,8 +10,6 @@ import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
-import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsEffect
-import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsStates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

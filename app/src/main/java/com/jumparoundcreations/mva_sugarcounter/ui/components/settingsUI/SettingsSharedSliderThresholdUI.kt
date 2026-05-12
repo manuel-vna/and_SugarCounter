@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsEffect
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsSnackbarMessage
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogDoubleBtn
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 
 
 @Composable
@@ -106,9 +106,8 @@ fun SettingsSharedSliderThreshold(
             },
             dismissBtnText = stringResource(id = R.string.generalCancel),
             dismissBtnAction = {
-                effectGramThresholdChangeCanceled(settingsVM)
                 settingsVM.actionGramThresholdDialogCheck(false)
-                //effectGramThresholdChangeCanceled()
+                effectGramThresholdChangeCanceled(settingsVM)
             },
             onDismissRequest = {
                 settingsVM.actionGramThresholdDialogCheck(false)

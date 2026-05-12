@@ -18,8 +18,8 @@ import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
 
