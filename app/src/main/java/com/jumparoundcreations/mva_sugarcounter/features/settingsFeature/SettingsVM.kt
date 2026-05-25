@@ -8,8 +8,8 @@ import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
-import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.useCases.ExportEntriesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,11 +19,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
-class SettingsVM : ViewModel(), KoinComponent {
+class SettingsVM(
+    val exportEntriesUseCase: ExportEntriesUseCase
+) : ViewModel(), KoinComponent {
 
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>()
@@ -84,40 +83,13 @@ class SettingsVM : ViewModel(), KoinComponent {
         osVersionHigherOrEqualsR: Boolean,
         settingsVM: SettingsVM
     ) {
-
-        val timestamp = System.currentTimeMillis()
-        val date = Date(timestamp)
-        val sdf = SimpleDateFormat("yyyy-MM-dd_HH:mm", Locale.getDefault())
-        val timestampString = sdf.format(date)
-
         viewModelScope.launch(Dispatchers.IO) {
-
-            val allEntriesSugar = database.appDao().getAllEntries()
-
-            if (osVersionHigherOrEqualsR) {
-
-                // export sugar entries for OS versions higher R
-                val fileNameSugar = "sugarCounter-$timestampString"
-                ExportData.exportEntriesViaMediaStore(
-                    context = context,
-                    allEntries = allEntriesSugar,
-                    fileName = fileNameSugar,
-                    settingsVM = settingsVM,
-                    header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
-                )
-
-            } else {
-
-                // export sugar entries
-                val fileNameSugar = "sugarCounter-$timestampString"
-                ExportData.exportEntriesViaFileWriter(
-                    allEntries = allEntriesSugar,
-                    fileName = fileNameSugar,
-                    settingsVM = settingsVM,
-                    header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n"
-                )
-            }
-            println("PermissionGranted, osVersionHigherOrEqualsR: $osVersionHigherOrEqualsR")
+            exportEntriesUseCase(
+                context,
+                osVersionHigherOrEqualsR,
+                settingsVM,
+                database
+            )
         }
     }
 

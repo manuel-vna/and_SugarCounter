@@ -24,6 +24,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.useCases.ExportEntriesUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
@@ -61,7 +62,11 @@ val appModule = module {
             getEntryGroupPerDayUseCase = get()
         )
     }
-    viewModel { SettingsVM() }
+    viewModel {
+        SettingsVM(
+            exportEntriesUseCase = get()
+        )
+    }
     viewModel { CategoryVM() }
     viewModel { HistoryVM() }
     single { provideSharedPrefsMain(androidApplication()) }
@@ -82,6 +87,7 @@ val appModule = module {
     single { EditDatabaseEntryUseCase(get()) }
     single { ReuseEntryForTodayUseCase(get()) }
     single { FilterEntriesBySearchFieldUseCase() }
+    single { ExportEntriesUseCase() }
 }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =
