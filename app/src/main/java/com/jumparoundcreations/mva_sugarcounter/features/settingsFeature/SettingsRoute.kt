@@ -22,7 +22,13 @@ fun SettingsRoute(
     snackbarHostState: SnackbarHostState,
 ) {
     val settingsStates by viewModel.settingsStates.collectAsStateWithLifecycle()
-    var pendingSnackbar by remember {mutableStateOf<SettingsSnackbarMessage?>(null) }
+    var pendingSnackbar by remember { mutableStateOf<SettingsSnackbarMessage?>(null) }
+
+    SettingsScreen(
+        context,
+        navController,
+        settingsStates
+    )
 
     LaunchedEffect(Unit) {
         viewModel.settingsEffects.collect { effect ->
@@ -44,12 +50,6 @@ fun SettingsRoute(
             pendingSnackbar = null
         }
     }
-
-    SettingsScreen(
-        context,
-        navController,
-        settingsStates
-    )
 
 }
 
