@@ -27,17 +27,39 @@ class SettingsVM(
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>()
 
-    private val _settingsStates = MutableStateFlow(
-        SettingsStates(
-            entriesDeletionActivated = loadShaPrefEntriesDeletionSwitch(),
-            dynamicColorActivated = loadShaPrefColorSchemeSwitch(),
-            deletionWorkerSlider = loadShaPrefEntriesDeletionSwitchValue()
-        )
-    )
+    private val _settingsStates = MutableStateFlow(SettingsStates(isLoading = true))
     val settingsStates = _settingsStates.asStateFlow()
 
     private val _settingsEffects = MutableSharedFlow<SettingsEffect>(replay = 0)
     val settingsEffects = _settingsEffects.asSharedFlow()
+
+    init {
+        loadInitialSettings()
+    }
+
+    private fun loadInitialSettings() {
+        viewModelScope.launch {
+            try {
+                // Testing delay
+                // delay(500)
+                
+                val deletion = loadShaPrefEntriesDeletionSwitch()
+                val color = loadShaPrefColorSchemeSwitch()
+                val sliderValue = loadShaPrefEntriesDeletionSwitchValue()
+                
+                _settingsStates.update { 
+                    it.copy(
+                        isLoading = false,
+                        entriesDeletionActivated = deletion,
+                        dynamicColorActivated = color,
+                        deletionWorkerSlider = sliderValue
+                    ) 
+                }
+            } catch (e: Exception) {
+                _settingsStates.update { it.copy(isLoading = false, isError = true) }
+            }
+        }
+    }
 
     //Actions: START
 
@@ -84,12 +106,17 @@ class SettingsVM(
         settingsVM: SettingsVM
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            exportEntriesUseCase(
-                context,
-                osVersionHigherOrEqualsR,
-                settingsVM,
-                database
-            )
+            try {
+                exportEntriesUseCase(
+                    context,
+                    osVersionHigherOrEqualsR,
+                    settingsVM,
+                    database
+                )
+            } catch (e: Exception) {
+                // If a critical error occurs during export that should show the error screen
+                _settingsStates.update { it.copy(isError = true) }
+            }
         }
     }
 
@@ -163,6 +190,8 @@ class SettingsVM(
             false
         )
     }
+
+    // Loading Shared Preferences: END
 
 
 }
