@@ -16,23 +16,22 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun ImprintUI(navController: NavController) {
-
     val termsHtml: String = getKoin().get(named("imprint"))
 
     Column {
-
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.about_title_imprint),
             onBackClickAction = {
                 navController.popBackStack()
-            }
+            },
         )
 
         WebView(
-            state = rememberWebViewStateWithHTMLData(
-                termsHtml.replace(
-                    "##STYLE_PLACEHOLDER##",
-                    """<style>
+            state =
+                rememberWebViewStateWithHTMLData(
+                    termsHtml.replace(
+                        "##STYLE_PLACEHOLDER##",
+                        """<style>
                         body {
                             background-color: rgb(
                                 ${MaterialTheme.colorScheme.background.red * 255},
@@ -45,12 +44,11 @@ fun ImprintUI(navController: NavController) {
                                 ${MaterialTheme.colorScheme.onBackground.blue * 255}
                             );
                         }
-                    </style>""".trimMargin()
-                )
-            ),
-            modifier = Modifier.fillMaxSize()
+                    </style>
+                        """.trimMargin(),
+                    ),
+                ),
+            modifier = Modifier.fillMaxSize(),
         )
     }
-
 }
-

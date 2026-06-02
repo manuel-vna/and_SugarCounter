@@ -43,9 +43,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.settingsData.ExportData
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
-
 lateinit var uri: Uri
-
 
 @SuppressLint("NewApi", "API level check is handled via a Boolean in actionExportEntries()")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,43 +54,42 @@ fun SettingsPostExportBottomSheet(
     descriptionText: String,
     buttonIcon: Int,
 ) {
-
     val settingsStates by settingsVM.settingsStates.collectAsState()
 
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            settingsVM.actionExportEntries(context = context, false, settingsVM)
-        }
-    )
+    val requestPermissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted: Boolean ->
+                settingsVM.actionExportEntries(context = context, false, settingsVM)
+            },
+        )
 
     if (settingsStates.bottomSheetsSettings == BottomSheetsSettings.DATA_PRE_EXPORT) {
         ModalBottomSheet(
             onDismissRequest = {
                 settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
-            }
+            },
         ) {
-
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Start
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
                     text = stringResource(R.string.export_settings_button),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
 
-
             Row(
                 modifier = Modifier.padding(16.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
-                    text = stringResource(R.string.export__pre_bottom_sheet_description)
+                    text = stringResource(R.string.export__pre_bottom_sheet_description),
                 )
             }
 
@@ -100,48 +97,49 @@ fun SettingsPostExportBottomSheet(
 
             Row(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 32.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 OutlinedButton(
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                        .weight(0.5f),
-
-                    onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
+                    modifier =
+                        Modifier
+                            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                            .weight(0.5f),
+                    onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) },
                 ) {
                     Text(
-                        text = stringResource(R.string.generalCancel)
+                        text = stringResource(R.string.generalCancel),
                     )
                 }
                 Button(
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                        .weight(0.5F),
+                    modifier =
+                        Modifier
+                            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                            .weight(0.5F),
                     onClick = {
-
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                             settingsVM.actionExportEntries(
                                 context = context,
                                 osVersionHigherOrEqualsR = true,
-                                settingsVM = settingsVM
+                                settingsVM = settingsVM,
                             )
                         } else {
-                            if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                            if (context.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                                PackageManager.PERMISSION_GRANTED
+                            ) {
                                 settingsVM.actionExportEntries(
                                     context = context,
                                     osVersionHigherOrEqualsR = false,
-                                    settingsVM = settingsVM
+                                    settingsVM = settingsVM,
                                 )
                             } else {
                                 requestPermissionLauncher.launch(input = Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             }
                         }
                         settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
-                    }
+                    },
                 ) {
                     Text(
-                        text = "$descriptionText   "
+                        text = "$descriptionText   ",
                     )
                     Icon(
                         painter = painterResource(id = buttonIcon),
@@ -153,19 +151,18 @@ fun SettingsPostExportBottomSheet(
     }
 }
 
-
 @Composable
 fun ExportProgressIndicator(settingsVM: SettingsVM) {
-
     val settingsStates by settingsVM.settingsStates.collectAsState()
 
     if (settingsStates.exportProgressIndicatorShown) {
         LinearProgressIndicator(
-            modifier = Modifier
-                .zIndex(1f),
+            modifier =
+                Modifier
+                    .zIndex(1f),
             progress = {
                 settingsStates.exportProgressIndicator
-            }
+            },
         )
     }
 }
@@ -180,68 +177,67 @@ fun SettingsPostExportBottomSheet(context: Context) {
         ModalBottomSheet(
             onDismissRequest = {
                 settingsVM.actionChangeExportBottomSheetVisibility(isShown = false)
-            }
+            },
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp, vertical = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 if (settingsStates.exportSuccessfully) {
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.export_bottom_sheet_success)
+                        text = stringResource(R.string.export_bottom_sheet_success),
                     )
                     Button(
                         modifier = Modifier.padding(bottom = 16.dp),
                         onClick = {
                             openFile(context = context, mimeType = "text/plain")
                             settingsVM.actionChangeExportBottomSheetVisibility(isShown = false)
-                        }
-                    )
-                    {
+                        },
+                    ) {
                         Text(stringResource(R.string.export_bottom_sheet_button))
                     }
                 } else {
                     Text(
                         modifier = Modifier.padding(all = 32.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.general_error)
+                        text = stringResource(R.string.general_error),
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 16.dp),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.export_data_error_message)
+                        text = stringResource(R.string.export_data_error_message),
                     )
                 }
-
             }
         }
     }
 }
 
 @SuppressLint("QueryPermissionsNeeded")
-fun openFile(context: Context, mimeType: String) {
-
+fun openFile(
+    context: Context,
+    mimeType: String,
+) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         val uriLocal = ExportData.uri
         uriLocal?.let { uri = it }
 
-        val intent = Intent(Intent.ACTION_VIEW).apply {
-            setDataAndType(uri, mimeType)
-            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-        }
+        val intent =
+            Intent(Intent.ACTION_VIEW).apply {
+                setDataAndType(uri, mimeType)
+                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            }
         if (intent.resolveActivity(context.packageManager) != null) {
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
-
         } else {
             navigateToOsDownloadsDir(context)
         }
-
     } else {
         navigateToOsDownloadsDir(context)
     }
@@ -252,4 +248,3 @@ fun navigateToOsDownloadsDir(context: Context) {
     intent2.addFlags(FLAG_ACTIVITY_NEW_TASK)
     context.startActivity(intent2)
 }
-

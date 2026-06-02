@@ -22,5 +22,5 @@ data class EntryPerHundred(
     @ColumnInfo(name = "perHundredQuantity")
     val perHundredQuantity: Double,
     @ColumnInfo(name = "gramTotal")
-    override val gramTotal: Double
+    override val gramTotal: Double,
 ) : IEntry

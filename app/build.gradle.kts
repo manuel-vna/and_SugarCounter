@@ -39,7 +39,6 @@ android {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
-
     }
 
     signingConfigs {
@@ -59,7 +58,7 @@ android {
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             ndk {
                 debugSymbolLevel = "FULL"
@@ -103,15 +102,21 @@ tasks.register("ensureSchemaFolder") {
     }
 }
 
-fun getAppGitVersion(): String {
-    return try {
-        val output = providers.exec {
-            commandLine("git", "describe", "--tags", "--long", "--always")
-            isIgnoreExitValue = true
-        }
-        val version = output.standardOutput.asText.get().trim()
+fun getAppGitVersion(): String =
+    try {
+        val output =
+            providers.exec {
+                commandLine("git", "describe", "--tags", "--long", "--always")
+                isIgnoreExitValue = true
+            }
+        val version =
+            output.standardOutput.asText
+                .get()
+                .trim()
         if (output.result.get().exitValue != 0) {
-            println("Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.")
+            println(
+                "Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.",
+            )
             ""
         } else {
             println("Git version: $version")
@@ -121,7 +126,6 @@ fun getAppGitVersion(): String {
         println("Retrieving version code by git command failed : ${e.message}. Falling back to default version.")
         ""
     }
-}
 
 fun getAppVersionCode(gitVersion: String): Int {
     var versionCode = "1"
@@ -213,5 +217,4 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     detektPlugins(libs.detekt.formatting)
     detektPlugins(libs.detekt.compose)
-
 }

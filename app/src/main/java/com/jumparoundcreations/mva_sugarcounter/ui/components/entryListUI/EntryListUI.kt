@@ -40,27 +40,27 @@ fun EntryListUI(
     backgroundColorPrimary: Boolean,
     data: SuccessData,
     onAction: (EntryListDisplayingIntents) -> Unit,
-    sharedPrefsMain: SharedPreferences = koinInject()
+    sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
-
-    val entryGroupList = if (currentScreen == Screens.COUNTER) {
-        data.entriesGroupedPerDayCounter
-    } else {
-        data.entriesGroupedPerDayHistory
-    }
+    val entryGroupList =
+        if (currentScreen == Screens.COUNTER) {
+            data.entriesGroupedPerDayCounter
+        } else {
+            data.entriesGroupedPerDayHistory
+        }
 
     if (currentScreen == Screens.HISTORY && data.entriesGroupedPerDayHistory.isEmpty()) {
         Column(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
         }
     } else {
         Column {
-
             var previousMonth: YearMonth? = null
 
             entryGroupList.forEach { entryGroup ->
@@ -70,20 +70,22 @@ fun EntryListUI(
                         HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
                     if (previousMonth == null || currentMonth != previousMonth) {
                         Text(
-                            text = currentMonth.format(
-                                DateTimeFormatter.ofPattern("MMMM uuuu")
-                            ),
+                            text =
+                                currentMonth.format(
+                                    DateTimeFormatter.ofPattern("MMMM uuuu"),
+                                ),
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 4.dp)
+                            modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 4.dp),
                         )
                     }
                     previousMonth = currentMonth
                 }
 
-                val totalGramPerDayBlock = HelperMethods.calculateTotalGramPerDayBlock(
-                    entryGroup.entryList
-                )
+                val totalGramPerDayBlock =
+                    HelperMethods.calculateTotalGramPerDayBlock(
+                        entryGroup.entryList,
+                    )
                 var thresholdValue = 0
 
                 if (entryGroup.entryList.isNotEmpty()) {
@@ -91,94 +93,104 @@ fun EntryListUI(
                 }
 
                 Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp, bottom = 12.dp),
-                    border = if (totalGramPerDayBlock > thresholdValue) {
-                        BorderStroke(2.dp, MaterialTheme.colorScheme.error)
-                    } else {
-                        BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
-                    },
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (backgroundColorPrimary)
-                            MaterialTheme.colorScheme.surface
-                        else MaterialTheme.colorScheme.surface,
-                    )
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp, bottom = 12.dp),
+                    border =
+                        if (totalGramPerDayBlock > thresholdValue) {
+                            BorderStroke(2.dp, MaterialTheme.colorScheme.error)
+                        } else {
+                            BorderStroke(2.dp, MaterialTheme.colorScheme.secondary)
+                        },
+                    colors =
+                        CardDefaults.cardColors(
+                            containerColor =
+                                if (backgroundColorPrimary) {
+                                    MaterialTheme.colorScheme.surface
+                                } else {
+                                    MaterialTheme.colorScheme.surface
+                                },
+                        ),
                 ) {
-
                     Row(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(bottom = 12.dp),
+                        modifier =
+                            Modifier
+                                .align(Alignment.CenterHorizontally)
+                                .padding(bottom = 12.dp),
                     ) {
-
                         Text(
                             modifier = Modifier.padding(top = 6.dp),
-                            text = when (
-                                entryGroup.dayDisplayFormat) {
-                                "TODAY" -> stringResource(R.string.timestampToday)
-                                "YESTERDAY" -> stringResource(
-                                    R.string.timestampYesterday
-                                )
+                            text =
+                                when (
+                                    entryGroup.dayDisplayFormat
+                                ) {
+                                    "TODAY" -> stringResource(R.string.timestampToday)
+                                    "YESTERDAY" ->
+                                        stringResource(
+                                            R.string.timestampYesterday,
+                                        )
 
-                                else -> entryGroup.dayDisplayFormat
-                            },
+                                    else -> entryGroup.dayDisplayFormat
+                                },
                             fontWeight = FontWeight.Bold,
                             fontSize = 20.sp,
-                            fontStyle = FontStyle.Italic
+                            fontStyle = FontStyle.Italic,
                         )
-
                     }
 
                     entryGroup.entryList.forEach {
-
                         var firstColumnText = ""
                         val secondColumnText = it.category
                         var thirdColumnText = ""
 
-                        firstColumnText = if (it.entryType == GramCountMode.PerHundred) {
-                            it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
-                        } else {
-                            it.quantity.toString() +
+                        firstColumnText =
+                            if (it.entryType == GramCountMode.PerHundred) {
+                                it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
+                            } else {
+                                it.quantity.toString() +
                                     stringResource(id = R.string.sugar_card_multiplier_expression) +
                                     it.gram.toString() +
                                     stringResource(id = R.string.gram_unit_short)
-                        }
+                            }
                         thirdColumnText =
                             it.gramTotal.toString() + stringResource(id = R.string.gram_unit_short)
 
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onAction(
-                                        EntryListDisplayingIntents.OpenCardDetails(
-                                            sugarEntry = it
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+                                        onAction(
+                                            EntryListDisplayingIntents.OpenCardDetails(
+                                                sugarEntry = it,
+                                            ),
                                         )
-                                    )
-                                },
+                                    },
                             horizontalArrangement = Arrangement.Start,
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .weight(3f),
+                                modifier =
+                                    Modifier
+                                        .padding(start = 8.dp)
+                                        .weight(3f),
                                 textAlign = TextAlign.Start,
                                 text = firstColumnText,
-
-                                )
+                            )
                             Text(
-                                modifier = Modifier
-                                    .padding(horizontal = 2.dp)
-                                    .weight(6f),
+                                modifier =
+                                    Modifier
+                                        .padding(horizontal = 2.dp)
+                                        .weight(6f),
                                 textAlign = TextAlign.Center,
                                 text = secondColumnText,
                             )
                             Text(
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                                    .weight(2f),
+                                modifier =
+                                    Modifier
+                                        .padding(end = 8.dp)
+                                        .weight(2f),
                                 textAlign = TextAlign.End,
                                 text = thirdColumnText,
                             )
@@ -186,23 +198,29 @@ fun EntryListUI(
                     }
 
                     Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.End)
-                            .padding(top = 12.dp, bottom = 12.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(Alignment.End)
+                                .padding(top = 12.dp, bottom = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
-
                         Icon(
                             modifier = Modifier.padding(horizontal = 8.dp),
-                            painter = if (totalGramPerDayBlock <= thresholdValue)
-                                painterResource(id = R.drawable.baseline_check_circle_outline_24)
-                            else painterResource(
-                                id = R.drawable.baseline_remove_circle_outline_24
-                            ),
-                            tint = if (totalGramPerDayBlock > thresholdValue)
-                                MaterialTheme.colorScheme.error
-                            else MaterialTheme.colorScheme.secondary,
+                            painter =
+                                if (totalGramPerDayBlock <= thresholdValue) {
+                                    painterResource(id = R.drawable.baseline_check_circle_outline_24)
+                                } else {
+                                    painterResource(
+                                        id = R.drawable.baseline_remove_circle_outline_24,
+                                    )
+                                },
+                            tint =
+                                if (totalGramPerDayBlock > thresholdValue) {
+                                    MaterialTheme.colorScheme.error
+                                } else {
+                                    MaterialTheme.colorScheme.secondary
+                                },
                             contentDescription = stringResource(R.string.accessibility_card_status),
                         )
 
@@ -210,17 +228,16 @@ fun EntryListUI(
                             modifier = Modifier.padding(end = 8.dp),
                             text =
                                 stringResource(id = R.string.totalAmountSugar) +
-                                        stringResource(id = R.string.general_colon_character) +
-                                        stringResource(id = R.string.general_whitespace_character) +
-                                        "%.1f".format(
-                                            HelperMethods.calculateTotalGramPerDayBlock(
-                                                entryGroup.entryList
-                                            )
+                                    stringResource(id = R.string.general_colon_character) +
+                                    stringResource(id = R.string.general_whitespace_character) +
+                                    "%.1f".format(
+                                        HelperMethods.calculateTotalGramPerDayBlock(
+                                            entryGroup.entryList,
                                         ),
-                            fontWeight = FontWeight.Bold
+                                    ),
+                            fontWeight = FontWeight.Bold,
                         )
                     }
-
                 }
             }
         }
@@ -234,14 +251,3 @@ fun EntryListUI(
         )
     }
 }
-
-
-
-
-
-
-
-
-
-
-

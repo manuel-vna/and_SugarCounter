@@ -26,7 +26,6 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryBottomSheet() {
-
     val categoryVM: CategoryVM = koinViewModel()
     val categoryBottomSheet by categoryVM.categoryBottomSheetShown.collectAsState()
     val clickedCategory by categoryVM.clickedCategory.collectAsState()
@@ -37,67 +36,68 @@ fun CategoryBottomSheet() {
             onDismissRequest = {
                 categoryVM.actionChangeCategoryBottomSheetShown(
                     false,
-                    null
+                    null,
                 )
-            }
+            },
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-
                 Text(
                     modifier = Modifier.padding(bottom = 36.dp),
                     text = clickedCategory.category,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
                 )
 
                 if (entrySugarForClickedCategory.category.isNotEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
                             modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                            text = stringResource(R.string.category_bottom_sheet_sugar_value)
+                            text = stringResource(R.string.category_bottom_sheet_sugar_value),
                         )
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
                             text =
-                                if (entrySugarForClickedCategory.entryType == GramCountMode.PerHundred) stringResource(
-                                R.string.category_bottom_sheet_per_hundred_gram,
-                                    entrySugarForClickedCategory.gram
-                            )
-                            else stringResource(
-                                R.string.category_bottom_sheet_per_piece_gram,
-                                    entrySugarForClickedCategory.gram
-                            )
+                                if (entrySugarForClickedCategory.entryType == GramCountMode.PerHundred) {
+                                    stringResource(
+                                        R.string.category_bottom_sheet_per_hundred_gram,
+                                        entrySugarForClickedCategory.gram,
+                                    )
+                                } else {
+                                    stringResource(
+                                        R.string.category_bottom_sheet_per_piece_gram,
+                                        entrySugarForClickedCategory.gram,
+                                    )
+                                },
                         )
                     }
                 }
 
-
                 if (clickedCategory.barcodeNumber.isNotEmpty()) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         Text(
                             modifier = Modifier.padding(start = 24.dp, bottom = 16.dp),
-                            text = stringResource(
-                                R.string.category_bottom_sheet_barcode
-                            )
+                            text =
+                                stringResource(
+                                    R.string.category_bottom_sheet_barcode,
+                                ),
                         )
                         Text(
                             modifier = Modifier.padding(end = 24.dp, bottom = 16.dp),
-                            text = clickedCategory.barcodeNumber
+                            text = clickedCategory.barcodeNumber,
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.padding(60.dp))
-
             }
         }
     }

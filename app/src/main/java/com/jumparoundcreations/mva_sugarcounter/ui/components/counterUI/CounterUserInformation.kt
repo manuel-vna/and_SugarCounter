@@ -24,7 +24,6 @@ fun CounterUserInformation(
     scanUiEvents: Flow<ScanUiEvents>,
     snackbarHostState: SnackbarHostState,
 ) {
-
     if (entrySavingStates.savingProcessMissingSugarData) {
         ShowAlertDialogSingleBtn(
             dialogTitle = stringResource(id = R.string.foodType),
@@ -54,7 +53,7 @@ fun CounterUserInformation(
     }
 
     if (entrySavingStates.savingProcessDailyGramThreshold is
-                CheckThresholdResult.DailyThresholdBreached
+            CheckThresholdResult.DailyThresholdBreached
     ) {
         ShowAlertDialogDoubleBtn(
             dialogTitle = stringResource(id = R.string.alertSugarThresholdTitle),
@@ -63,25 +62,25 @@ fun CounterUserInformation(
             confirmBtnAction = {
                 onAction(
                     EntrySavingIntents.UserThresholdReaction(
-                        userThresholdBreachReaction = UserThresholdBreachReaction.DeleteLastEnteredEntry
-                    )
+                        userThresholdBreachReaction = UserThresholdBreachReaction.DeleteLastEnteredEntry,
+                    ),
                 )
             },
             dismissBtnText = stringResource(id = R.string.alertThresholdDismissBtn),
             dismissBtnAction = {
                 onAction(
                     EntrySavingIntents.UserThresholdReaction(
-                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
-                    )
+                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry,
+                    ),
                 )
             },
             onDismissRequest = {
                 onAction(
                     EntrySavingIntents.UserThresholdReaction(
-                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry
-                    )
+                        userThresholdBreachReaction = UserThresholdBreachReaction.KeepLastEnteredEntry,
+                    ),
                 )
-            }
+            },
         )
     }
 
@@ -91,25 +90,24 @@ fun CounterUserInformation(
                 is ScanUiEvents.ScanResultNoCategoryForBarcode -> {
                     snackbarHostState.showSnackbar(
                         message = "ToDo: ScanResultNoCategoryForBarcode",
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
 
                 is ScanUiEvents.ScanResultFailed -> {
                     snackbarHostState.showSnackbar(
                         message = "ToDo: Scan failed",
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
 
                 is ScanUiEvents.CategoryEditNoDataForChosenCategory -> {
                     snackbarHostState.showSnackbar(
                         message = context.getString(R.string.no_entry_found_for_given_category_Snackbar_text),
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
             }
         }
     }
-
 }

@@ -7,13 +7,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class GetEntryGroupPerDayUseCase(
-    private val database: AppDatabase
+    private val database: AppDatabase,
 ) {
     private val startOfToday = HelperMethods.getStartOfTodayAsLong()
     private val endOfToday = HelperMethods.getEndOfTodayAsLong()
 
-    operator fun invoke(timeFrameBeginning: Long): Flow<List<EntryGroup>> {
-        return database.appDao()
+    operator fun invoke(timeFrameBeginning: Long): Flow<List<EntryGroup>> =
+        database
+            .appDao()
             .getEntriesInTimeframe((startOfToday - timeFrameBeginning), endOfToday)
             .map { entries ->
                 entries
@@ -22,11 +23,8 @@ class GetEntryGroupPerDayUseCase(
                         EntryGroup(
                             date = date,
                             dayDisplayFormat = HelperMethods.formatDateForDisplay(date),
-                            entryList = items.sortedBy { it.currentTimestamp }
+                            entryList = items.sortedBy { it.currentTimestamp },
                         )
-                    }
-                    .sortedByDescending { it.date }
+                    }.sortedByDescending { it.date }
             }
-    }
-
 }

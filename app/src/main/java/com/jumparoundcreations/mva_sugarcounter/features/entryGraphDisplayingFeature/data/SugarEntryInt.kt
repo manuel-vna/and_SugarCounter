@@ -22,5 +22,5 @@ data class SugarEntryInt(
     @ColumnInfo(name = "quantity")
     val quantity: Int,
     @ColumnInfo(name = "gramTotal")
-    val gramTotal: Int
+    val gramTotal: Int,
 )

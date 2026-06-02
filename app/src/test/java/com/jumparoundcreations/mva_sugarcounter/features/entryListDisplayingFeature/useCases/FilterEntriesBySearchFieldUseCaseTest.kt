@@ -9,56 +9,60 @@ import org.junit.Before
 import org.junit.Test
 
 class FilterEntriesBySearchFieldUseCaseTest {
-
     private lateinit var useCase: FilterEntriesBySearchFieldUseCase
 
     private lateinit var entryGroupList: List<EntryGroup>
-    private val chocolateEntry = SugarEntry(
-        id = 1,
-        currentTimestamp = 0,
-        date = "2025-12-20",
-        category = "Chocolate Bar",
-        entryType = GramCountMode.PerPiece,
-        gram = 10.0,
-        quantity = 1.0,
-        gramTotal = 10.0
-    )
-    private val cookieEntry = SugarEntry(
-        id = 2,
-        currentTimestamp = 0,
-        date = "2025-12-20", category = "Cookie",
-        entryType = GramCountMode.PerPiece,
-        gram = 15.0,
-        quantity = 1.0,
-        gramTotal = 15.0
-    )
-    private val yogurtEntry = SugarEntry(
-        id = 3,
-        currentTimestamp = 0,
-        date = "2025-12-19",
-        category = "Yogurt",
-        entryType = GramCountMode.PerHundred,
-        gram = 5.0,
-        quantity = 150.0,
-        gramTotal = 7.5
-    )
+    private val chocolateEntry =
+        SugarEntry(
+            id = 1,
+            currentTimestamp = 0,
+            date = "2025-12-20",
+            category = "Chocolate Bar",
+            entryType = GramCountMode.PerPiece,
+            gram = 10.0,
+            quantity = 1.0,
+            gramTotal = 10.0,
+        )
+    private val cookieEntry =
+        SugarEntry(
+            id = 2,
+            currentTimestamp = 0,
+            date = "2025-12-20",
+            category = "Cookie",
+            entryType = GramCountMode.PerPiece,
+            gram = 15.0,
+            quantity = 1.0,
+            gramTotal = 15.0,
+        )
+    private val yogurtEntry =
+        SugarEntry(
+            id = 3,
+            currentTimestamp = 0,
+            date = "2025-12-19",
+            category = "Yogurt",
+            entryType = GramCountMode.PerHundred,
+            gram = 5.0,
+            quantity = 150.0,
+            gramTotal = 7.5,
+        )
 
     @Before
     fun setUp() {
         useCase = FilterEntriesBySearchFieldUseCase()
 
-        entryGroupList = listOf(
-            EntryGroup(
-                date = "2025-12-20",
-                dayDisplayFormat = "",
-                entryList = listOf(chocolateEntry, cookieEntry)
-            ),
-            EntryGroup(
-                date = "2025-12-19",
-                dayDisplayFormat = "",
-                entryList = listOf(yogurtEntry)
+        entryGroupList =
+            listOf(
+                EntryGroup(
+                    date = "2025-12-20",
+                    dayDisplayFormat = "",
+                    entryList = listOf(chocolateEntry, cookieEntry),
+                ),
+                EntryGroup(
+                    date = "2025-12-19",
+                    dayDisplayFormat = "",
+                    entryList = listOf(yogurtEntry),
+                ),
             )
-        )
     }
 
     @Test
@@ -92,7 +96,6 @@ class FilterEntriesBySearchFieldUseCaseTest {
         assertEquals("2025-12-20", filteredList[0].date)
     }
 
-
     @Test
     fun `invoke returns an empty list when no category matches the search text`() {
         // --- Arrange ---
@@ -105,7 +108,6 @@ class FilterEntriesBySearchFieldUseCaseTest {
         // No group should match, so the resulting list should be empty
         assertTrue(filteredList.isEmpty())
     }
-
 
     @Test
     fun `invoke returns the original full list when the search text is blank`() {
@@ -120,5 +122,4 @@ class FilterEntriesBySearchFieldUseCaseTest {
         assertEquals(2, filteredList.size)
         assertEquals(entryGroupList, filteredList)
     }
-
 }

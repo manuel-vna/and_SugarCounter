@@ -40,9 +40,7 @@ object TimeConstants {
     const val NINETY_DAYS_IN_SECONDS = 7776000L
     const val YEAR_ONE_IN_SECONDS = 31536000L
 
-
     const val DATE_SHORT_DAY = " EE dd.MM."
-
 }
 
 object TestData {
@@ -50,6 +48,5 @@ object TestData {
 }
 
 object EntrySavingConstants {
-
     const val DEFAULT_PER_PIECE_VALUE = "1"
 }

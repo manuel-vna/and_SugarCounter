@@ -31,36 +31,36 @@ import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
 
-
 @Composable
 fun RowScope.DatePicker(
     onAction: (EntrySavingIntents) -> Unit,
     entrySavingStates: EntrySavingStates,
-    textColor: Color
+    textColor: Color,
 ) {
     val nowMillis = System.currentTimeMillis()
     val xDaysAgoMillis = nowMillis - TimeConstants.MONTH_ONE_IN_MILLISECONDS
 
-    val datePickerState = rememberDatePickerState(
-        initialDisplayMode = DisplayMode.Picker,
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis in (xDaysAgoMillis + NumberConstants.ONE_AS_INT)..<nowMillis
-            }
-        }
-    )
+    val datePickerState =
+        rememberDatePickerState(
+            initialDisplayMode = DisplayMode.Picker,
+            selectableDates =
+                object : SelectableDates {
+                    override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+                        utcTimeMillis in (xDaysAgoMillis + NumberConstants.ONE_AS_INT)..<nowMillis
+                },
+        )
 
     ElevatedButton(
         onAction = onAction,
         accessibilityDatePickerButton = stringResource(R.string.accessibility_date_picker_button),
         textColor = textColor,
-        dateOfEntryEpochSec = entrySavingStates.dateOfEntryEpochSec
+        dateOfEntryEpochSec = entrySavingStates.dateOfEntryEpochSec,
     )
 
     if (entrySavingStates.datePickerShown) {
         DatePickerDialog(
             onAction = onAction,
-            datePickerState = datePickerState
+            datePickerState = datePickerState,
         )
     }
 }
@@ -70,22 +70,24 @@ fun RowScope.ElevatedButton(
     onAction: (EntrySavingIntents) -> Unit,
     accessibilityDatePickerButton: String,
     textColor: Color,
-    dateOfEntryEpochSec: Long
+    dateOfEntryEpochSec: Long,
 ) {
     ElevatedButton(
-        modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .weight(1f)
-            .semantics {
-                contentDescription = accessibilityDatePickerButton
-            },
+        modifier =
+            Modifier
+                .padding(horizontal = 8.dp)
+                .weight(1f)
+                .semantics {
+                    contentDescription = accessibilityDatePickerButton
+                },
         onClick = {
             onAction(EntrySavingIntents.OpenAndCloseDatePicker)
         },
-        colors = elevatedButtonColors(
-            contentColor = textColor
-        ),
-        border = BorderStroke(width = 1.dp, color = textColor)
+        colors =
+            elevatedButtonColors(
+                contentColor = textColor,
+            ),
+        border = BorderStroke(width = 1.dp, color = textColor),
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -93,10 +95,11 @@ fun RowScope.ElevatedButton(
             contentDescription = "",
         )
         Text(
-            text = HelperMethods.convertTimestampToDateString(
-                timestamp = dateOfEntryEpochSec,
-                format = TimeConstants.DATE_SHORT_DAY
-            )
+            text =
+                HelperMethods.convertTimestampToDateString(
+                    timestamp = dateOfEntryEpochSec,
+                    format = TimeConstants.DATE_SHORT_DAY,
+                ),
         )
     }
 }
@@ -104,9 +107,8 @@ fun RowScope.ElevatedButton(
 @Composable
 fun DatePickerDialog(
     onAction: (EntrySavingIntents) -> Unit,
-    datePickerState: DatePickerState
+    datePickerState: DatePickerState,
 ) {
-
     DatePickerDialog(
         onDismissRequest = {
             onAction(EntrySavingIntents.OpenAndCloseDatePicker)
@@ -117,8 +119,8 @@ fun DatePickerDialog(
                 datePickerState.selectedDateMillis?.let {
                     onAction(
                         EntrySavingIntents.ChangeSelectedDate(
-                            epochTime = it / TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER
-                        )
+                            epochTime = it / TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER,
+                        ),
                     )
                 }
             }) {
@@ -129,24 +131,25 @@ fun DatePickerDialog(
             Button(
                 onClick = {
                     onAction(EntrySavingIntents.OpenAndCloseDatePicker)
-                }
+                },
             ) {
                 Text(text = stringResource(id = R.string.generalCancel))
             }
-        }) {
+        },
+    ) {
         androidx.compose.material3.DatePicker(
             title = {
                 Text(
                     modifier = Modifier.padding(12.dp),
                     fontSize = 12.sp,
-                    text = stringResource(R.string.entryDateDescription)
+                    text = stringResource(R.string.entryDateDescription),
                 )
             },
             headline = {
                 Text(
                     modifier = Modifier.padding(2.dp),
                     fontSize = 18.sp,
-                    text = stringResource(R.string.entryDateTitle)
+                    text = stringResource(R.string.entryDateTitle),
                 )
             },
             state = datePickerState,

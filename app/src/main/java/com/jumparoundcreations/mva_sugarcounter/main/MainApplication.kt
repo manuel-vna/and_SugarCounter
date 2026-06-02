@@ -12,8 +12,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class MainApplication() : Application(), Configuration.Provider {
-
+class MainApplication :
+    Application(),
+    Configuration.Provider {
     lateinit var workerFactory: CustomWorkerFactory
 
     override fun onCreate() {
@@ -25,7 +26,7 @@ class MainApplication() : Application(), Configuration.Provider {
             modules(appModule)
         }
 
-        //WorkFactory for DeletionWorker
+        // WorkFactory for DeletionWorker
         val db = AppDatabase.getInstance(this)
         val dao = db.appDao()
         val sharedPrefs = getKoin().get<SharedPreferences>()
@@ -35,10 +36,10 @@ class MainApplication() : Application(), Configuration.Provider {
 
     override val workManagerConfiguration: Configuration
         get() {
-            return Configuration.Builder()
+            return Configuration
+                .Builder()
                 .setMinimumLoggingLevel(android.util.Log.VERBOSE)
                 .setWorkerFactory(workerFactory)
                 .build()
         }
-
 }

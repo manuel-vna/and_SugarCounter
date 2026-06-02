@@ -14,21 +14,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = MintGreen,
-    secondary = BlueGrey80,
-    tertiary = White80,
-    onSecondary = MintGreen,
-    error = Red,
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = MintGreen,
+        secondary = BlueGrey80,
+        tertiary = White80,
+        onSecondary = MintGreen,
+        error = Red,
+    )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Green,
-    secondary = PurpleGrey40,
-    tertiary = White40,
-    secondaryContainer = MintGreen,
-    error = Red
-
+private val LightColorScheme =
+    lightColorScheme(
+        primary = Green,
+        secondary = PurpleGrey40,
+        tertiary = White40,
+        secondaryContainer = MintGreen,
+        error = Red,
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
     surface = Color(0xFFFFFBFE),
@@ -37,24 +38,25 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = Color.White,
     onBackground = Color(0xFF1C1B1F),
     onSurface = Color(0xFF1C1B1F),
-    */
-)
+     */
+    )
 
 @Composable
 fun SugarCounterTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    val colorScheme =
+        when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            }
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
         }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -67,6 +69,6 @@ fun SugarCounterTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content
+        content = content,
     )
 }

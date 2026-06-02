@@ -5,11 +5,7 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import kotlinx.coroutines.flow.Flow
 
 class DisplayAllCategoriesUseCase(
-    private val database: AppDatabase
+    private val database: AppDatabase,
 ) {
-
-    operator fun invoke(): Flow<List<Category>> {
-        return database.appDao().observeAllCategories()
-    }
-
+    operator fun invoke(): Flow<List<Category>> = database.appDao().observeAllCategories()
 }

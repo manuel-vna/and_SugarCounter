@@ -6,11 +6,9 @@ import org.koin.test.KoinTest
 import org.koin.test.verify.verify
 
 class AppModuleTest : KoinTest {
-
     @OptIn(KoinExperimentalAPI::class)
     @Test
     fun checkAllModules() {
         appModule.verify()
     }
-
 }

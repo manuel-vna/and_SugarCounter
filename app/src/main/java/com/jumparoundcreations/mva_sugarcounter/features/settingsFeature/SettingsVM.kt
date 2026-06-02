@@ -21,9 +21,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class SettingsVM(
-    val exportEntriesUseCase: ExportEntriesUseCase
-) : ViewModel(), KoinComponent {
-
+    val exportEntriesUseCase: ExportEntriesUseCase,
+) : ViewModel(),
+    KoinComponent {
     private val database by inject<AppDatabase>()
     private val sharedPrefsMain by inject<SharedPreferences>()
 
@@ -42,18 +42,18 @@ class SettingsVM(
             try {
                 // Testing delay
                 // delay(500)
-                
+
                 val deletion = loadShaPrefEntriesDeletionSwitch()
                 val color = loadShaPrefColorSchemeSwitch()
                 val sliderValue = loadShaPrefEntriesDeletionSwitchValue()
-                
-                _settingsStates.update { 
+
+                _settingsStates.update {
                     it.copy(
                         isLoading = false,
                         entriesDeletionActivated = deletion,
                         dynamicColorActivated = color,
-                        deletionWorkerSlider = sliderValue
-                    ) 
+                        deletionWorkerSlider = sliderValue,
+                    )
                 }
             } catch (e: Exception) {
                 _settingsStates.update { it.copy(isLoading = false, isError = true) }
@@ -61,7 +61,7 @@ class SettingsVM(
         }
     }
 
-    //Actions: START
+    // Actions: START
 
     fun actionChangeExpandedId(id: Long) {
         _settingsStates.update { it.copy(faqExpandedId = id) }
@@ -84,10 +84,12 @@ class SettingsVM(
     fun actionResetThresholdSliderValuesToSharedPref() {
         _settingsStates.update {
             it.copy(
-                gramThresholdSlider = sharedPrefsMain.getInt(
-                    "gramThresholdValue",
-                    50
-                ).toFloat()
+                gramThresholdSlider =
+                    sharedPrefsMain
+                        .getInt(
+                            "gramThresholdValue",
+                            50,
+                        ).toFloat(),
             )
         }
     }
@@ -103,7 +105,7 @@ class SettingsVM(
     fun actionExportEntries(
         context: Context,
         osVersionHigherOrEqualsR: Boolean,
-        settingsVM: SettingsVM
+        settingsVM: SettingsVM,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -111,7 +113,7 @@ class SettingsVM(
                     context,
                     osVersionHigherOrEqualsR,
                     settingsVM,
-                    database
+                    database,
                 )
             } catch (e: Exception) {
                 // If a critical error occurs during export that should show the error screen
@@ -137,7 +139,6 @@ class SettingsVM(
         _settingsStates.update { it.copy(exportSuccessfully = wasSuccessful) }
     }
 
-
     fun actionChangeEntriesDeletionActivated(isActivated: Boolean) {
         _settingsStates.update { it.copy(entriesDeletionActivated = isActivated) }
 
@@ -156,7 +157,7 @@ class SettingsVM(
         _settingsStates.update { it.copy(bottomSheetsSettings = shownSheet) }
     }
 
-    //Actions: END
+    // Actions: END
 
     // Effects START
 
@@ -170,28 +171,23 @@ class SettingsVM(
 
     // Loading Shared Preferences: START
 
-    private fun loadShaPrefEntriesDeletionSwitch(): Boolean {
-        return sharedPrefsMain.getBoolean(
+    private fun loadShaPrefEntriesDeletionSwitch(): Boolean =
+        sharedPrefsMain.getBoolean(
             "entriesDeletionActivated",
-            false
+            false,
         )
-    }
 
-    private fun loadShaPrefEntriesDeletionSwitchValue(): Int {
-        return sharedPrefsMain.getInt(
+    private fun loadShaPrefEntriesDeletionSwitchValue(): Int =
+        sharedPrefsMain.getInt(
             "automaticDeletionValue",
-            3
+            3,
         )
-    }
 
-    private fun loadShaPrefColorSchemeSwitch(): Boolean {
-        return sharedPrefsMain.getBoolean(
+    private fun loadShaPrefColorSchemeSwitch(): Boolean =
+        sharedPrefsMain.getBoolean(
             "dynamicColorActivated",
-            false
+            false,
         )
-    }
 
     // Loading Shared Preferences: END
-
-
 }

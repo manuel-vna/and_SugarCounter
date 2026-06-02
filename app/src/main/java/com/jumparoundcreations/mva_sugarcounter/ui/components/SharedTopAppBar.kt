@@ -15,18 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SharedTopAppBar(
     appBarTitle: String,
     onBackClickAction: () -> Unit,
-    actionIconFirst: @Composable RowScope.() -> Unit = {}
+    actionIconFirst: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 0.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 0.dp),
         title = { Text(appBarTitle) },
         scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
         actions = actionIconFirst,
@@ -34,7 +34,7 @@ fun SharedTopAppBar(
             IconButton(onClick = { onBackClickAction.invoke() }) {
                 Icon(
                     Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
                 )
             }
         },

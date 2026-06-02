@@ -17,8 +17,9 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class CategoryVM : ViewModel(), KoinComponent {
-
+class CategoryVM :
+    ViewModel(),
+    KoinComponent {
     private val database by inject<AppDatabase>()
 
     companion object {
@@ -77,40 +78,39 @@ class CategoryVM : ViewModel(), KoinComponent {
         private const val INDEX25 = 25
 
         private const val SCROLL_STATE_START_INDEX = 0
-
-
     }
 
-    val letters = mapOf(
-        Pair(LETTER_A, INDEX0),
-        Pair(LETTER_B, INDEX1),
-        Pair(LETTER_C, INDEX2),
-        Pair(LETTER_D, INDEX3),
-        Pair(LETTER_E, INDEX4),
-        Pair(LETTER_F, INDEX5),
-        Pair(LETTER_G, INDEX6),
-        Pair(LETTER_H, INDEX7),
-        Pair(LETTER_I, INDEX8),
-        Pair(LETTER_J, INDEX9),
-        Pair(LETTER_K, INDEX10),
-        Pair(LETTER_L, INDEX11),
-        Pair(LETTER_M, INDEX12),
-        Pair(LETTER_N, INDEX13),
-        Pair(LETTER_O, INDEX14),
-        Pair(LETTER_P, INDEX15),
-        Pair(LETTER_Q, INDEX16),
-        Pair(LETTER_R, INDEX17),
-        Pair(LETTER_S, INDEX18),
-        Pair(LETTER_T, INDEX19),
-        Pair(LETTER_U, INDEX20),
-        Pair(LETTER_V, INDEX21),
-        Pair(LETTER_W, INDEX22),
-        Pair(LETTER_X, INDEX23),
-        Pair(LETTER_Y, INDEX24),
-        Pair(LETTER_Z, INDEX25),
-    )
+    val letters =
+        mapOf(
+            Pair(LETTER_A, INDEX0),
+            Pair(LETTER_B, INDEX1),
+            Pair(LETTER_C, INDEX2),
+            Pair(LETTER_D, INDEX3),
+            Pair(LETTER_E, INDEX4),
+            Pair(LETTER_F, INDEX5),
+            Pair(LETTER_G, INDEX6),
+            Pair(LETTER_H, INDEX7),
+            Pair(LETTER_I, INDEX8),
+            Pair(LETTER_J, INDEX9),
+            Pair(LETTER_K, INDEX10),
+            Pair(LETTER_L, INDEX11),
+            Pair(LETTER_M, INDEX12),
+            Pair(LETTER_N, INDEX13),
+            Pair(LETTER_O, INDEX14),
+            Pair(LETTER_P, INDEX15),
+            Pair(LETTER_Q, INDEX16),
+            Pair(LETTER_R, INDEX17),
+            Pair(LETTER_S, INDEX18),
+            Pair(LETTER_T, INDEX19),
+            Pair(LETTER_U, INDEX20),
+            Pair(LETTER_V, INDEX21),
+            Pair(LETTER_W, INDEX22),
+            Pair(LETTER_X, INDEX23),
+            Pair(LETTER_Y, INDEX24),
+            Pair(LETTER_Z, INDEX25),
+        )
 
-    //SateFlows: START
+    // SateFlows: START
     private val _categories = MutableStateFlow(emptyMap<Char, List<Category>>())
     val categories = _categories.asStateFlow()
 
@@ -131,49 +131,57 @@ class CategoryVM : ViewModel(), KoinComponent {
         MutableStateFlow(Category(category = "", deletionCheckbox = false, barcodeNumber = ""))
     val clickedCategory = _clickedCategory.asStateFlow()
 
-    private val _entrySugarForClickedCategory = MutableStateFlow(
-        SugarEntry(
-            id = DatabaseConstants.DEFAULT_DATABASE_INT,
-            currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
-            date = DatabaseConstants.DEFAULT_DATABASE_STRING,
-            category = DatabaseConstants.DEFAULT_DATABASE_STRING,
-            entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
-            gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
-            quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
-            gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE
+    private val _entrySugarForClickedCategory =
+        MutableStateFlow(
+            SugarEntry(
+                id = DatabaseConstants.DEFAULT_DATABASE_INT,
+                currentTimestamp = DatabaseConstants.DEFAULT_DATABASE_TIMESTAMP,
+                date = DatabaseConstants.DEFAULT_DATABASE_STRING,
+                category = DatabaseConstants.DEFAULT_DATABASE_STRING,
+                entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
+                gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+            ),
         )
-    )
     val entrySugarForClickedCategory = _entrySugarForClickedCategory.asStateFlow()
 
-    //SateFlows: END
+    // SateFlows: END
 
-
-    //Observer _categories: START
+    // Observer _categories: START
     // Observer that is used to observe Dao of RoomDB
-    private val categoriesObserver = Observer<List<Category>> { listOfCategories ->
-        val sortedCategories =
-            listOfCategories.filter { it.category.isNotBlank() }
-                .groupBy(keySelector = { it.category.uppercase().first() })
-                .toSortedMap()
-        _categories.value = sortedCategories
-    }
+    private val categoriesObserver =
+        Observer<List<Category>> { listOfCategories ->
+            val sortedCategories =
+                listOfCategories
+                    .filter { it.category.isNotBlank() }
+                    .groupBy(keySelector = { it.category.uppercase().first() })
+                    .toSortedMap()
+            _categories.value = sortedCategories
+        }
 
     init {
-        database.appDao().getAllCategories()
+        database
+            .appDao()
+            .getAllCategories()
             .observeForever(categoriesObserver)
     }
 
     override fun onCleared() {
         super.onCleared()
         // Stop observing at Dao of RoomDB when this ViewModel is cleared
-        database.appDao().getAllCategories()
+        database
+            .appDao()
+            .getAllCategories()
             .removeObserver(categoriesObserver)
     }
-    //Observer _categories: END
+    // Observer _categories: END
 
-
-    //Actions: START
-    fun actionHandleCategoryScrollState(index: Int, scrollState: LazyListState) {
+    // Actions: START
+    fun actionHandleCategoryScrollState(
+        index: Int,
+        scrollState: LazyListState,
+    ) {
         viewModelScope.launch {
             scrollState.scrollToItem(index)
         }
@@ -185,17 +193,19 @@ class CategoryVM : ViewModel(), KoinComponent {
     }
 
     fun actionShowDeletionCheckboxes() {
-        _deletionCheckboxes.value = CategoryStates(
-            deletionCheckboxesDisplayed = true,
-            deletionButtonsDisplayed = true,
-        )
+        _deletionCheckboxes.value =
+            CategoryStates(
+                deletionCheckboxesDisplayed = true,
+                deletionButtonsDisplayed = true,
+            )
     }
 
     fun actionHideDeletionCheckboxes() {
-        _deletionCheckboxes.value = CategoryStates(
-            deletionCheckboxesDisplayed = false,
-            deletionButtonsDisplayed = false,
-        )
+        _deletionCheckboxes.value =
+            CategoryStates(
+                deletionCheckboxesDisplayed = false,
+                deletionButtonsDisplayed = false,
+            )
     }
 
     fun actionChangeDeleteCheckbox(category: Category) {
@@ -205,16 +215,16 @@ class CategoryVM : ViewModel(), KoinComponent {
                     Category(
                         id = category.id,
                         category = category.category.trim(),
-                        deletionCheckbox = false
-                    )
+                        deletionCheckbox = false,
+                    ),
                 )
             } else {
                 database.appDao().updateCategory(
                     Category(
                         id = category.id,
                         category = category.category.trim(),
-                        deletionCheckbox = true
-                    )
+                        deletionCheckbox = true,
+                    ),
                 )
             }
         }
@@ -228,7 +238,7 @@ class CategoryVM : ViewModel(), KoinComponent {
 
     fun actionChangeCategoryBottomSheetShown(
         categoryBottomSheet: Boolean,
-        clickedCategory: Category?
+        clickedCategory: Category?,
     ) {
         _categoryBottomSheetShown.value = categoryBottomSheet
         clickedCategory?.let {
@@ -236,7 +246,7 @@ class CategoryVM : ViewModel(), KoinComponent {
             retrieveLastEntriesForClickedCategory(clickedCategory = it)
         }
     }
-    //Actions: END
+    // Actions: END
 
     private fun retrieveLastEntriesForClickedCategory(clickedCategory: Category) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -250,13 +260,13 @@ class CategoryVM : ViewModel(), KoinComponent {
                 entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
                 gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                 quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
-                gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE
+                gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
             )
         }
     }
 
-    //Testing Purposes: START
-    //Call to this method has to be added somewhere
+    // Testing Purposes: START
+    // Call to this method has to be added somewhere
     fun addCategoryTestData() {
         viewModelScope.launch(Dispatchers.IO) {
             repeat(150) {
@@ -269,13 +279,11 @@ class CategoryVM : ViewModel(), KoinComponent {
                 database.appDao().insertCategory(
                     Category(
                         category = randomWord.trim(),
-                        barcodeNumber = TestData.TEST_BARCODE_NUMBER
-                    )
+                        barcodeNumber = TestData.TEST_BARCODE_NUMBER,
+                    ),
                 )
             }
         }
     }
-    //Testing Purposes: END
-
-
+    // Testing Purposes: END
 }

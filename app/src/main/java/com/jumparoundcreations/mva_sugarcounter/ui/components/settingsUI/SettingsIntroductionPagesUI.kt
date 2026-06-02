@@ -31,56 +31,53 @@ import de.sldw.composeonboarding.OnboardingPage
 
 class OnboardingPage1(
     private val appLanguage: AppLanguage,
-    private val fontColorOnBackground: Color
+    private val fontColorOnBackground: Color,
 ) : OnboardingPage() {
-
-
     @Composable
     override fun Content(paddingValues: PaddingValues) {
-
-        //val context = LocalContext.current
+        // val context = LocalContext.current
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(
-                        MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.secondary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(
+                            MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(8.dp),
+                        ).border(
+                            BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
                         ),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(R.string.settings_intoduction_counter_title),
                     fontSize = 20.sp,
-                    color = fontColorOnBackground
+                    color = fontColorOnBackground,
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
                     painter =
@@ -97,83 +94,85 @@ class OnboardingPage1(
                                 painterResource(id = R.drawable.introduction_counter_top_en)
                             }
                         },
-                    contentDescription = stringResource(R.string.counterTitle)
+                    contentDescription = stringResource(R.string.counterTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_counter_top)
+                text = stringResource(R.string.settings_introduction_counter_top),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_counter_middle_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_counter_middle_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_counter_middle_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_counter_middle_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_counter_middle_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.counterTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_counter_middle_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.counterTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_counter_middle)
+                text = stringResource(R.string.settings_introduction_counter_middle),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_counter_bottom_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_counter_bottom_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_counter_bottom_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_counter_bottom_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_counter_bottom_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.counterTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_counter_bottom_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.counterTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_counter_bottom)
+                text = stringResource(R.string.settings_introduction_counter_bottom),
             )
         }
     }
@@ -181,145 +180,147 @@ class OnboardingPage1(
 
 class OnboardingPage2(
     private val appLanguage: AppLanguage,
-    private val fontColorOnBackground: Color
+    private val fontColorOnBackground: Color,
 ) : OnboardingPage() {
-
     @Composable
     override fun Content(paddingValues: PaddingValues) {
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(
-                        MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.secondary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(
+                            MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(8.dp),
+                        ).border(
+                            BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
                         ),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(R.string.settings_introduction_history_title),
                     fontSize = 20.sp,
-                    color = fontColorOnBackground
+                    color = fontColorOnBackground,
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_history_top_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_history_top_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_top_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_history_top_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_history_top_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.counterTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_history_top_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.counterTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_history_top)
+                text = stringResource(R.string.settings_introduction_history_top),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_history_middle_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_history_middle_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_middle_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_history_middle_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_history_middle_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.historyTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_history_middle_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.historyTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_history_middle)
+                text = stringResource(R.string.settings_introduction_history_middle),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_history_graph_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_history_graph_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_history_graph_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_history_graph_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_history_graph_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.historyTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_history_graph_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.historyTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_history_graph)
+                text = stringResource(R.string.settings_introduction_history_graph),
             )
         }
     }
@@ -327,187 +328,187 @@ class OnboardingPage2(
 
 class OnboardingPage3(
     private val appLanguage: AppLanguage,
-    private val fontColorOnBackground: Color
+    private val fontColorOnBackground: Color,
 ) : OnboardingPage() {
-
     @Composable
     override fun Content(paddingValues: PaddingValues) {
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(
-                        MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.secondary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(
+                            MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(8.dp),
+                        ).border(
+                            BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
                         ),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(R.string.settings_introduction_category_title),
                     fontSize = 20.sp,
-                    color = fontColorOnBackground
+                    color = fontColorOnBackground,
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_category_top_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_category_top_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_category_top_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_category_top_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_category_top_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.categoryPlural)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_category_top_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.categoryPlural),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_category_top)
+                text = stringResource(R.string.settings_introduction_category_top),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_category_bottom_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_category_bottom_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_category_bottom_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_category_bottom_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_category_bottom_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.categoryPlural)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_category_bottom_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.categoryPlural),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_category_bottom)
+                text = stringResource(R.string.settings_introduction_category_bottom),
             )
         }
     }
 }
 
-
 class OnboardingPage4(
     private val appLanguage: AppLanguage,
-    private val fontColorOnBackground: Color
+    private val fontColorOnBackground: Color,
 ) : OnboardingPage() {
-
     @Composable
     override fun Content(paddingValues: PaddingValues) {
         Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .background(
-                        MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .border(
-                        BorderStroke(
-                            1.dp,
-                            MaterialTheme.colorScheme.secondary
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .background(
+                            MaterialTheme.colorScheme.secondary,
+                            shape = RoundedCornerShape(8.dp),
+                        ).border(
+                            BorderStroke(
+                                1.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
                         ),
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                contentAlignment = Alignment.Center
-
+                contentAlignment = Alignment.Center,
             ) {
                 Text(
                     text = stringResource(R.string.settings_introduction_settings_title),
                     fontSize = 20.sp,
-                    color = fontColorOnBackground
+                    color = fontColorOnBackground,
                 )
             }
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
             Box(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .border(
-                        BorderStroke(
-                            1.5.dp,
-                            MaterialTheme.colorScheme.secondary
-                        ),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .clip(RoundedCornerShape(8.dp))
+                modifier =
+                    Modifier
+                        .padding(8.dp)
+                        .border(
+                            BorderStroke(
+                                1.5.dp,
+                                MaterialTheme.colorScheme.secondary,
+                            ),
+                            shape = RoundedCornerShape(8.dp),
+                        ).clip(RoundedCornerShape(8.dp)),
             ) {
                 Image(
-                    painter = when (appLanguage) {
-                        AppLanguage.GERMAN -> {
-                            painterResource(id = R.drawable.introduction_settings_top_de)
-                        }
+                    painter =
+                        when (appLanguage) {
+                            AppLanguage.GERMAN -> {
+                                painterResource(id = R.drawable.introduction_settings_top_de)
+                            }
 
-                        AppLanguage.SPANISH -> {
-                            painterResource(id = R.drawable.introduction_settings_top_en)
-                        }
+                            AppLanguage.SPANISH -> {
+                                painterResource(id = R.drawable.introduction_settings_top_en)
+                            }
 
-                        else -> {
-                            painterResource(id = R.drawable.introduction_settings_top_en)
-                        }
-                    },
-                    contentDescription = stringResource(R.string.settingsTitle)
+                            else -> {
+                                painterResource(id = R.drawable.introduction_settings_top_en)
+                            }
+                        },
+                    contentDescription = stringResource(R.string.settingsTitle),
                 )
             }
             Text(
                 modifier = Modifier.padding(12.dp),
                 textAlign = TextAlign.Justify,
-                text = stringResource(R.string.settings_introduction_settings_top)
+                text = stringResource(R.string.settings_introduction_settings_top),
             )
             Spacer(modifier = Modifier.padding(vertical = 12.dp))
         }

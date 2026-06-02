@@ -26,29 +26,28 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
-
 @Composable
 fun TabRow(
     onAction: (EntrySavingIntents) -> Unit,
-    entrySavingStates: EntrySavingStates
+    entrySavingStates: EntrySavingStates,
 ) {
-
-    val tabItems = listOf(
-        CounterTabItem(
-            gramCountMode = GramCountMode.PerHundred,
-            title = stringResource(id = R.string.tabCounterPerHundred),
-            unselectedIcon = Icons.Outlined.BarChart,
-            selectedIcon = Icons.Outlined.BarChart,
-            contentDescription = stringResource(id = R.string.accessibility_tabCounterPerHundred),
-        ),
-        CounterTabItem(
-            gramCountMode = GramCountMode.PerPiece,
-            title = stringResource(id = R.string.tabCounterPerPiece),
-            unselectedIcon = Icons.Outlined.Dialpad,
-            selectedIcon = Icons.Outlined.Dialpad,
-            contentDescription = stringResource(id = R.string.accessibility_tabCounterPerPiece),
+    val tabItems =
+        listOf(
+            CounterTabItem(
+                gramCountMode = GramCountMode.PerHundred,
+                title = stringResource(id = R.string.tabCounterPerHundred),
+                unselectedIcon = Icons.Outlined.BarChart,
+                selectedIcon = Icons.Outlined.BarChart,
+                contentDescription = stringResource(id = R.string.accessibility_tabCounterPerHundred),
+            ),
+            CounterTabItem(
+                gramCountMode = GramCountMode.PerPiece,
+                title = stringResource(id = R.string.tabCounterPerPiece),
+                unselectedIcon = Icons.Outlined.Dialpad,
+                selectedIcon = Icons.Outlined.Dialpad,
+                contentDescription = stringResource(id = R.string.accessibility_tabCounterPerPiece),
+            ),
         )
-    )
 
     val pagerState = rememberPagerState { tabItems.size }
 
@@ -56,12 +55,13 @@ fun TabRow(
         pagerState.animateScrollToPage(entrySavingStates.gramCountModeTabIndex)
     }
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress)
+        if (!pagerState.isScrollInProgress) {
             onAction(
                 EntrySavingIntents.ChangeGramCountModeTabIndex(
-                    tabIndex = pagerState.currentPage
-                )
+                    tabIndex = pagerState.currentPage,
+                ),
             )
+        }
     }
 
     Column {
@@ -72,25 +72,27 @@ fun TabRow(
                     onClick = {
                         onAction(
                             EntrySavingIntents.ChangeGramCountModeTabIndex(
-                                tabIndex = index
-                            )
+                                tabIndex = index,
+                            ),
                         )
-
                     },
                     text = {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(4.dp)
+                            modifier = Modifier.padding(4.dp),
                         ) {
                             Icon(
-                                imageVector = if (index == entrySavingStates.gramCountModeTabIndex) {
-                                    item.selectedIcon
-                                } else item.unselectedIcon,
-                                contentDescription = item.contentDescription
+                                imageVector =
+                                    if (index == entrySavingStates.gramCountModeTabIndex) {
+                                        item.selectedIcon
+                                    } else {
+                                        item.unselectedIcon
+                                    },
+                                contentDescription = item.contentDescription,
                             )
                             Text(text = item.title)
                         }
-                    }
+                    },
                 )
             }
         }
@@ -99,9 +101,7 @@ fun TabRow(
             state = pagerState,
         ) { index ->
             Row {
-
                 if (tabItems[index].gramCountMode == GramCountMode.PerPiece) {
-
                     CounterTabRowFieldsUI(
                         onAction = onAction,
                         entrySavingStates = entrySavingStates,
@@ -112,32 +112,32 @@ fun TabRow(
                         labelGramField = stringResource(R.string.gramSugar),
                         labelQuantityField = stringResource(R.string.quantitySugar),
                         onValueChangeGramField = { input ->
-                            if (InputFilters.filterBlockingOverHundred(input))
+                            if (InputFilters.filterBlockingOverHundred(input)) {
                                 onAction(
                                     EntrySavingIntents.ChangeEntryFieldGram(
-                                        entryFieldGram = input
-                                    )
+                                        entryFieldGram = input,
+                                    ),
                                 )
+                            }
                         },
                         onValueChangeQuantityField = { input ->
-                            if (InputFilters.filterBlockingOverHundred(input))
+                            if (InputFilters.filterBlockingOverHundred(input)) {
                                 onAction(
                                     EntrySavingIntents.ChangeEntryFieldQuantity(
-                                        entryFieldQuantity = input
-                                    )
+                                        entryFieldQuantity = input,
+                                    ),
                                 )
+                            }
                         },
                         quantityFieldPlaceholder = NumberConstants.ONE_AS_INT.toString(),
                     )
 
                     onAction(
                         EntrySavingIntents.ChangeGramCountMode(
-                            gramCountMode = GramCountMode.PerPiece
-                        )
+                            gramCountMode = GramCountMode.PerPiece,
+                        ),
                     )
-
                 } else {
-
                     CounterTabRowFieldsUI(
                         onAction = onAction,
                         entrySavingStates = entrySavingStates,
@@ -152,31 +152,30 @@ fun TabRow(
                                 if (InputFilters.filterBlockingOverHundred(input)) {
                                     onAction(
                                         EntrySavingIntents.ChangeEntryFieldGram(
-                                            entryFieldGram = input
-                                        )
+                                            entryFieldGram = input,
+                                        ),
                                     )
                                 }
                             },
                         onValueChangeQuantityField = { input ->
-                            if(InputFilters.filterBlockingOverThousand(input))
+                            if (InputFilters.filterBlockingOverThousand(input)) {
                                 onAction(
                                     EntrySavingIntents.ChangeEntryFieldQuantity(
-                                        entryFieldQuantity = input
-                                    )
+                                        entryFieldQuantity = input,
+                                    ),
                                 )
+                            }
                         },
                         quantityFieldPlaceholder = stringResource(R.string.gram_unit_short),
                     )
 
                     onAction(
                         EntrySavingIntents.ChangeGramCountMode(
-                            gramCountMode = GramCountMode.PerHundred
-                        )
+                            gramCountMode = GramCountMode.PerHundred,
+                        ),
                     )
-
                 }
             }
         }
     }
-
 }

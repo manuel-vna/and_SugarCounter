@@ -7,9 +7,8 @@ import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
 import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
 
 class EditDatabaseEntryUseCase(
-    val database: AppDatabase
+    val database: AppDatabase,
 ) {
-
     operator fun invoke(
         sugarEntryID: Int,
         sugarEntryType: GramCountMode,
@@ -18,28 +17,28 @@ class EditDatabaseEntryUseCase(
         newGram: Double,
         newQuantity: Double,
     ) {
-
         database.appDao().updateSugarEntry(
             id = sugarEntryID,
             gram = newGram,
             quantity = newQuantity,
-            gramTotal = if (sugarEntryType == GramCountMode.PerHundred) {
-                ((newGram / 100) * newQuantity).roundToOneDecimal()
-            } else {
-                (newGram * newQuantity).roundToOneDecimal()
-            }
+            gramTotal =
+                if (sugarEntryType == GramCountMode.PerHundred) {
+                    ((newGram / 100) * newQuantity).roundToOneDecimal()
+                } else {
+                    (newGram * newQuantity).roundToOneDecimal()
+                },
         )
 
         database.appDao().updateEntrySugarCategoryOfLastXDays(
             oldCategory = oldCategory,
             newCategory = newCategory,
             startPoint = HelperMethods.getStartOfTodayAsLong() - TimeConstants.NINETY_DAYS_IN_SECONDS,
-            endPoint = HelperMethods.getEndOfTodayAsLong()
+            endPoint = HelperMethods.getEndOfTodayAsLong(),
         )
 
         database.appDao().updateCategoryOnEdit(
             oldCategory = oldCategory,
-            newCategory = newCategory
+            newCategory = newCategory,
         )
     }
 }

@@ -33,19 +33,17 @@ import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
 fun History(
     context: Context,
     entryListDisplayingViewModel: EntryListDisplayingViewModel,
     entryGraphDisplayingViewModel: EntryGraphDisplayingViewModel = koinViewModel(),
-    historyViewModel: HistoryVM = koinViewModel()
+    historyViewModel: HistoryVM = koinViewModel(),
 ) {
-
     val entryListDisplayingStates by
-    entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+        entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val entryGraphDisplayingStates by
-    entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
+        entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
     val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
     val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
     val configuration = LocalConfiguration.current
@@ -53,40 +51,39 @@ fun History(
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
     Column(
-        modifier = Modifier.padding(horizontal = 16.dp)
+        modifier = Modifier.padding(horizontal = 16.dp),
     ) {
-
         HistoryTabRowUI(historyViewModel)
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //Card Screen
+        // Card Screen
         if (historyCardsScreenShown) {
             val states = entryListDisplayingStates
             when (states) {
                 is EntryListDisplayingStates.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         CircularProgressIndicator(
-                            modifier = Modifier.size(90.dp)
+                            modifier = Modifier.size(90.dp),
                         )
                     }
                 }
 
                 is EntryListDisplayingStates.Success -> {
                     BackHandler(
-                        enabled = states.data.searchFieldShown
+                        enabled = states.data.searchFieldShown,
                     ) {
                         entryListDisplayingViewModel.onAction(
-                            action = EntryListDisplayingIntents.CloseSearchFieldAndClearText
+                            action = EntryListDisplayingIntents.CloseSearchFieldAndClearText,
                         )
                     }
 
                     CardsScreen(
                         onAction = entryListDisplayingViewModel::onAction,
-                        data = states.data
+                        data = states.data,
                     )
                 }
 
@@ -102,11 +99,11 @@ fun History(
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     EmptyDataInfo(
                         description =
-                            stringResource(id = R.string.landscape_mode_no_graph_description)
+                            stringResource(id = R.string.landscape_mode_no_graph_description),
                     )
                 }
             } else {
@@ -115,10 +112,10 @@ fun History(
                     is EntryGraphDisplayingStates.Loading -> {
                         Box(
                             modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
+                            contentAlignment = Alignment.Center,
                         ) {
                             CircularProgressIndicator(
-                                modifier = Modifier.size(90.dp)
+                                modifier = Modifier.size(90.dp),
                             )
                         }
                     }
@@ -128,7 +125,7 @@ fun History(
                             states.data.entriesGroupedPerDay.toIntModel()
                         LineChart(
                             context = context,
-                            savedSugarCountGrouped = savedSugarCountGroupedInt
+                            savedSugarCountGrouped = savedSugarCountGroupedInt,
                         )
                     }
 

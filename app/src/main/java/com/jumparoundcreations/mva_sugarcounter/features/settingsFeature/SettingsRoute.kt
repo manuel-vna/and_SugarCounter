@@ -27,7 +27,7 @@ fun SettingsRoute(
     SettingsScreen(
         context,
         navController,
-        settingsStates
+        settingsStates,
     )
 
     LaunchedEffect(Unit) {
@@ -50,18 +50,18 @@ fun SettingsRoute(
             pendingSnackbar = null
         }
     }
-
 }
 
 @Composable
-private fun discoverSnackbarText(msg: SettingsSnackbarMessage): String = when (msg) {
-    is SettingsSnackbarMessage.GramThresholdChangeSuccess -> stringResource(
-        R.string.snackbar_threshold_change_success, msg.newThreshold
-    )
-    is SettingsSnackbarMessage.GramThresholdChangeCanceled -> stringResource(
-        R.string.snackbar_threshold_change_cancel
-    )
-}
-
-
-
+private fun discoverSnackbarText(msg: SettingsSnackbarMessage): String =
+    when (msg) {
+        is SettingsSnackbarMessage.GramThresholdChangeSuccess ->
+            stringResource(
+                R.string.snackbar_threshold_change_success,
+                msg.newThreshold,
+            )
+        is SettingsSnackbarMessage.GramThresholdChangeCanceled ->
+            stringResource(
+                R.string.snackbar_threshold_change_cancel,
+            )
+    }

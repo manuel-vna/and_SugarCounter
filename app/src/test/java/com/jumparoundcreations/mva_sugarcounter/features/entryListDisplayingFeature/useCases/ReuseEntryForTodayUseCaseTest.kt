@@ -16,8 +16,6 @@ import org.junit.Before
 import org.junit.Test
 
 class ReuseEntryForTodayUseCaseTest {
-
-
     private lateinit var mockDatabase: AppDatabase
     private lateinit var mockDao: DaoAppDatabase
     private lateinit var useCase: ReuseEntryForTodayUseCase
@@ -41,16 +39,17 @@ class ReuseEntryForTodayUseCaseTest {
     @Test
     fun `invoke preserves PerHundred entryType when reusing entry`() {
         // Arrange
-        val originalEntry = SugarEntry(
-            id = 1,
-            currentTimestamp = 12345L,
-            date = "2025-01-01",
-            category = "Cereal",
-            entryType = GramCountMode.PerHundred,
-            gram = 25.0,
-            quantity = 50.0,
-            gramTotal = 12.5
-        )
+        val originalEntry =
+            SugarEntry(
+                id = 1,
+                currentTimestamp = 12345L,
+                date = "2025-01-01",
+                category = "Cereal",
+                entryType = GramCountMode.PerHundred,
+                gram = 25.0,
+                quantity = 50.0,
+                gramTotal = 12.5,
+            )
 
         // Act
         useCase.invoke(originalEntry)
@@ -71,16 +70,17 @@ class ReuseEntryForTodayUseCaseTest {
     @Test
     fun `invoke preserves PerPiece entryType when reusing entry`() {
         // Arrange
-        val originalEntry = SugarEntry(
-            id = 2,
-            currentTimestamp = 67890L,
-            date = "2025-02-02",
-            category = "Cookie",
-            entryType = GramCountMode.PerPiece, // This triggers the 'else' branch
-            gram = 15.0,
-            quantity = 2.0,
-            gramTotal = 30.0
-        )
+        val originalEntry =
+            SugarEntry(
+                id = 2,
+                currentTimestamp = 67890L,
+                date = "2025-02-02",
+                category = "Cookie",
+                entryType = GramCountMode.PerPiece, // This triggers the 'else' branch
+                gram = 15.0,
+                quantity = 2.0,
+                gramTotal = 30.0,
+            )
 
         // Act
         useCase.invoke(originalEntry)
@@ -97,4 +97,3 @@ class ReuseEntryForTodayUseCaseTest {
         assertEquals(originalEntry.gram, capturedEntry.gram, 0.0)
     }
 }
-

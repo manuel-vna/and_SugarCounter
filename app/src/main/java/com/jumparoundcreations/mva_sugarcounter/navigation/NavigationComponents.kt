@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.navigation
 
-
 import android.content.Context
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -29,30 +28,28 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Setting
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.TermsAndConditionsUI
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
     snackbarHostState: SnackbarHostState,
     context: Context,
     entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
-
-    ) {
+) {
     NavHost(
         navController = navController,
-        startDestination = BottomNavItem.SugarCounter.screenRoute
+        startDestination = BottomNavItem.SugarCounter.screenRoute,
     ) {
         composable(route = BottomNavItem.SugarCounter.screenRoute) {
             Counter(
                 context = context,
                 snackbarHostState = snackbarHostState,
-                entryListDisplayingViewModel = entryListDisplayingViewModel
+                entryListDisplayingViewModel = entryListDisplayingViewModel,
             )
         }
         composable(route = BottomNavItem.SugarHistory.screenRoute) {
             History(
                 context = context,
-                entryListDisplayingViewModel = entryListDisplayingViewModel
+                entryListDisplayingViewModel = entryListDisplayingViewModel,
             )
         }
         composable(route = BottomNavItem.CategoryTitle.screenRoute) {
@@ -62,37 +59,37 @@ fun NavigationGraph(
             SettingsRoute(
                 context = context,
                 navController = navController,
-                snackbarHostState = snackbarHostState
+                snackbarHostState = snackbarHostState,
             )
         }
         composable(route = NavItem.FAQ.screenRoute) {
             FAQScreen(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.ThirdPartyLibraries.screenRoute) {
             SettingsThirdPartyLibrariesUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.TermsAndConditions.screenRoute) {
             TermsAndConditionsUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.PrivacyPolicy.screenRoute) {
             PrivacyPolicyUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.Imprint.screenRoute) {
             ImprintUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.Onboarding.screenRoute) {
             OnboardingUI(
-                navController
+                navController,
             )
         }
     }
@@ -100,13 +97,12 @@ fun NavigationGraph(
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-
     val items =
         listOf(
             BottomNavItem.SugarCounter,
             BottomNavItem.SugarHistory,
             BottomNavItem.CategoryTitle,
-            BottomNavItem.Settings
+            BottomNavItem.Settings,
         )
 
     NavigationBar {
@@ -121,7 +117,7 @@ fun BottomNavigation(navController: NavController) {
                     Text(
                         text = stringResource(id = item.title),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
                 onClick = {
@@ -134,7 +130,7 @@ fun BottomNavigation(navController: NavController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }

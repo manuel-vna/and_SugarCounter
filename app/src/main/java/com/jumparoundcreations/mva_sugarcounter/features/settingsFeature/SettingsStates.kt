@@ -15,5 +15,5 @@ data class SettingsStates(
     val entriesDeletionActivated: Boolean = false,
     val dynamicColorActivated: Boolean = false,
     val bottomSheetsSettings: BottomSheetsSettings = BottomSheetsSettings.NONE,
-    val deletionWorkerSlider: Int = 3
+    val deletionWorkerSlider: Int = 3,
 )

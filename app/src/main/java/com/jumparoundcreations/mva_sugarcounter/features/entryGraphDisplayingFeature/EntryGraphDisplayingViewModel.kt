@@ -12,12 +12,12 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class EntryGraphDisplayingViewModel(
-    val getEntryGroupPerDayUseCase: GetEntryGroupPerDayUseCase
-) : ViewModel(), KoinComponent {
-
+    val getEntryGroupPerDayUseCase: GetEntryGroupPerDayUseCase,
+) : ViewModel(),
+    KoinComponent {
     val _entryGraphDisplayingStates =
         MutableStateFlow<EntryGraphDisplayingStates>(
-            value = EntryGraphDisplayingStates.Loading
+            value = EntryGraphDisplayingStates.Loading,
         )
     val entryGraphDisplayingStates = _entryGraphDisplayingStates.asStateFlow()
 
@@ -29,26 +29,23 @@ class EntryGraphDisplayingViewModel(
         viewModelScope.launch {
             getEntryGroupPerDayUseCase(
                 timeFrameBeginning =
-                    TimeConstants.YEAR_ONE_IN_SECONDS
-            )
-                .catch { throwable ->
-                    _entryGraphDisplayingStates.update {
-                        EntryGraphDisplayingStates.Error(
-                            message = throwable.localizedMessage ?: "Unknown error"
-                        )
-                    }
+                    TimeConstants.YEAR_ONE_IN_SECONDS,
+            ).catch { throwable ->
+                _entryGraphDisplayingStates.update {
+                    EntryGraphDisplayingStates.Error(
+                        message = throwable.localizedMessage ?: "Unknown error",
+                    )
                 }
-                .collect { entriesGroupedPerDay ->
-                    _entryGraphDisplayingStates.update {
-                        EntryGraphDisplayingStates.Success(
-                            data = SuccessData(
-                                entriesGroupedPerDay = entriesGroupedPerDay
-                            )
-                        )
-                    }
+            }.collect { entriesGroupedPerDay ->
+                _entryGraphDisplayingStates.update {
+                    EntryGraphDisplayingStates.Success(
+                        data =
+                            SuccessData(
+                                entriesGroupedPerDay = entriesGroupedPerDay,
+                            ),
+                    )
                 }
+            }
         }
     }
-
-
 }

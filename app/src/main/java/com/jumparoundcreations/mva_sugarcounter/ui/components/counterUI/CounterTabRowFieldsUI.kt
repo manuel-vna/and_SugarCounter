@@ -41,39 +41,39 @@ fun CounterTabRowFieldsUI(
     labelQuantityField: String,
     onValueChangeGramField: (String) -> Unit,
     onValueChangeQuantityField: (String) -> Unit,
-    quantityFieldPlaceholder: String
+    quantityFieldPlaceholder: String,
 ) {
-
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .weight(1f),
-            Arrangement.SpaceEvenly
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .weight(1f),
+            Arrangement.SpaceEvenly,
         ) {
-
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = labelGramField,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
 
             TextField(
-                modifier = Modifier.semantics {
-                    contentDescription = accessibilityGramTextField
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor =
-                        MaterialTheme.colorScheme.secondaryContainer,
-                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
+                modifier =
+                    Modifier.semantics {
+                        contentDescription = accessibilityGramTextField
+                    },
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor =
+                            MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    ),
                 value = entrySavingStates.entryFieldGram,
                 onValueChange = { input ->
                     onValueChangeGramField(input)
@@ -83,8 +83,8 @@ fun CounterTabRowFieldsUI(
                     IconButton(onClick = {
                         onAction(
                             EntrySavingIntents.ChangeEntryFieldGram(
-                                entryFieldGram = GeneralConstants.EMPTY_STRING
-                            )
+                                entryFieldGram = GeneralConstants.EMPTY_STRING,
+                            ),
                         )
                     }) {
                         Icon(
@@ -98,36 +98,38 @@ fun CounterTabRowFieldsUI(
                 placeholder = {
                     Text(
                         text = stringResource(R.string.gram_unit_short),
-                        modifier = Modifier.clearAndSetSemantics {}
+                        modifier = Modifier.clearAndSetSemantics {},
                     )
-                }
+                },
             )
         }
 
         Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .weight(1f),
-            Arrangement.SpaceEvenly
+            modifier =
+                Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .weight(1f),
+            Arrangement.SpaceEvenly,
         ) {
-
             Text(
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                 text = labelQuantityField,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
             )
 
             TextField(
-                modifier = Modifier.semantics {
-                    contentDescription = accessibilityGramTextFieldConsumed
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    unfocusedContainerColor =
-                        MaterialTheme.colorScheme.secondaryContainer,
-                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                ),
+                modifier =
+                    Modifier.semantics {
+                        contentDescription = accessibilityGramTextFieldConsumed
+                    },
+                colors =
+                    OutlinedTextFieldDefaults.colors(
+                        unfocusedContainerColor =
+                            MaterialTheme.colorScheme.secondaryContainer,
+                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    ),
                 value = entrySavingStates.entryFieldQuantity,
                 onValueChange = { input ->
                     onValueChangeQuantityField(input)
@@ -137,8 +139,8 @@ fun CounterTabRowFieldsUI(
                     IconButton(onClick = {
                         onAction(
                             EntrySavingIntents.ChangeEntryFieldQuantity(
-                                entryFieldQuantity = GeneralConstants.EMPTY_STRING
-                            )
+                                entryFieldQuantity = GeneralConstants.EMPTY_STRING,
+                            ),
                         )
                     }) {
                         Icon(
@@ -152,11 +154,10 @@ fun CounterTabRowFieldsUI(
                 placeholder = {
                     Text(
                         text = quantityFieldPlaceholder,
-                        modifier = Modifier.clearAndSetSemantics {}
+                        modifier = Modifier.clearAndSetSemantics {},
                     )
-                }
+                },
             )
         }
     }
-
 }

@@ -2,8 +2,10 @@ package com.jumparoundcreations.mva_sugarcounter.navigation
 
 import com.jumparoundcreations.mva_sugarcounter.R
 
-sealed class NavItem(var title: Int, var screenRoute: String) {
-
+sealed class NavItem(
+    var title: Int,
+    var screenRoute: String,
+) {
     data object FAQ :
         NavItem(R.string.settings_button_faq_text, "faq")
 
@@ -21,5 +23,4 @@ sealed class NavItem(var title: Int, var screenRoute: String) {
 
     data object Onboarding :
         NavItem(R.string.settings_introduction_title, "onboarding")
-
 }

@@ -21,63 +21,62 @@ import org.koin.core.qualifier.named
 
 @Composable
 fun TermsAndConditionsUI(navController: NavController) {
-
     val termsHtml: String = getKoin().get(named("termsAndConditions"))
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .verticalScroll(rememberScrollState())
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
     ) {
-
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.about_title_terms_and_conditions),
             onBackClickAction = {
                 navController.popBackStack()
-            }
+            },
         )
 
         WebView(
-            state = rememberWebViewStateWithHTMLData(
-                termsHtml.replace(
-                    "##STYLE_PLACEHOLDER##",
-                    """<style>
+            state =
+                rememberWebViewStateWithHTMLData(
+                    termsHtml.replace(
+                        "##STYLE_PLACEHOLDER##",
+                        """<style>
                         body {
                             background-color: rgb(
                                 ${
-                        MaterialTheme.colorScheme.background.red *
+                            MaterialTheme.colorScheme.background.red *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    },
+                        },
                                 ${
-                        MaterialTheme.colorScheme.background.green *
+                            MaterialTheme.colorScheme.background.green *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    },
+                        },
                                 ${
-                        MaterialTheme.colorScheme.background.blue *
+                            MaterialTheme.colorScheme.background.blue *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    }
+                        }
                             ); 
                             color: rgb(
                                 ${
-                        MaterialTheme.colorScheme.onBackground.red *
+                            MaterialTheme.colorScheme.onBackground.red *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    },
+                        },
                                 ${
-                        MaterialTheme.colorScheme.onBackground.green *
+                            MaterialTheme.colorScheme.onBackground.green *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    },
+                        },
                                 ${
-                        MaterialTheme.colorScheme.onBackground.blue *
+                            MaterialTheme.colorScheme.onBackground.blue *
                                 NumberConstants.COLOR_RGB_MULTIPLIER
-                    }
+                        }
                             );
                         }
-                    </style>""".trimMargin()
-                )
-            ),
-            modifier = Modifier.fillMaxSize()
+                    </style>
+                        """.trimMargin(),
+                    ),
+                ),
+            modifier = Modifier.fillMaxSize(),
         )
-
     }
-
 }

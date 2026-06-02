@@ -39,11 +39,9 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyD
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
 fun Categories() {
-
-    //get an instance of the ViewModel
+    // get an instance of the ViewModel
     val categoryVM: CategoryVM = koinViewModel()
 
     val categories by categoryVM.categories.collectAsState()
@@ -60,52 +58,53 @@ fun CategoryList(
     categoryVM: CategoryVM,
     categories: Map<Char, List<Category>>,
     deletionCheckboxes: CategoryStates,
-    scrollState: LazyListState
+    scrollState: LazyListState,
 ) {
-
     Column(modifier = Modifier.padding(horizontal = 16.dp)) {
-
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-
             ScrollToSpecificLetter(categoryVM = categoryVM, scrollState = scrollState)
 
             Text(
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 textAlign = TextAlign.Center,
-                text = stringResource(id = R.string.categoryPlural)
+                text = stringResource(id = R.string.categoryPlural),
             )
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 val accessibilityNumberOfEntries =
                     stringResource(R.string.accessibility_number_of_entries)
                 Text(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .semantics {
-                            contentDescription =
-                                accessibilityNumberOfEntries + categories.flatMap { it.value }.size.toString()
-                        },
+                    modifier =
+                        Modifier
+                            .padding(2.dp)
+                            .semantics {
+                                contentDescription =
+                                    accessibilityNumberOfEntries + categories.flatMap { it.value }.size.toString()
+                            },
                     text = categories.flatMap { it.value }.size.toString(),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
                 )
                 IconButton(
-                    modifier = Modifier
-                        .padding(2.dp),
+                    modifier =
+                        Modifier
+                            .padding(2.dp),
                     onClick = {
                         if (deletionCheckboxes.deletionCheckboxesDisplayed) {
                             categoryVM.actionHideDeletionCheckboxes()
                         } else {
                             categoryVM.actionShowDeletionCheckboxes()
                         }
-                    }) {
+                    },
+                ) {
                     Icon(
                         modifier = Modifier.size(28.dp),
                         imageVector = Icons.Rounded.Delete,
@@ -120,16 +119,14 @@ fun CategoryList(
         if (deletionCheckboxes.deletionCheckboxesDisplayed) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
-
                 Button(
                     modifier = Modifier.padding(8.dp),
-                    onClick = { categoryVM.actionDeleteCheckedCategories() }
+                    onClick = { categoryVM.actionDeleteCheckedCategories() },
                 ) {
                     Text(stringResource(id = R.string.general_delete))
                 }
-
             }
         }
 
@@ -140,32 +137,35 @@ fun CategoryList(
                         modifier = Modifier.padding(start = 16.dp, end = 4.dp),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        text = key.toString()
+                        text = key.toString(),
                     )
 
                     Column {
                         value.sortedBy { it.category }.forEach { category ->
                             Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        categoryVM.actionChangeCategoryBottomSheetShown(
-                                            true,
-                                            category
-                                        )
-                                    },
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            categoryVM.actionChangeCategoryBottomSheetShown(
+                                                true,
+                                                category,
+                                            )
+                                        },
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Text(text = category.category)
                                 if (deletionCheckboxes.deletionCheckboxesDisplayed) {
                                     Checkbox(
-                                        modifier = Modifier
-                                            .align(Alignment.CenterEnd)
-                                            .padding(end = 12.dp),
+                                        modifier =
+                                            Modifier
+                                                .align(Alignment.CenterEnd)
+                                                .padding(end = 12.dp),
                                         checked = category.deletionCheckbox,
                                         onCheckedChange = {
                                             categoryVM.actionChangeDeleteCheckbox(category)
-                                        })
+                                        },
+                                    )
                                 }
                             }
                         }
@@ -174,11 +174,12 @@ fun CategoryList(
             } else {
                 item {
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .fillParentMaxHeight(),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .fillParentMaxHeight(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         EmptyDataInfo(stringResource(id = R.string.no_cateogries_yet_description))
                     }

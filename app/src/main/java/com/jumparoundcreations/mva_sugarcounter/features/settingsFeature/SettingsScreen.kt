@@ -17,9 +17,8 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Setting
 fun SettingsScreen(
     context: Context,
     navController: NavController,
-    settingsStates: SettingsStates
+    settingsStates: SettingsStates,
 ) {
-
     when {
         settingsStates.isLoading -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -34,9 +33,8 @@ fun SettingsScreen(
         else -> {
             SettingsUI(
                 context,
-                navController
+                navController,
             )
         }
     }
-
 }

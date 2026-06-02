@@ -24,40 +24,38 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 
 @Composable
-fun HistoryTabRowUI(
-    historyVM: HistoryVM
-) {
-
-    val historyTabItems = listOf(
-        HistoryTabItem(
-            index = 0,
-            title = stringResource(id = R.string.historyCardsBtn),
-            unselectedIcon = Icons.Outlined.Tab,
-            selectedIcon = Icons.Outlined.Tab
-        ),
-        HistoryTabItem(
-            index = 1,
-            title = stringResource(id = R.string.historygraphBtn),
-            unselectedIcon = Icons.Outlined.SsidChart,
-            selectedIcon = Icons.Outlined.SsidChart
+fun HistoryTabRowUI(historyVM: HistoryVM) {
+    val historyTabItems =
+        listOf(
+            HistoryTabItem(
+                index = 0,
+                title = stringResource(id = R.string.historyCardsBtn),
+                unselectedIcon = Icons.Outlined.Tab,
+                selectedIcon = Icons.Outlined.Tab,
+            ),
+            HistoryTabItem(
+                index = 1,
+                title = stringResource(id = R.string.historygraphBtn),
+                unselectedIcon = Icons.Outlined.SsidChart,
+                selectedIcon = Icons.Outlined.SsidChart,
+            ),
         )
-    )
 
     val selectedTabIndex by historyVM.isCardTabIndex.collectAsState()
-    val pagerState = rememberPagerState {
-        historyTabItems.size
-    }
-
+    val pagerState =
+        rememberPagerState {
+            historyTabItems.size
+        }
 
     LaunchedEffect(key1 = selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
     }
 
     LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress)
+        if (!pagerState.isScrollInProgress) {
             historyVM.actionSetIsCardTabIndex(pagerState.currentPage)
+        }
     }
-
 
     TabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
@@ -73,24 +71,25 @@ fun HistoryTabRowUI(
                         historyVM.actionHideHistoryCardsScreen()
                         historyVM.actionShowHistoryChartScreen()
                     }
-
                 },
                 text = {
                     Row(
-                        verticalAlignment = Alignment.CenterVertically
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
-                            imageVector = if (index == selectedTabIndex) {
-                                item.selectedIcon
-                            } else item.unselectedIcon,
-                            contentDescription = ""
+                            imageVector =
+                                if (index == selectedTabIndex) {
+                                    item.selectedIcon
+                                } else {
+                                    item.unselectedIcon
+                                },
+                            contentDescription = "",
                         )
                         Spacer(modifier = Modifier.width(20.dp))
                         Text(text = item.title)
                     }
-                }
+                },
             )
         }
     }
-
 }

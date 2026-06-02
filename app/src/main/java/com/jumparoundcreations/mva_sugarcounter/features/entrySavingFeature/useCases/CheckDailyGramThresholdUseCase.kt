@@ -10,29 +10,27 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class CheckDailyGramThresholdUseCase(
-    private val database: AppDatabase
+    private val database: AppDatabase,
 ) : KoinComponent {
-
     private val sharedPrefsMain by inject<SharedPreferences>()
 
     operator fun invoke(state: EntrySavingStates): CheckThresholdResult {
-
-        val dateString = HelperMethods.convertTimestampToDateString(
-            state.dateOfEntryEpochSec,
-            "yyyy-MM-dd"
-        )
+        val dateString =
+            HelperMethods.convertTimestampToDateString(
+                state.dateOfEntryEpochSec,
+                "yyyy-MM-dd",
+            )
 
         val databaseSum = database.appDao().getGramSumForSpecificDate(dateString) ?: 0
 
-        if (databaseSum > sharedPrefsMain.getInt(
+        if (databaseSum >
+            sharedPrefsMain.getInt(
                 GeneralConstants.KEY_GRAM_THRESHOLD,
-                GeneralConstants.STANDARD_GRAM_THRESHOLD
+                GeneralConstants.STANDARD_GRAM_THRESHOLD,
             )
         ) {
             return CheckThresholdResult.DailyThresholdBreached
         }
         return CheckThresholdResult.WithinDailyThresholdBoundaries
     }
-
-
 }

@@ -3,5 +3,5 @@ package com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFe
 data class EntryGroupInt(
     val date: String,
     val dayDisplayFormat: String,
-    val entryList: List<SugarEntryInt>
+    val entryList: List<SugarEntryInt>,
 )

@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DaoAppDatabase {
-
     // SugarEntry
 
     @Insert
@@ -19,26 +18,29 @@ interface DaoAppDatabase {
 
     @Query(
         "UPDATE sugarEntriesTable SET " +
-                "gram = :gram, " +
-                "quantity = :quantity, " +
-                "gramTotal = :gramTotal " +
-                "WHERE id = :id"
+            "gram = :gram, " +
+            "quantity = :quantity, " +
+            "gramTotal = :gramTotal " +
+            "WHERE id = :id",
     )
     fun updateSugarEntry(
         id: Int,
         gram: Double,
         quantity: Double,
-        gramTotal: Double
+        gramTotal: Double,
     )
 
-    //On the timeline startPoint is further to the left/in the past than endPoint
+    // On the timeline startPoint is further to the left/in the past than endPoint
     @Query(
         """
         SELECT * FROM sugarEntriesTable 
         WHERE currentTimestamp > :startPoint AND currentTimestamp < :endPoint 
-        """
+        """,
     )
-    fun getEntriesInTimeframe(startPoint: Long, endPoint: Long): Flow<List<SugarEntry>>
+    fun getEntriesInTimeframe(
+        startPoint: Long,
+        endPoint: Long,
+    ): Flow<List<SugarEntry>>
 
     @Query("""SELECT * FROM sugarEntriesTable""")
     fun getAllEntries(): List<SugarEntry>
@@ -54,7 +56,7 @@ interface DaoAppDatabase {
         SELECT * FROM sugarEntriesTable 
         WHERE category = :category 
         ORDER BY id DESC LIMIT 1
-        """
+        """,
     )
     suspend fun checkIfEntryExistsForCategory(category: String): SugarEntry?
 
@@ -70,11 +72,11 @@ interface DaoAppDatabase {
             SELECT 1 FROM sugarEntriesTable 
             WHERE category = :category AND currentTimestamp > :deletionPointInTime
         )
-        """
+        """,
     )
     fun checkIfCategoryIsPresentSinceInSugarTable(
         category: String,
-        deletionPointInTime: Long
+        deletionPointInTime: Long,
     ): Boolean
 
     @Query("""DELETE FROM sugarEntriesTable WHERE currentTimestamp < :deletionPointInTime""")
@@ -85,17 +87,16 @@ interface DaoAppDatabase {
         UPDATE sugarEntriesTable SET category = :newCategory 
         WHERE category = :oldCategory AND 
         (currentTimestamp > :startPoint AND currentTimestamp < :endPoint)
-        """
+        """,
     )
     fun updateEntrySugarCategoryOfLastXDays(
         oldCategory: String,
         newCategory: String,
         startPoint: Long,
-        endPoint: Long
+        endPoint: Long,
     )
 
-    //#######################
-
+    // #######################
 
     /*
 
@@ -125,15 +126,15 @@ interface DaoAppDatabase {
 
     @Query(
         """
-        SELECT * 
+        SELECT *
         FROM entry_table
         WHERE category IN (
-            SELECT category 
+            SELECT category
             FROM entry_table
-            GROUP BY category 
+            GROUP BY category
             HAVING COUNT(category) = 1
         )
-        ORDER BY currentTimestamp ASC 
+        ORDER BY currentTimestamp ASC
         LIMIT :amountOfEntries
     """
     )
@@ -143,10 +144,6 @@ interface DaoAppDatabase {
     suspend fun getEntryTableRowCount(): Int
 
 */
-
-
-
-
 
     // Categories
 
@@ -174,7 +171,7 @@ interface DaoAppDatabase {
     @Query("""DELETE FROM category_table WHERE category = :categoryName""")
     suspend fun deleteSpecificCategoryByName(categoryName: String)
 
-    @Query("""DELETE FROM category_table WHERE deletionCheckbox = 1""") //1 = Boolean: true
+    @Query("""DELETE FROM category_table WHERE deletionCheckbox = 1""") // 1 = Boolean: true
     fun deleteCheckedCategories()
 
     @Query("""SELECT * from category_table WHERE category = :category LIMIT 1""")
@@ -185,5 +182,4 @@ interface DaoAppDatabase {
 
     @Query("SELECT COUNT(*) FROM category_table")
     suspend fun getCategoryTableRowCount(): Int
-
 }
