@@ -19,26 +19,28 @@ import com.jumparoundcreations.mva_sugarcounter.ui.theme.SugarCounterTheme
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class MainActivity : ComponentActivity(), KoinComponent,
+class MainActivity :
+    ComponentActivity(),
+    KoinComponent,
     SharedPreferences.OnSharedPreferenceChangeListener {
-
     private val sharedPrefsMain by inject<SharedPreferences>()
     private var isDynamicColor by mutableStateOf(
         sharedPrefsMain.getBoolean(
             "dynamicColorActivated",
-            false
-        )
+            false,
+        ),
     )
 
     override fun onSharedPreferenceChanged(
         sharedPreferences: SharedPreferences,
-        key: String?
+        key: String?,
     ) {
         if (key == "dynamicColorActivated") {
-            isDynamicColor = sharedPrefsMain.getBoolean(
-                "dynamicColorActivated",
-                false
-            )
+            isDynamicColor =
+                sharedPrefsMain.getBoolean(
+                    "dynamicColorActivated",
+                    false,
+                )
         }
     }
 
@@ -59,9 +61,8 @@ class MainActivity : ComponentActivity(), KoinComponent,
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
-
                     MainScreenView(applicationContext, showNavigationRail)
                 }
             }
@@ -72,5 +73,4 @@ class MainActivity : ComponentActivity(), KoinComponent,
         super.onDestroy()
         sharedPrefsMain.unregisterOnSharedPreferenceChangeListener(this)
     }
-
 }

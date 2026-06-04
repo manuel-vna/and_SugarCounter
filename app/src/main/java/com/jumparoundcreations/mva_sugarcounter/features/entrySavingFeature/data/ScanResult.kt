@@ -3,14 +3,14 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.dat
 sealed class ScanResult {
     data class FoundCategoryForBarcode(
         val category: String,
-        val barcode: String
+        val barcode: String,
     ) : ScanResult()
 
     data class NoCategoryForBarcode(
-        val barcode: String
+        val barcode: String,
     ) : ScanResult()
 
     data class Failed(
-        val reason: Throwable?
+        val reason: Throwable?,
     ) : ScanResult()
 }

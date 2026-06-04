@@ -38,9 +38,9 @@ class EntrySavingViewModel(
     private val checkUserInputUseCase: CheckUserInputUseCase,
     private val checkForDefaultSavingValuesUseCase: CheckForDefaultSavingValuesUseCase,
     private val displayAllCategoriesUseCase: DisplayAllCategoriesUseCase,
-    private val checkDailyGramThresholdUseCase: CheckDailyGramThresholdUseCase
-) : ViewModel(), KoinComponent {
-
+    private val checkDailyGramThresholdUseCase: CheckDailyGramThresholdUseCase,
+) : ViewModel(),
+    KoinComponent {
     val database by inject<AppDatabase>()
 
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
@@ -75,7 +75,7 @@ class EntrySavingViewModel(
             is EntrySavingIntents.EditOfCategoryWithinDropdown ->
                 actionEditOfCategoryWithinDropdown(
                     action.categoryInDropdown,
-                    action.categoryDropdownExpanded
+                    action.categoryDropdownExpanded,
                 )
 
             is EntrySavingIntents.ChangeGramCountMode ->
@@ -104,7 +104,7 @@ class EntrySavingViewModel(
 
             is EntrySavingIntents.UserThresholdReaction ->
                 actionHandleUserThresholdBreachReaction(
-                    action.userThresholdBreachReaction
+                    action.userThresholdBreachReaction,
                 )
         }
     }
@@ -127,7 +127,7 @@ class EntrySavingViewModel(
     private fun actionChangeDatePickerVisibility() {
         _entrySavingStates.update {
             it.copy(
-                datePickerShown = it.datePickerShown.not()
+                datePickerShown = it.datePickerShown.not(),
             )
         }
     }
@@ -135,7 +135,7 @@ class EntrySavingViewModel(
     private fun actionChangeSelectedDate(epochSec: Long) {
         _entrySavingStates.update { current ->
             current.copy(
-                dateOfEntryEpochSec = epochSec
+                dateOfEntryEpochSec = epochSec,
             )
         }
     }
@@ -165,7 +165,7 @@ class EntrySavingViewModel(
     private fun actionSetBarcodeState(barcodeNumber: String) {
         _entrySavingStates.update { current ->
             current.copy(
-                barcodeNumber = barcodeNumber
+                barcodeNumber = barcodeNumber,
             )
         }
     }
@@ -173,7 +173,7 @@ class EntrySavingViewModel(
     private fun actionSetCategoryForBarcode(category: String) {
         _entrySavingStates.update { current ->
             current.copy(
-                categoryInField = category
+                categoryInField = category,
             )
         }
     }
@@ -181,13 +181,12 @@ class EntrySavingViewModel(
     private fun getEntryByCategory(category: String) {
         viewModelScope.launch {
             when (val result = getEntryByCategoryUseCase(category)) {
-
                 is GetEntryByCategoryResult.NoEntryFound -> {
                     _scanUiEvents.emit(value = ScanUiEvents.CategoryEditNoDataForChosenCategory)
                     _entrySavingStates.update { current ->
                         current.copy(
                             entryFieldGram = "",
-                            entryFieldQuantity = ""
+                            entryFieldQuantity = "",
                         )
                     }
                 }
@@ -199,7 +198,7 @@ class EntrySavingViewModel(
                             entryFieldGram = entry.gram.toString(),
                             entryFieldQuantity = entry.quantity.toString(),
                             gramCountModeTabIndex =
-                                if (entry.entryType == GramCountMode.PerHundred) 0 else 1
+                                if (entry.entryType == GramCountMode.PerHundred) 0 else 1,
                         )
                     }
                 }
@@ -210,7 +209,7 @@ class EntrySavingViewModel(
     private fun actionBarcodeNotPresentInDb() {
         _entrySavingStates.update { current ->
             current.copy(
-                barcodeNotPresentInDb = current.barcodeNotPresentInDb.not()
+                barcodeNotPresentInDb = current.barcodeNotPresentInDb.not(),
             )
         }
     }
@@ -220,7 +219,7 @@ class EntrySavingViewModel(
             current.copy(
                 barcodeNumber = "",
                 barcodeNotPresentInDb = false,
-                barcodeInfoSheetShown = false
+                barcodeInfoSheetShown = false,
             )
         }
     }
@@ -228,41 +227,39 @@ class EntrySavingViewModel(
     fun actionChangeBarcodeInfoSheetShown() {
         _entrySavingStates.update { current ->
             current.copy(
-                barcodeInfoSheetShown = _entrySavingStates.value.barcodeInfoSheetShown.not()
+                barcodeInfoSheetShown = _entrySavingStates.value.barcodeInfoSheetShown.not(),
             )
         }
     }
 
     private fun actionEditOfCategoryField(
         categoryInField: String,
-        categoryDropdownExpanded: Boolean
+        categoryDropdownExpanded: Boolean,
     ) {
         _entrySavingStates.update { current ->
             current.copy(
                 categoryInField = categoryInField,
-                categoryDropdownExpanded = categoryDropdownExpanded
+                categoryDropdownExpanded = categoryDropdownExpanded,
             )
         }
     }
 
-    private fun actionExpandOrCollapseCategoryDropdown(
-        categoryDropdownExpanded: Boolean
-    ) {
+    private fun actionExpandOrCollapseCategoryDropdown(categoryDropdownExpanded: Boolean) {
         _entrySavingStates.update { current ->
             current.copy(
-                categoryDropdownExpanded = categoryDropdownExpanded
+                categoryDropdownExpanded = categoryDropdownExpanded,
             )
         }
     }
 
     private fun actionEditOfCategoryWithinDropdown(
         categoryInDropdown: String,
-        categoryDropdownExpanded: Boolean
+        categoryDropdownExpanded: Boolean,
     ) {
         _entrySavingStates.update { current ->
             current.copy(
                 categoryInField = categoryInDropdown,
-                categoryDropdownExpanded = categoryDropdownExpanded
+                categoryDropdownExpanded = categoryDropdownExpanded,
             )
         }
         getEntryByCategory(categoryInDropdown)
@@ -271,7 +268,7 @@ class EntrySavingViewModel(
     private fun actionChangeGramCountMode(gramCountMode: GramCountMode) {
         _entrySavingStates.update { current ->
             current.copy(
-                gramCountMode = gramCountMode
+                gramCountMode = gramCountMode,
             )
         }
     }
@@ -279,7 +276,7 @@ class EntrySavingViewModel(
     private fun actionChangeGramCountModeTabIndex(tabIndex: Int) {
         _entrySavingStates.update { current ->
             current.copy(
-                gramCountModeTabIndex = tabIndex
+                gramCountModeTabIndex = tabIndex,
             )
         }
     }
@@ -287,7 +284,7 @@ class EntrySavingViewModel(
     private fun actionChangeEntryFieldGram(entryFieldGram: String) {
         _entrySavingStates.update { current ->
             current.copy(
-                entryFieldGram = entryFieldGram
+                entryFieldGram = entryFieldGram,
             )
         }
     }
@@ -295,17 +292,16 @@ class EntrySavingViewModel(
     private fun actionChangeEntryFieldQuantity(entryFieldQuantity: String) {
         _entrySavingStates.update { current ->
             current.copy(
-                entryFieldQuantity = entryFieldQuantity
+                entryFieldQuantity = entryFieldQuantity,
             )
         }
     }
 
     private fun actionSaveEntry() {
-
         if (checkForDefaultSavingValuesUseCase(entrySavingStates.value)) {
             _entrySavingStates.update { current ->
                 current.copy(
-                    entryFieldQuantity = EntrySavingConstants.DEFAULT_PER_PIECE_VALUE
+                    entryFieldQuantity = EntrySavingConstants.DEFAULT_PER_PIECE_VALUE,
                 )
             }
         }
@@ -316,7 +312,7 @@ class EntrySavingViewModel(
             CheckUserInputResult.NoCategoryGiven -> {
                 _entrySavingStates.update { current ->
                     current.copy(
-                        savingProcessMissingCategoryData = true
+                        savingProcessMissingCategoryData = true,
                     )
                 }
             }
@@ -331,7 +327,7 @@ class EntrySavingViewModel(
                 actionSetBarcodeState(barcodeNumber = "")
                 _entrySavingStates.update { current ->
                     current.copy(
-                        savingProcessMissingSugarData = true
+                        savingProcessMissingSugarData = true,
                     )
                 }
             }
@@ -359,19 +355,18 @@ class EntrySavingViewModel(
                 _entrySavingStates.update { current ->
                     current.copy(
                         barcodeNotPresentInDb = false,
-                        categoryDropdownExpanded = false
+                        categoryDropdownExpanded = false,
                     )
                 }
                 actionSetBarcodeState(barcodeNumber = "")
             }
         }
-
     }
 
     private fun actionDismissNoCategoryDataEnteredAlert() {
         _entrySavingStates.update { current ->
             current.copy(
-                savingProcessMissingCategoryData = false
+                savingProcessMissingCategoryData = false,
             )
         }
     }
@@ -379,7 +374,7 @@ class EntrySavingViewModel(
     private fun actionDismissNoSugarDataEnteredAlert() {
         _entrySavingStates.update { current ->
             current.copy(
-                savingProcessMissingSugarData = false
+                savingProcessMissingSugarData = false,
             )
         }
     }
@@ -390,19 +385,17 @@ class EntrySavingViewModel(
                 categoryInField = "",
                 entryFieldGram = "",
                 entryFieldQuantity = "",
-                gramCountModeTabIndex = 0
+                gramCountModeTabIndex = 0,
             )
         }
     }
 
-    private fun actionHandleUserThresholdBreachReaction(
-        userThresholdBreachReaction: UserThresholdBreachReaction
-    ) {
+    private fun actionHandleUserThresholdBreachReaction(userThresholdBreachReaction: UserThresholdBreachReaction) {
         when (userThresholdBreachReaction) {
             is UserThresholdBreachReaction.DeleteLastEnteredEntry -> {
                 _entrySavingStates.update { current ->
                     current.copy(
-                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries
+                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries,
                     )
                 }
                 viewModelScope.launch(Dispatchers.IO) {
@@ -413,11 +406,10 @@ class EntrySavingViewModel(
             is UserThresholdBreachReaction.KeepLastEnteredEntry -> {
                 _entrySavingStates.update { current ->
                     current.copy(
-                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries
+                        savingProcessDailyGramThreshold = CheckThresholdResult.WithinDailyThresholdBoundaries,
                     )
                 }
             }
         }
     }
-
 }

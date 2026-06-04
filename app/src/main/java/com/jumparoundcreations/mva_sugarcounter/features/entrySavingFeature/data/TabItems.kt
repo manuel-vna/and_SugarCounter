@@ -7,17 +7,17 @@ data class CounterTabItem(
     val title: String,
     val unselectedIcon: ImageVector,
     val selectedIcon: ImageVector,
-    val contentDescription: String
+    val contentDescription: String,
 )
 
 enum class GramCountMode {
     PerHundred,
-    PerPiece
+    PerPiece,
 }
 
 data class HistoryTabItem(
     val index: Int,
     val title: String,
     val unselectedIcon: ImageVector,
-    val selectedIcon: ImageVector
+    val selectedIcon: ImageVector,
 )

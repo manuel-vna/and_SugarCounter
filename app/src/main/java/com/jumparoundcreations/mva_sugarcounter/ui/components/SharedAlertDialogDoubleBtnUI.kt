@@ -6,7 +6,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
-
 @Composable
 fun ShowAlertDialogDoubleBtn(
     dialogTitle: String,
@@ -15,7 +14,7 @@ fun ShowAlertDialogDoubleBtn(
     confirmBtnAction: () -> Unit,
     dismissBtnText: String,
     dismissBtnAction: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     /**
      * General method that shows an alert dialog wit two buttons: Confirm and Dismiss
@@ -33,9 +32,9 @@ fun ShowAlertDialogDoubleBtn(
             OutlinedButton(onClick = { dismissBtnAction.invoke() }) {
                 Text(dismissBtnText)
             }
-
         },
         text = {
             Text(dialogDescription)
-        })
+        },
+    )
 }

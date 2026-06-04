@@ -27,7 +27,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.SoftwareKeyboardController
@@ -40,86 +39,86 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 @Composable
-
 fun RowScope.CategoryDropdownField(
     context: Context,
-    entrySavingViewModel: EntrySavingViewModel,
-    keyboardController: SoftwareKeyboardController?
+    onAction: (EntrySavingIntents) -> Unit,
+    entrySavingStates: EntrySavingStates,
+    keyboardController: SoftwareKeyboardController?,
 ) {
-
-    val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
     val accessibilityCategoryInputField =
         stringResource(R.string.accessibility_category_input_field)
 
     Column(
-        modifier = Modifier.weight(2f)
+        modifier = Modifier.weight(2f),
     ) {
-
         Text(
             modifier = Modifier.padding(start = 3.dp, bottom = 2.dp),
             text = stringResource(R.string.foodType),
             fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
 
         TextField(
-            modifier = Modifier
-                .padding(end = 8.dp)
-                .fillMaxWidth()
-                .border(
-                    width = 1.8.dp,
-                    shape = RoundedCornerShape(15.dp),
-                    color = Color.Transparent
-                )
-                .semantics {
-                    contentDescription = accessibilityCategoryInputField
-                },
+            modifier =
+                Modifier
+                    .padding(end = 8.dp)
+                    .fillMaxWidth()
+                    .border(
+                        width = 1.8.dp,
+                        shape = RoundedCornerShape(15.dp),
+                        color = Color.Transparent,
+                    ).semantics {
+                        contentDescription = accessibilityCategoryInputField
+                    },
             value = entrySavingStates.categoryInField,
             onValueChange = {
                 if (it.count() <= NumberConstants.CATEGORY_MAX_INPUT_CHARACTERS) {
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.EditOfCategoryField(
+                    onAction(
+                        EntrySavingIntents.EditOfCategoryField(
                             categoryInField = it,
-                            categoryDropdownExpanded = true
-                        )
+                            categoryDropdownExpanded = true,
+                        ),
                     )
                 } else {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.categoryMaxInput),
-                        Toast.LENGTH_LONG
-                    )
-                        .show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.getString(R.string.categoryMaxInput),
+                            Toast.LENGTH_LONG,
+                        ).show()
                 }
             },
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-            ),
-            textStyle = TextStyle(
-                fontSize = 16.sp
-            ),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Done
-            ),
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                ),
+            textStyle =
+                TextStyle(
+                    fontSize = 16.sp,
+                ),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done,
+                ),
             singleLine = true,
             trailingIcon = {
-                IconButton(onClick = {
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
-                            categoryDropdownExpanded =
-                                entrySavingStates.categoryDropdownExpanded.not()
+                IconButton(
+                    onClick = {
+                        onAction(
+                            EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
+                                categoryDropdownExpanded =
+                                    entrySavingStates.categoryDropdownExpanded.not(),
+                            ),
                         )
-                    )
-                }
+                    },
                 ) {
                     Icon(
                         modifier = Modifier.size(24.dp),
@@ -127,77 +126,74 @@ fun RowScope.CategoryDropdownField(
                         contentDescription = stringResource(R.string.accessibility_category_arrow_list),
                     )
                 }
-            }
+            },
         )
 
         AnimatedVisibility(visible = entrySavingStates.categoryDropdownExpanded) {
             Card(
-                modifier = Modifier
-                    .padding(horizontal = 5.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 5.dp)
+                        .fillMaxWidth(),
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
                 elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
                 shape = RoundedCornerShape(10.dp),
             ) {
-
                 LazyColumn(
                     modifier = Modifier.heightIn(max = 150.dp),
                 ) {
-
                     if (entrySavingStates.categoryInField.isNotEmpty()) {
                         items(
-                            entrySavingStates.categoryListInDropdown.filter {
-                                it.lowercase()
-                                    .contains(entrySavingStates.categoryInField.lowercase())
-                            }
-                                .sorted()
+                            entrySavingStates.categoryListInDropdown
+                                .filter {
+                                    it
+                                        .lowercase()
+                                        .contains(entrySavingStates.categoryInField.lowercase())
+                                }.sorted(),
                         ) {
                             CategoryItems(title = it) { title ->
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                onAction(
+                                    EntrySavingIntents.EditOfCategoryWithinDropdown(
                                         categoryInDropdown = title,
-                                        categoryDropdownExpanded = false
-                                    )
+                                        categoryDropdownExpanded = false,
+                                    ),
                                 )
                                 keyboardController?.hide()
                             }
                         }
                     } else {
                         items(
-                            entrySavingStates.categoryListInDropdown.sorted()
+                            entrySavingStates.categoryListInDropdown.sorted(),
                         ) {
                             CategoryItems(title = it) { title ->
-                                entrySavingViewModel.onAction(
-                                    action = EntrySavingIntents.EditOfCategoryWithinDropdown(
+                                onAction(
+                                    EntrySavingIntents.EditOfCategoryWithinDropdown(
                                         categoryInDropdown = title,
-                                        categoryDropdownExpanded = false
-                                    )
+                                        categoryDropdownExpanded = false,
+                                    ),
                                 )
                                 keyboardController?.hide()
                             }
                         }
                     }
-                } //LazyColumn
-            } //Card
-        } //Animated Visibility
-
+                } // LazyColumn
+            } // Card
+        } // Animated Visibility
     } // Column
-
 } // Composable: CategoryDropdownField
 
 @Composable
 fun CategoryItems(
     title: String,
-    onSelect: (String) -> Unit
+    onSelect: (String) -> Unit,
 ) {
-
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable {
-                onSelect(title)
-            }
-            .padding(10.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .clickable {
+                    onSelect(title)
+                }.padding(10.dp),
     ) {
         Text(text = title, fontSize = 16.sp)
     }

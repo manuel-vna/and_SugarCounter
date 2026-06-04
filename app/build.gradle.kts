@@ -6,8 +6,9 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.aboutLibraries)
+    alias(libs.plugins.ktlint)
     id("kotlin-kapt")
-    id("com.mikepenz.aboutlibraries.plugin")
     id("androidx.room")
     id("de.mannodermaus.android-junit5")
 }
@@ -38,7 +39,6 @@ android {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
-
     }
 
     signingConfigs {
@@ -58,7 +58,7 @@ android {
             isDebuggable = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             ndk {
                 debugSymbolLevel = "FULL"
@@ -102,15 +102,21 @@ tasks.register("ensureSchemaFolder") {
     }
 }
 
-fun getAppGitVersion(): String {
-    return try {
-        val output = providers.exec {
-            commandLine("git", "describe", "--tags", "--long", "--always")
-            isIgnoreExitValue = true
-        }
-        val version = output.standardOutput.asText.get().trim()
+fun getAppGitVersion(): String =
+    try {
+        val output =
+            providers.exec {
+                commandLine("git", "describe", "--tags", "--long", "--always")
+                isIgnoreExitValue = true
+            }
+        val version =
+            output.standardOutput.asText
+                .get()
+                .trim()
         if (output.result.get().exitValue != 0) {
-            println("Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.")
+            println(
+                "Retrieving version code by git command failed with exit code ${output.result.get().exitValue}. Falling back to default version.",
+            )
             ""
         } else {
             println("Git version: $version")
@@ -120,7 +126,6 @@ fun getAppGitVersion(): String {
         println("Retrieving version code by git command failed : ${e.message}. Falling back to default version.")
         ""
     }
-}
 
 fun getAppVersionCode(gitVersion: String): Int {
     var versionCode = "1"
@@ -142,6 +147,18 @@ fun getAppVersionNameValue(gitVersion: String): String {
     }
     println("Version name: $versionName")
     return versionName
+}
+
+detekt {
+    buildUponDefaultConfig = true
+    allRules = true
+    autoCorrect = true
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    baseline = file("$rootDir/config/detekt/baseline.xml")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "17"
 }
 
 //noinspection UseTomlInstead
@@ -198,5 +215,6 @@ dependencies {
     testRuntimeOnly(libs.junit.vintage.engine) // for usage of junit4 along junit5, remove when no more junit4 tests exist
     testRuntimeOnly(libs.junit.jupiter.engine)
     ksp(libs.androidx.room.compiler)
-
+    detektPlugins(libs.detekt.formatting)
+    detektPlugins(libs.detekt.compose)
 }

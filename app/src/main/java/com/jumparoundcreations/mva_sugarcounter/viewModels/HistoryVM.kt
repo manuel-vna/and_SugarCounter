@@ -5,14 +5,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.component.KoinComponent
 
-
-class HistoryVM : ViewModel(), KoinComponent {
-
+class HistoryVM :
+    ViewModel(),
+    KoinComponent {
     companion object {
         private const val INDEX_DEFAULT = 0
     }
 
-    //SateFlows: START
+    // SateFlows: START
 
     private val _isCardTabIndex = MutableStateFlow(INDEX_DEFAULT)
     val isCardTabIndex = _isCardTabIndex.asStateFlow()
@@ -23,11 +23,9 @@ class HistoryVM : ViewModel(), KoinComponent {
     private val _historyCardsScreenShown = MutableStateFlow(true)
     val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
 
+    // SateFlows: END
 
-    //SateFlows: END
-
-
-    //Actions: START
+    // Actions: START
     fun actionShowHistoryChartScreen() {
         _historyChartScreenShown.value = true
     }
@@ -48,5 +46,5 @@ class HistoryVM : ViewModel(), KoinComponent {
         _isCardTabIndex.value = tabIndex
     }
 
-    //Actions: END
+    // Actions: END
 }

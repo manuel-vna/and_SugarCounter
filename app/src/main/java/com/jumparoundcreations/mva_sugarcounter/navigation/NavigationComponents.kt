@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.navigation
 
-
 import android.content.Context
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -17,6 +16,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsRoute
 import com.jumparoundcreations.mva_sugarcounter.ui.components.categoriesUI.Categories
 import com.jumparoundcreations.mva_sugarcounter.ui.components.counterUI.Counter
 import com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI.History
@@ -24,11 +24,9 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.FAQScre
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.ImprintUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.OnboardingUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.PrivacyPolicyUI
-import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.Settings
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.SettingsThirdPartyLibrariesUI
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.TermsAndConditionsUI
 import org.koin.androidx.compose.koinViewModel
-
 
 @Composable
 fun NavigationGraph(
@@ -36,62 +34,62 @@ fun NavigationGraph(
     snackbarHostState: SnackbarHostState,
     context: Context,
     entryListDisplayingViewModel: EntryListDisplayingViewModel = koinViewModel(),
-
-    ) {
+) {
     NavHost(
         navController = navController,
-        startDestination = BottomNavItem.SugarCounter.screenRoute
+        startDestination = BottomNavItem.SugarCounter.screenRoute,
     ) {
         composable(route = BottomNavItem.SugarCounter.screenRoute) {
             Counter(
                 context = context,
                 snackbarHostState = snackbarHostState,
-                entryListDisplayingViewModel = entryListDisplayingViewModel
+                entryListDisplayingViewModel = entryListDisplayingViewModel,
             )
         }
         composable(route = BottomNavItem.SugarHistory.screenRoute) {
             History(
                 context = context,
-                entryListDisplayingViewModel = entryListDisplayingViewModel
+                entryListDisplayingViewModel = entryListDisplayingViewModel,
             )
         }
         composable(route = BottomNavItem.CategoryTitle.screenRoute) {
             Categories()
         }
         composable(route = BottomNavItem.Settings.screenRoute) {
-            Settings(
-                context,
-                navController
+            SettingsRoute(
+                context = context,
+                navController = navController,
+                snackbarHostState = snackbarHostState,
             )
         }
         composable(route = NavItem.FAQ.screenRoute) {
             FAQScreen(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.ThirdPartyLibraries.screenRoute) {
             SettingsThirdPartyLibrariesUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.TermsAndConditions.screenRoute) {
             TermsAndConditionsUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.PrivacyPolicy.screenRoute) {
             PrivacyPolicyUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.Imprint.screenRoute) {
             ImprintUI(
-                navController
+                navController,
             )
         }
         composable(route = NavItem.Onboarding.screenRoute) {
             OnboardingUI(
-                navController
+                navController,
             )
         }
     }
@@ -99,13 +97,12 @@ fun NavigationGraph(
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-
     val items =
         listOf(
             BottomNavItem.SugarCounter,
             BottomNavItem.SugarHistory,
             BottomNavItem.CategoryTitle,
-            BottomNavItem.Settings
+            BottomNavItem.Settings,
         )
 
     NavigationBar {
@@ -120,7 +117,7 @@ fun BottomNavigation(navController: NavController) {
                     Text(
                         text = stringResource(id = item.title),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
                 onClick = {
@@ -133,7 +130,7 @@ fun BottomNavigation(navController: NavController) {
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }

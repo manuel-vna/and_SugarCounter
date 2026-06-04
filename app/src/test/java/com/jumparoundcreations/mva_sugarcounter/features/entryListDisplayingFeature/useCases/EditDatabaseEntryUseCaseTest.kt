@@ -15,7 +15,6 @@ import org.junit.Before
 import org.junit.Test
 
 class EditDatabaseEntryUseCaseTest {
-
     private lateinit var mockDatabase: AppDatabase
     private lateinit var mockDao: DaoAppDatabase
     private lateinit var useCase: EditDatabaseEntryUseCase
@@ -39,7 +38,7 @@ class EditDatabaseEntryUseCaseTest {
                 id = capture(idSlot),
                 gram = capture(gramSlot),
                 quantity = capture(quantitySlot),
-                gramTotal = capture(gramTotalSlot)
+                gramTotal = capture(gramTotalSlot),
             )
         }
         justRun {
@@ -47,13 +46,13 @@ class EditDatabaseEntryUseCaseTest {
                 oldCategory = any(),
                 newCategory = any(),
                 startPoint = any(),
-                endPoint = any()
+                endPoint = any(),
             )
         }
         justRun {
             mockDao.updateCategoryOnEdit(
                 oldCategory = any(),
-                newCategory = any()
+                newCategory = any(),
             )
         }
 
@@ -65,7 +64,6 @@ class EditDatabaseEntryUseCaseTest {
     fun tearDown() {
         clearAllMocks()
     }
-
 
     @Test
     fun `invoke calculates gramTotal correctly for PerHundred mode`() {
@@ -81,7 +79,7 @@ class EditDatabaseEntryUseCaseTest {
             oldCategory = "Old",
             newCategory = "New",
             newGram = newGram,
-            newQuantity = newQuantity
+            newQuantity = newQuantity,
         )
 
         // Assert
@@ -111,7 +109,7 @@ class EditDatabaseEntryUseCaseTest {
             oldCategory = "Old",
             newCategory = "New",
             newGram = newGram,
-            newQuantity = newQuantity
+            newQuantity = newQuantity,
         )
 
         // Assert
@@ -126,5 +124,4 @@ class EditDatabaseEntryUseCaseTest {
         assertEquals(newGram, gramSlot.captured, 0.0)
         assertEquals(newQuantity, quantitySlot.captured, 0.0)
     }
-
 }

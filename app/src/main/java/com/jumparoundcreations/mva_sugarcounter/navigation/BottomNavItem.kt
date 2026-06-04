@@ -8,7 +8,11 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.jumparoundcreations.mva_sugarcounter.R
 
-sealed class BottomNavItem(var title: Int, var icon: ImageVector, var screenRoute: String) {
+sealed class BottomNavItem(
+    var title: Int,
+    var icon: ImageVector,
+    var screenRoute: String,
+) {
     data object SugarCounter :
         BottomNavItem(R.string.counterTitle, Icons.Filled.FormatAlignJustify, "counter")
 

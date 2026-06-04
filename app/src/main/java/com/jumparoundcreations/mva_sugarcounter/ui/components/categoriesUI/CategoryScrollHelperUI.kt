@@ -24,23 +24,26 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.viewModels.CategoryVM
 
-
 @Composable
-fun ScrollToSpecificLetter(categoryVM: CategoryVM, scrollState: LazyListState) {
+fun ScrollToSpecificLetter(
+    categoryVM: CategoryVM,
+    scrollState: LazyListState,
+) {
     val scrollSearchMenuExpanded = categoryVM.scrollSearchMenuExpanded.collectAsState()
 
     Box(
-        modifier = Modifier
-            .padding(4.dp),
+        modifier =
+            Modifier
+                .padding(4.dp),
     ) {
         IconButton(onClick = {
             categoryVM.actionChangeScrollSearchMenuExpanded(
-                scrollSearchMenuExpanded.value.not()
+                scrollSearchMenuExpanded.value.not(),
             )
         }) {
             Icon(
                 imageVector = Icons.Default.ContentPasteSearch,
-                contentDescription = stringResource(R.string.accessibility_categories_srolling)
+                contentDescription = stringResource(R.string.accessibility_categories_srolling),
             )
         }
     }
@@ -49,7 +52,7 @@ fun ScrollToSpecificLetter(categoryVM: CategoryVM, scrollState: LazyListState) {
         modifier = Modifier.width(55.dp),
         expanded = scrollSearchMenuExpanded.value,
         onDismissRequest = { categoryVM.actionChangeScrollSearchMenuExpanded(false) },
-        offset = DpOffset(16.dp, 0.dp)
+        offset = DpOffset(16.dp, 0.dp),
     ) {
         categoryVM.letters.forEach { letter ->
             DropdownMenuItem(
@@ -57,7 +60,7 @@ fun ScrollToSpecificLetter(categoryVM: CategoryVM, scrollState: LazyListState) {
                 text = {
                     Box(
                         modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(text = letter.key, fontSize = 16.sp)
                     }
@@ -65,10 +68,11 @@ fun ScrollToSpecificLetter(categoryVM: CategoryVM, scrollState: LazyListState) {
                 onClick = {
                     categoryVM.actionHandleCategoryScrollState(
                         index = letter.value,
-                        scrollState = scrollState
+                        scrollState = scrollState,
                     )
                     categoryVM.actionChangeScrollSearchMenuExpanded(false)
-                })
+                },
+            )
         }
     }
 }

@@ -36,29 +36,28 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
-
 
 @Composable
 fun RowScope.Barcode(
-    entrySavingViewModel: EntrySavingViewModel,
-    textColor: Color
+    onAction: (EntrySavingIntents) -> Unit,
+    textColor: Color,
 ) {
-
     val accessibilityScanBarcodeButton = stringResource(R.string.accessibility_scan_barcode_button)
 
     ElevatedButton(
-        modifier = Modifier
-            .weight(1f)
-            .padding(horizontal = 8.dp)
-            .semantics {
-                contentDescription = accessibilityScanBarcodeButton
-            },
-        onClick = { entrySavingViewModel.onAction(EntrySavingIntents.ScanBarcode) },
-        colors = elevatedButtonColors(
-            contentColor = textColor
-        ),
-        border = BorderStroke(width = 1.dp, color = textColor)
+        modifier =
+            Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp)
+                .semantics {
+                    contentDescription = accessibilityScanBarcodeButton
+                },
+        onClick = { onAction(EntrySavingIntents.ScanBarcode) },
+        colors =
+            elevatedButtonColors(
+                contentColor = textColor,
+            ),
+        border = BorderStroke(width = 1.dp, color = textColor),
     ) {
         Icon(
             modifier = Modifier.size(20.dp),
@@ -68,7 +67,7 @@ fun RowScope.Barcode(
         Text(
             text = stringResource(id = R.string.scan_barcode_button),
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1
+            maxLines = 1,
         )
     }
 }
@@ -78,44 +77,47 @@ fun RowScope.Barcode(
 fun BarcodeInfoSheet(
     onAction: (EntrySavingIntents) -> Unit,
     states: EntrySavingStates,
-    barcodeNumber: String
+    barcodeNumber: String,
 ) {
-
     Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+            ),
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-
             IconButton(
                 onClick = {
                     onAction(EntrySavingIntents.ChangeBarcodeInfoSheetShown)
-                }
+                },
             ) {
                 Icon(
-                    modifier = Modifier
-                        .size(22.dp),
+                    modifier =
+                        Modifier
+                            .size(22.dp),
                     imageVector = Icons.Rounded.Info,
                     contentDescription = "info",
                 )
             }
 
             Text(
-                modifier = Modifier
-                    .align(Alignment.CenterVertically),
-                text = stringResource(id = R.string.no_barcode_yet_info_card, barcodeNumber)
+                modifier =
+                    Modifier
+                        .align(Alignment.CenterVertically),
+                text = stringResource(id = R.string.no_barcode_yet_info_card, barcodeNumber),
             )
 
             IconButton(
                 onClick = {
                     onAction(EntrySavingIntents.ClearBarcodeData)
-                }) {
+                },
+            ) {
                 Icon(
-                    modifier = Modifier
-                        .size(22.dp),
+                    modifier =
+                        Modifier
+                            .size(22.dp),
                     imageVector = Icons.Rounded.Clear,
                     contentDescription = "arrow",
                 )
@@ -127,42 +129,45 @@ fun BarcodeInfoSheet(
         ModalBottomSheet(
             onDismissRequest = {
                 onAction(EntrySavingIntents.ChangeBarcodeInfoSheetShown)
-            }
+            },
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 32.dp,
-                        end = 32.dp,
-                        top = 4.dp,
-                        bottom = 120.dp
-                    )
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 32.dp,
+                            end = 32.dp,
+                            top = 4.dp,
+                            bottom = 120.dp,
+                        ),
             ) {
-
                 Text(
                     text = stringResource(R.string.no_barcode_yet_info_title),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
 
                 HorizontalDivider(
-                    modifier = Modifier.padding(
-                        start = 4.dp,
-                        end = 4.dp,
-                        bottom = 16.dp
-                    )
+                    modifier =
+                        Modifier.padding(
+                            start = 4.dp,
+                            end = 4.dp,
+                            bottom = 16.dp,
+                        ),
                 )
 
                 Text(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .align(Alignment.CenterHorizontally),
-                    text = stringResource(
-                        R.string.no_barcode_yet_info_description, barcodeNumber
-                    )
+                    modifier =
+                        Modifier
+                            .padding(top = 12.dp)
+                            .align(Alignment.CenterHorizontally),
+                    text =
+                        stringResource(
+                            R.string.no_barcode_yet_info_description,
+                            barcodeNumber,
+                        ),
                 )
             }
         }
     }
-
 }

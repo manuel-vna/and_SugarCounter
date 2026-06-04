@@ -24,7 +24,6 @@ import de.sldw.composeonboarding.indicator.TextIndicator
 
 @Composable
 fun OnboardingUI(navController: NavController) {
-
     val systemLanguage = Locale.current.language
     val appLanguage = AppLanguage.fromCode(systemLanguage) ?: AppLanguage.ENGLISH
 
@@ -39,37 +38,34 @@ fun OnboardingUI(navController: NavController) {
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
 
     Column {
-
         SharedTopAppBar(
             appBarTitle = stringResource(R.string.settings_introduction_title),
             onBackClickAction = {
                 navController.popBackStack()
-            }
+            },
         )
 
         if (isLandscape) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 EmptyDataInfo(stringResource(id = R.string.landscape_mode_no_graph_description))
             }
         } else {
-
             ComposeOnboarding(
                 modifier = Modifier.consumeWindowInsets(WindowInsets.systemBars),
-                pages = listOf(
-                    OnboardingPage1(appLanguage, fontColorOnBackground),
-                    OnboardingPage2(appLanguage, fontColorOnBackground),
-                    OnboardingPage3(appLanguage, fontColorOnBackground),
-                    OnboardingPage4(appLanguage, fontColorOnBackground)
-                ),
+                pages =
+                    listOf(
+                        OnboardingPage1(appLanguage, fontColorOnBackground),
+                        OnboardingPage2(appLanguage, fontColorOnBackground),
+                        OnboardingPage3(appLanguage, fontColorOnBackground),
+                        OnboardingPage4(appLanguage, fontColorOnBackground),
+                    ),
                 indicatorType = TextIndicator(),
-                onFinishPressed = { navController.popBackStack() }
+                onFinishPressed = { navController.popBackStack() },
             )
         }
-
     }
-
 }

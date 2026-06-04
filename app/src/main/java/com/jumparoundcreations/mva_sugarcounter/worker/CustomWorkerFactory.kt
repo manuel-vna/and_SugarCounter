@@ -9,19 +9,17 @@ import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 
 class CustomWorkerFactory(
     private val dao: DaoAppDatabase,
-    private val sharedPrefsMain: SharedPreferences
+    private val sharedPrefsMain: SharedPreferences,
 ) : WorkerFactory() {
-
     override fun createWorker(
         context: Context,
         workerClassName: String,
-        workerParameters: WorkerParameters
-    ): ListenableWorker? {
-        return when (workerClassName) {
+        workerParameters: WorkerParameters,
+    ): ListenableWorker? =
+        when (workerClassName) {
             DeletionWorker::class.java.name ->
                 DeletionWorker(context, workerParameters, dao, sharedPrefsMain)
             else ->
                 null
         }
-    }
 }

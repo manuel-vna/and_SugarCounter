@@ -8,7 +8,6 @@ import org.junit.Before
 import org.junit.Test
 
 class CheckForDefaultSavingValuesUseCaseTest {
-
     private lateinit var useCase: CheckForDefaultSavingValuesUseCase
 
     @Before
@@ -21,10 +20,11 @@ class CheckForDefaultSavingValuesUseCaseTest {
     fun `invoke returns true when quantity is empty and mode is PerPiece`() {
         // --- Arrange ---
         // The state that matches the required conditions for the use case to return true
-        val state = EntrySavingStates(
-            entryFieldQuantity = "", // Condition 1: quantity is empty
-            gramCountMode = GramCountMode.PerPiece // Condition 2: mode is PerPiece
-        )
+        val state =
+            EntrySavingStates(
+                entryFieldQuantity = "", // Condition 1: quantity is empty
+                gramCountMode = GramCountMode.PerPiece, // Condition 2: mode is PerPiece
+            )
 
         // --- Act ---
         val result = useCase(state)
@@ -38,10 +38,11 @@ class CheckForDefaultSavingValuesUseCaseTest {
     fun `invoke returns false when quantity is not empty and mode is PerPiece`() {
         // --- Arrange ---
         // Create a state where the quantity field has a value
-        val state = EntrySavingStates(
-            entryFieldQuantity = "1", // This fails the first condition
-            gramCountMode = GramCountMode.PerPiece
-        )
+        val state =
+            EntrySavingStates(
+                entryFieldQuantity = "1", // This fails the first condition
+                gramCountMode = GramCountMode.PerPiece,
+            )
 
         // --- Act ---
         val result = useCase(state)
@@ -55,10 +56,11 @@ class CheckForDefaultSavingValuesUseCaseTest {
     fun `invoke returns false when quantity is empty and mode is not PerPiece`() {
         // --- Arrange ---
         // Create a state where the gramCountMode is not PerPiece
-        val state = EntrySavingStates(
-            entryFieldQuantity = "",
-            gramCountMode = GramCountMode.PerHundred
-        )
+        val state =
+            EntrySavingStates(
+                entryFieldQuantity = "",
+                gramCountMode = GramCountMode.PerHundred,
+            )
 
         // --- Act ---
         val result = useCase(state)
@@ -72,10 +74,11 @@ class CheckForDefaultSavingValuesUseCaseTest {
     fun `invoke returns false when quantity is not empty and mode is not PerPiece`() {
         // --- Arrange ---
         // Create a state where neither of the conditions is met
-        val state = EntrySavingStates(
-            entryFieldQuantity = "2",
-            gramCountMode = GramCountMode.PerHundred
-        )
+        val state =
+            EntrySavingStates(
+                entryFieldQuantity = "2",
+                gramCountMode = GramCountMode.PerHundred,
+            )
 
         // --- Act ---
         val result = useCase(state)

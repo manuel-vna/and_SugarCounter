@@ -146,4 +146,6 @@
     <string name="accessibility_delete_categories">Delete selected categories</string>
     <string name="accessibility_number_of_entries">Number of entries</string>
     <string name="accessibility_card_status">Card status</string>
+    <string name="snackbar_threshold_change_success">New threshold successfully changed to %1$s</string>
+    <string name="snackbar_threshold_change_cancel">Gram threshold change canceled</string>
 </resources>

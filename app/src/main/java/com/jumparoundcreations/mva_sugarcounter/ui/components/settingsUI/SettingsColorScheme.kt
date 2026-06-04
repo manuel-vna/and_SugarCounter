@@ -23,91 +23,84 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsColorScheme(settingsVM: SettingsVM) {
-
-    val bottomSheetsSettings by settingsVM.bottomSheetsSettings.collectAsState()
-    val dynamicColorActivated by settingsVM.dynamicColorActivated.collectAsState()
+    val settingsStates by settingsVM.settingsStates.collectAsState()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (bottomSheetsSettings == BottomSheetsSettings.COLOR_SCHEME) {
-
+    if (settingsStates.bottomSheetsSettings == BottomSheetsSettings.COLOR_SCHEME) {
         ModalBottomSheet(
             sheetState = sheetState,
             onDismissRequest = {
                 settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE)
-            }
+            },
         ) {
-
             Column(
-                modifier = Modifier
-                    .padding(start = 32.dp, end = 32.dp, bottom = 32.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(start = 32.dp, end = 32.dp, bottom = 32.dp)
+                        .fillMaxWidth(),
             ) {
-
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start
+                    horizontalArrangement = Arrangement.Start,
                 ) {
                     Text(
                         text = stringResource(R.string.settings_color_scheme_title),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
                 HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            settingsVM.actionChangeDynamicColorActivated(
-                                dynamicColorActivated.not()
-                            )
-                        },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                settingsVM.actionChangeDynamicColorActivated(
+                                    settingsStates.dynamicColorActivated.not(),
+                                )
+                            },
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(text = stringResource(id = R.string.settings_use_dynamic_colors_from_os))
 
                     Switch(
-                        checked = dynamicColorActivated,
-                        onCheckedChange = { settingsVM.actionChangeDynamicColorActivated(it) }
+                        checked = settingsStates.dynamicColorActivated,
+                        onCheckedChange = { settingsVM.actionChangeDynamicColorActivated(it) },
                     )
                 }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 16.dp),
-                        text = stringResource(id = R.string.settings_use_dynamic_colors_from_os_description)
+                        text = stringResource(id = R.string.settings_use_dynamic_colors_from_os_description),
                     )
                 }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    horizontalArrangement = Arrangement.Center
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     OutlinedButton(
-                        onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) }
+                        onClick = { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.NONE) },
                     ) {
                         Text(
-                            text = stringResource(R.string.generalClose)
+                            text = stringResource(R.string.generalClose),
                         )
                     }
                 }
-
             }
-
         }
-
     }
-
-
 }

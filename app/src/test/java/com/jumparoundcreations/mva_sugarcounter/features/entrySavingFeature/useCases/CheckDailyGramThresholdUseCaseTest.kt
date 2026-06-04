@@ -17,7 +17,6 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 
 class CheckDailyGramThresholdUseCaseTest : KoinTest {
-
     private lateinit var mockDatabase: AppDatabase
     private lateinit var mockDao: DaoAppDatabase
     private lateinit var mockSharedPrefs: SharedPreferences
@@ -38,9 +37,11 @@ class CheckDailyGramThresholdUseCaseTest : KoinTest {
 
         // Start a Koin instance specifically for this test, providing the mock SharedPreferences
         startKoin {
-            modules(module {
-                single { mockSharedPrefs }
-            })
+            modules(
+                module {
+                    single { mockSharedPrefs }
+                },
+            )
         }
 
         // Instantiate the class under test with its mocked dependency
@@ -57,7 +58,7 @@ class CheckDailyGramThresholdUseCaseTest : KoinTest {
         every {
             mockSharedPrefs.getInt(
                 GeneralConstants.KEY_GRAM_THRESHOLD,
-                GeneralConstants.STANDARD_GRAM_THRESHOLD
+                GeneralConstants.STANDARD_GRAM_THRESHOLD,
             )
         } returns threshold
 
@@ -84,7 +85,7 @@ class CheckDailyGramThresholdUseCaseTest : KoinTest {
         every {
             mockSharedPrefs.getInt(
                 GeneralConstants.KEY_GRAM_THRESHOLD,
-                GeneralConstants.STANDARD_GRAM_THRESHOLD
+                GeneralConstants.STANDARD_GRAM_THRESHOLD,
             )
         } returns threshold
 
@@ -109,7 +110,7 @@ class CheckDailyGramThresholdUseCaseTest : KoinTest {
         every {
             mockSharedPrefs.getInt(
                 GeneralConstants.KEY_GRAM_THRESHOLD,
-                GeneralConstants.STANDARD_GRAM_THRESHOLD
+                GeneralConstants.STANDARD_GRAM_THRESHOLD,
             )
         } returns threshold
 

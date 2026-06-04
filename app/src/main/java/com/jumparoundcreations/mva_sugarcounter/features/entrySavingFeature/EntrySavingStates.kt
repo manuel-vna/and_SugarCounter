@@ -3,7 +3,6 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 
-
 data class EntrySavingStates(
     val datePickerShown: Boolean = false,
     val dateOfEntryEpochSec: Long = System.currentTimeMillis() / 1000,
@@ -21,6 +20,5 @@ data class EntrySavingStates(
     val savingProcessMissingCategoryData: Boolean = false,
     val savingProcessMissingSugarData: Boolean = false,
     val savingProcessDailyGramThreshold: CheckThresholdResult =
-        CheckThresholdResult.WithinDailyThresholdBoundaries
+        CheckThresholdResult.WithinDailyThresholdBoundaries,
 )
-

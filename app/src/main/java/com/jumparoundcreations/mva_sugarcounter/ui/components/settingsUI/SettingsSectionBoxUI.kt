@@ -23,40 +23,39 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-
 @Composable
 fun SettingsSectionBoxUI(
     title: String,
-    sectionRows: List<Pair<String, () -> Unit>>
+    sectionRows: List<Pair<String, () -> Unit>>,
 ) {
-
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Start,
     ) {
         Text(
             text = title,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
     }
     HorizontalDivider(modifier = Modifier.padding(top = 4.dp, bottom = 8.dp))
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(15.dp)
-            )
-            .padding(horizontal = 8.dp, vertical = 8.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    color = MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(15.dp),
+                ).padding(horizontal = 8.dp, vertical = 8.dp),
     ) {
         sectionRows.forEachIndexed { index, item ->
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { item.second.invoke() }
-                    .padding(vertical = 16.dp, horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clickable { item.second.invoke() }
+                        .padding(vertical = 16.dp, horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
@@ -68,17 +67,15 @@ fun SettingsSectionBoxUI(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                     contentDescription = "Copy App Version",
-                    modifier = Modifier.size(20.dp)
+                    modifier = Modifier.size(20.dp),
                 )
-
             }
             if (index != sectionRows.lastIndex) {
                 HorizontalDivider(
                     color = Color.Gray,
-                    thickness = 1.dp
+                    thickness = 1.dp,
                 )
             }
         }
     }
-
 }

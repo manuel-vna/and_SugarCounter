@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
-
 import android.content.Context
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
@@ -20,39 +19,38 @@ import java.util.Locale
 import kotlin.random.Random
 
 class HelperMethods : KoinComponent {
-
     companion object {
-
-        fun formatDateForDisplay(date: String): String {
-            return try {
+        fun formatDateForDisplay(date: String): String =
+            try {
                 val input = LocalDate.parse(date)
                 val formatter = DateTimeFormatter.ofPattern("EEEE (dd.MM.)")
                 input.format(formatter)
             } catch (e: Exception) {
                 date // fallback
             }
-        }
 
-        fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday {
-            return if (DateUtils.isToday(currentTimestamp * TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER)) {
+        fun timestampIsTodayOrYesterday(currentTimestamp: Long): TodayOrYesterday =
+            if (DateUtils.isToday(currentTimestamp * TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER)) {
                 TodayOrYesterday.TODAY
             } else if (DateUtils.isToday(
                     currentTimestamp *
-                            TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER +
-                            TimeConstants.DAY_ONE_IN_MILLISECONDS
+                        TimeConstants.MILLISECONDS_TO_SECONDS_DIVIDER +
+                        TimeConstants.DAY_ONE_IN_MILLISECONDS,
                 )
             ) {
                 TodayOrYesterday.YESTERDAY
             } else {
                 TodayOrYesterday.LATER
             }
-        }
 
-        fun convertTimestampToDateString(timestamp: Long, format: String): String {
-
-            val formatter = DateTimeFormatter
-                .ofPattern(format)
-                .withZone(ZoneId.systemDefault()) //system's default timezone
+        fun convertTimestampToDateString(
+            timestamp: Long,
+            format: String,
+        ): String {
+            val formatter =
+                DateTimeFormatter
+                    .ofPattern(format)
+                    .withZone(ZoneId.systemDefault()) // system's default timezone
             val instant = Instant.ofEpochSecond(timestamp)
 
             return formatter.format(instant)
@@ -63,45 +61,41 @@ class HelperMethods : KoinComponent {
             return YearMonth.of(ld.year, ld.month)
         }
 
-        fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double {
-            return if (valueList.isNotEmpty()) {
-                valueList.map {
-                    it.gramTotal
-                }.reduce { sum, element -> sum + element }
+        fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double =
+            if (valueList.isNotEmpty()) {
+                valueList
+                    .map {
+                        it.gramTotal
+                    }.reduce { sum, element -> sum + element }
             } else {
                 NumberConstants.NULL_AS_DOUBLE
             }
-        }
 
-        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryInt>): Int {
-            return if (valueList.isNotEmpty()) {
-                valueList.map {
-                    it.gramTotal
-                }.reduce { sum, element -> sum + element }
+        fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryInt>): Int =
+            if (valueList.isNotEmpty()) {
+                valueList
+                    .map {
+                        it.gramTotal
+                    }.reduce { sum, element -> sum + element }
             } else {
                 0
-
             }
-        }
 
-        fun getSystemLanguage(): String {
-            return Locale.getDefault().language
-        }
+        fun getSystemLanguage(): String = Locale.getDefault().language
 
         fun checkForUIMode(context: Context): Int {
-            //darkMode == 33 and brightMode = 17
+            // darkMode == 33 and brightMode = 17
             return context.resources.configuration.uiMode
         }
 
-        fun getStartOfTodayAsLong(): Long {
-            return LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
-        }
+        fun getStartOfTodayAsLong(): Long = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()
 
-        fun getEndOfTodayAsLong(): Long {
-            return LocalDate.now().plusDays(1).atStartOfDay(ZoneId.systemDefault())
+        fun getEndOfTodayAsLong(): Long =
+            LocalDate
+                .now()
+                .plusDays(1)
+                .atStartOfDay(ZoneId.systemDefault())
                 .toEpochSecond() - 1
-        }
-
 
         /**
          * This method creates test data and is only called for that purpose
@@ -127,29 +121,28 @@ class HelperMethods : KoinComponent {
 
                         database.appDao().insertSugarEntry(
                             SugarEntry(
-                                date = convertTimestampToDateString(
-                                    timestamp,
-                                    "yyyy-MM-dd"
-                                ),
+                                date =
+                                    convertTimestampToDateString(
+                                        timestamp,
+                                        "yyyy-MM-dd",
+                                    ),
                                 currentTimestamp = timestamp,
                                 category = "TestSugar$it",
                                 entryType = GramCountMode.PerHundred,
                                 gram = gramValue,
                                 quantity = quantityValue,
-                                gramTotal = gramValue
-                            )
+                                gramTotal = gramValue,
+                            ),
                         )
                     }
                 }
             }
         }
-
     }
 
     enum class TodayOrYesterday {
         TODAY,
         YESTERDAY,
-        LATER
+        LATER,
     }
-
 }

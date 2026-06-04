@@ -1,6 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI
 
-
 import android.content.Context
 import android.os.Build
 import androidx.compose.foundation.layout.Spacer
@@ -18,20 +17,17 @@ import androidx.navigation.NavController
 import com.jumparoundcreations.mva_sugarcounter.BuildConfig
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.settingsData.BottomSheetsSettings
+import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavItem
-import com.jumparoundcreations.mva_sugarcounter.viewModels.SettingsVM
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
-fun Settings(
+fun SettingsUI(
     context: Context,
     navController: NavController,
 ) {
-
     val settingsVM: SettingsVM = koinViewModel()
     settingsVM.actionResetThresholdSliderValuesToSharedPref()
-
 
     LazyColumn(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -48,7 +44,7 @@ fun Settings(
                 context = context,
                 settingsVM = settingsVM,
                 descriptionText = stringResource(R.string.export_settings_button),
-                buttonIcon = R.drawable.baseline_read_more_24
+                buttonIcon = R.drawable.baseline_read_more_24,
             )
 
             SettingsSectionBoxUI(
@@ -58,25 +54,29 @@ fun Settings(
                         listOf(
                             Pair(
                                 stringResource(R.string.export_settings_button),
-                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) },
+                            ),
                             Pair(
                                 stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) },
+                            ),
                             Pair(
                                 stringResource(R.string.settings_color_scheme_title),
-                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.COLOR_SCHEME) })
-
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.COLOR_SCHEME) },
+                            ),
                         )
                     } else {
                         listOf(
                             Pair(
                                 stringResource(R.string.export_settings_button),
-                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.DATA_PRE_EXPORT) },
+                            ),
                             Pair(
                                 stringResource(R.string.settings_entries_deletion_bottom_sheet_description_switch),
-                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) }),
+                                { settingsVM.actionChangeBottomSheetsSetting(BottomSheetsSettings.ENTRIES_DELETION) },
+                            ),
                         )
-                    }
+                    },
             )
 
             SettingsEntriesDeletion(settingsVM = settingsVM)
@@ -93,18 +93,18 @@ fun Settings(
         item {
             SettingsSectionBoxUI(
                 title = stringResource(R.string.general_help),
-                sectionRows = listOf(
-                    Pair(
-                        stringResource(R.string.settings_button_faq_text),
-                        { navController.navigate(NavItem.FAQ.screenRoute) }
+                sectionRows =
+                    listOf(
+                        Pair(
+                            stringResource(R.string.settings_button_faq_text),
+                            { navController.navigate(NavItem.FAQ.screenRoute) },
+                        ),
+                        Pair(
+                            stringResource(R.string.settings_introduction_title),
+                            { navController.navigate(NavItem.Onboarding.screenRoute) },
+                        ),
                     ),
-                    Pair(
-                        stringResource(R.string.settings_introduction_title),
-                        { navController.navigate(NavItem.Onboarding.screenRoute) }
-                    )
-                )
             )
-
         }
 
         item { Spacer(modifier = Modifier.height(32.dp)) }
@@ -112,46 +112,46 @@ fun Settings(
         item {
             SettingsSectionBoxUI(
                 title = stringResource(R.string.settings_button_about_text),
-                sectionRows = listOf(
-                    Pair(
-                        stringResource(R.string.about_title_terms_and_conditions),
-                        { navController.navigate(NavItem.TermsAndConditions.screenRoute) }),
-                    Pair(
-                        stringResource(R.string.about_title_privacy_policy),
-                        { navController.navigate(NavItem.PrivacyPolicy.screenRoute) }),
-                    Pair(
-                        stringResource(R.string.settings_third_party_licenses_text),
-                        {
-                            navController.navigate(NavItem.ThirdPartyLibraries.screenRoute)
-                        }),
-                    Pair(
-                        stringResource(R.string.about_title_imprint),
-                        { navController.navigate(NavItem.Imprint.screenRoute) })
-                )
+                sectionRows =
+                    listOf(
+                        Pair(
+                            stringResource(R.string.about_title_terms_and_conditions),
+                            { navController.navigate(NavItem.TermsAndConditions.screenRoute) },
+                        ),
+                        Pair(
+                            stringResource(R.string.about_title_privacy_policy),
+                            { navController.navigate(NavItem.PrivacyPolicy.screenRoute) },
+                        ),
+                        Pair(
+                            stringResource(R.string.settings_third_party_licenses_text),
+                            {
+                                navController.navigate(NavItem.ThirdPartyLibraries.screenRoute)
+                            },
+                        ),
+                        Pair(
+                            stringResource(R.string.about_title_imprint),
+                            { navController.navigate(NavItem.Imprint.screenRoute) },
+                        ),
+                    ),
             )
         }
 
         item { Spacer(modifier = Modifier.height(32.dp)) }
 
         item { SettingsVersionCode() }
-
     }
 }
 
 @Composable
 fun SettingsVersionCode() {
-
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(
         text = stringResource(R.string.app_name) + " " + BuildConfig.VERSION_NAME,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
     )
 
     Text(
-        text = stringResource(R.string.about_concluding_part)
+        text = stringResource(R.string.about_concluding_part),
     )
 }
-
-
-

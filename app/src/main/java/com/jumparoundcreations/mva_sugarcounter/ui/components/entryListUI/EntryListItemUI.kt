@@ -43,43 +43,41 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import com.jumparoundcreations.mva_sugarcounter.ui.components.ShowAlertDialogDoubleBtn
 import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EntryListItemUI(
     data: SuccessData,
     onAction: (EntryListDisplayingIntents) -> Unit,
 ) {
-
     LaunchedEffect(key1 = data.entryInCardItem.id) {
         onAction(
             EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(
-                sugarEntry = data.entryInCardItem
-            )
+                sugarEntry = data.entryInCardItem,
+            ),
         )
     }
 
     ModalBottomSheet(
-        modifier = Modifier
-            .navigationBarsPadding(),
+        modifier =
+            Modifier
+                .navigationBarsPadding(),
         onDismissRequest = {
             onAction(EntryListDisplayingIntents.DismissCardDetails)
-        }
+        },
     ) {
-
         Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+            modifier = Modifier.verticalScroll(rememberScrollState()),
         ) {
-
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.Start
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.Start,
             ) {
                 Text(
                     text = stringResource(R.string.card_item_detail_view_heading),
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
                 )
             }
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
@@ -87,32 +85,31 @@ fun EntryListItemUI(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Column(
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier.padding(8.dp),
                 ) {
-
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
                         text = stringResource(id = R.string.foodType),
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
 
                     TextField(
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor =
-                                MaterialTheme.colorScheme.secondaryContainer,
-                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                        ),
+                        colors =
+                            OutlinedTextFieldDefaults.colors(
+                                unfocusedContainerColor =
+                                    MaterialTheme.colorScheme.secondaryContainer,
+                                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            ),
                         value = data.valueCategory,
                         onValueChange = {
                             onAction(
                                 EntryListDisplayingIntents.EditCategory(
-                                    newCategory = it
-                                )
+                                    newCategory = it,
+                                ),
                             )
                         },
                         singleLine = true,
@@ -120,8 +117,8 @@ fun EntryListItemUI(
                             IconButton(onClick = {
                                 onAction(
                                     EntryListDisplayingIntents.EditCategory(
-                                        newCategory = ""
-                                    )
+                                        newCategory = "",
+                                    ),
                                 )
                             }) {
                                 Icon(
@@ -135,47 +132,48 @@ fun EntryListItemUI(
                 }
             }
 
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .weight(1f),
-                    Arrangement.SpaceEvenly
+                    modifier =
+                        Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .weight(1f),
+                    Arrangement.SpaceEvenly,
                 ) {
-
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = if (data.entryInCardItem.entryType == GramCountMode.PerHundred)
-                            stringResource(id = R.string.gramPerHundredLabel)
-                        else
-                            stringResource(id = R.string.gramSugar),
+                        text =
+                            if (data.entryInCardItem.entryType == GramCountMode.PerHundred) {
+                                stringResource(id = R.string.gramPerHundredLabel)
+                            } else {
+                                stringResource(id = R.string.gramSugar)
+                            },
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
 
                     TextField(
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor =
-                                MaterialTheme.colorScheme.secondaryContainer,
-                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                        ),
+                        colors =
+                            OutlinedTextFieldDefaults.colors(
+                                unfocusedContainerColor =
+                                    MaterialTheme.colorScheme.secondaryContainer,
+                                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            ),
                         value = data.valueGram,
                         onValueChange = {
                             if (InputFilters.filterBlockingOverHundred(
-                                    input = it
+                                    input = it,
                                 )
                             ) {
                                 onAction(
                                     EntryListDisplayingIntents.EditGram(
-                                        newGram = it
-                                    )
+                                        newGram = it,
+                                    ),
                                 )
                             }
                         },
@@ -184,8 +182,8 @@ fun EntryListItemUI(
                             IconButton(onClick = {
                                 onAction(
                                     EntryListDisplayingIntents.EditGram(
-                                        newGram = ""
-                                    )
+                                        newGram = "",
+                                    ),
                                 )
                             }) {
                                 Icon(
@@ -196,59 +194,62 @@ fun EntryListItemUI(
                             }
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        placeholder = { Text(stringResource(R.string.gram_unit_short)) }
+                        placeholder = { Text(stringResource(R.string.gram_unit_short)) },
                     )
                 }
 
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
-                        .fillMaxWidth()
-                        .weight(1f),
-                    Arrangement.SpaceEvenly
+                    modifier =
+                        Modifier
+                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .weight(1f),
+                    Arrangement.SpaceEvenly,
                 ) {
-
                     Text(
                         modifier = Modifier.padding(top = 6.dp, bottom = 4.dp),
-                        text = if (data.entryInCardItem.entryType == GramCountMode.PerHundred)
-                            stringResource(id = R.string.amountSugar)
-                        else
-                            stringResource(id = R.string.quantitySugar),
+                        text =
+                            if (data.entryInCardItem.entryType == GramCountMode.PerHundred) {
+                                stringResource(id = R.string.amountSugar)
+                            } else {
+                                stringResource(id = R.string.quantitySugar)
+                            },
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
                     )
 
                     TextField(
-                        colors = OutlinedTextFieldDefaults.colors(
-                            unfocusedContainerColor =
-                                MaterialTheme.colorScheme.secondaryContainer,
-                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                        ),
+                        colors =
+                            OutlinedTextFieldDefaults.colors(
+                                unfocusedContainerColor =
+                                    MaterialTheme.colorScheme.secondaryContainer,
+                                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            ),
                         value = data.valueQuantity,
                         onValueChange = {
                             when (data.entryInCardItem.entryType) {
                                 GramCountMode.PerHundred -> {
                                     if (InputFilters.filterBlockingOverThousand(
-                                            input = it
+                                            input = it,
                                         )
                                     ) {
                                         onAction(
                                             EntryListDisplayingIntents.EditQuantity(
-                                                newQuantity = it
-                                            )
+                                                newQuantity = it,
+                                            ),
                                         )
                                     }
                                 }
 
                                 GramCountMode.PerPiece -> {
                                     if (InputFilters.filterBlockingOverHundred(
-                                            input = it
+                                            input = it,
                                         )
                                     ) {
                                         onAction(
                                             EntryListDisplayingIntents.EditQuantity(
-                                                newQuantity = it
-                                            )
+                                                newQuantity = it,
+                                            ),
                                         )
                                     }
                                 }
@@ -259,8 +260,8 @@ fun EntryListItemUI(
                             IconButton(onClick = {
                                 onAction(
                                     EntryListDisplayingIntents.EditQuantity(
-                                        newQuantity = ""
-                                    )
+                                        newQuantity = "",
+                                    ),
                                 )
                             }) {
                                 Icon(
@@ -271,91 +272,93 @@ fun EntryListItemUI(
                             }
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        placeholder = { Text(stringResource(R.string.gram_unit_short)) }
+                        placeholder = { Text(stringResource(R.string.gram_unit_short)) },
                     )
                 }
             }
 
             Row(
-                modifier = Modifier
-                    .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                modifier =
+                    Modifier
+                        .padding(bottom = 16.dp, start = 16.dp, end = 16.dp)
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
             ) {
                 ElevatedButton(
                     shape = RoundedCornerShape(12.dp),
                     onClick = {
                         onAction(EntryListDisplayingIntents.ReuseEntryForToday)
                         onAction(EntryListDisplayingIntents.DismissCardDetails)
-                    }
+                    },
                 ) {
                     Text(
-                        text = stringResource(R.string.card_item_detail_view_reuse_button)
+                        text = stringResource(R.string.card_item_detail_view_reuse_button),
                     )
                 }
             }
 
-
             Row(
-                modifier = Modifier.padding(
-                    bottom = 32.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                ),
-                horizontalArrangement = Arrangement.SpaceBetween
+                modifier =
+                    Modifier.padding(
+                        bottom = 32.dp,
+                        start = 16.dp,
+                        end = 16.dp,
+                    ),
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Button(
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                        .weight(0.1F),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.error,
-                        contentColor = Color.White,
-                        //contentColor for text font statically because it fits light and dark mode
-                    ),
+                    modifier =
+                        Modifier
+                            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                            .weight(0.1F),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = Color.White,
+                            // contentColor for text font statically because it fits light and dark mode
+                        ),
                     onClick = {
                         onAction(
                             EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
-                                isShown = true
-                            )
+                                isShown = true,
+                            ),
                         )
-                    }
+                    },
                 ) {
                     Text(
-                        text = stringResource(id = R.string.general_delete)
+                        text = stringResource(id = R.string.general_delete),
                     )
                 }
                 OutlinedButton(
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                        .weight(0.1f),
+                    modifier =
+                        Modifier
+                            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                            .weight(0.1f),
                     onClick = {
                         onAction(EntryListDisplayingIntents.DismissCardDetails)
-                    }
+                    },
                 ) {
                     Text(
-                        text = stringResource(R.string.generalCancel)
+                        text = stringResource(R.string.generalCancel),
                     )
                 }
                 Button(
-                    modifier = Modifier
-                        .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
-                        .weight(0.1F),
+                    modifier =
+                        Modifier
+                            .padding(start = 2.dp, end = 2.dp, bottom = 12.dp)
+                            .weight(0.1F),
                     onClick = {
                         onAction(EntryListDisplayingIntents.EditEntryInDB)
                         onAction(EntryListDisplayingIntents.DismissCardDetails)
-                    }
+                    },
                 ) {
                     Text(
-                        text = stringResource(id = R.string.general_edit)
+                        text = stringResource(id = R.string.general_edit),
                     )
                 }
-
             }
         }
     }
-
-
 
     if (data.entryDeletionConfirmationDialogShown) {
         ShowAlertDialogDoubleBtn(
@@ -365,13 +368,13 @@ fun EntryListItemUI(
             confirmBtnAction = {
                 onAction(
                     EntryListDisplayingIntents.DeleteEntry(
-                        entryId = data.entryInCardItem.id
-                    )
+                        entryId = data.entryInCardItem.id,
+                    ),
                 )
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
-                        isShown = false
-                    )
+                        isShown = false,
+                    ),
                 )
                 onAction(EntryListDisplayingIntents.DismissCardDetails)
             },
@@ -379,22 +382,17 @@ fun EntryListItemUI(
             dismissBtnAction = {
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
-                        isShown = false
-                    )
+                        isShown = false,
+                    ),
                 )
             },
             onDismissRequest = {
                 onAction(
                     EntryListDisplayingIntents.ShowDeleteEntryConfirmation(
-                        isShown = false
-                    )
+                        isShown = false,
+                    ),
                 )
-            }
+            },
         )
     }
-
 }
-
-
-
-

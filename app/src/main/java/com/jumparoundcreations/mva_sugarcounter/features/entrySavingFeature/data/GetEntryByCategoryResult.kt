@@ -4,5 +4,8 @@ import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 
 sealed class GetEntryByCategoryResult {
     object NoEntryFound : GetEntryByCategoryResult()
-    data class EntryFound(val entry: SugarEntry) : GetEntryByCategoryResult()
+
+    data class EntryFound(
+        val entry: SugarEntry,
+    ) : GetEntryByCategoryResult()
 }

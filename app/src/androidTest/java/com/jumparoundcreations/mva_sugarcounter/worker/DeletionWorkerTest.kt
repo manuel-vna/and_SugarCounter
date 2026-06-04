@@ -30,11 +30,9 @@ import java.util.UUID
 import kotlin.properties.Delegates
 import kotlin.random.Random
 
-
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class DeletionWorkerTest {
-
     private lateinit var db: AppDatabase
     private lateinit var dao: DaoAppDatabase
     private lateinit var context: Context
@@ -45,37 +43,37 @@ class DeletionWorkerTest {
     private var threeMonthsAgo = 0L
     private var sixMonthsAgo = 0L
 
-
     @Before
     fun setup() {
-
         context = ApplicationProvider.getApplicationContext()
 
-        //<editor-fold desc="Setup Room test database">
-        db = Room.inMemoryDatabaseBuilder(
-            context,
-            AppDatabase::class.java
-        ).allowMainThreadQueries().build()
+        // <editor-fold desc="Setup Room test database">
+        db =
+            Room
+                .inMemoryDatabaseBuilder(
+                    context,
+                    AppDatabase::class.java,
+                ).allowMainThreadQueries()
+                .build()
         dao = db.appDao()
-        //</editor-fold>
+        // </editor-fold>
 
-        //<editor-fold desc="Mock Shared Preferences">
+        // <editor-fold desc="Mock Shared Preferences">
         mockPrefs = mockk()
         every { mockPrefs.getInt("automaticDeletionValue", any()) } returns 0
         every { mockPrefs.getBoolean("entriesDeletionActivated", any()) } returns true
-        //</editor-fold>
+        // </editor-fold>
 
-        //<editor-fold desc="Set timestamps used for testing">
+        // <editor-fold desc="Set timestamps used for testing">
         val oneYearAgo =
             (System.currentTimeMillis() / 1000) - 31556926 // 31556926 = 1 year in seconds
         threeMonthsAgo =
             (System.currentTimeMillis() / 1000) - 7889229L // 7889229 = 3 months in seconds
         sixMonthsAgo =
             (System.currentTimeMillis() / 1000) - 15778458L // 15778458 = 6 months in seconds
-        //</editor-fold>
+        // </editor-fold>
 
-
-        //<editor-fold desc="Fill test database with test data">
+        // <editor-fold desc="Fill test database with test data">
         val timestampInSeconds = oneYearAgo
         val yearsTimespan = 1
         val sugarTestData = true
@@ -92,36 +90,38 @@ class DeletionWorkerTest {
                         dao.insertSugarEntry(
                             SugarEntry(
                                 currentTimestamp = timestamp,
-                                date = convertTimestampToDateString(
-                                    timestamp,
-                                    "yyyy-MM-dd"
-                                ),
+                                date =
+                                    convertTimestampToDateString(
+                                        timestamp,
+                                        "yyyy-MM-dd",
+                                    ),
                                 category = "Test Sugar",
                                 entryType = GramCountMode.PerPiece,
                                 gram = 7.5,
                                 quantity = 2.0,
-                                gramTotal = 15.0
-                            )
+                                gramTotal = 15.0,
+                            ),
                         )
                     }
                 }
-
             }
         }
-        //</editor-fold>
+        // </editor-fold>
 
-        //<editor-fold desc="Initialize WorkManager for instrumentation tests">
-        val config = Configuration.Builder()
-            .setMinimumLoggingLevel(android.util.Log.DEBUG)
-            .setWorkerFactory(CustomWorkerFactory(dao, mockPrefs))
-            .build()
+        // <editor-fold desc="Initialize WorkManager for instrumentation tests">
+        val config =
+            Configuration
+                .Builder()
+                .setMinimumLoggingLevel(android.util.Log.DEBUG)
+                .setWorkerFactory(CustomWorkerFactory(dao, mockPrefs))
+                .build()
         WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
 
         val sugarEntriesBeforeDeletion = dao.getAllEntries()
         numberOfSugarEntriesBeforeDeletion = sugarEntriesBeforeDeletion.size
-        //</editor-fold>
+        // </editor-fold>
 
-        //<editor-fold desc="Run DeletionWorker">
+        // <editor-fold desc="Run DeletionWorker">
         val request = OneTimeWorkRequestBuilder<DeletionWorker>().build()
         val workManager = WorkManager.getInstance(context)
         workManager.enqueue(request).result.get()
@@ -130,21 +130,20 @@ class DeletionWorkerTest {
         assertNotNull(testDriver)
         testDriver?.setAllConstraintsMet(request.id)
         testDriver?.setInitialDelayMet(request.id)
-        //</editor-fold>
+        // </editor-fold>
 
-        //<editor-fold desc="Get result of DeletionWorker run">
+        // <editor-fold desc="Get result of DeletionWorker run">
         val workerState = awaitSuccessOrFail(workManager, request.id)
         println("Worker state: $workerState")
         workInfo = workManager.getWorkInfoById(request.id).get()!!
         println("workInfo: $workInfo ")
-        //</editor-fold>
-
+        // </editor-fold>
     }
 
     fun awaitSuccessOrFail(
         workManager: WorkManager,
         requestId: UUID,
-        timeoutMs: Long = 5000
+        timeoutMs: Long = 5000,
     ): WorkInfo.State {
         val startTime = System.currentTimeMillis()
         while (System.currentTimeMillis() - startTime < timeoutMs) {
@@ -164,14 +163,12 @@ class DeletionWorkerTest {
 
     @Test
     fun testThatDeletionWorkerRanSuccessfully() {
-
         // Test
         assertEquals(WorkInfo.State.SUCCEEDED, workInfo.state)
     }
 
     @Test
     fun testThatNumberOfSugarEntriesIsSmallerAfterWorkerWasRunning() {
-
         // Prepare
         val numberOfSugarEntriesAfterDeletion = dao.getAllEntries().size
         println("numberOfSugarEntriesBeforeDeletion: $numberOfSugarEntriesBeforeDeletion")
@@ -179,12 +176,10 @@ class DeletionWorkerTest {
 
         // Test
         assertTrue(numberOfSugarEntriesBeforeDeletion > numberOfSugarEntriesAfterDeletion)
-
     }
 
     @Test
     fun checkThatLatestSugarEntryIsWithin6MonthsRange() {
-
         // Prepare
         val allLeftEntries = dao.getAllEntries()
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
@@ -198,7 +193,6 @@ class DeletionWorkerTest {
 
     @Test
     fun checkThatLatestSugarEntryIsOlderThan3MonthsAgo() {
-
         // Prepare
         val allLeftEntries = dao.getAllEntries()
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
@@ -206,6 +200,4 @@ class DeletionWorkerTest {
         // Test
         assertTrue(timestampOfEntry < threeMonthsAgo)
     }
-
-
 }

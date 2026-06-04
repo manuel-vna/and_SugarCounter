@@ -40,7 +40,6 @@ import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryL
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.androidx.compose.koinViewModel
 
-
 @Composable
 fun Counter(
     context: Context,
@@ -48,95 +47,102 @@ fun Counter(
     entrySavingViewModel: EntrySavingViewModel = koinViewModel(),
     entryListDisplayingViewModel: EntryListDisplayingViewModel,
 ) {
-
     // States
     val interactionSource = remember { MutableInteractionSource() }
     val entrySavingStates by entrySavingViewModel.entrySavingStates.collectAsStateWithLifecycle()
     val entryListDisplayingStates by
-    entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
+        entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
 
-    //Keyboard
+    // Keyboard
     val keyboardController = LocalSoftwareKeyboardController.current
 
     // Style
     val darkMode = HelperMethods.checkForUIMode(context)
     val textColor = if (darkMode == 33) Color.White else Color.Black
 
-
     Column(
-        modifier = Modifier
-            .padding(horizontal = 16.dp)
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = {
-                    entrySavingViewModel.onAction(
-                        action = EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
-                            categoryDropdownExpanded = false
-                        )
-                    )
-                }
-            )
-            .verticalScroll(rememberScrollState())
-    ) {
-
-        Row(
-            modifier = Modifier
+        modifier =
+            Modifier
+                .padding(horizontal = 16.dp)
                 .fillMaxWidth()
-                .padding(bottom = 6.dp),
-            Arrangement.Absolute.SpaceAround
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = {
+                        entrySavingViewModel.onAction(
+                            action =
+                                EntrySavingIntents.ExpandOrCollapseCategoryDropdown(
+                                    categoryDropdownExpanded = false,
+                                ),
+                        )
+                    },
+                ).verticalScroll(rememberScrollState()),
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 6.dp),
+            Arrangement.Absolute.SpaceAround,
         ) {
             DatePicker(
-                entrySavingViewModel = entrySavingViewModel,
+                onAction = entrySavingViewModel::onAction,
+                entrySavingStates = entrySavingStates,
                 textColor = textColor,
             )
 
             Barcode(
-                entrySavingViewModel = entrySavingViewModel,
-                textColor = textColor
+                onAction = entrySavingViewModel::onAction,
+                textColor = textColor,
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 6.dp),
-            horizontalArrangement = Arrangement.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 6.dp),
+            horizontalArrangement = Arrangement.Center,
         ) {
             if (entrySavingStates.barcodeNotPresentInDb) {
                 BarcodeInfoSheet(
                     onAction = entrySavingViewModel::onAction,
                     states = entrySavingStates,
-                    barcodeNumber = entrySavingStates.barcodeNumber
+                    barcodeNumber = entrySavingStates.barcodeNumber,
                 )
             }
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 4.dp, bottom = 4.dp)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 4.dp),
         ) {
-
             CategoryDropdownField(
                 context = context,
-                entrySavingViewModel = entrySavingViewModel,
-                keyboardController = keyboardController
+                onAction = entrySavingViewModel::onAction,
+                entrySavingStates = entrySavingStates,
+                keyboardController = keyboardController,
             )
         }
 
-        TabRow(entrySavingViewModel)
+        TabRow(
+            onAction = entrySavingViewModel::onAction,
+            entrySavingStates = entrySavingStates,
+        )
 
         Row(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth(),
-            Arrangement.SpaceEvenly
+            modifier =
+                Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+            Arrangement.SpaceEvenly,
         ) {
             Button(
-                modifier = Modifier
-                    .width(160.dp),
+                modifier =
+                    Modifier
+                        .width(160.dp),
                 onClick = {
                     entrySavingViewModel.onAction(EntrySavingIntents.SaveSugarEntry)
                     // clearing fields by an empty value / setting fields back to default
@@ -147,20 +153,19 @@ fun Counter(
                 Text(
                     text = stringResource(id = R.string.saveButton),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
                 )
             }
-
         }
 
         when (entryListDisplayingStates) {
             is EntryListDisplayingStates.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    contentAlignment = Alignment.Center,
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(90.dp)
+                        modifier = Modifier.size(90.dp),
                     )
                 }
             }
@@ -170,24 +175,25 @@ fun Counter(
                     currentScreen = Screens.COUNTER,
                     backgroundColorPrimary = false,
                     data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
-                    viewModel = entryListDisplayingViewModel
+                    onAction = entryListDisplayingViewModel::onAction,
                 )
             }
 
             is EntryListDisplayingStates.Error -> {
                 Text(
-                    text = "Error: " +
-                            (entryListDisplayingStates as EntryListDisplayingStates.Error).message
+                    text =
+                        "Error: " +
+                            (entryListDisplayingStates as EntryListDisplayingStates.Error).message,
                 )
             }
         }
-
     }
 
     CounterUserInformation(
         context = context,
-        entrySavingViewModel = entrySavingViewModel,
-        snackbarHostState = snackbarHostState
+        entrySavingStates = entrySavingStates,
+        onAction = entrySavingViewModel::onAction,
+        scanUiEvents = entrySavingViewModel.scanUiEvents,
+        snackbarHostState = snackbarHostState,
     )
-
 }

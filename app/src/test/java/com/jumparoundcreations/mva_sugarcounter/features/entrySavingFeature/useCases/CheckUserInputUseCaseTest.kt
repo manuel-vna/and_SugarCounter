@@ -7,7 +7,6 @@ import org.junit.Before
 import org.junit.Test
 
 class CheckUserInputUseCaseTest {
-
     private lateinit var useCase: CheckUserInputUseCase
 
     @Before
@@ -18,11 +17,12 @@ class CheckUserInputUseCaseTest {
     @Test
     fun `invoke returns NoCategoryGiven when category field is empty`() {
         // Arrange
-        val state = EntrySavingStates(
-            categoryInField = "",
-            entryFieldGram = "10",
-            entryFieldQuantity = "1"
-        )
+        val state =
+            EntrySavingStates(
+                categoryInField = "",
+                entryFieldGram = "10",
+                entryFieldQuantity = "1",
+            )
 
         // Act
         val result = useCase(state)
@@ -34,11 +34,12 @@ class CheckUserInputUseCaseTest {
     @Test
     fun `invoke returns NoGramDataGiven when gram field is empty`() {
         // Arrange
-        val state = EntrySavingStates(
-            categoryInField = "Cereal",
-            entryFieldGram = "", // The failing condition
-            entryFieldQuantity = "1"
-        )
+        val state =
+            EntrySavingStates(
+                categoryInField = "Cereal",
+                entryFieldGram = "", // The failing condition
+                entryFieldQuantity = "1",
+            )
 
         // Act
         val result = useCase(state)
@@ -50,11 +51,12 @@ class CheckUserInputUseCaseTest {
     @Test
     fun `invoke returns NoGramDataGiven when quantity field is empty`() {
         // Arrange
-        val state = EntrySavingStates(
-            categoryInField = "Cereal",
-            entryFieldGram = "45",
-            entryFieldQuantity = "" // The failing condition
-        )
+        val state =
+            EntrySavingStates(
+                categoryInField = "Cereal",
+                entryFieldGram = "45",
+                entryFieldQuantity = "", // The failing condition
+            )
 
         // Act
         val result = useCase(state)
@@ -66,11 +68,12 @@ class CheckUserInputUseCaseTest {
     @Test
     fun `invoke returns InputDataComplete when all fields are filled`() {
         // Arrange
-        val state = EntrySavingStates(
-            categoryInField = "Cereal",
-            entryFieldGram = "45",
-            entryFieldQuantity = "2"
-        )
+        val state =
+            EntrySavingStates(
+                categoryInField = "Cereal",
+                entryFieldGram = "45",
+                entryFieldQuantity = "2",
+            )
 
         // Act
         val result = useCase(state)

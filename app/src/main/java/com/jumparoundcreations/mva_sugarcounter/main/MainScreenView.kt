@@ -29,14 +29,12 @@ import com.jumparoundcreations.mva_sugarcounter.navigation.BottomNavItem
 import com.jumparoundcreations.mva_sugarcounter.navigation.BottomNavigation
 import com.jumparoundcreations.mva_sugarcounter.navigation.NavigationGraph
 
-
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun MainScreenView(
     context: Context,
-    showNavigationRail: Boolean
+    showNavigationRail: Boolean,
 ) {
-
     val navController = rememberNavController()
     val snackbarHostState = remember { SnackbarHostState() }
     val items =
@@ -44,7 +42,7 @@ fun MainScreenView(
             BottomNavItem.SugarCounter,
             BottomNavItem.SugarHistory,
             BottomNavItem.CategoryTitle,
-            BottomNavItem.Settings
+            BottomNavItem.Settings,
         )
 
     Scaffold(
@@ -55,12 +53,13 @@ fun MainScreenView(
             }
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        floatingActionButtonPosition = FabPosition.End
+        floatingActionButtonPosition = FabPosition.End,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(it),
         ) {
             if (showNavigationRail) {
                 NavigationSideBar(
@@ -69,15 +68,15 @@ fun MainScreenView(
                 )
             }
             Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-            )
-            {
+                modifier =
+                    Modifier
+                        .weight(1f)
+                        .fillMaxHeight(),
+            ) {
                 NavigationGraph(
                     navController = navController,
                     snackbarHostState = snackbarHostState,
-                    context = context
+                    context = context,
                 )
             }
         }
@@ -101,7 +100,7 @@ fun NavigationSideBar(
                     Text(
                         text = stringResource(id = item.title),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
                 onClick = {
@@ -114,9 +113,8 @@ fun NavigationSideBar(
                         launchSingleTop = true
                         restoreState = true
                     }
-                }
+                },
             )
         }
     }
 }
-

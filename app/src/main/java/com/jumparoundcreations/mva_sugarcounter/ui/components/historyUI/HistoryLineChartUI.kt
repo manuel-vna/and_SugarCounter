@@ -40,9 +40,8 @@ import org.koin.compose.koinInject
 fun LineChart(
     context: Context,
     savedSugarCountGrouped: List<EntryGroupInt>,
-    sharedPrefsMain: SharedPreferences = koinInject()
+    sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
-
     val graphDataList: List<GraphData> = getGraphDataList(savedSugarCountGrouped)
     // create array that tags the y axis of the graph with gram values:
     // 0g,10g,...,90g = 0 + 18 = 19 gram tags
@@ -59,32 +58,34 @@ fun LineChart(
     val scrollState = rememberScrollState()
     val textMeasurer = rememberTextMeasurer()
 
-    val styleBig = TextStyle(
-        fontSize = 13.sp,
-        fontWeight = FontWeight.Bold,
-        color = drawColor,
-    )
-    val styleSmall = TextStyle(
-        fontSize = 11.sp,
-        fontWeight = FontWeight.Bold,
-        color = drawColor,
-    )
+    val styleBig =
+        TextStyle(
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            color = drawColor,
+        )
+    val styleSmall =
+        TextStyle(
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold,
+            color = drawColor,
+        )
 
     // Draw the XY chart if there is any date given
     if (graphDataList.isNotEmpty()) {
         Box(
-            modifier = Modifier
-                .padding(top = 32.dp, end = 4.dp)
-                .background(backgroundColor)
-                .horizontalScroll(scrollState)
+            modifier =
+                Modifier
+                    .padding(top = 32.dp, end = 4.dp)
+                    .background(backgroundColor)
+                    .horizontalScroll(scrollState),
         ) {
-
             Canvas(
-                modifier = Modifier
-                    .aspectRatio(6 / 1f)
+                modifier =
+                    Modifier
+                        .aspectRatio(6 / 1f),
             ) {
-
-                //DrawScope variables
+                // DrawScope variables
                 val barWidthPix = 1.dp.toPx()
                 val sizeGraphDataList = graphDataList.count()
                 val onePercentHeight = size.height / 100
@@ -102,13 +103,13 @@ fun LineChart(
                     thresholdLineColor = thresholdLineColor,
                     oneWidthSection = oneWidthSection,
                     sizeGraphDataList = sizeGraphDataList,
-                    barWidthPix = barWidthPix
+                    barWidthPix = barWidthPix,
                 )
 
-                //Start: Vertical Drawing
+                // Start: Vertical Drawing
                 var yAxisCount = 1
                 var previousTotalValue: Int = 0
-                graphDataList.forEach { it ->
+                graphDataList.forEach { graphData ->
 
                     // increase value of x-axis by each loop
                     val xAxisPointVerticalLines = oneWidthSection * (yAxisCount)
@@ -117,49 +118,50 @@ fun LineChart(
                         drawColor,
                         xAxisPointVerticalLines,
                         oneHeightSection,
-                        barWidthPix
+                        barWidthPix,
                     )
 
                     drawEntryDatesUnderVerticalLines(
                         textMeasurer,
-                        it,
+                        graphData,
                         styleSmall,
                         xAxisPointVerticalLines,
                         onePercentWidth,
-                        oneHeightSection
+                        oneHeightSection,
                     )
 
-                    val heightDataPoint = getHeightOfDataPoint(
-                        it.valueTotal,
-                        onePercentHeight
-                    )
+                    val heightDataPoint =
+                        getHeightOfDataPoint(
+                            graphData.valueTotal,
+                            onePercentHeight,
+                        )
 
-                    val xAxisPointHorizontalLines = drawDataPoint(
-                        oneWidthSection,
-                        yAxisCount,
-                        path,
-                        lineGraphColor,
-                        heightDataPoint
-                    )
+                    val xAxisPointHorizontalLines =
+                        drawDataPoint(
+                            oneWidthSection,
+                            yAxisCount,
+                            path,
+                            lineGraphColor,
+                            heightDataPoint,
+                        )
 
                     drawTextLabelOfDataPoint(
-                        it,
+                        graphData,
                         textMeasurer,
                         styleSmall,
                         onePercentWidth,
                         previousTotalValue,
                         onePercentHeight,
                         heightDataPoint,
-                        xAxisPointHorizontalLines
+                        xAxisPointHorizontalLines,
                     )
 
-                    previousTotalValue = it.valueTotal
+                    previousTotalValue = graphData.valueTotal
                     yAxisCount++
                 }
-                //END: Vertical Drawing
+                // END: Vertical Drawing
 
-
-                //Start: Horizontal Drawing
+                // Start: Horizontal Drawing
                 var horizontalLinesCount = 0
                 lineGraphYAxisTag.forEach { _ ->
 
@@ -179,35 +181,28 @@ fun LineChart(
                         oneWidthSection,
                         oneHeightSection,
                         sizeGraphDataList,
-                        barWidthPix
+                        barWidthPix,
                     )
 
                     horizontalLinesCount++
-
-
-                } //END: Horizontal Drawing
-
+                } // END: Horizontal Drawing
             } // closing Canvas()
-
         } // closing Box()
-
     } // closing if-query: graphDataList.isNotEmpty()
 
-    //Show this info text to the user when there is no date yet
+    // Show this info text to the user when there is no date yet
     else {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             EmptyDataInfo(stringResource(id = R.string.no_data_yet_description))
         }
     }
-
 } // closing LineChart() composable method
 
-
-//START: Methods called from within CANVAS()
+// START: Methods called from within CANVAS()
 
 /**
  * Draws a line that marks the limit of gram that the user chose
@@ -222,9 +217,8 @@ fun DrawScope.drawThresholdLine(
     thresholdLineColor: Color,
     oneWidthSection: Float,
     sizeGraphDataList: Int,
-    barWidthPix: Float
+    barWidthPix: Float,
 ) {
-
     val thresholdLineHeight: Float =
         onePercentHeight * (90 - sharedPrefsMain.getInt("gramThresholdValue", 50))
 
@@ -232,7 +226,7 @@ fun DrawScope.drawThresholdLine(
         color = thresholdLineColor,
         start = Offset(oneWidthSection, thresholdLineHeight),
         end = Offset(oneWidthSection * sizeGraphDataList, thresholdLineHeight),
-        strokeWidth = barWidthPix * 3
+        strokeWidth = barWidthPix * 3,
     )
 }
 
@@ -245,16 +239,18 @@ fun DrawScope.drawVerticalLinesForMatrix(
     drawColor: Color,
     xAxisPointVerticalLines: Float,
     oneHeightSection: Float,
-    barWidthPix: Float
+    barWidthPix: Float,
 ) {
     drawLine(
         color = drawColor,
         start = Offset(xAxisPointVerticalLines, 0f),
-        end = Offset(
-            xAxisPointVerticalLines,
-            oneHeightSection * 18
-        ), // take x HeightSections
-        strokeWidth = barWidthPix
+        end =
+            Offset(
+                xAxisPointVerticalLines,
+                oneHeightSection * 18,
+            ),
+        // take x HeightSections
+        strokeWidth = barWidthPix,
     )
 }
 
@@ -268,18 +264,19 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
     styleSmall: TextStyle,
     xAxisPointVerticalLines: Float,
     onePercentWidth: Float,
-    oneHeightSection: Float
+    oneHeightSection: Float,
 ) {
     drawText(
         textMeasurer = textMeasurer,
         text = graphDataElement.day,
         style = styleSmall,
-        topLeft = Offset(
-            //subtract x% of the x axis point to have the date
-            // values centered under the vertical lines
-            x = xAxisPointVerticalLines - (onePercentWidth / 2),
-            y = oneHeightSection * 18 // take x height sections
-        )
+        topLeft =
+            Offset(
+                // subtract x% of the x axis point to have the date
+                // values centered under the vertical lines
+                x = xAxisPointVerticalLines - (onePercentWidth / 2),
+                y = oneHeightSection * 18, // take x height sections
+            ),
     )
 }
 
@@ -291,24 +288,25 @@ fun DrawScope.drawEntryDatesUnderVerticalLines(
  */
 fun getHeightOfDataPoint(
     valueTotal: Int,
-    onePercentHeight: Float
+    onePercentHeight: Float,
 ): Float {
-
     val maximalValue: Int
     var valueToSubtractFrom90Percent: Int = 0
 
     maximalValue = 100 // gram sugar
     valueToSubtractFrom90Percent = valueTotal
 
-    return (if (valueTotal <= maximalValue) {
-        // 90 = 90% height line graph, 10% height bottom date line
-        onePercentHeight * (90 - valueToSubtractFrom90Percent)
-    } else {
-        // multiplying one percent of the height with '-10'
-        // sets the data point above the top x-axis
-        onePercentHeight * -10
-        // by having a minus value on the vertical axis
-    }) as Float
+    return (
+        if (valueTotal <= maximalValue) {
+            // 90 = 90% height line graph, 10% height bottom date line
+            onePercentHeight * (90 - valueToSubtractFrom90Percent)
+        } else {
+            // multiplying one percent of the height with '-10'
+            // sets the data point above the top x-axis
+            onePercentHeight * -10
+            // by having a minus value on the vertical axis
+        }
+    ) as Float
 }
 
 /**
@@ -320,16 +318,16 @@ fun DrawScope.drawDataPoint(
     yAxisCount: Int,
     path: Path,
     lineGraphColor: Color,
-    heightDataPoint: Float
+    heightDataPoint: Float,
 ): Float {
-    //Start: Data point lines
+    // Start: Data point lines
     val xAxisPointHorizontalLines = oneWidthSection * (yAxisCount)
     if (yAxisCount == 1) {
         path.moveTo(xAxisPointHorizontalLines, heightDataPoint)
     }
     path.lineTo(xAxisPointHorizontalLines, heightDataPoint)
     drawPath(path = path, color = lineGraphColor, style = Stroke(2.dp.toPx()))
-    //End: Data point lines
+    // End: Data point lines
 
     return xAxisPointHorizontalLines
 }
@@ -343,23 +341,25 @@ fun DrawScope.drawTextLabelOfDataPoint(
     textMeasurer: TextMeasurer,
     styleSmall: TextStyle,
     onePercentWidth: Float,
-    previousTotalValue: Int, //Double
+    previousTotalValue: Int, // Double
     onePercentHeight: Float,
     heightDataPoint: Float,
-    xAxisPointHorizontalLines: Float
+    xAxisPointHorizontalLines: Float,
 ) {
     drawText(
         textMeasurer = textMeasurer,
         text = graphDataElement.valueTotal.toString(),
         style = styleSmall,
-        topLeft = Offset(
-            x = xAxisPointHorizontalLines - (onePercentWidth / 2),
-            y = if (previousTotalValue < graphDataElement.valueTotal) {
-                heightDataPoint - onePercentHeight * 2
-            } else {
-                heightDataPoint
-            }
-        )
+        topLeft =
+            Offset(
+                x = xAxisPointHorizontalLines - (onePercentWidth / 2),
+                y =
+                    if (previousTotalValue < graphDataElement.valueTotal) {
+                        heightDataPoint - onePercentHeight * 2
+                    } else {
+                        heightDataPoint
+                    },
+            ),
     )
 }
 
@@ -374,25 +374,27 @@ fun DrawScope.drawYAxisLabels(
     onePercentHeight: Float,
     textMeasurer: TextMeasurer,
     styleBig: TextStyle,
-    styleSmall: TextStyle
+    styleSmall: TextStyle,
 ) {
     var xAxisCount = 0
     lineGraphYAxisTag.forEach { yAxis ->
         drawText(
             textMeasurer = textMeasurer,
             text = yAxis,
-            style = if (xAxisCount % 2 == 0) {
-                styleBig
-            } else {
-                styleSmall
-            },
-            topLeft = Offset(
-                // Position tags horizontally in the middle (onePercentWidth / 2)
-                // of the first horizontal section
-                x = (onePercentWidth / 2),
-                // Position tags to the middle of the horizontal lines
-                y = ((oneHeightSection * xAxisCount) - onePercentHeight)
-            )
+            style =
+                if (xAxisCount % 2 == 0) {
+                    styleBig
+                } else {
+                    styleSmall
+                },
+            topLeft =
+                Offset(
+                    // Position tags horizontally in the middle (onePercentWidth / 2)
+                    // of the first horizontal section
+                    x = (onePercentWidth / 2),
+                    // Position tags to the middle of the horizontal lines
+                    y = ((oneHeightSection * xAxisCount) - onePercentHeight),
+                ),
         )
         xAxisCount++
     }
@@ -409,46 +411,52 @@ fun DrawScope.drawHorizontalLinesForMatrix(
     oneWidthSection: Float,
     oneHeightSection: Float,
     sizeGraphDataList: Int,
-    barWidthPix: Float
+    barWidthPix: Float,
 ) {
     // do not draw last horizontal lines at the bottom which are the 19th and 20th line
     if (horizontalLinesCount <= 18) {
         drawLine(
             drawColor,
-            start = Offset(
-                oneWidthSection,
-                oneHeightSection * horizontalLinesCount
-            ),
-            end = Offset(
-                oneWidthSection * sizeGraphDataList,
-                oneHeightSection * horizontalLinesCount
-            ),
-            strokeWidth = barWidthPix
+            start =
+                Offset(
+                    oneWidthSection,
+                    oneHeightSection * horizontalLinesCount,
+                ),
+            end =
+                Offset(
+                    oneWidthSection * sizeGraphDataList,
+                    oneHeightSection * horizontalLinesCount,
+                ),
+            strokeWidth = barWidthPix,
         )
     }
 }
 
-//END: Methods called from within CANVAS()
-
+// END: Methods called from within CANVAS()
 
 fun getGraphDataList(entryList: List<EntryGroupInt>): List<GraphData> {
-    val returnList = entryList.take(60).mapIndexed { id, entryGroup ->
-        GraphData(
-            id = id,
-            valueTotal = HelperMethods.calculateTotalGramPerDayBlockTemp(
-                entryGroup.entryList
-            ),
-            day = HelperMethods.convertTimestampToDateString(
-                entryGroup.entryList.first().currentTimestamp,
-                if (HelperMethods.getSystemLanguage() == "en") {
-                    "EEEE \n MM/dd"
-                } else {
-                    "EEEE \n dd.MM"
-                }
-            ),
-            date = entryGroup.date
-        )
-    }.sortedByDescending { it.date }
+    val returnList =
+        entryList
+            .take(60)
+            .mapIndexed { id, entryGroup ->
+                GraphData(
+                    id = id,
+                    valueTotal =
+                        HelperMethods.calculateTotalGramPerDayBlockTemp(
+                            entryGroup.entryList,
+                        ),
+                    day =
+                        HelperMethods.convertTimestampToDateString(
+                            entryGroup.entryList.first().currentTimestamp,
+                            if (HelperMethods.getSystemLanguage() == "en") {
+                                "EEEE \n MM/dd"
+                            } else {
+                                "EEEE \n dd.MM"
+                            },
+                        ),
+                    date = entryGroup.date,
+                )
+            }.sortedByDescending { it.date }
 
     return returnList
 }

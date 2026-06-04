@@ -15,22 +15,18 @@ fun SugarEntry.toIntModel(): SugarEntryInt =
         entryType = entryType,
         gram = gram.toInt(),
         quantity = quantity.toInt(),
-        gramTotal = gramTotal.toInt()
+        gramTotal = gramTotal.toInt(),
     )
 
 fun EntryGroup.toIntModel(): EntryGroupInt =
     EntryGroupInt(
         date = date,
         dayDisplayFormat = dayDisplayFormat,
-        entryList = entryList.map { it.toIntModel() }
+        entryList = entryList.map { it.toIntModel() },
     )
 
-fun List<EntryGroup>.toIntModel(): List<EntryGroupInt> =
-    map { it.toIntModel() }
+fun List<EntryGroup>.toIntModel(): List<EntryGroupInt> = map { it.toIntModel() }
 
-fun Double.roundToOneDecimal(): Double =
-    round(this * 10) / 10
+fun Double.roundToOneDecimal(): Double = round(this * 10) / 10
 
-fun String.toDoubleFormatted(): Double {
-    return this.replace(",", ".").toDouble()
-}
+fun String.toDoubleFormatted(): Double = this.replace(",", ".").toDouble()

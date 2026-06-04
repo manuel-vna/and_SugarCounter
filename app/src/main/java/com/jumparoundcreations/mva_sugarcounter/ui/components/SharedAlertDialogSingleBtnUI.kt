@@ -11,7 +11,7 @@ fun ShowAlertDialogSingleBtn(
     dialogDescription: String,
     confirmBtnText: String,
     confirmBtnAction: () -> Unit,
-    onDismissRequest: () -> Unit
+    onDismissRequest: () -> Unit,
 ) {
     /**
      * General method that shows an alert dialog wit one button: Confirm
@@ -27,5 +27,6 @@ fun ShowAlertDialogSingleBtn(
         },
         text = {
             Text(dialogDescription)
-        })
+        },
+    )
 }

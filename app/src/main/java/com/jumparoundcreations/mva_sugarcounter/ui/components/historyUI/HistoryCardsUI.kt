@@ -26,18 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListUI
-
 
 @Composable
 fun CardsScreen(
     onAction: (EntryListDisplayingIntents) -> Unit,
     data: SuccessData,
-    viewModel: EntryListDisplayingViewModel
 ) {
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
             item {
@@ -45,20 +41,19 @@ fun CardsScreen(
                     currentScreen = Screens.HISTORY,
                     backgroundColorPrimary = false,
                     data = data,
-                    viewModel = viewModel
+                    onAction = onAction,
                 )
             }
-
         }
 
         Row(
             modifier = Modifier.align(Alignment.BottomStart),
-            verticalAlignment = Alignment.Bottom
+            verticalAlignment = Alignment.Bottom,
         ) {
             FloatingActionButton(
                 onClick = {
                     onAction(
-                        EntryListDisplayingIntents.ChangeSearchFieldShown
+                        EntryListDisplayingIntents.ChangeSearchFieldShown,
                     )
                 },
                 modifier = Modifier.padding(16.dp),
@@ -66,7 +61,7 @@ fun CardsScreen(
             ) {
                 Icon(
                     Icons.Default.Search,
-                    contentDescription = stringResource(R.string.accessibility_search)
+                    contentDescription = stringResource(R.string.accessibility_search),
                 )
             }
 
@@ -80,22 +75,23 @@ fun CardsScreen(
                     onValueChange = {
                         onAction(
                             EntryListDisplayingIntents.ChangeSearchTextFieldText(
-                                newText = it
-                            )
+                                newText = it,
+                            ),
                         )
                         onAction(EntryListDisplayingIntents.FilterEntryListInHistory)
                     },
                     label = { Text("Search") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                     singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
+                    colors =
+                        OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        ),
                 )
             }
         }
     }
-
 }
