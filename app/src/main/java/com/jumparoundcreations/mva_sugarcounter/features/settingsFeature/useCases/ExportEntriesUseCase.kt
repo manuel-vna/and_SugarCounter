@@ -33,7 +33,7 @@ class ExportEntriesUseCase {
                 allEntries = allEntriesSugar,
                 fileName = fileNameSugar,
                 settingsVM = settingsVM,
-                header = "Date,Name,Mode,Gram perHundred/perPiece,QuantityGram/AmountNumber,GramTotal\n",
+                header = "Date,Name,Mode,GramPerHundred,QuantityInGram,GramPerPiece,AmountAsANumber,Gram total\n",
             )
         } else {
             // export sugar entries
