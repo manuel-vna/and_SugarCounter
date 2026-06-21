@@ -161,9 +161,10 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 
 //noinspection UseTomlInstead
 dependencies {
+    implementation(libs.androidx.concurrent.futures)
+    implementation(libs.androidx.concurrent.futures.ktx)
 
     implementation(libs.androidx.material3.window.size.class1.android)
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
