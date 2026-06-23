@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.rememberNavController
@@ -84,7 +85,7 @@ class SettingsExportE2ETest {
 
     @Test
     fun exportProcess_createsCsvFileWithCorrectContent() {
-        // This test is specifically designed for Android R+ (API 30+) as requested
+        // This test is for Android R+ (API level 30+)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return
 
         val exportButtonLabel = context.getString(R.string.export_settings_button)
@@ -102,16 +103,19 @@ class SettingsExportE2ETest {
 
         // 3. Click the button on the Bottom Sheet that starts the export
         // We wait for the specific clickable button in the bottom sheet to appear.
-        // It has trailing spaces "Export entries   " and a click action.
-        val exportBtnMatcher = hasText(exportButtonLabel, substring = true) and hasClickAction()
-        
+        // Since you removed the trailing spaces, we now use an exact text match.
+        // We still use 'and hasClickAction()' to distinguish the Button from the sheet's Title text.
+        val exportBtnMatcher = hasText(exportButtonLabel) and hasClickAction()
         composeTestRule.waitUntil(10000) {
             composeTestRule.onAllNodes(exportBtnMatcher).fetchSemanticsNodes().isNotEmpty()
         }
-        
+        // Detecting the export button (semantic node) on the export bottom sheet:
+        // We get all nodes that satisfy our matcher string and save it in a nodes collection
         val nodes = composeTestRule.onAllNodes(exportBtnMatcher)
-        nodes[nodes.fetchSemanticsNodes().size - 1].performClick()
-
+        // If there are still other nodes found (e.g. the one on the main screen), we pick the last
+        // one in the collection. The last one is correct because the main screen button is found
+        // first in the semantic nodes tree
+        nodes.onLast().performClick()
 
         // 4. Wait for export to finish (BottomSheet with success message should appear)
         val successText = context.getString(R.string.export_bottom_sheet_success)
