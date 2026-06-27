@@ -2,8 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
@@ -71,11 +69,10 @@ class CreateNewEntryTest {
         
         // The total is displayed as "19.7g" (exact match on the row) 
         // OR inside the total summary as "total: 19.7" (depending on locale)
-        val expectedTotalValue = "19.7"
+        val expectedSubstring = "19."
         val gramUnit = context.getString(R.string.gram_unit_short) // "g"
 
         composeTestRule.setContent {
-            val snackbarHostState = remember { SnackbarHostState() }
             SugarCounterTheme(dynamicColor = false) {
                 MainScreenView(context = context, showNavigationRail = false)
             }
@@ -104,7 +101,7 @@ class CreateNewEntryTest {
         // We look for "19." as a substring. 
         // Note: It appears twice (in the entry row and in the day's total summary).
         // We verify that both instances exist by asserting the count is 2.
-        composeTestRule.onAllNodesWithText("19.", substring = true).assertCountEquals(2)
+        composeTestRule.onAllNodesWithText(expectedSubstring, substring = true).assertCountEquals(2)
         composeTestRule.onAllNodesWithText(gramUnit, substring = true).fetchSemanticsNodes().isNotEmpty()
 
         // 4. Verify category on Category Screen
@@ -114,4 +111,5 @@ class CreateNewEntryTest {
             .performClick()
         composeTestRule.onNodeWithText(categoryName).assertExists()
     }
+
 }
