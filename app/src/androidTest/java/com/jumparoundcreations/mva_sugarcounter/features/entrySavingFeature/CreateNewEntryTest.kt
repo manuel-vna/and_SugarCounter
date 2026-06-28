@@ -112,4 +112,10 @@ class CreateNewEntryTest {
         composeTestRule.onNodeWithText(categoryName).assertExists()
     }
 
+    // TODO: Further test scenarios
+    // fun entryWithGramPerUnit
+    // fun entryWithPresentDate()
+    // fun entryWithAlreadyExistingCategory()
+    // Unhappy paths: Wrong input tests
+
 }
