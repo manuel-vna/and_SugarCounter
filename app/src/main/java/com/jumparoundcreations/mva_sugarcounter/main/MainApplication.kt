@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.main
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.work.Configuration
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.di.appModule
@@ -38,7 +39,7 @@ class MainApplication :
         get() {
             return Configuration
                 .Builder()
-                .setMinimumLoggingLevel(android.util.Log.VERBOSE)
+                .setMinimumLoggingLevel(Log.VERBOSE)
                 .setWorkerFactory(workerFactory)
                 .build()
         }

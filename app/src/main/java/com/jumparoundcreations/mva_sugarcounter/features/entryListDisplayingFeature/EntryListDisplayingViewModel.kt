@@ -137,7 +137,7 @@ class EntryListDisplayingViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             getEntryGroupPerDayUseCase(
-                timeFrameBeginning = TimeConstants.NINETY_DAYS_IN_SECONDS,
+                timeFrameBeginning = TimeConstants.TIMEFRAME_OF_SHOWN_ENTRY_CARDS,
             ).catch { throwable ->
                 _entryListDisplayingStates.update {
                     EntryListDisplayingStates.Error(
