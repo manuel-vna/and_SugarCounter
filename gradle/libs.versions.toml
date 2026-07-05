@@ -22,6 +22,7 @@ koinTestJunit4 = "4.2.1"
 kotlin = "2.4.0"
 ksp = "2.3.4"
 ktlint = "14.2.0"
+ktor = "3.1.1"
 lifecycleRuntimeKtx = "2.10.0"
 material = "1.14.0"
 material3Android = "1.4.0"
@@ -96,6 +97,11 @@ junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engi
 junitFive-android-core = { group = "de.mannodermaus.junit5", name = "android-test-core", version.ref = "junitFiveTesting" }
 junitFive-test-runner = { group = "de.mannodermaus.junit5", name = "android-test-runner", version.ref = "junitFiveTesting" }
 androidx-material3-window-size-class1-android = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3WindowSizeClassAndroid" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 [bundles]
 room = ["androidx-room-common", "androidx-room-ktx", "androidx-room-runtime", "androidx-room-testing"]
@@ -109,6 +115,7 @@ androidJunitFive = { id = "de.mannodermaus.android-junit5", version.ref = "junit
 aboutLibraries = { id = "com.mikepenz.aboutlibraries.plugin.android", version.ref = "aboutLibraries" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 
 
