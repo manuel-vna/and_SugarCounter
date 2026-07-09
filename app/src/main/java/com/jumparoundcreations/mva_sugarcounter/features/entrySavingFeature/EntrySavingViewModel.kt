@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GetEntryByApiResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.ScanResult
@@ -14,6 +15,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryFromApiUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
@@ -33,6 +35,7 @@ import org.koin.core.component.inject
 class EntrySavingViewModel(
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase,
+    private val getEntryFromApiUseCase: GetEntryFromApiUseCase,
     private val saveEntryInDatabaseUseCase: SaveEntryInDatabaseUseCase,
     private val saveCategoryInDatabaseUseCase: SaveCategoryInDatabaseUseCase,
     private val checkUserInputUseCase: CheckUserInputUseCase,
@@ -149,10 +152,37 @@ class EntrySavingViewModel(
                     getEntryByCategory(result.category)
                 }
 
-                is ScanResult.NoCategoryForBarcode -> {
+                is ScanResult.ScanResultNoEntryInDbForBarcode -> {
                     actionSetBarcodeState(result.barcode)
-                    _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoCategoryForBarcode)
-                    actionBarcodeNotPresentInDb()
+
+                    val apiResult = getEntryFromApiUseCase(
+                        barcode = result.barcode
+                    )
+
+                    when (apiResult) {
+                        is GetEntryByApiResult.ProductFound -> {
+                            actionSetBarcodeState(result.barcode)
+                            actionSetCategoryForBarcode(apiResult.category)
+                            _entrySavingStates.update { current ->
+                                current.copy(
+                                    entryFieldGram = apiResult.gram.toString(),
+                                    gramCountModeTabIndex =
+                                        if (apiResult.entryType == GramCountMode.PerHundred) 0 else 1,
+                                )
+                            }
+                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoEntryInDbForBarcode)
+
+                        }
+
+                        is GetEntryByApiResult.ProductNotFound -> {
+                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoProductFoundViaApi)
+                            actionBarcodeNotPresentInDb()
+                        }
+
+                        else -> {
+                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
+                        }
+                    }
                 }
 
                 is ScanResult.Failed -> {

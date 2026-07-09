@@ -6,7 +6,7 @@ sealed class ScanResult {
         val barcode: String,
     ) : ScanResult()
 
-    data class NoCategoryForBarcode(
+    data class ScanResultNoEntryInDbForBarcode(
         val barcode: String,
     ) : ScanResult()
 
