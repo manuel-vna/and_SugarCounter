@@ -22,7 +22,7 @@ class GetEntryFromApiUseCase(
                         return GetEntryByApiResult.ProductNotFound
                     }
 
-                    if (serving_quantity != null && sugars_serving != null){
+                    if (serving_quantity != null && sugars_serving != null && sugars_100g != sugars_serving){
                         return GetEntryByApiResult.ProductFound(
                             entryType = GramCountMode.PerPiece,
                             category = category,

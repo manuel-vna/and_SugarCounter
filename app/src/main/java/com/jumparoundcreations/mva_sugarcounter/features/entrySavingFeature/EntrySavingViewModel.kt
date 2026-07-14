@@ -150,9 +150,11 @@ class EntrySavingViewModel(
                     actionSetBarcodeState(result.barcode)
                     actionSetCategoryForBarcode(result.category)
                     getEntryByCategory(result.category)
+                    println("FoundCategoryForBarcode")
                 }
 
                 is ScanResult.ScanResultNoEntryInDbForBarcode -> {
+                    println("ScanResultNoEntryInDbForBarcode")
                     actionSetBarcodeState(result.barcode)
 
                     val apiResult = getEntryFromApiUseCase(
