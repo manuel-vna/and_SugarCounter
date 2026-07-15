@@ -11,6 +11,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryFromApiUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
@@ -30,6 +31,8 @@ class EntrySavingViewModelTest {
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
     private val getEntryByCategoryUseCase = mockk<GetEntryByCategoryUseCase>()
     private val saveEntryInDatabaseUseCase = mockk<SaveEntryInDatabaseUseCase>()
+
+    private val getEntryFromApiUseCase = mockk<GetEntryFromApiUseCase>()
     private val saveCategoryInDatabaseUseCase = mockk<SaveCategoryInDatabaseUseCase>()
     private val checkUserInputUseCase = mockk<CheckUserInputUseCase>()
     private val checkForDefaultSavingValuesUseCase = mockk<CheckForDefaultSavingValuesUseCase>()
@@ -45,6 +48,7 @@ class EntrySavingViewModelTest {
             EntrySavingViewModel(
                 mockScanBarcodeUseCase,
                 getEntryByCategoryUseCase,
+                getEntryFromApiUseCase,
                 saveEntryInDatabaseUseCase,
                 saveCategoryInDatabaseUseCase,
                 checkUserInputUseCase,
