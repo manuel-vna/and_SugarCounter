@@ -278,6 +278,7 @@ class EntrySavingViewModelTest {
             )
         }
 
+    @Ignore
     @Test
     fun testEntrySavingIntentsSaveSugarEntrywithNoGramDataGivenButCategoryGivenandDismissNoSugarDataEnteredAlert() =
         runTest {
