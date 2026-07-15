@@ -106,7 +106,7 @@ fun BarcodeInfoSheet(
                 modifier =
                     Modifier
                         .align(Alignment.CenterVertically),
-                text = stringResource(id = R.string.no_barcode_yet_info_card, barcodeNumber),
+                text = stringResource(id = R.string.no_barcode_yet_info_card),
             )
 
             IconButton(

@@ -6,9 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,17 +30,14 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
-import org.koin.compose.koinInject
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-@Composable
-fun EntryListUI(
+fun LazyListScope.entryListItems(
     currentScreen: Screens,
-    backgroundColorPrimary: Boolean,
     data: SuccessData,
     onAction: (EntryListDisplayingIntents) -> Unit,
-    sharedPrefsMain: SharedPreferences = koinInject(),
+    sharedPrefsMain: SharedPreferences,
 ) {
     val entryGroupList =
         if (currentScreen == Screens.COUNTER) {
@@ -50,25 +47,27 @@ fun EntryListUI(
         }
 
     if (currentScreen == Screens.HISTORY && data.entriesGroupedPerDayHistory.isEmpty()) {
-        Column(
-            modifier =
-                Modifier
-                    .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
+        item {
+            Column(
+                modifier =
+                    Modifier
+                        .fillParentMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                EmptyDataInfo(stringResource(id = R.string.no_cards_yet_description))
+            }
         }
     } else {
-        Column {
-            var previousMonth: YearMonth? = null
+        var previousMonth: YearMonth? = null
 
-            entryGroupList.forEach { entryGroup ->
+        entryGroupList.forEach { entryGroup ->
 
-                if (currentScreen != Screens.COUNTER) {
-                    val currentMonth: YearMonth =
-                        HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
-                    if (previousMonth == null || currentMonth != previousMonth) {
+            if (currentScreen != Screens.COUNTER) {
+                val currentMonth: YearMonth =
+                    HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
+                if (previousMonth == null || currentMonth != previousMonth) {
+                    item(key = "month_${currentMonth}_${entryGroup.date}") {
                         Text(
                             text =
                                 currentMonth.format(
@@ -79,18 +78,16 @@ fun EntryListUI(
                             modifier = Modifier.padding(start = 8.dp, top = 12.dp, bottom = 4.dp),
                         )
                     }
-                    previousMonth = currentMonth
                 }
+                previousMonth = currentMonth
+            }
 
+            item(key = entryGroup.date) {
                 val totalGramPerDayBlock =
                     HelperMethods.calculateTotalGramPerDayBlock(
                         entryGroup.entryList,
                     )
-                var thresholdValue = 0
-
-                if (entryGroup.entryList.isNotEmpty()) {
-                    thresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
-                }
+                val thresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50)
 
                 Card(
                     modifier =
@@ -105,12 +102,7 @@ fun EntryListUI(
                         },
                     colors =
                         CardDefaults.cardColors(
-                            containerColor =
-                                if (backgroundColorPrimary) {
-                                    MaterialTheme.colorScheme.surface
-                                } else {
-                                    MaterialTheme.colorScheme.surface
-                                },
+                            containerColor = MaterialTheme.colorScheme.surface,
                         ),
                 ) {
                     Row(
@@ -242,8 +234,10 @@ fun EntryListUI(
             }
         }
     }
+}
 
-// Card Item Bottom Sheet
+@Composable
+fun EntryListBottomSheet(data: SuccessData, onAction: (EntryListDisplayingIntents) -> Unit) {
     if (data.showCardItemBottomSheet) {
         EntryListItemUI(
             data = data,

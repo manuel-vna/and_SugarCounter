@@ -38,6 +38,8 @@ object TimeConstants {
     const val DAY_ONE_IN_MILLISECONDS = 86400000
     const val ONE_DAY_IN_SECONDS = 86400L
     const val NINETY_DAYS_IN_SECONDS = 7776000L
+
+    const val TIMEFRAME_OF_SHOWN_ENTRY_CARDS = 31557600L // = 1 year in seconds
     const val YEAR_ONE_IN_SECONDS = 31536000L
 
     const val DATE_SHORT_DAY = " EE dd.MM."

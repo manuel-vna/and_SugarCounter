@@ -51,7 +51,6 @@ lateinit var uri: Uri
 fun SettingsPostExportBottomSheet(
     context: Context,
     settingsVM: SettingsVM,
-    descriptionText: String,
     buttonIcon: Int,
 ) {
     val settingsStates by settingsVM.settingsStates.collectAsState()
@@ -139,7 +138,7 @@ fun SettingsPostExportBottomSheet(
                     },
                 ) {
                     Text(
-                        text = "$descriptionText   ",
+                        text = stringResource(R.string.export_settings_button),
                     )
                     Icon(
                         painter = painterResource(id = buttonIcon),

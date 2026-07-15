@@ -87,9 +87,13 @@ fun CounterUserInformation(
     LaunchedEffect(snackbarHostState) {
         scanUiEvents.collect { event ->
             when (event) {
-                is ScanUiEvents.ScanResultNoCategoryForBarcode -> {
+                is ScanUiEvents.ScanResultNoEntryInDbForBarcode -> {
+                    println("ScanUiEvents.ScanResultNoEntryInDbForBarcode")
+                }
+
+                is ScanUiEvents.ScanResultNoProductFoundViaApi -> {
                     snackbarHostState.showSnackbar(
-                        message = "ToDo: ScanResultNoCategoryForBarcode",
+                        message = context.getString(R.string.no_barcode_yet_info_card),
                         duration = SnackbarDuration.Short,
                     )
                 }
