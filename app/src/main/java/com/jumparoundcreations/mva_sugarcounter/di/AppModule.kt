@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
@@ -20,6 +21,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.CheckUserInputUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.DisplayAllCategoriesUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryByCategoryUseCase
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.GetEntryFromApiUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveCategoryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
@@ -46,6 +48,7 @@ val appModule =
                 checkForDefaultSavingValuesUseCase = get(),
                 displayAllCategoriesUseCase = get(),
                 checkDailyGramThresholdUseCase = get(),
+                getEntryFromApiUseCase = get(),
             )
         }
         viewModel {
@@ -76,6 +79,7 @@ val appModule =
         single(named("imprint")) { provideHtmlContent(get(), R.raw.imprint) }
         single { ScanBarcodeUseCase() }
         single { GetEntryByCategoryUseCase(get()) }
+        single { GetEntryFromApiUseCase(get()) }
         single { SaveEntryInDatabaseUseCase(get()) }
         single { SaveCategoryInDatabaseUseCase(get()) }
         single { CheckUserInputUseCase() }
@@ -98,8 +102,8 @@ fun provideBarcodeScanner(application: Application): GmsBarcodeScanner {
         GmsBarcodeScannerOptions
             .Builder()
             .setBarcodeFormats(
-                com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_13,
-                com.google.mlkit.vision.barcode.common.Barcode.FORMAT_EAN_8,
+                Barcode.FORMAT_EAN_13,
+                Barcode.FORMAT_EAN_8,
             ).enableAutoZoom()
             .build()
     val scanner = GmsBarcodeScanning.getClient(application, options)

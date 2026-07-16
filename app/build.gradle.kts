@@ -2,13 +2,12 @@ import java.util.regex.Pattern
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
     alias(libs.plugins.aboutLibraries)
     alias(libs.plugins.ktlint)
-    id("kotlin-kapt")
+    alias(libs.plugins.kotlin.serialization)
     id("androidx.room")
     id("de.mannodermaus.android-junit5")
 }
@@ -20,7 +19,7 @@ val versionNameValue = getAppVersionNameValue(gitVersion)
 
 android {
     namespace = "com.jumparoundcreations.mva_sugarcounter"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.jumparoundcreations.mva_sugarcounter"
@@ -66,12 +65,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlin {
         compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
         }
     }
     buildFeatures {
@@ -163,14 +162,15 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 
 //noinspection UseTomlInstead
 dependencies {
-
+    implementation(libs.androidx.concurrent.futures)
+    implementation(libs.androidx.concurrent.futures.ktx)
     implementation(libs.androidx.material3.window.size.class1.android)
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.junit.jupiter)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.truth)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     androidTestImplementation(libs.androidx.work.testing)
     androidTestImplementation(libs.mockk.android)
     debugImplementation(libs.androidx.ui.test.manifest)
@@ -202,6 +202,11 @@ dependencies {
     implementation(libs.jetbrans.kotlinx)
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.material)
     implementation(libs.sldw.onboarding)
     implementation(platform(libs.androidx.compose.bom))

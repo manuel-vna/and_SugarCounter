@@ -36,7 +36,7 @@ class ScanBarcodeUseCase : KoinComponent {
                         val category = dao.getCategoryByBarcodeNumber(raw)
                         if (category.isNullOrEmpty()) {
                             cont.resume(
-                                ScanResult.NoCategoryForBarcode(
+                                ScanResult.ScanResultNoEntryInDbForBarcode(
                                     barcode.rawValue.toString(),
                                 ),
                             )

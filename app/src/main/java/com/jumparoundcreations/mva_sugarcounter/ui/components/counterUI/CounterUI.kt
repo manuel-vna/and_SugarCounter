@@ -1,19 +1,18 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.counterUI
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
@@ -36,9 +35,11 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingViewModel
-import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListUI
+import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListBottomSheet
+import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.entryListItems
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun Counter(
@@ -46,6 +47,7 @@ fun Counter(
     snackbarHostState: SnackbarHostState,
     entrySavingViewModel: EntrySavingViewModel = koinViewModel(),
     entryListDisplayingViewModel: EntryListDisplayingViewModel,
+    sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
     // States
     val interactionSource = remember { MutableInteractionSource() }
@@ -60,11 +62,11 @@ fun Counter(
     val darkMode = HelperMethods.checkForUIMode(context)
     val textColor = if (darkMode == 33) Color.White else Color.Black
 
-    Column(
+    LazyColumn(
         modifier =
             Modifier
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
+                .fillMaxSize()
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
@@ -76,34 +78,31 @@ fun Counter(
                                 ),
                         )
                     },
-                ).verticalScroll(rememberScrollState()),
+                ),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 6.dp),
-            Arrangement.Absolute.SpaceAround,
-        ) {
-            DatePicker(
-                onAction = entrySavingViewModel::onAction,
-                entrySavingStates = entrySavingStates,
-                textColor = textColor,
-            )
+        item {
+            Row(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 6.dp, top = 8.dp),
+                Arrangement.Absolute.SpaceAround,
+            ) {
+                DatePicker(
+                    onAction = entrySavingViewModel::onAction,
+                    entrySavingStates = entrySavingStates,
+                    textColor = textColor,
+                )
 
-            Barcode(
-                onAction = entrySavingViewModel::onAction,
-                textColor = textColor,
-            )
+                Barcode(
+                    onAction = entrySavingViewModel::onAction,
+                    textColor = textColor,
+                )
+            }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 6.dp),
-            horizontalArrangement = Arrangement.Center,
-        ) {
+        item {
             if (entrySavingStates.barcodeNotPresentInDb) {
                 BarcodeInfoSheet(
                     onAction = entrySavingViewModel::onAction,
@@ -113,35 +112,29 @@ fun Counter(
             }
         }
 
-        Row(
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, bottom = 4.dp),
-        ) {
-            CategoryDropdownField(
-                context = context,
+        item {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                CategoryDropdownField(
+                    context = context,
+                    onAction = entrySavingViewModel::onAction,
+                    entrySavingStates = entrySavingStates,
+                    keyboardController = keyboardController,
+                )
+            }
+        }
+
+        item {
+            TabRow(
                 onAction = entrySavingViewModel::onAction,
                 entrySavingStates = entrySavingStates,
-                keyboardController = keyboardController,
             )
         }
 
-        TabRow(
-            onAction = entrySavingViewModel::onAction,
-            entrySavingStates = entrySavingStates,
-        )
-
-        Row(
-            modifier =
-                Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-            Arrangement.SpaceEvenly,
-        ) {
+        item {
             Button(
                 modifier =
                     Modifier
+                        .padding(vertical = 8.dp)
                         .width(160.dp),
                 onClick = {
                     entrySavingViewModel.onAction(EntrySavingIntents.SaveSugarEntry)
@@ -158,35 +151,44 @@ fun Counter(
             }
         }
 
-        when (entryListDisplayingStates) {
+        when (val states = entryListDisplayingStates) {
             is EntryListDisplayingStates.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(90.dp),
-                    )
+                item {
+                    Box(
+                        modifier = Modifier.fillParentMaxHeight(0.4f).fillMaxWidth(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(90.dp),
+                        )
+                    }
                 }
             }
 
             is EntryListDisplayingStates.Success -> {
-                EntryListUI(
+                entryListItems(
                     currentScreen = Screens.COUNTER,
-                    backgroundColorPrimary = false,
-                    data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
+                    data = states.data,
                     onAction = entryListDisplayingViewModel::onAction,
+                    sharedPrefsMain = sharedPrefsMain
                 )
             }
 
             is EntryListDisplayingStates.Error -> {
-                Text(
-                    text =
-                        "Error: " +
-                            (entryListDisplayingStates as EntryListDisplayingStates.Error).message,
-                )
+                item {
+                    Text(
+                        text = "Error: " + states.message,
+                    )
+                }
             }
         }
+    }
+
+    if (entryListDisplayingStates is EntryListDisplayingStates.Success) {
+        EntryListBottomSheet(
+            data = (entryListDisplayingStates as EntryListDisplayingStates.Success).data,
+            onAction = entryListDisplayingViewModel::onAction
+        )
     }
 
     CounterUserInformation(

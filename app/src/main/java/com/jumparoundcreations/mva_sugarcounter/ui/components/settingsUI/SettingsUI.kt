@@ -43,7 +43,6 @@ fun SettingsUI(
             SettingsPostExportBottomSheet(
                 context = context,
                 settingsVM = settingsVM,
-                descriptionText = stringResource(R.string.export_settings_button),
                 buttonIcon = R.drawable.baseline_read_more_24,
             )
 

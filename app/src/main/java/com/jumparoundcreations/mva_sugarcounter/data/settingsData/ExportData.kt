@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -114,16 +115,34 @@ object ExportData : KoinComponent {
                     // END: Variables for ProgressIndicator
 
                     for (entry in allEntries) {
-                        outputStream.write(
-                            (
-                                "${entry.date}," +
-                                    "${entry.category}," +
-                                    "perHundred," +
-                                    "${entry.gram}," +
-                                    "${entry.quantity}," +
-                                    "${entry.gramTotal}\n"
-                            ).toByteArray(),
-                        )
+
+                        if (entry.entryType == GramCountMode.PerHundred){
+                            outputStream.write(
+                                (
+                                        "${entry.date}," +
+                                        "${entry.category}," +
+                                        "${entry.entryType}," +
+                                        "${entry.gram}," +
+                                        "${entry.quantity}," +
+                                                "," +
+                                                "," +
+                                        "${entry.gramTotal}\n"
+                                        ).toByteArray(),
+                            )
+                        } else {
+                            outputStream.write(
+                                (
+                                        "${entry.date}," +
+                                                "${entry.category}," +
+                                                "${entry.entryType}," +
+                                                "," +
+                                                "," +
+                                                "${entry.gram}," +
+                                                "${entry.quantity}," +
+                                                "${entry.gramTotal}\n"
+                                        ).toByteArray(),
+                            )
+                        }
 
                         // progress indicator
                         count++

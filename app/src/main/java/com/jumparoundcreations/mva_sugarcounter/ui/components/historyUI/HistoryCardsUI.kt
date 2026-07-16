@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
+import android.content.SharedPreferences
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -27,24 +28,27 @@ import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.Screens
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
-import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListUI
+import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EntryListBottomSheet
+import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.entryListItems
+import org.koin.compose.koinInject
 
 @Composable
 fun CardsScreen(
     onAction: (EntryListDisplayingIntents) -> Unit,
     data: SuccessData,
+    sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn {
-            item {
-                EntryListUI(
-                    currentScreen = Screens.HISTORY,
-                    backgroundColorPrimary = false,
-                    data = data,
-                    onAction = onAction,
-                )
-            }
+            entryListItems(
+                currentScreen = Screens.HISTORY,
+                data = data,
+                onAction = onAction,
+                sharedPrefsMain = sharedPrefsMain,
+            )
         }
+
+        EntryListBottomSheet(data = data, onAction = onAction)
 
         Row(
             modifier = Modifier.align(Alignment.BottomStart),

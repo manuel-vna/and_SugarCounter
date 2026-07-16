@@ -2,7 +2,9 @@ package com.jumparoundcreations.mva_sugarcounter.main
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.work.Configuration
+import com.jumparoundcreations.mva_sugarcounter.api.networkModule
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.di.appModule
 import com.jumparoundcreations.mva_sugarcounter.worker.CustomWorkerFactory
@@ -23,7 +25,7 @@ class MainApplication :
         startKoin {
             androidLogger()
             androidContext(this@MainApplication)
-            modules(appModule)
+            modules(appModule, networkModule)
         }
 
         // WorkFactory for DeletionWorker
@@ -38,7 +40,7 @@ class MainApplication :
         get() {
             return Configuration
                 .Builder()
-                .setMinimumLoggingLevel(android.util.Log.VERBOSE)
+                .setMinimumLoggingLevel(Log.VERBOSE)
                 .setWorkerFactory(workerFactory)
                 .build()
         }

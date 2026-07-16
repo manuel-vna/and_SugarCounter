@@ -74,7 +74,7 @@
     <string name="settings_threshold_dialog_title">¿Fijar estos valores como nuevos límites superiores?</string>
     <string name="settings_button_about_text">Acerca de la aplicación</string>
     <string name="scan_barcode_button"> Barcode</string>
-    <string name="no_barcode_yet_info_card">Barcode: %1$s</string>
+    <string name="no_barcode_yet_info_card">No se ha encontrado ningún producto</string>
     <string name="no_barcode_yet_info_title">Barcode aún no disponible</string>
     <string name="no_barcode_yet_info_description">Todavía no se ha asignado ninguna categoría de producto a este código de barras. Si rellena los demás campos y guarda la entrada, el nombre del producto introducido en el campo \'<i>categoría</i>\' se asigna automáticamente al código de barras \'<i>%1$s</i>\' indicado anteriormente.</string>
     <string name="category_bottom_sheet_barcode">Barcode (EAN)</string>
