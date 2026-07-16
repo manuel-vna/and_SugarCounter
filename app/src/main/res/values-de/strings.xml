@@ -49,11 +49,11 @@
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Häufige Fragen</string>
     <string name="faq_question_one">Wofür ist diese App gedacht?</string>
-    <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch das Aufschreiben des konsumierten Zuckers in Gramm. Zusätzlich können noch die verzehrte Kalorien eingetragen und täglich festgehalten werden.</string>
+    <string name="faq_answer_one">Zur Kontrolle des täglichen Zuckerkonsums durch Scannen der Lebensmittel oder eigenständiges Eintragen der Zuckerwerte.</string>
     <string name="faq_question_two">Ist die App kostenlos nutzbar?</string>
     <string name="faq_answer_two">Ja, die App ist komplett kostenlos und es wird keine Werbung angezeigt.</string>
-    <string name="faq_question_three">Warum müssen die Zuckerwerte eines bestimmten Lebensmittels vom Nutzer selbst eingetragen werden?</string>
-    <string name="faq_answer_three">Durch das eigenständige Eingeben der Zuckerwerte soll ein besseres Gefühl für den eigenen Zuckerkonsum entstehen.</string>
+    <string name="faq_question_three">Woher werden die aus einem Barcode-Scan resultierenden Angaben zu einem bestimmten Produkt entnommen?</string>
+    <string name="faq_answer_three">Aus Open Food Facts. Eine gemeinschaftlich erstellte, kostenlose und frei zugängliche Datenbank mit Lebensmitteln aus aller Welt.</string>
     <string name="faq_question_four">Was bedeuten die beiden Eingabevarianten \'Zucker/100g\' und \'Zucker/Stück\'?</string>
     <string name="faq_answer_four">Für die Variante Zucker/100g kann der Zuckergehalt pro 100g von der Packung abgelesen und im ersten Feld eingetragen werden. Zudem muss die konsumierte Menge angegeben werden. Der Zuckergehalt wird dann automatisch berechnet. Wenn die Zuckermenge eines Produkts auch pro Stück bekannt ist, kann der Zuckergehalt je Teilstück angegeben werden.</string>
     <string name="faq_question_five">Muss ich mich einloggen, um die App zu nutzen?</string>
@@ -66,10 +66,10 @@
     <string name="faq_answer_eight">Ja, die Farbeinstellungen des Android-System können aktiviert werden.</string>
     <string name="faq_question_nine">Welche Motivation steckt hinter der Entwicklung dieser App?</string>
     <string name="faq_answer_nine">Hinter dieser App steckt die Motivation, die von vielen Seiten empfohlene Obergrenze von 50 Gramm Zucker pro Tag, nicht zu überschreiten. Diese App soll dabei helfen, dieses Ziel zu erreichen.</string>
-    <string name="faq_question_ten">Warum wird beim Scannen des Barcodes das entsprechende Lebensmittelprodukt mit Zuckerangabe nicht automatisch erkannt?</string>
-    <string name="faq_answer_ten">Die Idee dieser App ist, dass sich Nutzer mit Zuckerwerten selbstständig auseinandersetzen. Daher wird auf ein automatisches Laden von Zucker- und/oder Kalorienwerten verzichtet.</string>
+    <string name="faq_question_ten">Was passiert im Hintergrund beim Scannen des Barcodes eines Lebensmittels?</string>
+    <string name="faq_answer_ten">Die Angaben zum gescannten Produkt werden programmatisch von der Open Food Facts Datenbank entnommen.</string>
     <string name="faq_question_eleven">Ist es nicht zu aufwendig, alles was ein wenig Zucker hat in diese App einzutragen?</string>
-    <string name="faq_answer_eleven">Es ist jedem selbst überlassen, wie die App verwendet wird. Eine gängige Methode wäre jedoch, die Zucker-Obergrenze (hier in den Einstellungen der App) 5-15 Gramm tiefer als das pro Tag angestrebte Oberlimit zu setzen, damit für Kleinstmengen Spielraum bleibt und man auch ohne deren Einträge unter der gewünschten Zuckermenge pro Tag bleibt.</string>
+    <string name="faq_answer_eleven">Es ist jedem selbst überlassen, wie die App verwendet wird. Eine gängige Methode wäre jedoch, die Zucker-Obergrenze (hier in den Einstellungen der App) 5-15 Gramm höher als das pro Tag angestrebte Oberlimit zu setzen, damit für Kleinstmengen Spielraum bleibt und man auch ohne deren Einträge unter der gewünschten Zuckermenge pro Tag bleibt.</string>
     <string name="settings_threshold_title">Tagesobergrenze</string>
     <string name="settings_threshold_dialog_title">Diese Werte als neue Obergrenzen festlegen?</string>
     <string name="settings_button_about_text">Über die App</string>
@@ -121,7 +121,7 @@
     <string name="settings_introduction_category_top">1) Beim Suchsymbol öffnet sich eine Buchstabenleiste, womit zu einem bestimmten Buchstaben gesprungen werden kann.\n\n2) Über das Papierkorbsymbol können die Kategorien einzeln per Checkbox gelöscht werden. Ein erneutes Klicken auf das Symbol entfernt die Löschansicht wieder.</string>
     <string name="settings_introduction_category_bottom">Durch Anklicken einer bestimmten Kategorie öffnet sich ein Fenster in dem Einzelheiten zu dieser Kategorie aufgeführt werden.</string>
     <string name="settings_introduction_settings_title">Einstellungen verfeinern</string>
-    <string name="settings_introduction_settings_top">1) Zusätzlich zum Erfassen der Zuckerwerte können auch Kalorien gezählt werden.\n\n2)Für Zucker in Gramm (g) und Kalorien in Kilokalorien (kcal) sind Tagesobergrenzen festgelegt, die über den Regler angepasst werden können.\n\n3) Die erfassten Einträge können im CSV-Format exportiert werden.\n\n4) Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.\n\n5) Es kann auch jenes Farbschema gewählt werden, welches im Android-Betriebssystem in den Einstellungen gewählt ist.</string>
+    <string name="settings_introduction_settings_top">1) Der Kalorienzähler wurde entfernt.\n\n2) Es ist eine Tagesobergrenze festgelegt, die über den Regler angepasst werden kann.\n\n3) Die erfassten Einträge können im CSV-Format exportiert werden.\n\n4) Zudem kann eine automatische Löschung älterer Einträge aktiviert werden.\n\n5) Es kann auch jenes Farbschema gewählt werden, welches im Android-Betriebssystem in den Einstellungen gewählt ist.</string>
     <string name="settings_color_scheme_title">Farben</string>
     <string name="settings_use_dynamic_colors_from_os">Android-Farbschema</string>
     <string name="settings_use_dynamic_colors_from_os_description">Wenn Sie diesen Switch setzen, wird in der SugarCounter-App jenes Farbschema benutzt, welches Sie im Android Betriebssystem in den Einstellungen festgelegt haben.</string>

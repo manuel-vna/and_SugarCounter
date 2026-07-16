@@ -48,11 +48,11 @@
     <string name="settings_button_faq_text">FAQ</string>
     <string name="settings_title_faq_text">Frequently Asked Questions</string>
     <string name="faq_question_one">What is this app for?</string>
-    <string name="faq_answer_one">To monitor your daily sugar consumption by writing down the sugar consumed in grams. </string>
+    <string name="faq_answer_one">To monitor daily sugar intake by scanning food items or manually entering sugar values.</string>
     <string name="faq_question_two">Can the app be used free of charge?</string>
     <string name="faq_answer_two">Yes, the app is completely free and no advertising is displayed.</string>
-    <string name="faq_question_three">Why does a user have to enter the sugar content of a particular food product?</string>
-    <string name="faq_answer_three">Entering the sugar values by yourself should give you a better feeling for your own sugar consumption.</string>
+    <string name="faq_question_three">Where does the information about a specific product, obtained from a barcode scan, come from?</string>
+    <string name="faq_answer_three">From Open Food Facts. A collaborative, free and open database of food products from around the world.</string>
     <string name="faq_question_four">What do the two input variants \'Sugar/100g\' and \'Sugar/piece\' mean?</string>
     <string name="faq_answer_four">For the sugar/100g variant, the sugar content per 100g can be read off the packing and entered in the first field. The quantity consumed must also be entered. The sugar content is then calculated automatically. If the amount of sugar in a product is also known per piece, the sugar content per piece can be entered as well.</string>
     <string name="faq_question_five">Do I have to log in to use the app?</string>
@@ -65,10 +65,10 @@
     <string name="faq_answer_eight">Yes, the color settings of the Android system can be activated.</string>
     <string name="faq_question_nine">What was the motivation behind the development of this app?</string>
     <string name="faq_answer_nine">The motivation behind this app is not to exceed the upper limit of 50 grams of sugar per day recommended by many sources. This app is designed to help you achieve this goal.</string>
-    <string name="faq_question_ten">Why is the corresponding food product with sugar information not automatically recognized when the barcode is scanned?</string>
-    <string name="faq_answer_ten">The idea of this app is that users deal with sugar and/or calorie values on their own. Therefore, sugar and/or calorie values are not loaded automatically.</string>
+    <string name="faq_question_ten">What happens behind the scenes when you scan a food barcode?</string>
+    <string name="faq_answer_ten">The information about the scanned product is retrieved programmatically from the Open Food Facts database.</string>
     <string name="faq_question_eleven">Isn\'t it too time-consuming to enter everything that has a little sugar in this app?</string>
-    <string name="faq_answer_eleven">It is up to you how you use the app. However, a common method would be to set the upper sugar limit (here in the app settings) 5-15 grams lower than the upper limit you are aiming for per day, so that there is room for small amounts and you remain below the desired amount of sugar per day even without entering them.</string>
+    <string name="faq_answer_eleven">It is up to you how you use the app. However, a common method would be to set the upper sugar limit (here in the app settings) 5-15 grams higher than the upper limit you are aiming for per day, so that there is room for small amounts and you remain below the desired amount of sugar per day even without entering them.</string>
     <string name="settings_threshold_title">Daily limit</string>
     <string name="settings_threshold_dialog_title">Select these values as your new daily limits?</string>
     <string name="settings_button_about_text">About</string>
@@ -120,7 +120,7 @@
     <string name="settings_introduction_category_top">1) The search icon opens a letter bar, which can be used to jump to a specific letter.\n\n2) The categories can be deleted individually via the trash icon using the checkbox. Clicking on the icon again removes the delete view.</string>
     <string name="settings_introduction_category_bottom">By clicking on a specific category, a window opens in which details of this category are listed.</string>
     <string name="settings_introduction_settings_title">Adjust settings</string>
-    <string name="settings_introduction_settings_top">1) In addition to recording the sugar values, calories can also be counted.\n\n2)Daily upper limits are set for sugar in grams (g) and calories in kilocalories (kcal), which can be adjusted using the slider.\n\n3) The recorded entries can be exported in CSV format.\n\n4) In addition, automatic deletion of older entries can be activated.\n\n5) The color scheme selected in the Android operating system settings can also be selected.</string>
+    <string name="settings_introduction_settings_top">1) Counting calories has been removed\n\n2) There is a daily upper limit , which can be adjusted using the slider.\n\n3) The recorded entries can be exported in CSV format.\n\n4) In addition, automatic deletion of older entries can be activated.\n\n5) The color scheme selected in the Android operating system settings can also be selected.</string>
     <string name="settings_color_scheme_title">Color scheme</string>
     <string name="settings_use_dynamic_colors_from_os">Android color scheme</string>
     <string name="settings_use_dynamic_colors_from_os_description">If you set this switch, the SugarCounter app will use the color scheme that you have set in the Android operating system in the settings.</string>
