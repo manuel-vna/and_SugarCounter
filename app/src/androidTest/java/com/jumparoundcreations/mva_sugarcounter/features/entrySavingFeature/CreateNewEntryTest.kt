@@ -13,6 +13,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.jumparoundcreations.mva_sugarcounter.R
+import com.jumparoundcreations.mva_sugarcounter.api.networkModule
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.di.appModule
 import com.jumparoundcreations.mva_sugarcounter.main.MainScreenView
@@ -51,7 +52,10 @@ class CreateNewEntryTest {
             modules(appModule, module {
                 single<AppDatabase> { db }
                 single<SharedPreferences> { context.getSharedPreferences("TEST_PREFS", Context.MODE_PRIVATE) }
-            })
+
+                },
+                networkModule
+            )
         }
     }
 
