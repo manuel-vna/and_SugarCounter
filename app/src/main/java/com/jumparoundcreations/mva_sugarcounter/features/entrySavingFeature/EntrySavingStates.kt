@@ -16,7 +16,10 @@ data class EntrySavingStates(
     val gramCountMode: GramCountMode = GramCountMode.PerHundred,
     val gramCountModeTabIndex: Int = 0,
     val entryFieldGram: String = "",
+    val entryFieldGramPerHundred: String = "",
+    val entryFieldGramPerPiece: String = "",
     val entryFieldQuantity: String = "",
+    val entryFieldAmount: String = "",
     val savingProcessMissingCategoryData: Boolean = false,
     val savingProcessMissingSugarData: Boolean = false,
     val savingProcessDailyGramThreshold: CheckThresholdResult =

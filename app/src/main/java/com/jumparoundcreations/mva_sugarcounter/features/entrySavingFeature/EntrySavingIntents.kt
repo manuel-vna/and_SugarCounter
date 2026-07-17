@@ -42,8 +42,21 @@ sealed interface EntrySavingIntents {
         val entryFieldGram: String,
     ) : EntrySavingIntents
 
+    data class ChangeEntryFieldGramPerHundred(
+        val entryFieldGramPerHundred: String,
+    ) : EntrySavingIntents
+
+    data class ChangeEntryFieldGramPerPiece(
+        val entryFieldGramPerPiece: String,
+    ) : EntrySavingIntents
+
+
     data class ChangeEntryFieldQuantity(
         val entryFieldQuantity: String,
+    ) : EntrySavingIntents
+
+    data class ChangeEntryFieldAmount(
+        val entryFieldAmount: String,
     ) : EntrySavingIntents
 
     data object SaveSugarEntry : EntrySavingIntents

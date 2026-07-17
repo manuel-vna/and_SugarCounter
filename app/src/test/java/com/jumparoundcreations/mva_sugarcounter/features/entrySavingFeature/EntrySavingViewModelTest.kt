@@ -217,8 +217,8 @@ class EntrySavingViewModelTest {
                 ),
             )
             viewModel.onAction(
-                EntrySavingIntents.ChangeEntryFieldGram(
-                    entryFieldGram = entryFieldGram,
+                EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                    entryFieldGramPerPiece = entryFieldGram,
                 ),
             )
             viewModel.onAction(

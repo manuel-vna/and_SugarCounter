@@ -7,7 +7,8 @@ sealed class GetEntryByApiResult {
     data class ProductFound(
         val entryType: GramCountMode,
         val category: String,
-        val gram: Double,
+        val gramPerHundred: Double?,
+        val gramPerPiece: Double?
     ) : GetEntryByApiResult()
 
 }

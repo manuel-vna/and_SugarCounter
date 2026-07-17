@@ -90,8 +90,17 @@ class EntrySavingViewModel(
             is EntrySavingIntents.ChangeEntryFieldGram ->
                 actionChangeEntryFieldGram(action.entryFieldGram)
 
+            is EntrySavingIntents.ChangeEntryFieldGramPerHundred ->
+                actionChangeEntryFieldGramPerHundred(action.entryFieldGramPerHundred)
+
+            is EntrySavingIntents.ChangeEntryFieldGramPerPiece ->
+                actionChangeEntryFieldGramPerPiece(action.entryFieldGramPerPiece)
+
             is EntrySavingIntents.ChangeEntryFieldQuantity ->
                 actionChangeEntryFieldQuantity(action.entryFieldQuantity)
+
+            is EntrySavingIntents.ChangeEntryFieldAmount ->
+                actionChangeEntryFieldAmount(action.entryFieldAmount)
 
             is EntrySavingIntents.SaveSugarEntry ->
                 actionSaveEntry()
@@ -167,13 +176,15 @@ class EntrySavingViewModel(
                             actionSetCategoryForBarcode(apiResult.category)
                             _entrySavingStates.update { current ->
                                 current.copy(
-                                    entryFieldGram = apiResult.gram.toString(),
+                                    entryFieldGramPerHundred =
+                                        apiResult.gramPerHundred.toString(),
+                                    entryFieldGramPerPiece =
+                                        apiResult.gramPerPiece.toString(),
                                     gramCountModeTabIndex =
                                         if (apiResult.entryType == GramCountMode.PerHundred) 0 else 1,
                                 )
                             }
                             _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoEntryInDbForBarcode)
-
                         }
 
                         is GetEntryByApiResult.ProductNotFound -> {
@@ -321,10 +332,34 @@ class EntrySavingViewModel(
         }
     }
 
+    private fun actionChangeEntryFieldGramPerHundred(entryFieldGram: String) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                entryFieldGramPerHundred = entryFieldGram,
+            )
+        }
+    }
+
+    private fun actionChangeEntryFieldGramPerPiece(entryFieldGram: String) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                entryFieldGramPerPiece = entryFieldGram,
+            )
+        }
+    }
+
     private fun actionChangeEntryFieldQuantity(entryFieldQuantity: String) {
         _entrySavingStates.update { current ->
             current.copy(
                 entryFieldQuantity = entryFieldQuantity,
+            )
+        }
+    }
+
+    private fun actionChangeEntryFieldAmount(entryFieldAmount: String) {
+        _entrySavingStates.update { current ->
+            current.copy(
+                entryFieldAmount = entryFieldAmount,
             )
         }
     }

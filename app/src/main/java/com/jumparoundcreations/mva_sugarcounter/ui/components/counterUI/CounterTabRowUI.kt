@@ -114,8 +114,8 @@ fun TabRow(
                         onValueChangeGramField = { input ->
                             if (InputFilters.filterBlockingOverHundred(input)) {
                                 onAction(
-                                    EntrySavingIntents.ChangeEntryFieldGram(
-                                        entryFieldGram = input,
+                                    EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                                        entryFieldGramPerPiece = input,
                                     ),
                                 )
                             }
@@ -151,8 +151,8 @@ fun TabRow(
                             { input ->
                                 if (InputFilters.filterBlockingOverHundred(input)) {
                                     onAction(
-                                        EntrySavingIntents.ChangeEntryFieldGram(
-                                            entryFieldGram = input,
+                                        EntrySavingIntents.ChangeEntryFieldGramPerHundred(
+                                            entryFieldGramPerHundred = input,
                                         ),
                                     )
                                 }

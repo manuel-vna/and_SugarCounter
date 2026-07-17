@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.GeneralConstants
 
 @Composable
@@ -74,19 +75,31 @@ fun CounterTabRowFieldsUI(
                             MaterialTheme.colorScheme.secondaryContainer,
                         focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
-                value = entrySavingStates.entryFieldGram,
+                value = if (entrySavingStates.gramCountMode == GramCountMode.PerHundred)
+                    entrySavingStates.entryFieldGramPerHundred
+                else entrySavingStates.entryFieldGramPerPiece,
                 onValueChange = { input ->
                     onValueChangeGramField(input)
                 },
                 singleLine = true,
                 trailingIcon = {
                     IconButton(onClick = {
-                        onAction(
-                            EntrySavingIntents.ChangeEntryFieldGram(
-                                entryFieldGram = GeneralConstants.EMPTY_STRING,
-                            ),
-                        )
-                    }) {
+                        if (entrySavingStates.gramCountMode == GramCountMode.PerHundred) {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldGramPerHundred(
+                                    entryFieldGramPerHundred = GeneralConstants.EMPTY_STRING,
+                                ),
+                            )
+                        } else {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                                    entryFieldGramPerPiece = GeneralConstants.EMPTY_STRING,
+                                ),
+                            )
+                        }
+
+                        }
+                    ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
