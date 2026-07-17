@@ -4,10 +4,10 @@ import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
-import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
-import com.jumparoundcreations.mva_sugarcounter.util.toDoubleFormatted
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.roundToOneDecimal
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toDoubleFormatted
 
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase,
@@ -17,8 +17,7 @@ class SaveEntryInDatabaseUseCase(
             SugarEntry(
                 currentTimestamp = state.dateOfEntryEpochSec,
                 date =
-                    HelperMethods.convertTimestampToDateString(
-                        state.dateOfEntryEpochSec,
+                    state.dateOfEntryEpochSec.convertTimestampToDateString(
                         "yyyy-MM-dd",
                     ),
                 category = state.categoryInField.trim(),

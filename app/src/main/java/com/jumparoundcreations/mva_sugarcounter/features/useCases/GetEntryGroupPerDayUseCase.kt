@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.features.useCases
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatDateForDisplay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -22,7 +23,7 @@ class GetEntryGroupPerDayUseCase(
                     .map { (date, items) ->
                         EntryGroup(
                             date = date,
-                            dayDisplayFormat = HelperMethods.formatDateForDisplay(date),
+                            dayDisplayFormat = date.formatDateForDisplay(),
                             entryList = items.sortedBy { it.currentTimestamp },
                         )
                     }.sortedByDescending { it.date }

@@ -29,7 +29,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
-import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toIntModel
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
 

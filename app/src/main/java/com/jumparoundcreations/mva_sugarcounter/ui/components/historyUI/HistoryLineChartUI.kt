@@ -34,7 +34,9 @@ import com.jumparoundcreations.mva_sugarcounter.data.historyData.GraphData
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 import org.koin.compose.koinInject
+import java.util.Locale
 
 @Composable
 fun LineChart(
@@ -446,9 +448,8 @@ fun getGraphDataList(entryList: List<EntryGroupInt>): List<GraphData> {
                             entryGroup.entryList,
                         ),
                     day =
-                        HelperMethods.convertTimestampToDateString(
-                            entryGroup.entryList.first().currentTimestamp,
-                            if (HelperMethods.getSystemLanguage() == "en") {
+                        entryGroup.entryList.first().currentTimestamp.convertTimestampToDateString(
+                            if (Locale.getDefault().language == "en") {
                                 "EEEE \n MM/dd"
                             } else {
                                 "EEEE \n dd.MM"

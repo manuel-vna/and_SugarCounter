@@ -4,7 +4,7 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
-import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.roundToOneDecimal
 
 class EditDatabaseEntryUseCase(
     val database: AppDatabase,

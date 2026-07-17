@@ -1,4 +1,4 @@
-package com.jumparoundcreations.mva_sugarcounter.util
+package com.jumparoundcreations.mva_sugarcounter.util.extensions
 
 import com.jumparoundcreations.mva_sugarcounter.data.EntryGroup
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
@@ -28,5 +28,3 @@ fun EntryGroup.toIntModel(): EntryGroupInt =
 fun List<EntryGroup>.toIntModel(): List<EntryGroupInt> = map { it.toIntModel() }
 
 fun Double.roundToOneDecimal(): Double = round(this * 10) / 10
-
-fun String.toDoubleFormatted(): Double = this.replace(",", ".").toDouble()

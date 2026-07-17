@@ -3,7 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFea
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 
 class ReuseEntryForTodayUseCase(
     val database: AppDatabase,
@@ -16,8 +16,7 @@ class ReuseEntryForTodayUseCase(
                 SugarEntry(
                     currentTimestamp = currentTimestamp,
                     date =
-                        HelperMethods.convertTimestampToDateString(
-                            currentTimestamp,
+                        currentTimestamp.convertTimestampToDateString(
                             "yyyy-MM-dd",
                         ),
                     category = entrySugar.category,
@@ -32,8 +31,7 @@ class ReuseEntryForTodayUseCase(
                 SugarEntry(
                     currentTimestamp = currentTimestamp,
                     date =
-                        HelperMethods.convertTimestampToDateString(
-                            currentTimestamp,
+                        currentTimestamp.convertTimestampToDateString(
                             "yyyy-MM-dd",
                         ),
                     category = entrySugar.category,

@@ -5,7 +5,7 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.util.GeneralConstants
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,8 +16,7 @@ class CheckDailyGramThresholdUseCase(
 
     operator fun invoke(state: EntrySavingStates): CheckThresholdResult {
         val dateString =
-            HelperMethods.convertTimestampToDateString(
-                state.dateOfEntryEpochSec,
+            state.dateOfEntryEpochSec.convertTimestampToDateString(
                 "yyyy-MM-dd",
             )
 

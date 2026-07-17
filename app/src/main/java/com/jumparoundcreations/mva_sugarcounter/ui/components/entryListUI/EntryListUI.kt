@@ -30,6 +30,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.SuccessData
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.yearMonthFromIsoDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
@@ -65,7 +66,7 @@ fun LazyListScope.entryListItems(
 
             if (currentScreen != Screens.COUNTER) {
                 val currentMonth: YearMonth =
-                    HelperMethods.yearMonthFromIsoDate(dateStr = entryGroup.date)
+                    entryGroup.date.yearMonthFromIsoDate()
                 if (previousMonth == null || currentMonth != previousMonth) {
                     item(key = "month_${currentMonth}_${entryGroup.date}") {
                         Text(
