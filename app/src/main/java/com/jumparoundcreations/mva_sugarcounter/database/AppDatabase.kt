@@ -92,10 +92,10 @@ abstract class AppDatabase : RoomDatabase() {
                             date TEXT NOT NULL,
                             category TEXT NOT NULL,
                             entryType TEXT NOT NULL,
-                            gramPerHundred REAL NOT NULL,
-                            gramPerPiece REAL NOT NULL,
-                            quantity REAL NOT NULL,
-                            amount REAL NOT NULL,
+                            gramPerHundred REAL,
+                            gramPerPiece REAL,
+                            quantity REAL,
+                            amount REAL,
                             gramTotal REAL NOT NULL
                         )
                         """.trimIndent(),
@@ -120,11 +120,11 @@ abstract class AppDatabase : RoomDatabase() {
                             date,
                             category,
                             entryType,
-                            CASE WHEN entryType = 'PerHundred' THEN gram,
-                            CASE WHEN entryType = 'PerPiece' THEN gram,
-                            CASE WHEN entryType = 'PerHundred' THEN quantity,
-                            CASE WHEN entryType = 'PerPiece' THEN quantity,
-                            gramTotal * 1.0
+                            CASE WHEN entryType = 'PerHundred' THEN gram ELSE NULL END,
+                            CASE WHEN entryType = 'PerPiece' THEN gram ELSE NULL END,
+                            CASE WHEN entryType = 'PerHundred' THEN quantity ELSE NULL END,
+                            CASE WHEN entryType = 'PerPiece' THEN quantity ELSE NULL END,
+                            gramTotal
                         FROM sugarEntriesTable_old
                         ORDER BY currentTimestamp ASC
                         """.trimIndent(),
