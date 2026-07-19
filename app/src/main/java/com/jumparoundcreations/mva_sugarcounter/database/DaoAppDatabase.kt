@@ -27,12 +27,15 @@ interface DaoAppDatabase {
     )
     fun updateSugarEntry(
         id: Int,
-        gramPerHundred: Double,
-        gramPerPiece: Double,
-        quantity: Double,
-        amount: Double,
-        gramTotal: Double,
+        gramPerHundred: Double?,
+        gramPerPiece: Double?,
+        quantity: Double?,
+        amount: Double?,
+        gramTotal: Double?,
     )
+
+    @Query("SELECT * FROM sugarEntriesTable WHERE id = :id")
+    fun getSugarEntryById(id: Int): SugarEntry?
 
     // On the timeline startPoint is further to the left/in the past than endPoint
     @Query(

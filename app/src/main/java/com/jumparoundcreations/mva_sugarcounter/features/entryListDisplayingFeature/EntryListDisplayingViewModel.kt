@@ -9,6 +9,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toDoubleFormattedOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,7 +50,7 @@ class EntryListDisplayingViewModel(
             }
 
             is EntryListDisplayingIntents.EditQuantity -> {
-                actionEditQuantity(action.newQuantity)
+                actionEditQuantity(action.newQuantity, action.newAmount)
             }
 
             is EntryListDisplayingIntents.DismissCardDetails -> {
@@ -223,12 +224,13 @@ class EntryListDisplayingViewModel(
         }
     }
 
-    fun actionEditQuantity(newQuantity: String) {
+    fun actionEditQuantity(newQuantity: String, newAmount: String) {
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
                     data = current.data.copy(
                         valueQuantity = newQuantity,
+                        valueAmount = newAmount,
                     ),
                 )
             } else {
@@ -278,11 +280,11 @@ class EntryListDisplayingViewModel(
                     sugarEntryID = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.id,
                     sugarEntryType = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.entryType,
                     newCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueCategory,
-                    newGramPerHundred = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerHundred.toDouble(),
-                    newGramPerPiece = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerPiece.toDouble(),
+                    newGramPerHundred = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerHundred.toDoubleFormattedOrNull(),
+                    newGramPerPiece = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerPiece.toDoubleFormattedOrNull(),
                     oldCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.category,
-                    newQuantity = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueQuantity.toDouble(),
-                    newAmount = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueAmount.toDouble(),
+                    newQuantity = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueQuantity.toDoubleFormattedOrNull(),
+                    newAmount = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueAmount.toDoubleFormattedOrNull(),
                 )
             }
         }

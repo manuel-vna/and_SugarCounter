@@ -239,7 +239,11 @@ fun EntryListItemUI(
                                     MaterialTheme.colorScheme.secondaryContainer,
                                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             ),
-                        value = data.valueQuantity,
+                        value = if (data.entryInCardItem.entryType == GramCountMode.PerHundred) {
+                            data.valueQuantity
+                        } else {
+                            data.valueAmount
+                        },
                         onValueChange = {
                             when (data.entryInCardItem.entryType) {
                                 GramCountMode.PerHundred -> {
@@ -250,6 +254,7 @@ fun EntryListItemUI(
                                         onAction(
                                             EntryListDisplayingIntents.EditQuantity(
                                                 newQuantity = it,
+                                                newAmount = "",
                                             ),
                                         )
                                     }
@@ -262,7 +267,8 @@ fun EntryListItemUI(
                                     ) {
                                         onAction(
                                             EntryListDisplayingIntents.EditQuantity(
-                                                newQuantity = it,
+                                                newQuantity = "",
+                                                newAmount = it,
                                             ),
                                         )
                                     }
@@ -275,6 +281,7 @@ fun EntryListItemUI(
                                 onAction(
                                     EntryListDisplayingIntents.EditQuantity(
                                         newQuantity = "",
+                                        newAmount = "",
                                     ),
                                 )
                             }) {

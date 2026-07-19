@@ -22,6 +22,7 @@ sealed class EntryListDisplayingIntents {
 
     data class EditQuantity(
         val newQuantity: String,
+        val newAmount: String
     ) : EntryListDisplayingIntents()
 
     object DismissCardDetails : EntryListDisplayingIntents()
