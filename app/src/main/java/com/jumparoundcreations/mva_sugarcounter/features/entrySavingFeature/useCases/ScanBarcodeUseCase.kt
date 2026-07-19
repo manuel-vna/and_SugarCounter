@@ -6,11 +6,11 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class ScanBarcodeUseCase : KoinComponent {
     private val barcodeScanner: GmsBarcodeScanner by inject(named("barcodeScanner"))
@@ -18,7 +18,7 @@ class ScanBarcodeUseCase : KoinComponent {
     private val dao = database.appDao()
 
     suspend operator fun invoke(): ScanResult =
-        suspendCoroutine { cont ->
+        suspendCancellableCoroutine { cont ->
 
             barcodeScanner
                 .startScan()

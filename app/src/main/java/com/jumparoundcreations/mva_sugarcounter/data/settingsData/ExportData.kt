@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.SettingsVM
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -50,11 +49,13 @@ object ExportData : KoinComponent {
             for (entry in allEntries) {
                 writer.append(
                     "${entry.date}," +
-                        "${entry.category}," +
-                        "${entry.entryType}," +
-                        "${entry.gram}," +
-                        "${entry.quantity}," +
-                        "${entry.gramTotal}\n",
+                            "${entry.category}," +
+                            "${entry.entryType}," +
+                            "${entry.gramPerHundred}," +
+                            "${entry.gramPerPiece}," +
+                            "${entry.quantity}," +
+                            "${entry.amount}," +
+                            "${entry.gramTotal}\n",
                 )
 
                 // progress indicator
@@ -116,44 +117,30 @@ object ExportData : KoinComponent {
 
                     for (entry in allEntries) {
 
-                        if (entry.entryType == GramCountMode.PerHundred){
-                            outputStream.write(
-                                (
-                                        "${entry.date}," +
-                                        "${entry.category}," +
-                                        "${entry.entryType}," +
-                                        "${entry.gram}," +
-                                        "${entry.quantity}," +
-                                                "," +
-                                                "," +
-                                        "${entry.gramTotal}\n"
-                                        ).toByteArray(),
-                            )
-                        } else {
-                            outputStream.write(
-                                (
-                                        "${entry.date}," +
-                                                "${entry.category}," +
-                                                "${entry.entryType}," +
-                                                "," +
-                                                "," +
-                                                "${entry.gram}," +
-                                                "${entry.quantity}," +
-                                                "${entry.gramTotal}\n"
-                                        ).toByteArray(),
-                            )
-                        }
+                        outputStream.write(
+                            (
+                                    "${entry.date}," +
+                                            "${entry.category}," +
+                                            "${entry.entryType}," +
+                                            "${entry.gramPerHundred}," +
+                                            "${entry.gramPerPiece}," +
+                                            "${entry.quantity}," +
+                                            "${entry.amount}," +
+                                            "${entry.gramTotal}\n"
+                                    ).toByteArray(),
+                        )
+                    }
 
-                        // progress indicator
-                        count++
-                        if (currentStep == count) {
-                            settingsVM.actionIncrementExportProgressIndicator()
-                            multiplier++
-                            currentStep = tenPercent * multiplier
-                        }
+                    // progress indicator
+                    count++
+                    if (currentStep == count) {
+                        settingsVM.actionIncrementExportProgressIndicator()
+                        multiplier++
+                        currentStep = tenPercent * multiplier
                     }
                 }
             }
+
 
             settingsVM.actionChangExportProgressIndicatorVisibility(isShown = false)
             settingsVM.actionChangeExportBottomSheetVisibility(isShown = true)

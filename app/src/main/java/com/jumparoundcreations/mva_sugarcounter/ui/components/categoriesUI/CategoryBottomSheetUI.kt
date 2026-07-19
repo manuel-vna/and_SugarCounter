@@ -66,12 +66,12 @@ fun CategoryBottomSheet() {
                                 if (entrySugarForClickedCategory.entryType == GramCountMode.PerHundred) {
                                     stringResource(
                                         R.string.category_bottom_sheet_per_hundred_gram,
-                                        entrySugarForClickedCategory.gram,
+                                        entrySugarForClickedCategory.gramPerHundred,
                                     )
                                 } else {
                                     stringResource(
                                         R.string.category_bottom_sheet_per_piece_gram,
-                                        entrySugarForClickedCategory.gram,
+                                        entrySugarForClickedCategory.gramPerPiece,
                                     )
                                 },
                         )

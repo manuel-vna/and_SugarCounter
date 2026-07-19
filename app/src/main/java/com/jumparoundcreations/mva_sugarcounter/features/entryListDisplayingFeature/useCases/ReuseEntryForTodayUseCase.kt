@@ -21,8 +21,10 @@ class ReuseEntryForTodayUseCase(
                         ),
                     category = entrySugar.category,
                     entryType = GramCountMode.PerHundred,
-                    gram = entrySugar.gram,
+                    gramPerHundred = entrySugar.gramPerHundred,
+                    gramPerPiece = entrySugar.gramPerPiece,
                     quantity = entrySugar.quantity,
+                    amount = entrySugar.amount,
                     gramTotal = entrySugar.gramTotal,
                 ),
             )
@@ -36,8 +38,10 @@ class ReuseEntryForTodayUseCase(
                         ),
                     category = entrySugar.category,
                     entryType = GramCountMode.PerPiece,
-                    gram = entrySugar.gram,
+                    gramPerHundred = entrySugar.gramPerHundred,
+                    gramPerPiece = entrySugar.gramPerPiece,
                     quantity = entrySugar.quantity,
+                    amount = entrySugar.amount,
                     gramTotal = entrySugar.gramTotal,
                 ),
             )

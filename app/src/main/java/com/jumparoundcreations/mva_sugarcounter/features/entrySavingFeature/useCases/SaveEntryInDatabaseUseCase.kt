@@ -22,17 +22,29 @@ class SaveEntryInDatabaseUseCase(
                     ),
                 category = state.categoryInField.trim(),
                 entryType = state.gramCountMode,
-                gram =
-                    if (state.entryFieldGram.isEmpty()) {
+                gramPerHundred =
+                    if (state.entryFieldGramPerHundred.isEmpty()) {
                         NumberConstants.ONE_AS_DOUBLE
                     } else {
-                        state.entryFieldGram.toDoubleFormatted()
+                        state.entryFieldGramPerHundred.toDoubleFormatted()
+                    },
+                gramPerPiece =
+                    if (state.entryFieldGramPerPiece.isEmpty()) {
+                        NumberConstants.ONE_AS_DOUBLE
+                    } else {
+                        state.entryFieldGramPerPiece.toDoubleFormatted()
                     },
                 quantity =
                     if (state.entryFieldQuantity.isEmpty()) {
                         NumberConstants.ONE_AS_DOUBLE
                     } else {
                         state.entryFieldQuantity.toDoubleFormatted()
+                    },
+                amount =
+                    if (state.entryFieldAmount.isEmpty()) {
+                        NumberConstants.ONE_AS_DOUBLE
+                    } else {
+                        state.entryFieldAmount.toDoubleFormatted()
                     },
                 gramTotal =
                     if (state.gramCountMode == GramCountMode.PerHundred) {

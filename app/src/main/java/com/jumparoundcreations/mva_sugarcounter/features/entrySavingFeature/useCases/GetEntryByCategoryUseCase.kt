@@ -20,8 +20,10 @@ class GetEntryByCategoryUseCase(
                     date = reply.date,
                     category = reply.category,
                     entryType = reply.entryType,
-                    gram = reply.gram,
+                    gramPerHundred = reply.gramPerHundred,
+                    gramPerPiece = reply.gramPerPiece,
                     quantity = reply.quantity,
+                    amount = reply.amount,
                     gramTotal = reply.gramTotal,
                 ),
             )

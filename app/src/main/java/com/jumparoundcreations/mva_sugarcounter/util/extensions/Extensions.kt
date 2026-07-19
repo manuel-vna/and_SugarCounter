@@ -13,8 +13,10 @@ fun SugarEntry.toIntModel(): SugarEntryInt =
         date = date,
         category = category,
         entryType = entryType,
-        gram = gram.toInt(),
+        gramPerHundred = gramPerHundred.toInt(),
+        gramPerPiece = gramPerPiece.toInt(),
         quantity = quantity.toInt(),
+        amount = amount.toInt(),
         gramTotal = gramTotal.toInt(),
     )
 

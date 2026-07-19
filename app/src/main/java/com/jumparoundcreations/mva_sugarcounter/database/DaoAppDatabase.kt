@@ -18,15 +18,19 @@ interface DaoAppDatabase {
 
     @Query(
         "UPDATE sugarEntriesTable SET " +
-            "gram = :gram, " +
+            "gramPerHundred = :gramPerHundred, " +
+            "gramPerPiece = :gramPerPiece, " +
             "quantity = :quantity, " +
+            "amount = :amount, " +
             "gramTotal = :gramTotal " +
             "WHERE id = :id",
     )
     fun updateSugarEntry(
         id: Int,
-        gram: Double,
+        gramPerHundred: Double,
+        gramPerPiece: Double,
         quantity: Double,
+        amount: Double,
         gramTotal: Double,
     )
 

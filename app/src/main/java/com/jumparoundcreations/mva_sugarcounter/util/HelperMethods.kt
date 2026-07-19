@@ -83,8 +83,10 @@ class HelperMethods : KoinComponent {
                                 currentTimestamp = timestamp,
                                 category = "TestSugar$it",
                                 entryType = GramCountMode.PerHundred,
-                                gram = gramValue,
+                                gramPerHundred = gramValue,
+                                gramPerPiece = gramValue,
                                 quantity = quantityValue,
+                                amount = quantityValue,
                                 gramTotal = gramValue,
                             ),
                         )

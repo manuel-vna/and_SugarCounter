@@ -139,8 +139,10 @@ class CategoryVM :
                 date = DatabaseConstants.DEFAULT_DATABASE_STRING,
                 category = DatabaseConstants.DEFAULT_DATABASE_STRING,
                 entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
-                gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramPerHundred = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramPerPiece = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                 quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                amount = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                 gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
             ),
         )
@@ -258,8 +260,10 @@ class CategoryVM :
                 date = DatabaseConstants.DEFAULT_DATABASE_STRING,
                 category = DatabaseConstants.DEFAULT_DATABASE_STRING,
                 entryType = DatabaseConstants.DEFAULT_GRAM_COUNT_MODE,
-                gram = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramPerHundred = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                gramPerPiece = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                 quantity = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
+                amount = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
                 gramTotal = DatabaseConstants.DEFAULT_DATABASE_DOUBLE,
             )
         }

@@ -14,18 +14,22 @@ class EditDatabaseEntryUseCase(
         sugarEntryType: GramCountMode,
         oldCategory: String,
         newCategory: String,
-        newGram: Double,
+        newGramPerHundred: Double,
+        newGramPerPiece:Double,
         newQuantity: Double,
+        newAmount: Double
     ) {
         database.appDao().updateSugarEntry(
             id = sugarEntryID,
-            gram = newGram,
+            gramPerHundred = newGramPerHundred,
+            gramPerPiece = newGramPerPiece,
             quantity = newQuantity,
+            amount = newAmount,
             gramTotal =
                 if (sugarEntryType == GramCountMode.PerHundred) {
-                    ((newGram / 100) * newQuantity).roundToOneDecimal()
+                    ((newGramPerHundred / 100) * newQuantity).roundToOneDecimal()
                 } else {
-                    (newGram * newQuantity).roundToOneDecimal()
+                    (newGramPerPiece * newAmount).roundToOneDecimal()
                 },
         )
 

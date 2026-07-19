@@ -164,16 +164,29 @@ fun EntryListItemUI(
                                     MaterialTheme.colorScheme.secondaryContainer,
                                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                             ),
-                        value = data.valueGram,
+                        value = if (data.entryInCardItem.entryType == GramCountMode.PerHundred) {
+                            data.valueGramPerHundred
+                        } else {
+                            data.valueGramPerPiece
+                        },
                         onValueChange = {
                             if (InputFilters.filterBlockingOverHundred(
                                     input = it,
                                 )
                             ) {
                                 onAction(
-                                    EntryListDisplayingIntents.EditGram(
-                                        newGram = it,
-                                    ),
+                                    if (data.entryInCardItem.entryType == GramCountMode.PerHundred) {
+                                        EntryListDisplayingIntents.EditGram(
+                                            newGramPerHundred = it,
+                                            newGramPerPiece = "",
+
+                                            )
+                                    } else {
+                                        EntryListDisplayingIntents.EditGram(
+                                            newGramPerHundred = "",
+                                            newGramPerPiece = it,
+                                        )
+                                    }
                                 )
                             }
                         },
@@ -182,7 +195,8 @@ fun EntryListItemUI(
                             IconButton(onClick = {
                                 onAction(
                                     EntryListDisplayingIntents.EditGram(
-                                        newGram = "",
+                                        newGramPerHundred = "",
+                                        newGramPerPiece = ""
                                     ),
                                 )
                             }) {

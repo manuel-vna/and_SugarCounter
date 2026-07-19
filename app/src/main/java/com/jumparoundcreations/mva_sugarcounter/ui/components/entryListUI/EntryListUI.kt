@@ -141,9 +141,9 @@ fun LazyListScope.entryListItems(
                             if (it.entryType == GramCountMode.PerHundred) {
                                 it.quantity.toString() + stringResource(id = R.string.gram_unit_short)
                             } else {
-                                it.quantity.toString() +
+                                it.amount.toString() +
                                     stringResource(id = R.string.sugar_card_multiplier_expression) +
-                                    it.gram.toString() +
+                                    it.gramPerPiece.toString() +
                                     stringResource(id = R.string.gram_unit_short)
                             }
                         thirdColumnText =

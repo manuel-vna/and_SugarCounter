@@ -11,7 +11,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.util.CustomTypeConverter
 
-@Database(entities = [SugarEntry::class, Category::class], version = 11)
+@Database(entities = [SugarEntry::class, Category::class], version = 12)
 @TypeConverters(CustomTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun appDao(): DaoAppDatabase
@@ -77,6 +77,64 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }
 
+        val migration_11_12 =
+            object : Migration(11, 12) {
+                override fun migrate(db: SupportSQLiteDatabase) {
+                    // Rename the old table to avoid conflicts
+                    db.execSQL("ALTER TABLE sugarEntriesTable RENAME TO sugarEntriesTable_old")
+
+                    // Create the new "sugarEntriesTable"
+                    db.execSQL(
+                        """
+                        CREATE TABLE IF NOT EXISTS sugarEntriesTable (
+                            id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                            currentTimestamp INTEGER NOT NULL,
+                            date TEXT NOT NULL,
+                            category TEXT NOT NULL,
+                            entryType TEXT NOT NULL,
+                            gramPerHundred REAL NOT NULL,
+                            gramPerPiece REAL NOT NULL,
+                            quantity REAL NOT NULL,
+                            amount REAL NOT NULL,
+                            gramTotal REAL NOT NULL
+                        )
+                        """.trimIndent(),
+                    )
+
+                    // Insert ALL rows from the renamed old table
+                    db.execSQL(
+                        """
+                        INSERT INTO sugarEntriesTable (
+                            currentTimestamp,
+                            date,
+                            category,
+                            entryType,
+                            gramPerHundred,
+                            gramPerPiece,
+                            quantity,
+                            amount,
+                            gramTotal
+                        )
+                        SELECT
+                            currentTimestamp,
+                            date,
+                            category,
+                            entryType,
+                            CASE WHEN entryType = 'PerHundred' THEN gram,
+                            CASE WHEN entryType = 'PerPiece' THEN gram,
+                            CASE WHEN entryType = 'PerHundred' THEN quantity,
+                            CASE WHEN entryType = 'PerPiece' THEN quantity,
+                            gramTotal * 1.0
+                        FROM sugarEntriesTable_old
+                        ORDER BY currentTimestamp ASC
+                        """.trimIndent(),
+                    )
+
+                    // Drop the old table now that data has been migrated
+                    db.execSQL("DROP TABLE sugarEntriesTable_old")
+                }
+            }
+
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
@@ -91,7 +149,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 application.applicationContext,
                                 AppDatabase::class.java,
                                 "app_database",
-                            ).addMigrations(migration_8_9, migration_10_11)
+                            ).addMigrations(migration_8_9, migration_10_11, migration_11_12)
                             .fallbackToDestructiveMigration(false)
                             .build()
 

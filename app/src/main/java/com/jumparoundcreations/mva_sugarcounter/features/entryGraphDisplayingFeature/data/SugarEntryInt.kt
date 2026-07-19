@@ -17,10 +17,14 @@ data class SugarEntryInt(
     val category: String,
     @ColumnInfo(name = "entryType")
     val entryType: GramCountMode,
-    @ColumnInfo(name = "gram")
-    val gram: Int,
+    @ColumnInfo(name = "gramPerHundred")
+    val gramPerHundred: Int,
+    @ColumnInfo(name = "gramPerPiece")
+    val gramPerPiece: Int,
     @ColumnInfo(name = "quantity")
     val quantity: Int,
+    @ColumnInfo(name = "amount")
+    val amount: Int,
     @ColumnInfo(name = "gramTotal")
     val gramTotal: Int,
 )

@@ -180,6 +180,7 @@ class EntrySavingViewModel(
                                         apiResult.gramPerHundred.toString(),
                                     entryFieldGramPerPiece =
                                         apiResult.gramPerPiece.toString(),
+                                    entryFieldQuantity = "",
                                     gramCountModeTabIndex =
                                         if (apiResult.entryType == GramCountMode.PerHundred) 0 else 1,
                                 )
@@ -238,7 +239,8 @@ class EntrySavingViewModel(
                     val entry = result.entry
                     _entrySavingStates.update { current ->
                         current.copy(
-                            entryFieldGram = entry.gram.toString(),
+                            entryFieldGramPerHundred = entry.gramPerHundred .toString(),
+                            entryFieldGramPerPiece = entry.gramPerPiece.toString(),
                             entryFieldQuantity = entry.quantity.toString(),
                             gramCountModeTabIndex =
                                 if (entry.entryType == GramCountMode.PerHundred) 0 else 1,
