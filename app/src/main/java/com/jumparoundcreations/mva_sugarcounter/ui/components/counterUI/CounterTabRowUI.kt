@@ -146,16 +146,18 @@ fun TabRow(
                                 )
                             }
                         } else {
-                            onAction(
-                                EntrySavingIntents.ChangeEntryFieldGramPerPiece(
-                                    entryFieldGramPerPiece = input,
-                                ),
-                            )
+                            if (InputFilters.filterBlockingOverThousand(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                                        entryFieldGramPerPiece = input,
+                                    ),
+                                )
+                            }
                         }
                     },
                     onValueChangeQuantityField = { input ->
                         if (isPerHundred) {
-                            if (InputFilters.filterBlockingOverHundred(input)) {
+                            if (InputFilters.filterBlockingOverThousand(input)) {
                                 onAction(
                                     EntrySavingIntents.ChangeEntryFieldQuantity(
                                         entryFieldQuantity = input,
@@ -163,11 +165,13 @@ fun TabRow(
                                 )
                             }
                         } else {
-                            onAction(
-                                EntrySavingIntents.ChangeEntryFieldAmount(
-                                    entryFieldAmount = input,
-                                ),
-                            )
+                            if (InputFilters.filterBlockingOverHundred(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldAmount(
+                                        entryFieldAmount = input,
+                                    ),
+                                )
+                            }
                         }
                     },
                     onClearGramField = {
