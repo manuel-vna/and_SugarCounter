@@ -2,17 +2,27 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.use
 
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 
 class CheckUserInputUseCase {
-    operator fun invoke(state: EntrySavingStates): CheckUserInputResult =
-        if (state.categoryInField.isEmpty()) {
+
+    operator fun invoke(state: EntrySavingStates): CheckUserInputResult = when {
+        state.categoryInField.isEmpty() ->
             CheckUserInputResult.NoCategoryGiven
-        } else if (
-            state.entryFieldGram.isEmpty() ||
-            state.entryFieldQuantity.isEmpty()
-        ) {
+
+        state.isGramDataMissing() ->
             CheckUserInputResult.NoGramDataGivenButCategoryGiven
-        } else {
+
+        else ->
             CheckUserInputResult.InputDataComplete
-        }
+    }
+
+    private fun EntrySavingStates.isGramDataMissing(): Boolean = when (gramCountMode) {
+        GramCountMode.PerHundred ->
+            entryFieldGramPerHundred.isEmpty() || entryFieldQuantity.isEmpty()
+
+        GramCountMode.PerPiece ->
+            entryFieldGramPerPiece.isEmpty()
+    }
+
 }

@@ -96,7 +96,7 @@ abstract class AppDatabase : RoomDatabase() {
                             gramPerPiece REAL,
                             quantity REAL,
                             amount REAL,
-                            gramTotal REAL NOT NULL
+                            gramTotal REAL
                         )
                         """.trimIndent(),
                     )

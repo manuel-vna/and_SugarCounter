@@ -17,7 +17,7 @@ fun SugarEntry.toIntModel(): SugarEntryInt =
         gramPerPiece = gramPerPiece?.toInt(),
         quantity = quantity?.toInt(),
         amount = amount?.toInt(),
-        gramTotal = gramTotal.toInt(),
+        gramTotal = gramTotal?.toInt(),
     )
 
 fun EntryGroup.toIntModel(): EntryGroupInt =

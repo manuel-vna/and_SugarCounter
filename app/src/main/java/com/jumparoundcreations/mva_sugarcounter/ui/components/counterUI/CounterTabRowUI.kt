@@ -137,7 +137,15 @@ fun TabRow(
                         stringResource(R.string.quantitySugar)
                     },
                     onValueChangeGramField = { input ->
-                        if (InputFilters.filterBlockingOverHundred(input)) {
+                        if (isPerHundred) {
+                            if (InputFilters.filterBlockingOverHundred(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldGramPerHundred(
+                                        entryFieldGramPerHundred = input,
+                                    ),
+                                )
+                            }
+                        } else {
                             onAction(
                                 EntrySavingIntents.ChangeEntryFieldGramPerPiece(
                                     entryFieldGramPerPiece = input,
@@ -146,10 +154,18 @@ fun TabRow(
                         }
                     },
                     onValueChangeQuantityField = { input ->
-                        if (InputFilters.filterBlockingOverHundred(input)) {
+                        if (isPerHundred) {
+                            if (InputFilters.filterBlockingOverHundred(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldQuantity(
+                                        entryFieldQuantity = input,
+                                    ),
+                                )
+                            }
+                        } else {
                             onAction(
-                                EntrySavingIntents.ChangeEntryFieldQuantity(
-                                    entryFieldQuantity = input,
+                                EntrySavingIntents.ChangeEntryFieldAmount(
+                                    entryFieldAmount = input,
                                 ),
                             )
                         }

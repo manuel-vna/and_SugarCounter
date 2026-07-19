@@ -15,7 +15,6 @@ data class EntrySavingStates(
     val categoryDropdownExpanded: Boolean = false,
     val gramCountMode: GramCountMode = GramCountMode.PerHundred,
     val gramCountModeTabIndex: Int = 0,
-    val entryFieldGram: String = "",
     val entryFieldGramPerHundred: String = "",
     val entryFieldGramPerPiece: String = "",
     val entryFieldQuantity: String = "",

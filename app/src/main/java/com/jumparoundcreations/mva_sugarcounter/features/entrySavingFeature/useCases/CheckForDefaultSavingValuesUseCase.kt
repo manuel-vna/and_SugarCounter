@@ -5,6 +5,6 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 
 class CheckForDefaultSavingValuesUseCase {
     operator fun invoke(state: EntrySavingStates): Boolean =
-        state.entryFieldQuantity.isEmpty() &&
+        state.entryFieldAmount.isEmpty() &&
             state.gramCountMode == GramCountMode.PerPiece
 }

@@ -87,9 +87,6 @@ class EntrySavingViewModel(
             is EntrySavingIntents.ChangeGramCountModeTabIndex ->
                 actionChangeGramCountModeTabIndex(action.tabIndex)
 
-            is EntrySavingIntents.ChangeEntryFieldGram ->
-                actionChangeEntryFieldGram(action.entryFieldGram)
-
             is EntrySavingIntents.ChangeEntryFieldGramPerHundred ->
                 actionChangeEntryFieldGramPerHundred(action.entryFieldGramPerHundred)
 
@@ -177,10 +174,11 @@ class EntrySavingViewModel(
                             _entrySavingStates.update { current ->
                                 current.copy(
                                     entryFieldGramPerHundred =
-                                        apiResult.gramPerHundred.toString(),
+                                        apiResult.gramPerHundred?.toString() ?: "",
                                     entryFieldGramPerPiece =
-                                        apiResult.gramPerPiece.toString(),
+                                        apiResult.gramPerPiece?.toString() ?: "",
                                     entryFieldQuantity = "",
+                                    entryFieldAmount = "",
                                     gramCountModeTabIndex =
                                         if (apiResult.entryType == GramCountMode.PerHundred) 0 else 1,
                                 )
@@ -229,8 +227,10 @@ class EntrySavingViewModel(
                     _scanUiEvents.emit(value = ScanUiEvents.CategoryEditNoDataForChosenCategory)
                     _entrySavingStates.update { current ->
                         current.copy(
-                            entryFieldGram = "",
+                            entryFieldGramPerHundred = "",
+                            entryFieldGramPerPiece = "",
                             entryFieldQuantity = "",
+                            entryFieldAmount = ""
                         )
                     }
                 }
@@ -239,9 +239,10 @@ class EntrySavingViewModel(
                     val entry = result.entry
                     _entrySavingStates.update { current ->
                         current.copy(
-                            entryFieldGramPerHundred = entry.gramPerHundred .toString(),
-                            entryFieldGramPerPiece = entry.gramPerPiece.toString(),
-                            entryFieldQuantity = entry.quantity.toString(),
+                            entryFieldGramPerHundred = entry.gramPerHundred?.toString() ?: "",
+                            entryFieldGramPerPiece = entry.gramPerPiece?.toString() ?: "",
+                            entryFieldQuantity = entry.quantity?.toString() ?: "",
+                            entryFieldAmount = entry.amount?.toString() ?: "",
                             gramCountModeTabIndex =
                                 if (entry.entryType == GramCountMode.PerHundred) 0 else 1,
                         )
@@ -326,14 +327,6 @@ class EntrySavingViewModel(
         }
     }
 
-    private fun actionChangeEntryFieldGram(entryFieldGram: String) {
-        _entrySavingStates.update { current ->
-            current.copy(
-                entryFieldGram = entryFieldGram,
-            )
-        }
-    }
-
     private fun actionChangeEntryFieldGramPerHundred(entryFieldGram: String) {
         _entrySavingStates.update { current ->
             current.copy(
@@ -370,7 +363,7 @@ class EntrySavingViewModel(
         if (checkForDefaultSavingValuesUseCase(entrySavingStates.value)) {
             _entrySavingStates.update { current ->
                 current.copy(
-                    entryFieldQuantity = EntrySavingConstants.DEFAULT_PER_PIECE_VALUE,
+                    entryFieldAmount = EntrySavingConstants.DEFAULT_PER_PIECE_VALUE,
                 )
             }
         }
@@ -452,8 +445,10 @@ class EntrySavingViewModel(
         _entrySavingStates.update { current ->
             current.copy(
                 categoryInField = "",
-                entryFieldGram = "",
+                entryFieldGramPerHundred = "",
+                entryFieldGramPerPiece = "",
                 entryFieldQuantity = "",
+                entryFieldAmount = "",
                 gramCountModeTabIndex = 0,
             )
         }

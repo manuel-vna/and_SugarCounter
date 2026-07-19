@@ -19,24 +19,10 @@ class HelperMethods : KoinComponent {
     companion object {
 
         fun calculateTotalGramPerDayBlock(valueList: List<SugarEntry>): Double =
-            if (valueList.isNotEmpty()) {
-                valueList
-                    .map {
-                        it.gramTotal
-                    }.reduce { sum, element -> sum + element }
-            } else {
-                NumberConstants.NULL_AS_DOUBLE
-            }
+            valueList.sumOf { it.gramTotal ?: 0.0 }
 
         fun calculateTotalGramPerDayBlockTemp(valueList: List<SugarEntryInt>): Int =
-            if (valueList.isNotEmpty()) {
-                valueList
-                    .map {
-                        it.gramTotal
-                    }.reduce { sum, element -> sum + element }
-            } else {
-                0
-            }
+            valueList.sumOf { it.gramTotal ?: 0 }
 
         fun checkForUIMode(context: Context): Int {
             // darkMode == 33 and brightMode = 17

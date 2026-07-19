@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-fun String.toDoubleFormatted(): Double = this.replace(",", ".").toDouble()
+fun String.toDoubleFormattedOrNull(): Double? = this.replace(",", ".").toDoubleOrNull()
 
 fun String.formatDateForDisplay(): String =
     try {

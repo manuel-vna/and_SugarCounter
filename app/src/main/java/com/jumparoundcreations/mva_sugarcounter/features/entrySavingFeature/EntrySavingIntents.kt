@@ -38,10 +38,6 @@ sealed interface EntrySavingIntents {
         val tabIndex: Int,
     ) : EntrySavingIntents
 
-    data class ChangeEntryFieldGram(
-        val entryFieldGram: String,
-    ) : EntrySavingIntents
-
     data class ChangeEntryFieldGramPerHundred(
         val entryFieldGramPerHundred: String,
     ) : EntrySavingIntents

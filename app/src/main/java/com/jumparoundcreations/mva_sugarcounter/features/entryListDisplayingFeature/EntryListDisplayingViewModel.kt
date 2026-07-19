@@ -182,9 +182,10 @@ class EntryListDisplayingViewModel(
                 current.copy(
                     data = current.data.copy(
                         valueCategory = sugarEntry.category,
-                        valueGramPerHundred = sugarEntry.gramPerHundred.toString(),
-                        valueGramPerPiece = sugarEntry.gramPerPiece.toString(),
-                        valueQuantity = sugarEntry.quantity.toString(),
+                        valueGramPerHundred = sugarEntry.gramPerHundred?.toString() ?: "",
+                        valueGramPerPiece = sugarEntry.gramPerPiece?.toString() ?: "",
+                        valueQuantity = sugarEntry.quantity?.toString() ?: "",
+                        valueAmount = sugarEntry.amount?.toString() ?: "",
                     ),
                 )
             } else {
