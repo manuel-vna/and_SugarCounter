@@ -12,7 +12,7 @@ import java.util.Locale
 
 class ExportEntriesUseCase {
     @RequiresApi(Build.VERSION_CODES.Q)
-    operator fun invoke(
+    suspend operator fun invoke(
         context: Context,
         osVersionHigherOrEqualsR: Boolean,
         settingsVM: SettingsVM,

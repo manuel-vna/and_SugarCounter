@@ -8,7 +8,7 @@ import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestamp
 class ReuseEntryForTodayUseCase(
     val database: AppDatabase,
 ) {
-    operator fun invoke(entrySugar: SugarEntry) {
+    suspend operator fun invoke(entrySugar: SugarEntry) {
         val currentTimestamp = System.currentTimeMillis() / 1000
 
         if (entrySugar.entryType == GramCountMode.PerHundred) {

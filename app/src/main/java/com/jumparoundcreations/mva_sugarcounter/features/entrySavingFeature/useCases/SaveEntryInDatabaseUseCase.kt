@@ -11,7 +11,7 @@ import com.jumparoundcreations.mva_sugarcounter.util.extensions.toDoubleFormatte
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase,
 ) {
-    operator fun invoke(state: EntrySavingStates) {
+    suspend operator fun invoke(state: EntrySavingStates) {
         database.appDao().insertSugarEntry(
             SugarEntry(
                 currentTimestamp = state.dateOfEntryEpochSec,

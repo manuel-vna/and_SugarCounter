@@ -8,7 +8,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.Entr
 class SaveCategoryInDatabaseUseCase(
     private val database: AppDatabase,
 ) {
-    operator fun invoke(state: EntrySavingStates) {
+    suspend operator fun invoke(state: EntrySavingStates) {
         if (
             state.categoryListInDropdown.contains(state.categoryInField) &&
             state.barcodeNumber.isNotEmpty()

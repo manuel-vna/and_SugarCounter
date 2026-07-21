@@ -9,7 +9,7 @@ import com.jumparoundcreations.mva_sugarcounter.util.extensions.roundToOneDecima
 class EditDatabaseEntryUseCase(
     val database: AppDatabase,
 ) {
-    operator fun invoke(
+    suspend operator fun invoke(
         sugarEntryID: Int,
         sugarEntryType: GramCountMode,
         oldCategory: String,
