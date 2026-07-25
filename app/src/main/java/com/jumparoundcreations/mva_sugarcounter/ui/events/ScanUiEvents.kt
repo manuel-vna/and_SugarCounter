@@ -5,6 +5,8 @@ sealed class ScanUiEvents {
 
     object ScanResultNoProductFoundViaApi : ScanUiEvents()
 
+    object ScanResultNoInternet: ScanUiEvents()
+
     object ScanResultFailed : ScanUiEvents()
 
     object CategoryEditNoDataForChosenCategory : ScanUiEvents()

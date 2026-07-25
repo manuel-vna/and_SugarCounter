@@ -98,6 +98,13 @@ fun CounterUserInformation(
                     )
                 }
 
+                is ScanUiEvents.ScanResultNoInternet -> {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(R.string.scan_no_internet_snackbar_text),
+                        duration = SnackbarDuration.Short,
+                    )
+                }
+
                 is ScanUiEvents.ScanResultFailed -> {
                     snackbarHostState.showSnackbar(
                         message = "ToDo: Scan failed",

@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
@@ -21,6 +22,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import com.jumparoundcreations.mva_sugarcounter.ui.events.ScanUiEvents
 import com.jumparoundcreations.mva_sugarcounter.util.EntrySavingConstants
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.hasInternetAccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +35,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class EntrySavingViewModel(
+    private val context: Context,
     private val scanBarcodeUseCase: ScanBarcodeUseCase,
     private val getEntryByCategoryUseCase: GetEntryByCategoryUseCase,
     private val getEntryFromApiUseCase: GetEntryFromApiUseCase,
@@ -163,37 +166,42 @@ class EntrySavingViewModel(
                     println("ScanResultNoEntryInDbForBarcode")
                     actionSetBarcodeState(result.barcode)
 
-                    val apiResult = getEntryFromApiUseCase(
-                        barcode = result.barcode
-                    )
+                    if (context.hasInternetAccess()) {
+                        val apiResult = getEntryFromApiUseCase(
+                            barcode = result.barcode
+                        )
 
-                    when (apiResult) {
-                        is GetEntryByApiResult.ProductFound -> {
-                            actionSetBarcodeState(result.barcode)
-                            actionSetCategoryForBarcode(apiResult.category)
-                            _entrySavingStates.update { current ->
-                                current.copy(
-                                    entryFieldGramPerHundred =
+                        when (apiResult) {
+                            is GetEntryByApiResult.ProductFound -> {
+                                actionSetBarcodeState(result.barcode)
+                                actionSetCategoryForBarcode(apiResult.category)
+                                _entrySavingStates.update { current ->
+                                    current.copy(
+                                        entryFieldGramPerHundred =
                                         apiResult.gramPerHundred?.toString() ?: "",
-                                    entryFieldGramPerPiece =
+                                        entryFieldGramPerPiece =
                                         apiResult.gramPerPiece?.toString() ?: "",
-                                    entryFieldQuantity = "",
-                                    entryFieldAmount = "",
-                                    gramCountModeTabIndex =
+                                        entryFieldQuantity = "",
+                                        entryFieldAmount = "",
+                                        gramCountModeTabIndex =
                                         if (apiResult.entryType == GramCountMode.PerHundred) 0 else 1,
-                                )
+                                    )
+                                }
+                                _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoEntryInDbForBarcode)
                             }
-                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoEntryInDbForBarcode)
-                        }
 
-                        is GetEntryByApiResult.ProductNotFound -> {
-                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoProductFoundViaApi)
-                            actionBarcodeNotPresentInDb()
-                        }
+                            is GetEntryByApiResult.ProductNotFound -> {
+                                _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoProductFoundViaApi)
+                                actionBarcodeNotPresentInDb()
+                            }
 
-                        else -> {
-                            _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
+                            else -> {
+                                _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
+                            }
                         }
+                    } else {
+                        _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoInternet)
+                        actionBarcodeNotPresentInDb()
                     }
                 }
 

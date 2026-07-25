@@ -40,6 +40,7 @@ val appModule =
         single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
         viewModel {
             EntrySavingViewModel(
+                context = androidApplication(),
                 scanBarcodeUseCase = get(),
                 getEntryByCategoryUseCase = get(),
                 saveEntryInDatabaseUseCase = get(),

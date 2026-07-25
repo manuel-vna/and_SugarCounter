@@ -148,4 +148,5 @@
     <string name="accessibility_card_status">Card status</string>
     <string name="snackbar_threshold_change_success">New threshold successfully changed to %1$s</string>
     <string name="snackbar_threshold_change_cancel">Gram threshold change canceled</string>
+    <string name="scan_no_internet_snackbar_text">Internet connection required for barcode search</string>
 </resources>

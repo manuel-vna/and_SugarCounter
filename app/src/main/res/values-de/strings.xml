@@ -149,4 +149,5 @@
     <string name="accessibility_card_status">Status dieser Karte</string>
     <string name="snackbar_threshold_change_success">Neue Obergrenze geändert zu: %1$s</string>
     <string name="snackbar_threshold_change_cancel">Änderung der Obergrenze abgeebrochen</string>
+    <string name="scan_no_internet_snackbar_text">Internetverbindung für die Barcodesuche erforderlich</string>
 </resources>
