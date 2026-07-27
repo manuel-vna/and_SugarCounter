@@ -43,7 +43,7 @@ class SettingsExportE2ETest {
     private lateinit var context: Context
 
     @Before
-    fun setup() {
+    suspend fun setup() {
         context = ApplicationProvider.getApplicationContext()
         
         // 1. Setup in-memory database
@@ -70,9 +70,11 @@ class SettingsExportE2ETest {
                 date = "2023-10-27_10:00",
                 category = "TestCategory",
                 entryType = GramCountMode.PerHundred,
-                gram = 10.0,
+                gramPerPiece = 10.0,
+                gramPerHundred = 10.0,
                 quantity = 2.0,
-                gramTotal = 20.0
+                amount = 1.0,
+                gramTotal = 20.0,
             )
         )
     }

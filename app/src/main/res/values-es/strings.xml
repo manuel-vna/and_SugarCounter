@@ -76,7 +76,7 @@
     <string name="scan_barcode_button"> Barcode</string>
     <string name="no_barcode_yet_info_card">No se ha encontrado ningún producto</string>
     <string name="no_barcode_yet_info_title">Barcode aún no disponible</string>
-    <string name="no_barcode_yet_info_description">Todavía no se ha asignado ninguna categoría de producto a este código de barras. Si rellena los demás campos y guarda la entrada, el nombre del producto introducido en el campo \'<i>categoría</i>\' se asigna automáticamente al código de barras \'<i>%1$s</i>\' indicado anteriormente.</string>
+    <string name="no_barcode_yet_info_description">No se ha encontrado ningún producto alimenticio con este número de código de barras ni en la base de datos de Open Food Facts ni en la base de datos local de esta aplicación. Puedes añadir este producto (código de barras: «<i>%1$s</i>») ahora mismo completando el resto de los datos del producto y guardándolo.</string>
     <string name="category_bottom_sheet_barcode">Barcode (EAN)</string>
     <string name="category_bottom_sheet_per_piece_gram"> %1$s g de azúcar por pieza</string>
     <string name="category_bottom_sheet_per_hundred_gram"> %1$s g de azúcar por 100 gramos</string>

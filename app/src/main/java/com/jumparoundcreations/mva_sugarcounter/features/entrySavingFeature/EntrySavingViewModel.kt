@@ -192,16 +192,12 @@ class EntrySavingViewModel(
 
                             is GetEntryByApiResult.ProductNotFound -> {
                                 _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoProductFoundViaApi)
-                                actionBarcodeNotPresentInDb()
-                            }
-
-                            else -> {
-                                _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
+                                actionBarcodeNotFound()
                             }
                         }
                     } else {
                         _scanUiEvents.emit(value = ScanUiEvents.ScanResultNoInternet)
-                        actionBarcodeNotPresentInDb()
+                        actionBarcodeNotFound()
                     }
                 }
 
@@ -260,7 +256,7 @@ class EntrySavingViewModel(
         }
     }
 
-    private fun actionBarcodeNotPresentInDb() {
+    private fun actionBarcodeNotFound() {
         _entrySavingStates.update { current ->
             current.copy(
                 barcodeNotPresentInDb = current.barcodeNotPresentInDb.not(),
