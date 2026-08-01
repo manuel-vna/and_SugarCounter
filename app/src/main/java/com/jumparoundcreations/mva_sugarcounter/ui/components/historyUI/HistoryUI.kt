@@ -2,7 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,18 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
-import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
-import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
-import com.jumparoundcreations.mva_sugarcounter.util.extensions.toIntModel
+import com.jumparoundcreations.mva_sugarcounter.ui.components.calendarUI.EntryCalendarFeature
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
 
@@ -95,6 +89,10 @@ fun History(
 
         // Line Chart Screen
         if (historyChartScreenShown) {
+
+            EntryCalendarFeature()
+
+            /*
             if (isLandscape) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -134,6 +132,7 @@ fun History(
                     }
                 }
             }
+           */
         }
     }
 }
