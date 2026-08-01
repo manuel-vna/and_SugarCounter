@@ -50,15 +50,13 @@ data class CalendarDayUi(
     val isInCurrentMonth: Boolean
 )
 
-class EntryCalendarViewModel
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntryCalendarFeature(
     //viewModel: EntryCalendarViewModel = viewModel()
 ) {
     val currentMonth = remember { YearMonth.now() }
-    val pagerState = rememberPagerState(pageCount = { 12 })
+    val pagerState = rememberPagerState(initialPage = 11, pageCount = { 12 })
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -68,7 +66,7 @@ fun EntryCalendarFeature(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(0.dp)
         ) { page ->
-            val month = remember(page) { currentMonth.minusMonths(page.toLong()) }
+            val month = remember(page) { currentMonth.minusMonths((11 - page).toLong()) }
             val days = remember(month) { buildMonthGrid(month) }
 
             MonthPage(
@@ -213,10 +211,10 @@ private fun previewStatusFor(
 
 private fun DayStatus.toBackgroundColor(): Color {
     return when (this) {
-        DayStatus.LIMIT_OK -> Color(0xFF81C784)        // green
-        DayStatus.LIMIT_BREACHED -> Color(0xFFE57373)  // red
-        DayStatus.SPECIAL -> Color(0xFFFFF176)         // yellow
-        DayStatus.NO_DATA -> Color(0xFFE0E0E0)         // neutral
+        DayStatus.LIMIT_OK -> Color(0xFF81C784)
+        DayStatus.LIMIT_BREACHED -> Color(0xFFE57373)
+        DayStatus.SPECIAL -> Color(0xFFFFF176)
+        DayStatus.NO_DATA -> Color(0xFFE0E0E0)
     }
 }
 
