@@ -52,7 +52,7 @@ class EntrySavingViewModel(
     private val _scanUiEvents = MutableSharedFlow<ScanUiEvents>()
     val scanUiEvents = _scanUiEvents.asSharedFlow()
 
-    private val _entrySavingStates = MutableStateFlow(EntrySavingStates())
+    private val _entrySavingStates = MutableStateFlow(EntrySavingStates() )
     val entrySavingStates = _entrySavingStates.asStateFlow()
 
     fun onAction(action: EntrySavingIntents) {

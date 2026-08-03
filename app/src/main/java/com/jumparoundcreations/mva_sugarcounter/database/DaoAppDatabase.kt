@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.data.historyData.DateGramSummary
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -102,6 +103,14 @@ interface DaoAppDatabase {
         startPoint: Long,
         endPoint: Long,
     )
+
+    @Query("""
+    SELECT date, SUM(gramTotal) as totalGram 
+    FROM sugarEntriesTable 
+    WHERE currentTimestamp >= :sinceTimestamp 
+    GROUP BY date
+""")
+    fun getGramSummariesByDate(sinceTimestamp: Long): Flow<List<DateGramSummary>>
 
     // Categories
 

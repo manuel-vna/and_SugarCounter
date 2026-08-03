@@ -9,6 +9,8 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.GetGramSummaryPerDateUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
@@ -67,6 +69,10 @@ val appModule =
             )
         }
         viewModel {
+            EntryCalendarViewModel(get()
+            )
+        }
+        viewModel {
             SettingsVM(
                 exportEntriesUseCase = get(),
             )
@@ -93,6 +99,7 @@ val appModule =
         single { ReuseEntryForTodayUseCase(get()) }
         single { FilterEntriesBySearchFieldUseCase() }
         single { ExportEntriesUseCase() }
+        single { GetGramSummaryPerDateUseCase( get() ) }
     }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

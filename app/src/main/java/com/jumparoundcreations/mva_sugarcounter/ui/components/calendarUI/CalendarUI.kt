@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,30 +32,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.time.DayOfWeek
-import java.time.LocalDate
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jumparoundcreations.mva_sugarcounter.data.historyData.CalendarDayUi
+import com.jumparoundcreations.mva_sugarcounter.data.historyData.DayStatus
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarStates
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarViewModel
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatMonthTitle
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toBackgroundColor
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toMondayBasedIndex
+import org.koin.compose.viewmodel.koinViewModel
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-enum class DayStatus {
-    LIMIT_OK,
-    LIMIT_BREACHED,
-    SPECIAL,
-    NO_DATA
-}
-
-data class CalendarDayUi(
-    val date: LocalDate,
-    val status: DayStatus,
-    val isInCurrentMonth: Boolean
-)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntryCalendarFeature(
-    //viewModel: EntryCalendarViewModel = viewModel()
+    viewModel: EntryCalendarViewModel = koinViewModel()
 ) {
+
+    val entryCalendarStates by viewModel.entryCalendarStates.collectAsStateWithLifecycle()
     val currentMonth = remember { YearMonth.now() }
     val pagerState = rememberPagerState(initialPage = 11, pageCount = { 12 })
 
@@ -70,6 +67,7 @@ fun EntryCalendarFeature(
             val days = remember(month) { buildMonthGrid(month) }
 
             MonthPage(
+                entryCalendarStates = entryCalendarStates,
                 month = month,
                 days = days,
                 onDayClick = { day ->
@@ -83,6 +81,7 @@ fun EntryCalendarFeature(
 
 @Composable
 private fun MonthPage(
+    entryCalendarStates: EntryCalendarStates,
     month: YearMonth,
     days: List<CalendarDayUi>,
     onDayClick: (CalendarDayUi) -> Unit
@@ -110,6 +109,7 @@ private fun MonthPage(
         ) {
             items(days) { day ->
                 DayCell(
+                    entryCalendarStates = entryCalendarStates,
                     day = day,
                     onClick = { onDayClick(day) }
                 )
@@ -146,10 +146,25 @@ private fun WeekdayHeader() {
 
 @Composable
 private fun DayCell(
+    entryCalendarStates: EntryCalendarStates,
     day: CalendarDayUi,
     onClick: () -> Unit
 ) {
-    val backgroundColor = day.status.toBackgroundColor()
+    val status = remember(entryCalendarStates.gramSummariesPerDate, day.date) {
+        if (!day.isInCurrentMonth) {
+            DayStatus.NO_DATA
+        } else {
+            val dateString = day.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+            val summary = entryCalendarStates.gramSummariesPerDate.find { it.date == dateString }
+            when (summary?.totalGram) {
+                null -> DayStatus.NO_DATA
+                in 0.0..45.0 -> DayStatus.LIMIT_OK
+                else -> DayStatus.LIMIT_BREACHED
+            }
+        }
+    }
+
+    val backgroundColor = status.toBackgroundColor()
     val contentAlpha = if (day.isInCurrentMonth) 1f else 0.35f
 
     Surface(
@@ -179,7 +194,9 @@ private fun DayCell(
     }
 }
 
-private fun buildMonthGrid(month: YearMonth): List<CalendarDayUi> {
+private fun buildMonthGrid(
+    month: YearMonth
+): List<CalendarDayUi> {
     val firstDayOfMonth = month.atDay(1)
     val startOffset = firstDayOfMonth.dayOfWeek.toMondayBasedIndex()
 
@@ -189,40 +206,7 @@ private fun buildMonthGrid(month: YearMonth): List<CalendarDayUi> {
         val date = gridStartDate.plusDays(index.toLong())
         CalendarDayUi(
             date = date,
-            status = previewStatusFor(date, month),
             isInCurrentMonth = date.month == month.month
         )
     }
-}
-
-private fun previewStatusFor(
-    date: LocalDate,
-    currentMonth: YearMonth
-): DayStatus {
-    if (date.month != currentMonth.month) return DayStatus.NO_DATA
-
-    return when (date.dayOfMonth % 5) {
-        0 -> DayStatus.LIMIT_BREACHED
-        1 -> DayStatus.SPECIAL
-        2, 3 -> DayStatus.LIMIT_OK
-        else -> DayStatus.NO_DATA
-    }
-}
-
-private fun DayStatus.toBackgroundColor(): Color {
-    return when (this) {
-        DayStatus.LIMIT_OK -> Color(0xFF81C784)
-        DayStatus.LIMIT_BREACHED -> Color(0xFFE57373)
-        DayStatus.SPECIAL -> Color(0xFFFFF176)
-        DayStatus.NO_DATA -> Color(0xFFE0E0E0)
-    }
-}
-
-private fun DayOfWeek.toMondayBasedIndex(): Int {
-    return value - 1 // Monday = 0 ... Sunday = 6
-}
-
-private fun YearMonth.formatMonthTitle(): String {
-    val formatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.getDefault())
-    return atDay(1).format(formatter)
 }
