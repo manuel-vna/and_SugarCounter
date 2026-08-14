@@ -29,10 +29,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.CalendarDayUi
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.DayStatus
 import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarStates
@@ -41,6 +43,7 @@ import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatMonthTitle
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toBackgroundColor
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toMondayBasedIndex
 import org.koin.compose.viewmodel.koinViewModel
+import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
@@ -120,7 +123,15 @@ private fun MonthPage(
 
 @Composable
 private fun WeekdayHeader() {
-    val weekdays = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    val weekdays = listOf(
+        R.string.weekday_mon,
+        R.string.weekday_tue,
+        R.string.weekday_wed,
+        R.string.weekday_thu,
+        R.string.weekday_fri,
+        R.string.weekday_sat,
+        R.string.weekday_sun
+    )
 
     Row(
         modifier = Modifier
@@ -128,14 +139,14 @@ private fun WeekdayHeader() {
             .padding(bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        weekdays.forEach { weekday ->
+        weekdays.forEach { weekdayRes ->
             Box(
                 modifier = Modifier
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = weekday,
+                    text = stringResource(id = weekdayRes),
                     style = MaterialTheme.typography.labelMedium,
                     textAlign = TextAlign.Center
                 )
@@ -197,10 +208,10 @@ private fun DayCell(
 private fun buildMonthGrid(
     month: YearMonth
 ): List<CalendarDayUi> {
-    val firstDayOfMonth = month.atDay(1)
-    val startOffset = firstDayOfMonth.dayOfWeek.toMondayBasedIndex()
+    val firstDayOfMonth: LocalDate = month.atDay(1)
+    val startOffset: Int = firstDayOfMonth.dayOfWeek.toMondayBasedIndex()
 
-    val gridStartDate = firstDayOfMonth.minusDays(startOffset.toLong())
+    val gridStartDate: LocalDate = firstDayOfMonth.minusDays(startOffset.toLong())
 
     return (0 until 42).map { index ->
         val date = gridStartDate.plusDays(index.toLong())

@@ -150,4 +150,11 @@
     <string name="snackbar_threshold_change_success">Neue Obergrenze geändert zu: %1$s</string>
     <string name="snackbar_threshold_change_cancel">Änderung der Obergrenze abgeebrochen</string>
     <string name="scan_no_internet_snackbar_text">Internetverbindung für die Barcodesuche erforderlich</string>
+    <string name="weekday_mon">Mo</string>
+    <string name="weekday_tue">Di</string>
+    <string name="weekday_wed">Mi</string>
+    <string name="weekday_thu">Do</string>
+    <string name="weekday_fri">Fr</string>
+    <string name="weekday_sat">Sa</string>
+    <string name="weekday_sun">So</string>
 </resources>

@@ -149,4 +149,11 @@
     <string name="snackbar_threshold_change_success">New threshold successfully changed to %1$s</string>
     <string name="snackbar_threshold_change_cancel">Gram threshold change canceled</string>
     <string name="scan_no_internet_snackbar_text">Internet connection required for barcode search</string>
+    <string name="weekday_mon">Mon</string>
+    <string name="weekday_tue">Tue</string>
+    <string name="weekday_wed">Wed</string>
+    <string name="weekday_thu">Thu</string>
+    <string name="weekday_fri">Fri</string>
+    <string name="weekday_sat">Sat</string>
+    <string name="weekday_sun">Sun</string>
 </resources>
