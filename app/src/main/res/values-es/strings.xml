@@ -35,8 +35,9 @@
     <string name="alertSugarThresholdTitle">Advertencia: Azúcar</string>
     <string name="alertSugarThresholdDescription">Esta entrada superaría el límite máximo de gramos por día</string>
     <string name="alertThresholdDismissBtn">Conservar</string>
-    <string name="historygraphBtn">Diagrama</string>
-    <string name="historyCardsBtn">Mapas</string>
+    <string name="historyGraph">Diagrama</string>
+    <string name="historyCalendar">Calendario</string>
+    <string name="historyCards">Mapas</string>
     <string name="historyInfoDescriptionGraph">El diagrama muestra las últimas 35 entradas (si están disponibles)\n\nLa línea roja representa el límite diario de gramos de azúcar, que puede establecer en los ajustes.\n\nLa línea azul conecta los puntos que representan el consumo diario total de azúcar.\n\nLos valores diarios de gramos superiores a 100 g son demasiado altos para mostrarse en el diagrama.</string>
     <string name="historyInfoDescriptionCards">Esta vista general muestra la evolución de los valores de azúcar registrados por día (máximo 35 días).\nUna marca verde en la parte inferior izquierda indica que ese día se ha respetado el límite superior de azúcar establecido. Un símbolo de advertencia con un borde alrededor de la tarjeta indica que se ha superado el límite superior.</string>
     <string name="historyNoDataInfoDescription">Aún no hay entradas disponibles</string>
