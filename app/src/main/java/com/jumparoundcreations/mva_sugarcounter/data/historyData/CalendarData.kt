@@ -11,7 +11,8 @@ enum class DayStatus {
 
 data class CalendarDayUi(
     val date: LocalDate,
-    val isInCurrentMonth: Boolean
+    val isInCurrentMonth: Boolean,
+    val isToday: Boolean
 )
 
 data class DateGramSummary(

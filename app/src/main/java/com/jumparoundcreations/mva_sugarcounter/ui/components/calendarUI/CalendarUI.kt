@@ -177,6 +177,7 @@ private fun DayCell(
 
     val backgroundColor = status.toBackgroundColor()
     val contentAlpha = if (day.isInCurrentMonth) 1f else 0.35f
+    val currentDayBorder: Color = if (day.isToday) Color.Blue else Color.LightGray.copy(alpha = 0.3f)
 
     Surface(
         modifier = Modifier
@@ -191,7 +192,7 @@ private fun DayCell(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .border(1.dp, Color.LightGray.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                .border(1.dp, currentDayBorder, RoundedCornerShape(8.dp))
                 .padding(4.dp),
             contentAlignment = Alignment.TopStart
         ) {
@@ -212,12 +213,14 @@ private fun buildMonthGrid(
     val startOffset: Int = firstDayOfMonth.dayOfWeek.toMondayBasedIndex()
 
     val gridStartDate: LocalDate = firstDayOfMonth.minusDays(startOffset.toLong())
+    val today = LocalDate.now()
 
     return (0 until 42).map { index ->
         val date = gridStartDate.plusDays(index.toLong())
         CalendarDayUi(
             date = date,
-            isInCurrentMonth = date.month == month.month
+            isInCurrentMonth = date.month == month.month,
+            isToday = date.isEqual(today)
         )
     }
 }
