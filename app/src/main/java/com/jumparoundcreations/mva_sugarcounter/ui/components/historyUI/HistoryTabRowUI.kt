@@ -3,7 +3,6 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Tab
@@ -12,7 +11,6 @@ import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,20 +40,6 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
         )
 
     val selectedTabIndex by historyVM.isCardTabIndex.collectAsState()
-    val pagerState =
-        rememberPagerState {
-            historyTabItems.size
-        }
-
-    LaunchedEffect(key1 = selectedTabIndex) {
-        pagerState.animateScrollToPage(selectedTabIndex)
-    }
-
-    LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress) {
-            historyVM.actionSetIsCardTabIndex(pagerState.currentPage)
-        }
-    }
 
     SecondaryTabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
@@ -63,14 +47,6 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
                 selected = index == selectedTabIndex,
                 onClick = {
                     historyVM.actionSetIsCardTabIndex(index)
-
-                    if (index == 0) {
-                        historyVM.actionShowTabOneScreen()
-                        historyVM.actionHideTabTwoScreen()
-                    } else {
-                        historyVM.actionHideTabOneScreen()
-                        historyVM.actionShowTabTwoScreen()
-                    }
                 },
                 text = {
                     Row(

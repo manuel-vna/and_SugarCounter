@@ -78,7 +78,7 @@ val appModule =
             )
         }
         viewModel { CategoryVM() }
-        viewModel { HistoryVM() }
+        viewModel { HistoryVM(get()) }
         single { provideSharedPrefsMain(androidApplication()) }
         single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
         single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
