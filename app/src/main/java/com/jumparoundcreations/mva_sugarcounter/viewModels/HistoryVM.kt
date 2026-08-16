@@ -12,21 +12,21 @@ class HistoryVM(
     ViewModel(),
     KoinComponent {
     companion object {
-        private const val INDEX_KEY = "isCardTabIndex"
+        private const val INDEX_KEY = "historyTabIndex"
         private const val INDEX_DEFAULT = 0
     }
 
     // SateFlows: START
 
-    private val _isCardTabIndex = MutableStateFlow(
+    private val _historyTabIndex = MutableStateFlow(
         savedStateHandle.get<Int>(INDEX_KEY) ?: INDEX_DEFAULT
     )
-    val isCardTabIndex = _isCardTabIndex.asStateFlow()
+    val historyTabIndex = _historyTabIndex.asStateFlow()
 
-    private val _historyTabTwoShown = MutableStateFlow(_isCardTabIndex.value == 1)
+    private val _historyTabTwoShown = MutableStateFlow(_historyTabIndex.value == 1)
     val historyTabTwoShown = _historyTabTwoShown.asStateFlow()
 
-    private val _historyTabOneShown = MutableStateFlow(_isCardTabIndex.value == 0)
+    private val _historyTabOneShown = MutableStateFlow(_historyTabIndex.value == 0)
     val historyTabOneShown = _historyTabOneShown.asStateFlow()
 
     // SateFlows: END
@@ -48,8 +48,8 @@ class HistoryVM(
         _historyTabOneShown.value = false
     }
 
-    fun actionSetIsCardTabIndex(tabIndex: Int) {
-        _isCardTabIndex.value = tabIndex
+    fun actionSetHistoryTabIndex(tabIndex: Int) {
+        _historyTabIndex.value = tabIndex
         savedStateHandle[INDEX_KEY] = tabIndex
 
         if (tabIndex == 0) {

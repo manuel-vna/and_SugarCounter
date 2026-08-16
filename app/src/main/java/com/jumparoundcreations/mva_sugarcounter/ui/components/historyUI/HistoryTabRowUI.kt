@@ -39,14 +39,14 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
             ),
         )
 
-    val selectedTabIndex by historyVM.isCardTabIndex.collectAsState()
+    val selectedTabIndex by historyVM.historyTabIndex.collectAsState()
 
     SecondaryTabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
             Tab(
                 selected = index == selectedTabIndex,
                 onClick = {
-                    historyVM.actionSetIsCardTabIndex(index)
+                    historyVM.actionSetHistoryTabIndex(index)
                 },
                 text = {
                     Row(
