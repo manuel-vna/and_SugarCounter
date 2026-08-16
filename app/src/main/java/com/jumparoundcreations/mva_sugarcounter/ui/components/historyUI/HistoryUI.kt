@@ -38,8 +38,8 @@ fun History(
         entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val entryGraphDisplayingStates by
         entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
-    val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
-    val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
+    val historyTabOneShown by historyViewModel.historyTabOneShown.collectAsState()
+    val historyTabTwoShown by historyViewModel.historyTabTwoShown.collectAsState()
     val configuration = LocalConfiguration.current
     val isLandscape =
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -51,8 +51,7 @@ fun History(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Card Screen
-        if (historyCardsScreenShown) {
+        if (historyTabOneShown) {
             val states = entryListDisplayingStates
             when (states) {
                 is EntryListDisplayingStates.Loading -> {
@@ -87,52 +86,18 @@ fun History(
             }
         }
 
-        // Line Chart Screen
-        if (historyChartScreenShown) {
+        if (historyTabTwoShown) {
 
             EntryCalendarFeature()
 
             /*
-            if (isLandscape) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    EmptyDataInfo(
-                        description =
-                            stringResource(id = R.string.landscape_mode_no_graph_description),
-                    )
-                }
-            } else {
-                val states = entryGraphDisplayingStates
-                when (states) {
-                    is EntryGraphDisplayingStates.Loading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(90.dp),
-                            )
-                        }
-                    }
+            LineChartState(
+                context,
+                entryGraphDisplayingStates,
+                isLandscape
+            )
+            */
 
-                    is EntryGraphDisplayingStates.Success -> {
-                        val savedSugarCountGroupedInt: List<EntryGroupInt> =
-                            states.data.entriesGroupedPerDay.toIntModel()
-                        LineChart(
-                            context = context,
-                            savedSugarCountGrouped = savedSugarCountGroupedInt,
-                        )
-                    }
-
-                    is EntryGraphDisplayingStates.Error -> {
-                        Text(text = "Error: ${states.message}")
-                    }
-                }
-            }
-           */
         }
     }
 }

@@ -8,8 +8,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Tab
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,7 +57,7 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
         }
     }
 
-    TabRow(selectedTabIndex = selectedTabIndex) {
+    SecondaryTabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
             Tab(
                 selected = index == selectedTabIndex,
@@ -65,11 +65,11 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
                     historyVM.actionSetIsCardTabIndex(index)
 
                     if (index == 0) {
-                        historyVM.actionShowHistoryCardsScreen()
-                        historyVM.actionHideHistoryChartScreen()
+                        historyVM.actionShowTabOneScreen()
+                        historyVM.actionHideTabTwoScreen()
                     } else {
-                        historyVM.actionHideHistoryCardsScreen()
-                        historyVM.actionShowHistoryChartScreen()
+                        historyVM.actionHideTabOneScreen()
+                        historyVM.actionShowTabTwoScreen()
                     }
                 },
                 text = {

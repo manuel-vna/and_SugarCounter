@@ -17,29 +17,29 @@ class HistoryVM :
     private val _isCardTabIndex = MutableStateFlow(INDEX_DEFAULT)
     val isCardTabIndex = _isCardTabIndex.asStateFlow()
 
-    private val _historyChartScreenShown = MutableStateFlow(false)
-    val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
+    private val _historyTabTwoShown = MutableStateFlow(false)
+    val historyTabTwoShown = _historyTabTwoShown.asStateFlow()
 
-    private val _historyCardsScreenShown = MutableStateFlow(true)
-    val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
+    private val _historyTabOneShown = MutableStateFlow(true)
+    val historyTabOneShown = _historyTabOneShown.asStateFlow()
 
     // SateFlows: END
 
     // Actions: START
-    fun actionShowHistoryChartScreen() {
-        _historyChartScreenShown.value = true
+    fun actionShowTabTwoScreen() {
+        _historyTabTwoShown.value = true
     }
 
-    fun actionHideHistoryChartScreen() {
-        _historyChartScreenShown.value = false
+    fun actionHideTabTwoScreen() {
+        _historyTabTwoShown.value = false
     }
 
-    fun actionShowHistoryCardsScreen() {
-        _historyCardsScreenShown.value = true
+    fun actionShowTabOneScreen() {
+        _historyTabOneShown.value = true
     }
 
-    fun actionHideHistoryCardsScreen() {
-        _historyCardsScreenShown.value = false
+    fun actionHideTabOneScreen() {
+        _historyTabOneShown.value = false
     }
 
     fun actionSetIsCardTabIndex(tabIndex: Int) {

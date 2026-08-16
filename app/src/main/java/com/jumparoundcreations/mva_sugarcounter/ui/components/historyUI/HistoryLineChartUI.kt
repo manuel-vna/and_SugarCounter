@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,12 +34,62 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.GraphData
+import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
 import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toIntModel
 import org.koin.compose.koinInject
 import java.util.Locale
+
+@Composable
+fun LineChartState(
+    context: Context,
+    entryGraphDisplayingStates: EntryGraphDisplayingStates,
+    isLandscape: Boolean,
+) {
+    if (isLandscape) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            EmptyDataInfo(
+                description =
+                    stringResource(id = R.string.landscape_mode_no_graph_description),
+            )
+        }
+    } else {
+        val states = entryGraphDisplayingStates
+        when (states) {
+            is EntryGraphDisplayingStates.Loading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(90.dp),
+                    )
+                }
+            }
+
+            is EntryGraphDisplayingStates.Success -> {
+                val savedSugarCountGroupedInt: List<EntryGroupInt> =
+                    states.data.entriesGroupedPerDay.toIntModel()
+                LineChart(
+                    context = context,
+                    savedSugarCountGrouped = savedSugarCountGroupedInt,
+                )
+            }
+
+            is EntryGraphDisplayingStates.Error -> {
+                Text(text = "Error: ${states.message}")
+            }
+        }
+    }
+}
+
 
 @Composable
 fun LineChart(
@@ -299,16 +352,16 @@ fun getHeightOfDataPoint(
     valueToSubtractFrom90Percent = valueTotal
 
     return (
-        if (valueTotal <= maximalValue) {
-            // 90 = 90% height line graph, 10% height bottom date line
-            onePercentHeight * (90 - valueToSubtractFrom90Percent)
-        } else {
-            // multiplying one percent of the height with '-10'
-            // sets the data point above the top x-axis
-            onePercentHeight * -10
-            // by having a minus value on the vertical axis
-        }
-    ) as Float
+            if (valueTotal <= maximalValue) {
+                // 90 = 90% height line graph, 10% height bottom date line
+                onePercentHeight * (90 - valueToSubtractFrom90Percent)
+            } else {
+                // multiplying one percent of the height with '-10'
+                // sets the data point above the top x-axis
+                onePercentHeight * -10
+                // by having a minus value on the vertical axis
+            }
+            ) as Float
 }
 
 /**
