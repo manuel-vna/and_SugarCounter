@@ -17,6 +17,7 @@ class AppModuleTest : KoinTest {
                 android.content.Context::class,
                 android.content.SharedPreferences::class,
                 com.google.mlkit.vision.codescanner.GmsBarcodeScanner::class,
+                androidx.lifecycle.SavedStateHandle::class,
             )
         )
 

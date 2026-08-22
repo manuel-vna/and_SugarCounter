@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 
+import android.content.Context
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
@@ -16,18 +17,19 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useC
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.SaveEntryInDatabaseUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases.ScanBarcodeUseCase
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import kotlin.test.assertEquals
 
 @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class EntrySavingViewModelTest {
+    private val mockContext = mockk<Context>(relaxed = true)
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
     private val getEntryByCategoryUseCase = mockk<GetEntryByCategoryUseCase>()
     private val saveEntryInDatabaseUseCase = mockk<SaveEntryInDatabaseUseCase>()
@@ -46,6 +48,7 @@ class EntrySavingViewModelTest {
     fun setup() {
         viewModel =
             EntrySavingViewModel(
+                mockContext,
                 mockScanBarcodeUseCase,
                 getEntryByCategoryUseCase,
                 getEntryFromApiUseCase,
@@ -58,8 +61,8 @@ class EntrySavingViewModelTest {
             )
 
         every { displayAllCategoriesUseCase() } returns flowOf(listOf(category))
-        every { saveEntryInDatabaseUseCase(any()) } returns Unit
-        every { saveCategoryInDatabaseUseCase(any()) } returns Unit
+        coJustRun { saveEntryInDatabaseUseCase(any()) }
+        coJustRun { saveCategoryInDatabaseUseCase(any()) }
     }
 
     @Test
@@ -113,15 +116,14 @@ class EntrySavingViewModelTest {
             )
         }
 
-    @Ignore
     @Test
     fun testEntrySavingIntentsEditOfCategoryWithinDropdownwithEntryFound() =
         runTest {
             // Arrange
             val categoryInDropdown = "Chocolate"
-            val gram = 8.0
-            val quantity = 2.0
-            val gramTotal = gram * quantity
+            val gramPerPiece = 8.0
+            val amount = 2.0
+            val gramTotal = gramPerPiece * amount
             val foundEntry =
                 GetEntryByCategoryResult.EntryFound(
                     entry =
@@ -131,8 +133,10 @@ class EntrySavingViewModelTest {
                             date = "2025-12-15",
                             category = "Chocolate",
                             entryType = GramCountMode.PerPiece,
-                            gram = gram,
-                            quantity = quantity,
+                            gramPerHundred = 0.0,
+                            gramPerPiece = gramPerPiece,
+                            quantity = 1.0,
+                            amount = amount,
                             gramTotal = gramTotal,
                         ),
                 )
@@ -150,13 +154,13 @@ class EntrySavingViewModelTest {
             assertEquals(categoryInDropdown, viewModel.entrySavingStates.value.categoryInField)
             assertEquals(false, viewModel.entrySavingStates.value.categoryDropdownExpanded)
             assertEquals(
-                gram,
-                viewModel.entrySavingStates.value.entryFieldGram
+                gramPerPiece,
+                viewModel.entrySavingStates.value.entryFieldGramPerPiece
                     .toDouble(),
             )
             assertEquals(
-                quantity,
-                viewModel.entrySavingStates.value.entryFieldQuantity
+                amount,
+                viewModel.entrySavingStates.value.entryFieldAmount
                     .toDouble(),
             )
         }
@@ -188,7 +192,7 @@ class EntrySavingViewModelTest {
             )
             assertEquals(
                 expected = "",
-                actual = viewModel.entrySavingStates.value.entryFieldGram,
+                actual = viewModel.entrySavingStates.value.entryFieldGramPerHundred,
             )
             assertEquals(
                 expected = "",
@@ -203,7 +207,7 @@ class EntrySavingViewModelTest {
             val perPieceTabIndex = 1
             val perPiece = GramCountMode.PerPiece
             val entryFieldGram = "45"
-            val entryFieldQuantity = "25"
+            val entryFieldAmount = "25"
 
             // Act
             viewModel.onAction(
@@ -222,8 +226,8 @@ class EntrySavingViewModelTest {
                 ),
             )
             viewModel.onAction(
-                EntrySavingIntents.ChangeEntryFieldQuantity(
-                    entryFieldQuantity = entryFieldQuantity,
+                EntrySavingIntents.ChangeEntryFieldAmount(
+                    entryFieldAmount = entryFieldAmount,
                 ),
             )
 
@@ -240,11 +244,11 @@ class EntrySavingViewModelTest {
             )
             assertEquals(
                 expected = entryFieldGram,
-                actual = viewModel.entrySavingStates.value.entryFieldGram,
+                actual = viewModel.entrySavingStates.value.entryFieldGramPerPiece,
             )
             assertEquals(
-                expected = entryFieldQuantity,
-                actual = viewModel.entrySavingStates.value.entryFieldQuantity,
+                expected = entryFieldAmount,
+                actual = viewModel.entrySavingStates.value.entryFieldAmount,
             )
         }
 
@@ -278,7 +282,6 @@ class EntrySavingViewModelTest {
             )
         }
 
-    @Ignore
     @Test
     fun testEntrySavingIntentsSaveSugarEntrywithNoGramDataGivenButCategoryGivenandDismissNoSugarDataEnteredAlert() =
         runTest {
@@ -314,7 +317,6 @@ class EntrySavingViewModelTest {
             )
         }
 
-    @Ignore
     @Test
     fun testEntrySavingIntentsSaveSugarEntrywithInputDataComplete() =
         runTest {
@@ -322,7 +324,7 @@ class EntrySavingViewModelTest {
             every { checkForDefaultSavingValuesUseCase(any()) } returns false
             every { checkUserInputUseCase(any()) } returns
                 CheckUserInputResult.InputDataComplete
-            every { checkDailyGramThresholdUseCase(any()) } returns
+            coEvery { checkDailyGramThresholdUseCase(any()) } returns
                 CheckThresholdResult.WithinDailyThresholdBoundaries
 
             // Act
@@ -348,7 +350,7 @@ class EntrySavingViewModelTest {
             every { checkForDefaultSavingValuesUseCase(any()) } returns false
             every { checkUserInputUseCase(any()) } returns
                 CheckUserInputResult.InputDataComplete
-            every { checkDailyGramThresholdUseCase(any()) } returns
+            coEvery { checkDailyGramThresholdUseCase(any()) } returns
                 CheckThresholdResult.WithinDailyThresholdBoundaries
 
             // Act
@@ -381,7 +383,7 @@ class EntrySavingViewModelTest {
             )
             assertEquals(
                 expected = "",
-                actual = viewModel.entrySavingStates.value.entryFieldGram,
+                actual = viewModel.entrySavingStates.value.entryFieldGramPerHundred,
             )
             assertEquals(
                 expected = "",
