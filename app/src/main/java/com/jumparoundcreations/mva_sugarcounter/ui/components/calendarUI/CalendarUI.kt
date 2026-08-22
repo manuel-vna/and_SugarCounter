@@ -13,12 +13,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -59,7 +58,9 @@ fun EntryCalendarFeature(
     val pagerState = rememberPagerState(initialPage = 11, pageCount = { 12 })
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         HorizontalPager(
             state = pagerState,
@@ -103,19 +104,25 @@ private fun MonthPage(
 
         WeekdayHeader()
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(7),
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            userScrollEnabled = false
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(days) { day ->
-                DayCell(
-                    entryCalendarStates = entryCalendarStates,
-                    day = day,
-                    onClick = { onDayClick(day) }
-                )
+            val rows = days.chunked(7)
+            rows.forEach { rowDays ->
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    rowDays.forEach { day ->
+                        Box(modifier = Modifier.weight(1f)) {
+                            DayCell(
+                                entryCalendarStates = entryCalendarStates,
+                                day = day,
+                                onClick = { onDayClick(day) }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
