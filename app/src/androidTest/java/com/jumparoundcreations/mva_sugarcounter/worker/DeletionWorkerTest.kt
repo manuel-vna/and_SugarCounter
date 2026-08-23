@@ -79,7 +79,7 @@ class DeletionWorkerTest {
         val sugarTestData = true
 
         runBlocking {
-            var timestamp = timestampInSeconds.toLong()
+            var timestamp = timestampInSeconds
             repeat((365 * yearsTimespan)) {
                 timestamp += 86400
 
@@ -96,8 +96,10 @@ class DeletionWorkerTest {
                                     ),
                                 category = "Test Sugar",
                                 entryType = GramCountMode.PerPiece,
-                                gram = 7.5,
-                                quantity = 2.0,
+                                gramPerHundred = 0.0,
+                                gramPerPiece = 7.5,
+                                quantity = 0.0,
+                                amount = 2.0,
                                 gramTotal = 15.0,
                             ),
                         )
@@ -116,7 +118,7 @@ class DeletionWorkerTest {
                 .build()
         WorkManagerTestInitHelper.initializeTestWorkManager(context, config)
 
-        val sugarEntriesBeforeDeletion = dao.getAllEntries()
+        val sugarEntriesBeforeDeletion = runBlocking { dao.getAllEntries() }
         numberOfSugarEntriesBeforeDeletion = sugarEntriesBeforeDeletion.size
         // </editor-fold>
 
@@ -169,7 +171,7 @@ class DeletionWorkerTest {
     @Test
     fun testThatNumberOfSugarEntriesIsSmallerAfterWorkerWasRunning() {
         // Prepare
-        val numberOfSugarEntriesAfterDeletion = dao.getAllEntries().size
+        val numberOfSugarEntriesAfterDeletion = runBlocking { dao.getAllEntries().size }
         println("numberOfSugarEntriesBeforeDeletion: $numberOfSugarEntriesBeforeDeletion")
         println("numberOfSugarEntriesAfterDeletion: $numberOfSugarEntriesAfterDeletion")
 
@@ -180,7 +182,7 @@ class DeletionWorkerTest {
     @Test
     fun checkThatLatestSugarEntryIsWithin6MonthsRange() {
         // Prepare
-        val allLeftEntries = dao.getAllEntries()
+        val allLeftEntries = runBlocking { dao.getAllEntries() }
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
 
         println("timestampOfEntry: $timestampOfEntry")
@@ -193,7 +195,7 @@ class DeletionWorkerTest {
     @Test
     fun checkThatLatestSugarEntryIsOlderThan3MonthsAgo() {
         // Prepare
-        val allLeftEntries = dao.getAllEntries()
+        val allLeftEntries = runBlocking { dao.getAllEntries() }
         val timestampOfEntry = allLeftEntries.first().currentTimestamp
 
         // Test

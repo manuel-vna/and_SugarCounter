@@ -20,6 +20,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data
 import com.jumparoundcreations.mva_sugarcounter.features.settingsFeature.useCases.ExportEntriesUseCase
 import com.jumparoundcreations.mva_sugarcounter.ui.components.settingsUI.SettingsUI
 import com.jumparoundcreations.mva_sugarcounter.ui.theme.SugarCounterTheme
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -43,7 +44,7 @@ class SettingsExportE2ETest {
     private lateinit var context: Context
 
     @Before
-    suspend fun setup() {
+    fun setup() {
         context = ApplicationProvider.getApplicationContext()
         
         // 1. Setup in-memory database
@@ -64,19 +65,21 @@ class SettingsExportE2ETest {
         }
 
         // 3. Pre-populate database with a test entry using correct DAO method
-        db.appDao().insertSugarEntry(
-            SugarEntry(
-                currentTimestamp = System.currentTimeMillis(),
-                date = "2023-10-27_10:00",
-                category = "TestCategory",
-                entryType = GramCountMode.PerHundred,
-                gramPerPiece = 10.0,
-                gramPerHundred = 10.0,
-                quantity = 2.0,
-                amount = 1.0,
-                gramTotal = 20.0,
+        runBlocking {
+            db.appDao().insertSugarEntry(
+                SugarEntry(
+                    currentTimestamp = System.currentTimeMillis(),
+                    date = "2023-10-27_10:00",
+                    category = "TestCategory",
+                    entryType = GramCountMode.PerHundred,
+                    gramPerPiece = 10.0,
+                    gramPerHundred = 10.0,
+                    quantity = 2.0,
+                    amount = 1.0,
+                    gramTotal = 20.0,
+                )
             )
-        )
+        }
     }
 
     @After
