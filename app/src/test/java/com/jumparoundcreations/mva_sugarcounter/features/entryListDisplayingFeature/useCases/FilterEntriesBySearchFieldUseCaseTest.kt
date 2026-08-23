@@ -19,8 +19,10 @@ class FilterEntriesBySearchFieldUseCaseTest {
             date = "2025-12-20",
             category = "Chocolate Bar",
             entryType = GramCountMode.PerPiece,
-            gram = 10.0,
+            gramPerHundred = 0.0,
+            gramPerPiece = 10.0,
             quantity = 1.0,
+            amount = 1.0,
             gramTotal = 10.0,
         )
     private val cookieEntry =
@@ -30,8 +32,10 @@ class FilterEntriesBySearchFieldUseCaseTest {
             date = "2025-12-20",
             category = "Cookie",
             entryType = GramCountMode.PerPiece,
-            gram = 15.0,
+            gramPerHundred = 0.0,
+            gramPerPiece = 15.0,
             quantity = 1.0,
+            amount = 1.0,
             gramTotal = 15.0,
         )
     private val yogurtEntry =
@@ -41,8 +45,10 @@ class FilterEntriesBySearchFieldUseCaseTest {
             date = "2025-12-19",
             category = "Yogurt",
             entryType = GramCountMode.PerHundred,
-            gram = 5.0,
+            gramPerHundred = 5.0,
+            gramPerPiece = 0.0,
             quantity = 150.0,
+            amount = 0.0,
             gramTotal = 7.5,
         )
 

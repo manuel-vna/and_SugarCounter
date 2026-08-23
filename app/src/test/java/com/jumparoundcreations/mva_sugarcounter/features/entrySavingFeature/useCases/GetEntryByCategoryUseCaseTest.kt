@@ -38,8 +38,10 @@ class GetEntryByCategoryUseCaseTest {
                     date = "2025-12-15",
                     category = categoryToSearch,
                     entryType = GramCountMode.PerPiece,
-                    gram = 10.0,
-                    quantity = 2.0,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 10.0,
+                    quantity = 1.0,
+                    amount = 2.0,
                     gramTotal = 20.0,
                 )
 

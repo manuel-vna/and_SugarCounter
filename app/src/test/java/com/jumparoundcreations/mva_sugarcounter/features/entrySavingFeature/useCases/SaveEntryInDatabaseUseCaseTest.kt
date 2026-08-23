@@ -5,11 +5,12 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -27,9 +28,8 @@ class SaveEntryInDatabaseUseCaseTest {
 
         every { mockDatabase.appDao() } returns mockDao
 
-        // `coJustRun` is for suspend functions, but insertSugarEntry is not suspend.
-        // `justRun` tells MockK to "just run" the function without doing anything.
-        justRun { mockDao.insertSugarEntry(any()) }
+        // `coJustRun` is for suspend functions. insertSugarEntry is suspend.
+        coJustRun { mockDao.insertSugarEntry(any()) }
 
         useCase = SaveEntryInDatabaseUseCase(mockDatabase)
     }
@@ -43,30 +43,30 @@ class SaveEntryInDatabaseUseCaseTest {
                     dateOfEntryEpochSec = 1765566000L, // A specific timestamp (Dec 12, 2025 11:00:00 AM UTC)
                     categoryInField = "Cookie",
                     gramCountMode = GramCountMode.PerPiece, // The mode being tested
-                    entryFieldGram = "15.5",
-                    entryFieldQuantity = "2",
+                    entryFieldGramPerPiece = "15.5",
+                    entryFieldAmount = "2",
                 )
             // Expected total = 15.5 * 2 = 31.0
             val expectedGramTotal = 31.0
 
             // Use a CapturingSlot to grab the SugarEntry passed to the DAO
             val slot = slot<SugarEntry>()
-            every { mockDao.insertSugarEntry(capture(slot)) } answers { }
+            coEvery { mockDao.insertSugarEntry(capture(slot)) } coAnswers { }
 
             // Act
             useCase(state)
 
             // Assert
             // Verify that the insert method was called exactly once
-            verify(exactly = 1) { mockDao.insertSugarEntry(any()) }
+            coVerify(exactly = 1) { mockDao.insertSugarEntry(any()) }
 
             // Check the values of the captured SugarEntry
             val capturedEntry = slot.captured
             assertEquals("Cookie", capturedEntry.category)
             assertEquals(GramCountMode.PerPiece, capturedEntry.entryType)
-            assertEquals(15.5, capturedEntry.gram, 0.0)
-            assertEquals(2.0, capturedEntry.quantity, 0.0)
-            assertEquals(expectedGramTotal, capturedEntry.gramTotal, 0.0)
+            assertEquals(15.5, capturedEntry.gramPerPiece!!, 0.0)
+            assertEquals(2.0, capturedEntry.amount!!, 0.0)
+            assertEquals(expectedGramTotal, capturedEntry.gramTotal!!, 0.0)
         }
 
     @Test
@@ -78,26 +78,26 @@ class SaveEntryInDatabaseUseCaseTest {
                     dateOfEntryEpochSec = 1765566000L,
                     categoryInField = "Cereal",
                     gramCountMode = GramCountMode.PerHundred, // The mode being tested
-                    entryFieldGram = "25", // Sugar per 100g
+                    entryFieldGramPerHundred = "25", // Sugar per 100g
                     entryFieldQuantity = "50", // Grams of cereal eaten
                 )
             // Expected total = (25 / 100) * 50 = 12.5
             val expectedGramTotal = 12.5
 
             val slot = slot<SugarEntry>()
-            every { mockDao.insertSugarEntry(capture(slot)) } answers { }
+            coEvery { mockDao.insertSugarEntry(capture(slot)) } coAnswers { }
 
             // --- Act ---
             useCase(state)
 
             // --- Assert ---
-            verify(exactly = 1) { mockDao.insertSugarEntry(any()) }
+            coVerify(exactly = 1) { mockDao.insertSugarEntry(any()) }
 
             val capturedEntry = slot.captured
             assertEquals("Cereal", capturedEntry.category)
             assertEquals(GramCountMode.PerHundred, capturedEntry.entryType)
-            assertEquals(25.0, capturedEntry.gram, 0.0)
-            assertEquals(50.0, capturedEntry.quantity, 0.0)
-            assertEquals(expectedGramTotal, capturedEntry.gramTotal, 0.0)
+            assertEquals(25.0, capturedEntry.gramPerHundred!!, 0.0)
+            assertEquals(50.0, capturedEntry.quantity!!, 0.0)
+            assertEquals(expectedGramTotal, capturedEntry.gramTotal!!, 0.0)
         }
 }

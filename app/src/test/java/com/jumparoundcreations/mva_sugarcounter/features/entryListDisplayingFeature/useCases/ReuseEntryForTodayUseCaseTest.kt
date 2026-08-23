@@ -5,11 +5,12 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import io.mockk.clearAllMocks
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -27,7 +28,7 @@ class ReuseEntryForTodayUseCaseTest {
         mockDao = mockk()
         every { mockDatabase.appDao() } returns mockDao
         // Tell MockK to "just run" the insert function and capture its argument
-        justRun { mockDao.insertSugarEntry(capture(sugarEntrySlot)) }
+        coJustRun { mockDao.insertSugarEntry(capture(sugarEntrySlot)) }
         useCase = ReuseEntryForTodayUseCase(mockDatabase)
     }
 
@@ -37,63 +38,69 @@ class ReuseEntryForTodayUseCaseTest {
     }
 
     @Test
-    fun `invoke preserves PerHundred entryType when reusing entry`() {
-        // Arrange
-        val originalEntry =
-            SugarEntry(
-                id = 1,
-                currentTimestamp = 12345L,
-                date = "2025-01-01",
-                category = "Cereal",
-                entryType = GramCountMode.PerHundred,
-                gram = 25.0,
-                quantity = 50.0,
-                gramTotal = 12.5,
-            )
+    fun `invoke preserves PerHundred entryType when reusing entry`() =
+        runTest {
+            // Arrange
+            val originalEntry =
+                SugarEntry(
+                    id = 1,
+                    currentTimestamp = 12345L,
+                    date = "2025-01-01",
+                    category = "Cereal",
+                    entryType = GramCountMode.PerHundred,
+                    gramPerHundred = 25.0,
+                    gramPerPiece = 0.0,
+                    quantity = 50.0,
+                    amount = 0.0,
+                    gramTotal = 12.5,
+                )
 
-        // Act
-        useCase.invoke(originalEntry)
+            // Act
+            useCase.invoke(originalEntry)
 
-        // Assert
-        // Verify that the insert function was called exactly once
-        verify(exactly = 1) { mockDao.insertSugarEntry(any()) }
+            // Assert
+            // Verify that the insert function was called exactly once
+            coVerify(exactly = 1) { mockDao.insertSugarEntry(any()) }
 
-        // Assert that the entryType of the captured SugarEntry is correct
-        val capturedEntry = sugarEntrySlot.captured
-        assertEquals(GramCountMode.PerHundred, capturedEntry.entryType)
+            // Assert that the entryType of the captured SugarEntry is correct
+            val capturedEntry = sugarEntrySlot.captured
+            assertEquals(GramCountMode.PerHundred, capturedEntry.entryType)
 
-        // Assert that other important data was preserved
-        assertEquals(originalEntry.category, capturedEntry.category)
-        assertEquals(originalEntry.gram, capturedEntry.gram, 0.0)
-    }
+            // Assert that other important data was preserved
+            assertEquals(originalEntry.category, capturedEntry.category)
+            assertEquals(originalEntry.gramPerHundred!!, capturedEntry.gramPerHundred!!, 0.0)
+        }
 
     @Test
-    fun `invoke preserves PerPiece entryType when reusing entry`() {
-        // Arrange
-        val originalEntry =
-            SugarEntry(
-                id = 2,
-                currentTimestamp = 67890L,
-                date = "2025-02-02",
-                category = "Cookie",
-                entryType = GramCountMode.PerPiece, // This triggers the 'else' branch
-                gram = 15.0,
-                quantity = 2.0,
-                gramTotal = 30.0,
-            )
+    fun `invoke preserves PerPiece entryType when reusing entry`() =
+        runTest {
+            // Arrange
+            val originalEntry =
+                SugarEntry(
+                    id = 2,
+                    currentTimestamp = 67890L,
+                    date = "2025-02-02",
+                    category = "Cookie",
+                    entryType = GramCountMode.PerPiece, // This triggers the 'else' branch
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 15.0,
+                    quantity = 1.0,
+                    amount = 2.0,
+                    gramTotal = 30.0,
+                )
 
-        // Act
-        useCase.invoke(originalEntry)
+            // Act
+            useCase.invoke(originalEntry)
 
-        // Assert
-        verify(exactly = 1) { mockDao.insertSugarEntry(any()) }
+            // Assert
+            coVerify(exactly = 1) { mockDao.insertSugarEntry(any()) }
 
-        // Assert that the entryType of the captured SugarEntry is correct
-        val capturedEntry = sugarEntrySlot.captured
-        assertEquals(GramCountMode.PerPiece, capturedEntry.entryType)
+            // Assert that the entryType of the captured SugarEntry is correct
+            val capturedEntry = sugarEntrySlot.captured
+            assertEquals(GramCountMode.PerPiece, capturedEntry.entryType)
 
-        // Assert that other important data was preserved
-        assertEquals(originalEntry.category, capturedEntry.category)
-        assertEquals(originalEntry.gram, capturedEntry.gram, 0.0)
-    }
+            // Assert that other important data was preserved
+            assertEquals(originalEntry.category, capturedEntry.category)
+            assertEquals(originalEntry.gramPerPiece!!, capturedEntry.gramPerPiece!!, 0.0)
+        }
 }
