@@ -3,12 +3,12 @@ package com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFea
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 
 class ReuseEntryForTodayUseCase(
     val database: AppDatabase,
 ) {
-    operator fun invoke(entrySugar: SugarEntry) {
+    suspend operator fun invoke(entrySugar: SugarEntry) {
         val currentTimestamp = System.currentTimeMillis() / 1000
 
         if (entrySugar.entryType == GramCountMode.PerHundred) {
@@ -16,14 +16,15 @@ class ReuseEntryForTodayUseCase(
                 SugarEntry(
                     currentTimestamp = currentTimestamp,
                     date =
-                        HelperMethods.convertTimestampToDateString(
-                            currentTimestamp,
+                        currentTimestamp.convertTimestampToDateString(
                             "yyyy-MM-dd",
                         ),
                     category = entrySugar.category,
                     entryType = GramCountMode.PerHundred,
-                    gram = entrySugar.gram,
+                    gramPerHundred = entrySugar.gramPerHundred,
+                    gramPerPiece = entrySugar.gramPerPiece,
                     quantity = entrySugar.quantity,
+                    amount = entrySugar.amount,
                     gramTotal = entrySugar.gramTotal,
                 ),
             )
@@ -32,14 +33,15 @@ class ReuseEntryForTodayUseCase(
                 SugarEntry(
                     currentTimestamp = currentTimestamp,
                     date =
-                        HelperMethods.convertTimestampToDateString(
-                            currentTimestamp,
+                        currentTimestamp.convertTimestampToDateString(
                             "yyyy-MM-dd",
                         ),
                     category = entrySugar.category,
                     entryType = GramCountMode.PerPiece,
-                    gram = entrySugar.gram,
+                    gramPerHundred = entrySugar.gramPerHundred,
+                    gramPerPiece = entrySugar.gramPerPiece,
                     quantity = entrySugar.quantity,
+                    amount = entrySugar.amount,
                     gramTotal = entrySugar.gramTotal,
                 ),
             )

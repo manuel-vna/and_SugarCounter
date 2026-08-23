@@ -9,6 +9,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toDoubleFormattedOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,12 +25,10 @@ class EntryListDisplayingViewModel(
     val editDatabaseEntryUseCase: EditDatabaseEntryUseCase,
     val reuseEntryForTodayUseCase: ReuseEntryForTodayUseCase,
     val filterEntriesBySearchFieldUseCase: FilterEntriesBySearchFieldUseCase,
-) : ViewModel(),
-    KoinComponent {
-    private val _entryListDisplayingStates =
-        MutableStateFlow<EntryListDisplayingStates>(
-            value = EntryListDisplayingStates.Loading,
-        )
+) : ViewModel(), KoinComponent {
+    private val _entryListDisplayingStates = MutableStateFlow<EntryListDisplayingStates>(
+        value = EntryListDisplayingStates.Loading,
+    )
     val entryListDisplayingStates = _entryListDisplayingStates.asStateFlow()
 
     fun onAction(action: EntryListDisplayingIntents) {
@@ -47,11 +46,11 @@ class EntryListDisplayingViewModel(
             }
 
             is EntryListDisplayingIntents.EditGram -> {
-                actionEditGram(action.newGram)
+                actionEditGram(action.newGramPerHundred, action.newGramPerPiece)
             }
 
             is EntryListDisplayingIntents.EditQuantity -> {
-                actionEditQuantity(action.newQuantity)
+                actionEditQuantity(action.newQuantity, action.newAmount)
             }
 
             is EntryListDisplayingIntents.DismissCardDetails -> {
@@ -100,8 +99,7 @@ class EntryListDisplayingViewModel(
     fun groupEntriesPerDayCounter() {
         viewModelScope.launch {
             getEntryGroupPerDayUseCase(
-                timeFrameBeginning =
-                    TimeConstants.ONE_DAY_IN_SECONDS,
+                timeFrameBeginning = TimeConstants.ONE_DAY_IN_SECONDS,
             ).catch { throwable ->
                 _entryListDisplayingStates.update {
                     EntryListDisplayingStates.Error(
@@ -112,17 +110,15 @@ class EntryListDisplayingViewModel(
                 _entryListDisplayingStates.update { current ->
                     if (current is EntryListDisplayingStates.Success) {
                         current.copy(
-                            data =
-                                current.data.copy(
-                                    entriesGroupedPerDayCounter = entryGroupListCounter,
-                                ),
+                            data = current.data.copy(
+                                entriesGroupedPerDayCounter = entryGroupListCounter,
+                            ),
                         )
                     } else {
                         EntryListDisplayingStates.Success(
-                            data =
-                                SuccessData(
-                                    entriesGroupedPerDayCounter = entryGroupListCounter,
-                                ),
+                            data = SuccessData(
+                                entriesGroupedPerDayCounter = entryGroupListCounter,
+                            ),
                         )
                     }
                 }
@@ -148,19 +144,17 @@ class EntryListDisplayingViewModel(
                 _entryListDisplayingStates.update { current ->
                     if (current is EntryListDisplayingStates.Success) {
                         current.copy(
-                            data =
-                                current.data.copy(
-                                    entriesGroupedPerDayHistory = entryGroupListHistory,
-                                    entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory,
-                                ),
+                            data = current.data.copy(
+                                entriesGroupedPerDayHistory = entryGroupListHistory,
+                                entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory,
+                            ),
                         )
                     } else {
                         EntryListDisplayingStates.Success(
-                            data =
-                                SuccessData(
-                                    entriesGroupedPerDayHistory = entryGroupListHistory,
-                                    entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory,
-                                ),
+                            data = SuccessData(
+                                entriesGroupedPerDayHistory = entryGroupListHistory,
+                                entriesGroupedPerDayUnfilteredHistory = entryGroupListHistory,
+                            ),
                         )
                     }
                 }
@@ -172,11 +166,10 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            showCardItemBottomSheet = true,
-                            entryInCardItem = sugarEntry,
-                        ),
+                    data = current.data.copy(
+                        showCardItemBottomSheet = true,
+                        entryInCardItem = sugarEntry,
+                    ),
                 )
             } else {
                 current
@@ -188,12 +181,13 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            valueCategory = sugarEntry.category,
-                            valueGram = sugarEntry.gram.toString(),
-                            valueQuantity = sugarEntry.quantity.toString(),
-                        ),
+                    data = current.data.copy(
+                        valueCategory = sugarEntry.category,
+                        valueGramPerHundred = sugarEntry.gramPerHundred?.toString() ?: "",
+                        valueGramPerPiece = sugarEntry.gramPerPiece?.toString() ?: "",
+                        valueQuantity = sugarEntry.quantity?.toString() ?: "",
+                        valueAmount = sugarEntry.amount?.toString() ?: "",
+                    ),
                 )
             } else {
                 current
@@ -205,10 +199,9 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            valueCategory = newCategory,
-                        ),
+                    data = current.data.copy(
+                        valueCategory = newCategory,
+                    ),
                 )
             } else {
                 current
@@ -216,14 +209,14 @@ class EntryListDisplayingViewModel(
         }
     }
 
-    fun actionEditGram(newGram: String) {
+    fun actionEditGram(newGramPerHundred: String, newGramPerPiece: String) {
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            valueGram = newGram,
-                        ),
+                    data = current.data.copy(
+                        valueGramPerHundred = newGramPerHundred,
+                        valueGramPerPiece = newGramPerPiece,
+                    ),
                 )
             } else {
                 current
@@ -231,14 +224,14 @@ class EntryListDisplayingViewModel(
         }
     }
 
-    fun actionEditQuantity(newQuantity: String) {
+    fun actionEditQuantity(newQuantity: String, newAmount: String) {
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            valueQuantity = newQuantity,
-                        ),
+                    data = current.data.copy(
+                        valueQuantity = newQuantity,
+                        valueAmount = newAmount,
+                    ),
                 )
             } else {
                 current
@@ -250,10 +243,9 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            showCardItemBottomSheet = false,
-                        ),
+                    data = current.data.copy(
+                        showCardItemBottomSheet = false,
+                    ),
                 )
             } else {
                 current
@@ -265,10 +257,9 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            entryDeletionConfirmationDialogShown = isShown,
-                        ),
+                    data = current.data.copy(
+                        entryDeletionConfirmationDialogShown = isShown,
+                    ),
                 )
             } else {
                 current
@@ -286,36 +277,14 @@ class EntryListDisplayingViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
                 editDatabaseEntryUseCase(
-                    sugarEntryID =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.entryInCardItem.id,
-                    sugarEntryType =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.entryInCardItem.entryType,
-                    newCategory =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.valueCategory,
-                    newGram =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.valueGram.toDouble(),
-                    oldCategory =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.entryInCardItem.category,
-                    newQuantity =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.valueQuantity.toDouble(),
+                    sugarEntryID = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.id,
+                    sugarEntryType = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.entryType,
+                    newCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueCategory,
+                    newGramPerHundred = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerHundred.toDoubleFormattedOrNull(),
+                    newGramPerPiece = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueGramPerPiece.toDoubleFormattedOrNull(),
+                    oldCategory = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem.category,
+                    newQuantity = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueQuantity.toDoubleFormattedOrNull(),
+                    newAmount = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.valueAmount.toDoubleFormattedOrNull(),
                 )
             }
         }
@@ -325,11 +294,7 @@ class EntryListDisplayingViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
                 reuseEntryForTodayUseCase(
-                    entrySugar =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.entryInCardItem,
+                    entrySugar = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entryInCardItem,
                 )
             }
         }
@@ -339,14 +304,9 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            searchFieldShown =
-                                (
-                                    _entryListDisplayingStates.value as
-                                        EntryListDisplayingStates.Success
-                                ).data.searchFieldShown.not(),
-                        ),
+                    data = current.data.copy(
+                        searchFieldShown = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.searchFieldShown.not(),
+                    ),
                 )
             } else {
                 current
@@ -358,10 +318,9 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            searchFieldText = newText,
-                        ),
+                    data = current.data.copy(
+                        searchFieldText = newText,
+                    ),
                 )
             } else {
                 current
@@ -371,26 +330,16 @@ class EntryListDisplayingViewModel(
 
     fun actionFilterEntryListInHistory() {
         if (_entryListDisplayingStates.value is EntryListDisplayingStates.Success) {
-            val filteredEntryList =
-                filterEntriesBySearchFieldUseCase(
-                    searchFieldText =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.searchFieldText,
-                    entryList =
-                        (
-                            _entryListDisplayingStates.value as
-                                EntryListDisplayingStates.Success
-                        ).data.entriesGroupedPerDayUnfilteredHistory,
-                )
+            val filteredEntryList = filterEntriesBySearchFieldUseCase(
+                searchFieldText = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.searchFieldText,
+                entryList = (_entryListDisplayingStates.value as EntryListDisplayingStates.Success).data.entriesGroupedPerDayUnfilteredHistory,
+            )
             _entryListDisplayingStates.update { current ->
                 if (current is EntryListDisplayingStates.Success) {
                     current.copy(
-                        data =
-                            current.data.copy(
-                                entriesGroupedPerDayHistory = filteredEntryList,
-                            ),
+                        data = current.data.copy(
+                            entriesGroupedPerDayHistory = filteredEntryList,
+                        ),
                     )
                 } else {
                     current
@@ -403,12 +352,11 @@ class EntryListDisplayingViewModel(
         _entryListDisplayingStates.update { current ->
             if (current is EntryListDisplayingStates.Success) {
                 current.copy(
-                    data =
-                        current.data.copy(
-                            searchFieldShown = false,
-                            searchFieldText = "",
-                            entriesGroupedPerDayHistory = current.data.entriesGroupedPerDayUnfilteredHistory,
-                        ),
+                    data = current.data.copy(
+                        searchFieldShown = false,
+                        searchFieldText = "",
+                        entriesGroupedPerDayHistory = current.data.entriesGroupedPerDayUnfilteredHistory,
+                    ),
                 )
             } else {
                 current

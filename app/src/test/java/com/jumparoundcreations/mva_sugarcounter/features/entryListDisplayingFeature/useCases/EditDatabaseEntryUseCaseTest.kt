@@ -1,14 +1,17 @@
 package com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases
 
+import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.coJustRun
+import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.justRun
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -21,8 +24,10 @@ class EditDatabaseEntryUseCaseTest {
 
     // A slot to capture the arguments passed to the DAO methods
     private val idSlot = slot<Int>()
-    private val gramSlot = slot<Double>()
+    private val gramPerHundredSlot = slot<Double>()
+    private val gramPerPieceSlot = slot<Double>()
     private val quantitySlot = slot<Double>()
+    private val amountSlot = slot<Double>()
     private val gramTotalSlot = slot<Double>()
 
     @Before
@@ -31,17 +36,19 @@ class EditDatabaseEntryUseCaseTest {
         mockDao = mockk()
         every { mockDatabase.appDao() } returns mockDao
 
-        // `justRun` tells MockK to "just run" these void functions without doing anything.
+        // `coJustRun` tells MockK to "just run" these void functions without doing anything.
         // We capture the arguments passed to updateSugarEntry to verify them later.
-        justRun {
+        coJustRun {
             mockDao.updateSugarEntry(
                 id = capture(idSlot),
-                gram = capture(gramSlot),
+                gramPerHundred = capture(gramPerHundredSlot),
+                gramPerPiece = capture(gramPerPieceSlot),
                 quantity = capture(quantitySlot),
+                amount = capture(amountSlot),
                 gramTotal = capture(gramTotalSlot),
             )
         }
-        justRun {
+        coJustRun {
             mockDao.updateEntrySugarCategoryOfLastXDays(
                 oldCategory = any(),
                 newCategory = any(),
@@ -49,7 +56,7 @@ class EditDatabaseEntryUseCaseTest {
                 endPoint = any(),
             )
         }
-        justRun {
+        coJustRun {
             mockDao.updateCategoryOnEdit(
                 oldCategory = any(),
                 newCategory = any(),
@@ -66,62 +73,118 @@ class EditDatabaseEntryUseCaseTest {
     }
 
     @Test
-    fun `invoke calculates gramTotal correctly for PerHundred mode`() {
-        // Arrange
-        val newGram = 25.0
-        val newQuantity = 50.0
-        val expectedGramTotal = (25.0 / 100.0) * 50.0 // = 12.5
+    fun `invoke calculates gramTotal correctly for PerHundred mode`() =
+        runTest {
+            // Arrange
+            val sugarEntryID = 1
+            val currentEntry =
+                SugarEntry(
+                    id = sugarEntryID,
+                    currentTimestamp = 0L,
+                    date = "",
+                    category = "Old",
+                    entryType = GramCountMode.PerHundred,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 0.0,
+                    quantity = 0.0,
+                    amount = 0.0,
+                    gramTotal = 0.0,
+                )
+            coEvery { mockDao.getSugarEntryById(sugarEntryID) } returns currentEntry
 
-        // Act
-        useCase.invoke(
-            sugarEntryID = 1,
-            sugarEntryType = GramCountMode.PerHundred,
-            oldCategory = "Old",
-            newCategory = "New",
-            newGram = newGram,
-            newQuantity = newQuantity,
-        )
+            val newGramPerHundred = 25.0
+            val newQuantity = 50.0
+            val expectedGramTotal = 12.5
 
-        // Assert
-        // Verify that the updateSugarEntry function was called exactly once
-        verify(exactly = 1) { mockDao.updateSugarEntry(any(), any(), any(), any()) }
+            // Act
+            useCase.invoke(
+                sugarEntryID = sugarEntryID,
+                sugarEntryType = GramCountMode.PerHundred,
+                oldCategory = "Old",
+                newCategory = "New",
+                newGramPerHundred = newGramPerHundred,
+                newGramPerPiece = 0.0,
+                newQuantity = newQuantity,
+                newAmount = 0.0,
+            )
 
-        // Assert that the captured gramTotal value matches our expected calculation
-        assertEquals(expectedGramTotal, gramTotalSlot.captured, 0.001)
+            // Assert
+            // Verify that the updateSugarEntry function was called exactly once
+            coVerify(exactly = 1) {
+                mockDao.updateSugarEntry(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            }
 
-        // Assert other captured values are correct
-        assertEquals(1, idSlot.captured)
-        assertEquals(newGram, gramSlot.captured, 0.0)
-        assertEquals(newQuantity, quantitySlot.captured, 0.0)
-    }
+            // Assert that the captured gramTotal value matches our expected calculation
+            assertEquals(expectedGramTotal, gramTotalSlot.captured!!, 0.001)
+
+            // Assert other captured values are correct
+            assertEquals(sugarEntryID, idSlot.captured)
+            assertEquals(newGramPerHundred, gramPerHundredSlot.captured!!, 0.0)
+            assertEquals(newQuantity, quantitySlot.captured!!, 0.0)
+        }
 
     @Test
-    fun `invoke calculates gramTotal correctly for PerPiece mode`() {
-        // Arrange
-        val newGram = 15.0
-        val newQuantity = 3.0
-        val expectedGramTotal = 15.0 * 3.0 // = 45.0
+    fun `invoke calculates gramTotal correctly for PerPiece mode`() =
+        runTest {
+            // Arrange
+            val sugarEntryID = 2
+            val currentEntry =
+                SugarEntry(
+                    id = sugarEntryID,
+                    currentTimestamp = 0L,
+                    date = "",
+                    category = "Old",
+                    entryType = GramCountMode.PerPiece,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 0.0,
+                    quantity = 0.0,
+                    amount = 0.0,
+                    gramTotal = 0.0,
+                )
+            coEvery { mockDao.getSugarEntryById(sugarEntryID) } returns currentEntry
 
-        // Act
-        useCase.invoke(
-            sugarEntryID = 2,
-            sugarEntryType = GramCountMode.PerPiece, // This triggers the 'else' branch
-            oldCategory = "Old",
-            newCategory = "New",
-            newGram = newGram,
-            newQuantity = newQuantity,
-        )
+            val newGramPerPiece = 15.0
+            val newAmount = 3.0
+            val expectedGramTotal = 45.0
 
-        // Assert
-        // Verify that the updateSugarEntry function was called exactly once
-        verify(exactly = 1) { mockDao.updateSugarEntry(any(), any(), any(), any()) }
+            // Act
+            useCase.invoke(
+                sugarEntryID = sugarEntryID,
+                sugarEntryType = GramCountMode.PerPiece,
+                oldCategory = "Old",
+                newCategory = "New",
+                newGramPerHundred = 0.0,
+                newGramPerPiece = newGramPerPiece,
+                newQuantity = 0.0,
+                newAmount = newAmount,
+            )
 
-        // Assert that the captured gramTotal value is correct for the PerPiece calculation
-        assertEquals(expectedGramTotal, gramTotalSlot.captured, 0.001)
+            // Assert
+            // Verify that the updateSugarEntry function was called exactly once
+            coVerify(exactly = 1) {
+                mockDao.updateSugarEntry(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            }
 
-        // Assert other captured values are correct
-        assertEquals(2, idSlot.captured)
-        assertEquals(newGram, gramSlot.captured, 0.0)
-        assertEquals(newQuantity, quantitySlot.captured, 0.0)
-    }
+            // Assert that the captured gramTotal value is correct for the PerPiece calculation
+            assertEquals(expectedGramTotal, gramTotalSlot.captured!!, 0.001)
+
+            // Assert other captured values are correct
+            assertEquals(sugarEntryID, idSlot.captured)
+            assertEquals(newGramPerPiece, gramPerPieceSlot.captured!!, 0.0)
+            assertEquals(newAmount, amountSlot.captured!!, 0.0)
+        }
 }

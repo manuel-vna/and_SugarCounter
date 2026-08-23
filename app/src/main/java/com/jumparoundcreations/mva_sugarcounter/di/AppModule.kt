@@ -9,6 +9,8 @@ import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarViewModel
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.GetGramSummaryPerDateUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.DeleteEntryUseCase
@@ -40,6 +42,7 @@ val appModule =
         single<AppDatabase> { AppDatabase.getInstance(androidApplication()) }
         viewModel {
             EntrySavingViewModel(
+                context = androidApplication(),
                 scanBarcodeUseCase = get(),
                 getEntryByCategoryUseCase = get(),
                 saveEntryInDatabaseUseCase = get(),
@@ -66,12 +69,16 @@ val appModule =
             )
         }
         viewModel {
+            EntryCalendarViewModel(get()
+            )
+        }
+        viewModel {
             SettingsVM(
                 exportEntriesUseCase = get(),
             )
         }
         viewModel { CategoryVM() }
-        viewModel { HistoryVM() }
+        viewModel { HistoryVM(get()) }
         single { provideSharedPrefsMain(androidApplication()) }
         single(named("barcodeScanner")) { provideBarcodeScanner(androidApplication()) }
         single(named("termsAndConditions")) { provideHtmlContent(get(), R.raw.terms_and_conditions) }
@@ -92,6 +99,7 @@ val appModule =
         single { ReuseEntryForTodayUseCase(get()) }
         single { FilterEntriesBySearchFieldUseCase() }
         single { ExportEntriesUseCase() }
+        single { GetGramSummaryPerDateUseCase( get() ) }
     }
 
 fun provideSharedPrefsMain(application: Application): SharedPreferences =

@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 11,
-    "identityHash": "da7eee5874b775630cbe883d3312300d",
+    "identityHash": "3ef88b9a26b18dfed407f39d64da87f6",
     "entities": [
       {
         "tableName": "sugarEntriesTable",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentTimestamp` INTEGER NOT NULL, `date` TEXT NOT NULL, `category` TEXT NOT NULL, `entryType` TEXT NOT NULL, `gram` REAL NOT NULL, `quantity` REAL NOT NULL, `gramTotal` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `currentTimestamp` INTEGER NOT NULL, `date` TEXT NOT NULL, `category` TEXT NOT NULL, `entryType` TEXT NOT NULL, `gramPerHundred` REAL NOT NULL, `gramPerPiece` REAL NOT NULL, `quantity` REAL NOT NULL, `amount` REAL NOT NULL, `gramTotal` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -39,14 +39,26 @@
             "notNull": true
           },
           {
-            "fieldPath": "gram",
-            "columnName": "gram",
+            "fieldPath": "gramPerHundred",
+            "columnName": "gramPerHundred",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gramPerPiece",
+            "columnName": "gramPerPiece",
             "affinity": "REAL",
             "notNull": true
           },
           {
             "fieldPath": "quantity",
             "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
             "affinity": "REAL",
             "notNull": true
           },
@@ -114,7 +126,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'da7eee5874b775630cbe883d3312300d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ef88b9a26b18dfed407f39d64da87f6')"
     ]
   }
 }

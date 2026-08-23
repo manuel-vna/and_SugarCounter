@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 import com.jumparoundcreations.mva_sugarcounter.util.TimeConstants
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 
 @Composable
 fun RowScope.DatePicker(
@@ -96,8 +96,7 @@ fun RowScope.ElevatedButton(
         )
         Text(
             text =
-                HelperMethods.convertTimestampToDateString(
-                    timestamp = dateOfEntryEpochSec,
+                dateOfEntryEpochSec.convertTimestampToDateString(
                     format = TimeConstants.DATE_SHORT_DAY,
                 ),
         )

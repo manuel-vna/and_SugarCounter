@@ -14,7 +14,7 @@ import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.database.DaoAppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods.Companion.convertTimestampToDateString
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -91,8 +91,7 @@ class DeletionWorkerTest {
                             SugarEntry(
                                 currentTimestamp = timestamp,
                                 date =
-                                    convertTimestampToDateString(
-                                        timestamp,
+                                    timestamp.convertTimestampToDateString(
                                         "yyyy-MM-dd",
                                     ),
                                 category = "Test Sugar",

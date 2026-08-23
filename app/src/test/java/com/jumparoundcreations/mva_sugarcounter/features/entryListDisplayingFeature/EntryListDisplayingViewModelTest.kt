@@ -8,6 +8,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeat
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.useCases.ReuseEntryForTodayUseCase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.features.useCases.GetEntryGroupPerDayUseCase
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -46,8 +47,10 @@ class EntryListDisplayingViewModelTest {
             date = "2023-10-27",
             category = "Apple",
             entryType = GramCountMode.PerPiece,
-            gram = 100.0,
+            gramPerPiece = 100.0,
+            gramPerHundred = 0.0,
             quantity = 1.0,
+            amount = 0.0,
             gramTotal = 100.0,
         )
 
@@ -119,7 +122,7 @@ class EntryListDisplayingViewModelTest {
 
             val state = viewModel.entryListDisplayingStates.value as EntryListDisplayingStates.Success
             assertEquals("Apple", state.data.valueCategory)
-            assertEquals("100.0", state.data.valueGram)
+            assertEquals("100.0", state.data.valueGramPerPiece)
             assertEquals("1.0", state.data.valueQuantity)
         }
 
@@ -156,7 +159,7 @@ class EntryListDisplayingViewModelTest {
             viewModel.onAction(EntryListDisplayingIntents.DeleteEntry(1))
             advanceUntilIdle()
 
-            verify { deleteEntryUseCase(1) }
+            coVerify { deleteEntryUseCase(1) }
         }
 
     @Test
@@ -212,7 +215,7 @@ class EntryListDisplayingViewModelTest {
             viewModel.onAction(EntryListDisplayingIntents.ReuseEntryForToday)
             advanceUntilIdle()
 
-            verify { reuseEntryForTodayUseCase(sampleEntry) }
+            coVerify { reuseEntryForTodayUseCase(sampleEntry) }
         }
 
     @Test
@@ -221,10 +224,11 @@ class EntryListDisplayingViewModelTest {
             initViewModel()
             advanceUntilIdle()
 
-            viewModel.onAction(EntryListDisplayingIntents.EditGram("25.5"))
+            viewModel.onAction(EntryListDisplayingIntents.EditGram("25.5", "10.0"))
 
             val state = viewModel.entryListDisplayingStates.value as EntryListDisplayingStates.Success
-            assertEquals("25.5", state.data.valueGram)
+            assertEquals("25.5", state.data.valueGramPerHundred)
+            assertEquals("10.0", state.data.valueGramPerPiece)
         }
 
     @Test
@@ -233,10 +237,11 @@ class EntryListDisplayingViewModelTest {
             initViewModel()
             advanceUntilIdle()
 
-            viewModel.onAction(EntryListDisplayingIntents.EditQuantity("2.0"))
+            viewModel.onAction(EntryListDisplayingIntents.EditQuantity("2.0", "5.0"))
 
             val state = viewModel.entryListDisplayingStates.value as EntryListDisplayingStates.Success
             assertEquals("2.0", state.data.valueQuantity)
+            assertEquals("5.0", state.data.valueAmount)
         }
 
     @Test
@@ -278,20 +283,22 @@ class EntryListDisplayingViewModelTest {
             viewModel.onAction(EntryListDisplayingIntents.OpenCardDetails(sampleEntry))
             viewModel.onAction(EntryListDisplayingIntents.LoadEntryDataIntoCardDetails(sampleEntry))
             viewModel.onAction(EntryListDisplayingIntents.EditCategory("New Category"))
-            viewModel.onAction(EntryListDisplayingIntents.EditGram("50.0"))
-            viewModel.onAction(EntryListDisplayingIntents.EditQuantity("3.0"))
+            viewModel.onAction(EntryListDisplayingIntents.EditGram("50.0", "0.0"))
+            viewModel.onAction(EntryListDisplayingIntents.EditQuantity("3.0", "0.0"))
 
             viewModel.onAction(EntryListDisplayingIntents.EditEntryInDB)
             advanceUntilIdle()
 
-            verify {
+            coVerify {
                 editDatabaseEntryUseCase(
                     sugarEntryID = sampleEntry.id,
                     sugarEntryType = sampleEntry.entryType,
                     newCategory = "New Category",
-                    newGram = 50.0,
+                    newGramPerHundred = 50.0,
+                    newGramPerPiece = 0.0,
                     oldCategory = sampleEntry.category,
                     newQuantity = 3.0,
+                    newAmount = 0.0,
                 )
             }
         }

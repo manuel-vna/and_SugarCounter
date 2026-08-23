@@ -27,20 +27,19 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
-import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
-import com.jumparoundcreations.mva_sugarcounter.util.GeneralConstants
 
 @Composable
 fun CounterTabRowFieldsUI(
-    onAction: (EntrySavingIntents) -> Unit,
-    entrySavingStates: EntrySavingStates,
+    valueGram: String,
+    valueQuantity: String,
     accessibilityGramTextField: String,
     accessibilityGramTextFieldConsumed: String,
     labelGramField: String,
     labelQuantityField: String,
     onValueChangeGramField: (String) -> Unit,
     onValueChangeQuantityField: (String) -> Unit,
+    onClearGramField: () -> Unit,
+    onClearQuantityField: () -> Unit,
     quantityFieldPlaceholder: String,
 ) {
     Row(
@@ -74,19 +73,14 @@ fun CounterTabRowFieldsUI(
                             MaterialTheme.colorScheme.secondaryContainer,
                         focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
-                value = entrySavingStates.entryFieldGram,
+                value = valueGram,
                 onValueChange = { input ->
                     onValueChangeGramField(input)
                 },
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = {
-                        onAction(
-                            EntrySavingIntents.ChangeEntryFieldGram(
-                                entryFieldGram = GeneralConstants.EMPTY_STRING,
-                            ),
-                        )
-                    }) {
+                    IconButton(onClick = onClearGramField
+                    ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,
@@ -130,19 +124,13 @@ fun CounterTabRowFieldsUI(
                             MaterialTheme.colorScheme.secondaryContainer,
                         focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                     ),
-                value = entrySavingStates.entryFieldQuantity,
+                value = valueQuantity,
                 onValueChange = { input ->
                     onValueChangeQuantityField(input)
                 },
                 singleLine = true,
                 trailingIcon = {
-                    IconButton(onClick = {
-                        onAction(
-                            EntrySavingIntents.ChangeEntryFieldQuantity(
-                                entryFieldQuantity = GeneralConstants.EMPTY_STRING,
-                            ),
-                        )
-                    }) {
+                    IconButton(onClick = onClearQuantityField ) {
                         Icon(
                             modifier = Modifier.size(20.dp),
                             imageVector = Icons.Rounded.Clear,

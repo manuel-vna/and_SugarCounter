@@ -3,16 +3,14 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.SsidChart
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Tab
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -29,48 +27,26 @@ fun HistoryTabRowUI(historyVM: HistoryVM) {
         listOf(
             HistoryTabItem(
                 index = 0,
-                title = stringResource(id = R.string.historyCardsBtn),
+                title = stringResource(id = R.string.historyCards),
                 unselectedIcon = Icons.Outlined.Tab,
                 selectedIcon = Icons.Outlined.Tab,
             ),
             HistoryTabItem(
                 index = 1,
-                title = stringResource(id = R.string.historygraphBtn),
-                unselectedIcon = Icons.Outlined.SsidChart,
-                selectedIcon = Icons.Outlined.SsidChart,
+                title = stringResource(id = R.string.historyCalendar),
+                unselectedIcon = Icons.Outlined.CalendarMonth,
+                selectedIcon = Icons.Outlined.CalendarMonth,
             ),
         )
 
-    val selectedTabIndex by historyVM.isCardTabIndex.collectAsState()
-    val pagerState =
-        rememberPagerState {
-            historyTabItems.size
-        }
+    val selectedTabIndex by historyVM.historyTabIndex.collectAsState()
 
-    LaunchedEffect(key1 = selectedTabIndex) {
-        pagerState.animateScrollToPage(selectedTabIndex)
-    }
-
-    LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress) {
-            historyVM.actionSetIsCardTabIndex(pagerState.currentPage)
-        }
-    }
-
-    TabRow(selectedTabIndex = selectedTabIndex) {
+    SecondaryTabRow(selectedTabIndex = selectedTabIndex) {
         historyTabItems.forEachIndexed { index, item ->
             Tab(
                 selected = index == selectedTabIndex,
                 onClick = {
-                    historyVM.actionSetIsCardTabIndex(index)
-
-                    if (index == 0) {
-                        historyVM.actionShowHistoryCardsScreen()
-                        historyVM.actionHideHistoryChartScreen()
-                    } else {
-                        historyVM.actionHideHistoryCardsScreen()
-                        historyVM.actionShowHistoryChartScreen()
-                    }
+                    historyVM.actionSetHistoryTabIndex(index)
                 },
                 text = {
                     Row(

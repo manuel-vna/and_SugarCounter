@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.use
 
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
+import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +21,7 @@ class CheckUserInputUseCaseTest {
         val state =
             EntrySavingStates(
                 categoryInField = "",
-                entryFieldGram = "10",
+                entryFieldGramPerHundred = "10",
                 entryFieldQuantity = "1",
             )
 
@@ -37,7 +38,8 @@ class CheckUserInputUseCaseTest {
         val state =
             EntrySavingStates(
                 categoryInField = "Cereal",
-                entryFieldGram = "", // The failing condition
+                gramCountMode = GramCountMode.PerHundred,
+                entryFieldGramPerHundred = "", // The failing condition
                 entryFieldQuantity = "1",
             )
 
@@ -54,7 +56,8 @@ class CheckUserInputUseCaseTest {
         val state =
             EntrySavingStates(
                 categoryInField = "Cereal",
-                entryFieldGram = "45",
+                gramCountMode = GramCountMode.PerHundred,
+                entryFieldGramPerHundred = "45",
                 entryFieldQuantity = "", // The failing condition
             )
 
@@ -71,7 +74,8 @@ class CheckUserInputUseCaseTest {
         val state =
             EntrySavingStates(
                 categoryInField = "Cereal",
-                entryFieldGram = "45",
+                gramCountMode = GramCountMode.PerHundred,
+                entryFieldGramPerHundred = "45",
                 entryFieldQuantity = "2",
             )
 

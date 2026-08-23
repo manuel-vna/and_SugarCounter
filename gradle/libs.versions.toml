@@ -9,9 +9,11 @@ composeBom = "2026.05.01"
 composeRuntime = "1.11.2"
 coreKtx = "1.19.0"
 coroutinesTest = "1.11.0"
+coroutinesPlayServices = "1.11.0"
 detekt = "1.23.8"
 detektCompose = "0.5.9"
 gmsScanner = "16.1.0"
+gmsBase = "18.5.0"
 espressoCore = "3.7.0"
 googleAccompanist = "0.37.3"
 junitFive = "2.0.1"
@@ -79,9 +81,11 @@ app-cash-turbine = { group = "app.cash.turbine", name = "turbine", version.ref =
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 detekt-compose = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detektCompose" }
 github-vanpra-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "vanpraDatetime" }
+play-services-base = { group = "com.google.android.gms", name = "play-services-base", version.ref = "gmsBase" }
 gms-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "gmsScanner" }
 google-accompanist = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "googleAccompanist" }
 jetbrans-kotlinx = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koinTestJunit4" }

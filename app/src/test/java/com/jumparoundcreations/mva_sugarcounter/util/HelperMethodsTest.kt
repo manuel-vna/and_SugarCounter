@@ -3,6 +3,8 @@ package com.jumparoundcreations.mva_sugarcounter.util
 import android.text.format.DateUtils
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.timestampIsTodayOrYesterday
 import io.mockk.every
 import io.mockk.junit4.MockKRule
 import io.mockk.mockk
@@ -30,8 +32,10 @@ class HelperMethodsTest {
                     date = "2025-11-21",
                     category = "Duplo",
                     entryType = GramCountMode.PerPiece,
-                    gram = 9.0,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 9.0,
                     quantity = 1.0,
+                    amount = 1.0,
                     gramTotal = 9.0,
                 ),
                 SugarEntry(
@@ -40,8 +44,10 @@ class HelperMethodsTest {
                     date = "2025-11-19",
                     category = "Ritter Sport",
                     entryType = GramCountMode.PerPiece,
-                    gram = 6.0,
-                    quantity = 2.0,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 6.0,
+                    quantity = 1.0,
+                    amount = 2.0,
                     gramTotal = 12.0,
                 ),
                 SugarEntry(
@@ -50,8 +56,10 @@ class HelperMethodsTest {
                     date = "2025-11-16",
                     category = "Weingummi",
                     entryType = GramCountMode.PerPiece,
-                    gram = 5.0,
-                    quantity = 3.0,
+                    gramPerHundred = 0.0,
+                    gramPerPiece = 5.0,
+                    quantity = 1.0,
+                    amount = 3.0,
                     gramTotal = 15.0,
                 ),
             )
@@ -65,7 +73,7 @@ class HelperMethodsTest {
 
         // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801)
+            1715801801L.timestampIsTodayOrYesterday()
         assertEquals(timeString, HelperMethods.TodayOrYesterday.TODAY)
     }
 
@@ -77,7 +85,7 @@ class HelperMethodsTest {
 
         // 1715801801 = timestamp: Wednesday, May 15, 2024 21:36:41 GMT+02:00
         val timeString =
-            HelperMethods.timestampIsTodayOrYesterday(1715801801)
+            1715801801L.timestampIsTodayOrYesterday()
         assertEquals(timeString, HelperMethods.TodayOrYesterday.LATER)
     }
 
@@ -87,16 +95,14 @@ class HelperMethodsTest {
         val timestamp: Long = 1735495200 // = GMT: Sunday, December 29, 2024 18:00:00
 
         val dateString =
-            HelperMethods.convertTimestampToDateString(
-                timestamp,
+            timestamp.convertTimestampToDateString(
                 "yyyy-MM-dd",
             )
         assertEquals(dateString, "2024-12-29")
         // "yyyy" represents the calendar year.
 
         val dateString2 =
-            HelperMethods.convertTimestampToDateString(
-                timestamp,
+            timestamp.convertTimestampToDateString(
                 "YYYY-MM-dd",
             )
         // Not equal because it returns 2025-12-29 since "YYYY"

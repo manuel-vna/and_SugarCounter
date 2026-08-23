@@ -2,7 +2,6 @@ package com.jumparoundcreations.mva_sugarcounter.ui.components.historyUI
 
 import android.content.Context
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,18 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.jumparoundcreations.mva_sugarcounter.R
-import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.EntryGraphDisplayingViewModel
-import com.jumparoundcreations.mva_sugarcounter.features.entryGraphDisplayingFeature.data.EntryGroupInt
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryListDisplayingFeature.EntryListDisplayingViewModel
-import com.jumparoundcreations.mva_sugarcounter.ui.components.entryListUI.EmptyDataInfo
-import com.jumparoundcreations.mva_sugarcounter.util.toIntModel
+import com.jumparoundcreations.mva_sugarcounter.ui.components.calendarUI.EntryCalendarFeature
 import com.jumparoundcreations.mva_sugarcounter.viewModels.HistoryVM
 import org.koin.androidx.compose.koinViewModel
 
@@ -44,8 +38,8 @@ fun History(
         entryListDisplayingViewModel.entryListDisplayingStates.collectAsStateWithLifecycle()
     val entryGraphDisplayingStates by
         entryGraphDisplayingViewModel.entryGraphDisplayingStates.collectAsStateWithLifecycle()
-    val historyChartScreenShown by historyViewModel.historyChartScreenShown.collectAsState()
-    val historyCardsScreenShown by historyViewModel.historyCardsScreenShown.collectAsState()
+    val historyTabOneShown by historyViewModel.historyTabOneShown.collectAsState()
+    val historyTabTwoShown by historyViewModel.historyTabTwoShown.collectAsState()
     val configuration = LocalConfiguration.current
     val isLandscape =
         configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -57,8 +51,7 @@ fun History(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Card Screen
-        if (historyCardsScreenShown) {
+        if (historyTabOneShown) {
             val states = entryListDisplayingStates
             when (states) {
                 is EntryListDisplayingStates.Loading -> {
@@ -93,47 +86,18 @@ fun History(
             }
         }
 
-        // Line Chart Screen
-        if (historyChartScreenShown) {
-            if (isLandscape) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    EmptyDataInfo(
-                        description =
-                            stringResource(id = R.string.landscape_mode_no_graph_description),
-                    )
-                }
-            } else {
-                val states = entryGraphDisplayingStates
-                when (states) {
-                    is EntryGraphDisplayingStates.Loading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(90.dp),
-                            )
-                        }
-                    }
+        if (historyTabTwoShown) {
 
-                    is EntryGraphDisplayingStates.Success -> {
-                        val savedSugarCountGroupedInt: List<EntryGroupInt> =
-                            states.data.entriesGroupedPerDay.toIntModel()
-                        LineChart(
-                            context = context,
-                            savedSugarCountGrouped = savedSugarCountGroupedInt,
-                        )
-                    }
+            EntryCalendarFeature()
 
-                    is EntryGraphDisplayingStates.Error -> {
-                        Text(text = "Error: ${states.message}")
-                    }
-                }
-            }
+            /*
+            LineChartState(
+                context,
+                entryGraphDisplayingStates,
+                isLandscape
+            )
+            */
+
         }
     }
 }

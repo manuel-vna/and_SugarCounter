@@ -1,49 +1,64 @@
 package com.jumparoundcreations.mva_sugarcounter.viewModels
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.component.KoinComponent
 
-class HistoryVM :
+class HistoryVM(
+    private val savedStateHandle: SavedStateHandle
+) :
     ViewModel(),
     KoinComponent {
     companion object {
+        private const val INDEX_KEY = "historyTabIndex"
         private const val INDEX_DEFAULT = 0
     }
 
     // SateFlows: START
 
-    private val _isCardTabIndex = MutableStateFlow(INDEX_DEFAULT)
-    val isCardTabIndex = _isCardTabIndex.asStateFlow()
+    private val _historyTabIndex = MutableStateFlow(
+        savedStateHandle.get<Int>(INDEX_KEY) ?: INDEX_DEFAULT
+    )
+    val historyTabIndex = _historyTabIndex.asStateFlow()
 
-    private val _historyChartScreenShown = MutableStateFlow(false)
-    val historyChartScreenShown = _historyChartScreenShown.asStateFlow()
+    private val _historyTabTwoShown = MutableStateFlow(_historyTabIndex.value == 1)
+    val historyTabTwoShown = _historyTabTwoShown.asStateFlow()
 
-    private val _historyCardsScreenShown = MutableStateFlow(true)
-    val historyCardsScreenShown = _historyCardsScreenShown.asStateFlow()
+    private val _historyTabOneShown = MutableStateFlow(_historyTabIndex.value == 0)
+    val historyTabOneShown = _historyTabOneShown.asStateFlow()
 
     // SateFlows: END
 
     // Actions: START
-    fun actionShowHistoryChartScreen() {
-        _historyChartScreenShown.value = true
+    private fun actionShowTabTwoScreen() {
+        _historyTabTwoShown.value = true
     }
 
-    fun actionHideHistoryChartScreen() {
-        _historyChartScreenShown.value = false
+    private fun actionHideTabTwoScreen() {
+        _historyTabTwoShown.value = false
     }
 
-    fun actionShowHistoryCardsScreen() {
-        _historyCardsScreenShown.value = true
+    private fun actionShowTabOneScreen() {
+        _historyTabOneShown.value = true
     }
 
-    fun actionHideHistoryCardsScreen() {
-        _historyCardsScreenShown.value = false
+    private fun actionHideTabOneScreen() {
+        _historyTabOneShown.value = false
     }
 
-    fun actionSetIsCardTabIndex(tabIndex: Int) {
-        _isCardTabIndex.value = tabIndex
+    fun actionSetHistoryTabIndex(tabIndex: Int) {
+        _historyTabIndex.value = tabIndex
+        savedStateHandle[INDEX_KEY] = tabIndex
+
+        if (tabIndex == 0) {
+            actionShowTabOneScreen()
+            actionHideTabTwoScreen()
+        } else {
+            actionHideTabOneScreen()
+            actionShowTabTwoScreen()
+        }
     }
 
     // Actions: END

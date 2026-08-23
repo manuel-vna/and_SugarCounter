@@ -4,50 +4,48 @@ import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
-import com.jumparoundcreations.mva_sugarcounter.util.HelperMethods
-import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
-import com.jumparoundcreations.mva_sugarcounter.util.roundToOneDecimal
-import com.jumparoundcreations.mva_sugarcounter.util.toDoubleFormatted
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.convertTimestampToDateString
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.roundToOneDecimal
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.toDoubleFormattedOrNull
 
 class SaveEntryInDatabaseUseCase(
     private val database: AppDatabase,
 ) {
-    operator fun invoke(state: EntrySavingStates) {
+    suspend operator fun invoke(state: EntrySavingStates) {
         database.appDao().insertSugarEntry(
             SugarEntry(
                 currentTimestamp = state.dateOfEntryEpochSec,
                 date =
-                    HelperMethods.convertTimestampToDateString(
-                        state.dateOfEntryEpochSec,
+                    state.dateOfEntryEpochSec.convertTimestampToDateString(
                         "yyyy-MM-dd",
                     ),
                 category = state.categoryInField.trim(),
                 entryType = state.gramCountMode,
-                gram =
-                    if (state.entryFieldGram.isEmpty()) {
-                        NumberConstants.ONE_AS_DOUBLE
-                    } else {
-                        state.entryFieldGram.toDoubleFormatted()
-                    },
+                gramPerHundred =
+                    state.entryFieldGramPerHundred.toDoubleFormattedOrNull(),
+                gramPerPiece =
+                    state.entryFieldGramPerPiece.toDoubleFormattedOrNull(),
                 quantity =
-                    if (state.entryFieldQuantity.isEmpty()) {
-                        NumberConstants.ONE_AS_DOUBLE
-                    } else {
-                        state.entryFieldQuantity.toDoubleFormatted()
-                    },
-                gramTotal =
-                    if (state.gramCountMode == GramCountMode.PerHundred) {
-                        (
-                            (state.entryFieldGram.toDoubleFormatted() / NumberConstants.HUNDRED_AS_DOUBLE) *
-                                state.entryFieldQuantity.toDoubleFormatted()
-                        ).roundToOneDecimal()
-                    } else {
-                        (
-                            state.entryFieldGram.toDoubleFormatted() *
-                                state.entryFieldQuantity.toDoubleFormatted()
-                        ).roundToOneDecimal()
-                    },
+                    state.entryFieldQuantity.toDoubleFormattedOrNull(),
+                amount =
+                    state.entryFieldAmount.toDoubleFormattedOrNull(),
+                gramTotal = calculateGramTotal(state)
             ),
         )
+    }
+
+    private fun calculateGramTotal(state: EntrySavingStates): Double? {
+        return when (state.gramCountMode) {
+            GramCountMode.PerHundred -> {
+                val gramPerHundred = state.entryFieldGramPerHundred.toDoubleFormattedOrNull() ?: return null
+                val quantityPerPiece = state.entryFieldQuantity.toDoubleFormattedOrNull() ?: return null
+                ((gramPerHundred / 100.0) * quantityPerPiece).roundToOneDecimal()
+            }
+            GramCountMode.PerPiece -> {
+                val gramPerPiece = state.entryFieldGramPerPiece.toDoubleFormattedOrNull() ?: return null
+                val amountPerPiece = state.entryFieldAmount.toDoubleFormattedOrNull() ?: return null
+                (gramPerPiece * amountPerPiece).roundToOneDecimal()
+            }
+        }
     }
 }

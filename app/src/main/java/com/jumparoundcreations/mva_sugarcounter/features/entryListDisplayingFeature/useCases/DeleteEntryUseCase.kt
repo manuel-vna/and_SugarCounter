@@ -5,7 +5,7 @@ import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 class DeleteEntryUseCase(
     private val database: AppDatabase,
 ) {
-    operator fun invoke(entryId: Int) {
+    suspend operator fun invoke(entryId: Int) {
         database.appDao().deleteSpecificEntryRow(entryId)
     }
 }

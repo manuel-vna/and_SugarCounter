@@ -13,26 +13,28 @@ class GetEntryFromApiUseCase(
                 .onSuccess { productResponse ->
 
                     val category = productResponse.product?.productName
-                    val serving_quantity = productResponse.product?.servingQuantity
-                    val sugars_serving = productResponse.product?.nutriments?.sugarsServing
-                    val sugars_100g = productResponse.product?.nutriments?.sugars100g
+                    val servingQuantity = productResponse.product?.servingQuantity
+                    val sugarsServing = productResponse.product?.nutriments?.sugarsServing
+                    val sugars100g = productResponse.product?.nutriments?.sugars100g
                     println("Product Response: $productResponse")
 
                     if (category.isNullOrEmpty()) {
                         return GetEntryByApiResult.ProductNotFound
                     }
 
-                    if (serving_quantity != null && sugars_serving != null && sugars_100g != sugars_serving){
+                    if (servingQuantity != null && sugarsServing != null && sugars100g != sugarsServing){
                         return GetEntryByApiResult.ProductFound(
                             entryType = GramCountMode.PerPiece,
                             category = category,
-                            gram = sugars_serving
+                            gramPerHundred = sugars100g,
+                            gramPerPiece = sugarsServing
                         )
-                    } else if ( sugars_100g != null ) {
+                    } else if ( sugars100g != null ) {
                         return GetEntryByApiResult.ProductFound(
                             entryType = GramCountMode.PerHundred,
                             category = category,
-                            gram = sugars_100g
+                            gramPerHundred = sugars100g,
+                            gramPerPiece = sugarsServing
                         )
                     } else {
                         return GetEntryByApiResult.ProductNotFound
@@ -45,4 +47,5 @@ class GetEntryFromApiUseCase(
                 }
         return GetEntryByApiResult.ProductNotFound
     }
+
 }

@@ -16,11 +16,13 @@ sealed class EntryListDisplayingIntents {
     ) : EntryListDisplayingIntents()
 
     data class EditGram(
-        val newGram: String,
+        val newGramPerHundred: String,
+        val newGramPerPiece: String
     ) : EntryListDisplayingIntents()
 
     data class EditQuantity(
         val newQuantity: String,
+        val newAmount: String
     ) : EntryListDisplayingIntents()
 
     object DismissCardDetails : EntryListDisplayingIntents()

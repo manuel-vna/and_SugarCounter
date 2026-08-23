@@ -24,6 +24,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.Entr
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CounterTabItem
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
 import com.jumparoundcreations.mva_sugarcounter.ui.utils.InputFilters
+import com.jumparoundcreations.mva_sugarcounter.util.GeneralConstants
 import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 @Composable
@@ -97,67 +98,65 @@ fun TabRow(
             }
         }
 
-        HorizontalPager(
-            state = pagerState,
-        ) { index ->
-            Row {
-                if (tabItems[index].gramCountMode == GramCountMode.PerPiece) {
-                    CounterTabRowFieldsUI(
-                        onAction = onAction,
-                        entrySavingStates = entrySavingStates,
-                        accessibilityGramTextField =
-                            stringResource(R.string.accessibility_perPiece_textField),
-                        accessibilityGramTextFieldConsumed =
-                            stringResource(R.string.accessibility_perPiece_textField_consumed),
-                        labelGramField = stringResource(R.string.gramSugar),
-                        labelQuantityField = stringResource(R.string.quantitySugar),
-                        onValueChangeGramField = { input ->
-                            if (InputFilters.filterBlockingOverHundred(input)) {
-                                onAction(
-                                    EntrySavingIntents.ChangeEntryFieldGram(
-                                        entryFieldGram = input,
-                                    ),
-                                )
-                            }
-                        },
-                        onValueChangeQuantityField = { input ->
-                            if (InputFilters.filterBlockingOverHundred(input)) {
-                                onAction(
-                                    EntrySavingIntents.ChangeEntryFieldQuantity(
-                                        entryFieldQuantity = input,
-                                    ),
-                                )
-                            }
-                        },
-                        quantityFieldPlaceholder = NumberConstants.ONE_AS_INT.toString(),
-                    )
+        Row {
+            HorizontalPager(
+                state = pagerState,
+            ) { index ->
 
-                    onAction(
-                        EntrySavingIntents.ChangeGramCountMode(
-                            gramCountMode = GramCountMode.PerPiece,
-                        ),
-                    )
-                } else {
-                    CounterTabRowFieldsUI(
-                        onAction = onAction,
-                        entrySavingStates = entrySavingStates,
-                        accessibilityGramTextField =
-                            stringResource(R.string.accessibility_perHundredGram_textField),
-                        accessibilityGramTextFieldConsumed =
-                            stringResource(R.string.accessibility_perHundredGram_textField_consumed),
-                        labelGramField = stringResource(R.string.gramPerHundredLabel),
-                        labelQuantityField = stringResource(R.string.amountSugar),
-                        onValueChangeGramField =
-                            { input ->
-                                if (InputFilters.filterBlockingOverHundred(input)) {
-                                    onAction(
-                                        EntrySavingIntents.ChangeEntryFieldGram(
-                                            entryFieldGram = input,
-                                        ),
-                                    )
-                                }
-                            },
-                        onValueChangeQuantityField = { input ->
+                val isPerHundred = tabItems[index].gramCountMode == GramCountMode.PerHundred
+
+                CounterTabRowFieldsUI(
+                    valueGram = if (isPerHundred) {
+                        entrySavingStates.entryFieldGramPerHundred
+                    } else {
+                        entrySavingStates.entryFieldGramPerPiece
+                    },
+                    valueQuantity = if (isPerHundred) {
+                        entrySavingStates.entryFieldQuantity
+                    } else {
+                        entrySavingStates.entryFieldAmount
+                    },
+                    accessibilityGramTextField = if (isPerHundred) {
+                        stringResource(R.string.accessibility_perHundredGram_textField)
+                    } else {
+                        stringResource(R.string.accessibility_perPiece_textField)
+                    },
+                    accessibilityGramTextFieldConsumed = if (isPerHundred) {
+                        stringResource(R.string.accessibility_perHundredGram_textField_consumed)
+                    } else {
+                        stringResource(R.string.accessibility_perPiece_textField_consumed)
+                    },
+                    labelGramField = if (isPerHundred) {
+                        stringResource(R.string.gramPerHundredLabel)
+                    } else {
+                        stringResource(R.string.gramSugar)
+                    },
+                    labelQuantityField = if (isPerHundred) {
+                        stringResource(R.string.amountSugar)
+                    } else {
+                        stringResource(R.string.quantitySugar)
+                    },
+                    onValueChangeGramField = { input ->
+                        if (isPerHundred) {
+                            if (InputFilters.filterBlockingOverHundred(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldGramPerHundred(
+                                        entryFieldGramPerHundred = input,
+                                    ),
+                                )
+                            }
+                        } else {
+                            if (InputFilters.filterBlockingOverThousand(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                                        entryFieldGramPerPiece = input,
+                                    ),
+                                )
+                            }
+                        }
+                    },
+                    onValueChangeQuantityField = { input ->
+                        if (isPerHundred) {
                             if (InputFilters.filterBlockingOverThousand(input)) {
                                 onAction(
                                     EntrySavingIntents.ChangeEntryFieldQuantity(
@@ -165,17 +164,59 @@ fun TabRow(
                                     ),
                                 )
                             }
-                        },
-                        quantityFieldPlaceholder = stringResource(R.string.gram_unit_short),
-                    )
+                        } else {
+                            if (InputFilters.filterBlockingOverHundred(input)) {
+                                onAction(
+                                    EntrySavingIntents.ChangeEntryFieldAmount(
+                                        entryFieldAmount = input,
+                                    ),
+                                )
+                            }
+                        }
+                    },
+                    onClearGramField = {
+                        if (isPerHundred) {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldGramPerHundred(
+                                    entryFieldGramPerHundred = GeneralConstants.EMPTY_STRING
+                                )
+                            )
+                        } else {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldGramPerPiece(
+                                    entryFieldGramPerPiece = GeneralConstants.EMPTY_STRING,
+                                ),
+                            )
+                        }
+                    },
+                    onClearQuantityField = {
+                        if (isPerHundred) {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldQuantity(
+                                    entryFieldQuantity = GeneralConstants.EMPTY_STRING
+                                ),
+                            )
+                        } else {
+                            onAction(
+                                EntrySavingIntents.ChangeEntryFieldAmount(
+                                    entryFieldAmount = GeneralConstants.EMPTY_STRING
+                                ),
+                            )
+                        }
+                    },
+                    quantityFieldPlaceholder = if (isPerHundred) {
+                        stringResource(R.string.gram_unit_short)
+                    } else {
+                        NumberConstants.ONE_AS_INT.toString()
+                    }
+                )
 
-                    onAction(
-                        EntrySavingIntents.ChangeGramCountMode(
-                            gramCountMode = GramCountMode.PerHundred,
-                        ),
-                    )
-                }
             }
         }
     }
+
+    LaunchedEffect(pagerState.currentPage) {
+        onAction(EntrySavingIntents.ChangeGramCountMode(tabItems[pagerState.currentPage].gramCountMode))
+    }
 }
+
