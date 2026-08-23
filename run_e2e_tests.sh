@@ -2,7 +2,7 @@
 
 set -e  # Stop on first error
 
-AVD_NAME="Pixel_9_API_36"
+AVD_NAME="Pixel_9a_API_36"
 EMULATOR_SERIAL="emulator-5554"
 
 echo "==> Available AVDs:"
