@@ -3,6 +3,7 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 import android.content.Context
 import com.jumparoundcreations.mva_sugarcounter.data.SugarEntry
 import com.jumparoundcreations.mva_sugarcounter.data.categoryData.Category
+import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckUserInputResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GetEntryByCategoryResult
@@ -20,14 +21,26 @@ import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import kotlin.test.assertEquals
 
-@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class)
 class EntrySavingViewModelTest {
     private val mockContext = mockk<Context>(relaxed = true)
     private val mockScanBarcodeUseCase = mockk<ScanBarcodeUseCase>()
@@ -41,11 +54,25 @@ class EntrySavingViewModelTest {
     private val displayAllCategoriesUseCase = mockk<DisplayAllCategoriesUseCase>(relaxed = true)
     private val checkDailyGramThresholdUseCase = mockk<CheckDailyGramThresholdUseCase>()
 
-    private val category = mockk<Category>()
+    private val category = Category(category = "Apple", barcodeNumber = "123")
+    private val mockDatabase = mockk<AppDatabase>(relaxed = true)
     private lateinit var viewModel: EntrySavingViewModel
+    private val testDispatcher = StandardTestDispatcher()
 
     @Before
     fun setup() {
+        Dispatchers.setMain(testDispatcher)
+        mockkStatic(Dispatchers::class)
+        every { Dispatchers.IO } returns testDispatcher
+
+        startKoin {
+            modules(
+                module {
+                    single { mockDatabase }
+                },
+            )
+        }
+
         viewModel =
             EntrySavingViewModel(
                 mockContext,
@@ -65,19 +92,30 @@ class EntrySavingViewModelTest {
         coJustRun { saveCategoryInDatabaseUseCase(any()) }
     }
 
+    @After
+    fun tearDown() {
+        stopKoin()
+        Dispatchers.resetMain()
+        unmockkStatic(Dispatchers::class)
+    }
+
     @Test
     fun testEntrySavingIntentsOpenAndCloseDatePickerandChangeSelectedDate() =
         runTest {
             viewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
+            // advanceUntilIdle() here acts as a "synchronization point" that guarantees the ViewModel
+            // has finished processing the intent before the outcome is verified with e.g. assertEquals()
             assertEquals(true, viewModel.entrySavingStates.value.datePickerShown)
 
             viewModel.onAction(EntrySavingIntents.OpenAndCloseDatePicker)
+            advanceUntilIdle()
             assertEquals(false, viewModel.entrySavingStates.value.datePickerShown)
 
             // Arrange
             val newDate = 123456789L
             // Test
             viewModel.onAction(EntrySavingIntents.ChangeSelectedDate(newDate))
+            advanceUntilIdle()
             assertEquals(
                 newDate,
                 viewModel.entrySavingStates.value.dateOfEntryEpochSec,
@@ -96,6 +134,7 @@ class EntrySavingViewModelTest {
                     categoryDropdownExpanded = categoryDropdownExpanded,
                 ),
             )
+            advanceUntilIdle()
             assertEquals(
                 expected = categoryInField,
                 actual = viewModel.entrySavingStates.value.categoryInField,
@@ -110,6 +149,7 @@ class EntrySavingViewModelTest {
                     categoryDropdownExpanded = categoryDropdownExpanded,
                 ),
             )
+            advanceUntilIdle()
             assertEquals(
                 expected = categoryDropdownExpanded,
                 actual = viewModel.entrySavingStates.value.categoryDropdownExpanded,
@@ -149,6 +189,7 @@ class EntrySavingViewModelTest {
                     categoryDropdownExpanded = false,
                 ),
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(categoryInDropdown, viewModel.entrySavingStates.value.categoryInField)
@@ -180,6 +221,7 @@ class EntrySavingViewModelTest {
                     categoryDropdownExpanded = categoryDropdownExpanded,
                 ),
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -230,6 +272,7 @@ class EntrySavingViewModelTest {
                     entryFieldAmount = entryFieldAmount,
                 ),
             )
+            advanceUntilIdle()
 
             // Assert
 
@@ -263,6 +306,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.SaveSugarEntry,
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -274,6 +318,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.DismissNoCategoryDataEnteredAlert,
             )
+            advanceUntilIdle()
 
             // Arrange
             assertEquals(
@@ -294,6 +339,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.SaveSugarEntry,
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -309,6 +355,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.DismissNoSugarDataEnteredAlert,
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -331,6 +378,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.SaveSugarEntry,
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -357,6 +405,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.SaveSugarEntry,
             )
+            advanceUntilIdle()
 
             // Assert
             assertEquals(
@@ -376,6 +425,7 @@ class EntrySavingViewModelTest {
             viewModel.onAction(
                 action = EntrySavingIntents.ClearInputFields,
             )
+            advanceUntilIdle()
             // Assert
             assertEquals(
                 expected = "",
