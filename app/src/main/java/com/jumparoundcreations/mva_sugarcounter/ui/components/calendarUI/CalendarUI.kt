@@ -1,5 +1,6 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.calendarUI
 
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
@@ -41,6 +42,7 @@ import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.En
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatMonthTitle
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toBackgroundColor
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toMondayBasedIndex
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import java.time.LocalDate
 import java.time.YearMonth
@@ -50,7 +52,8 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntryCalendarFeature(
-    viewModel: EntryCalendarViewModel = koinViewModel()
+    viewModel: EntryCalendarViewModel = koinViewModel(),
+    sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
 
     val entryCalendarStates by viewModel.entryCalendarStates.collectAsStateWithLifecycle()
@@ -71,6 +74,7 @@ fun EntryCalendarFeature(
             val days = remember(month) { buildMonthGrid(month) }
 
             MonthPage(
+                sharedPrefsMain = sharedPrefsMain,
                 entryCalendarStates = entryCalendarStates,
                 month = month,
                 days = days,
@@ -85,6 +89,7 @@ fun EntryCalendarFeature(
 
 @Composable
 private fun MonthPage(
+    sharedPrefsMain: SharedPreferences,
     entryCalendarStates: EntryCalendarStates,
     month: YearMonth,
     days: List<CalendarDayUi>,
@@ -116,6 +121,7 @@ private fun MonthPage(
                     rowDays.forEach { day ->
                         Box(modifier = Modifier.weight(1f)) {
                             DayCell(
+                                sharedPrefsMain = sharedPrefsMain,
                                 entryCalendarStates = entryCalendarStates,
                                 day = day,
                                 onClick = { onDayClick(day) }
@@ -164,10 +170,12 @@ private fun WeekdayHeader() {
 
 @Composable
 private fun DayCell(
+    sharedPrefsMain: SharedPreferences,
     entryCalendarStates: EntryCalendarStates,
     day: CalendarDayUi,
     onClick: () -> Unit
 ) {
+    val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50).toDouble()
     val status = remember(entryCalendarStates.gramSummariesPerDate, day.date) {
         if (!day.isInCurrentMonth) {
             DayStatus.NO_DATA
@@ -176,7 +184,7 @@ private fun DayCell(
             val summary = entryCalendarStates.gramSummariesPerDate.find { it.date == dateString }
             when (summary?.totalGram) {
                 null -> DayStatus.NO_DATA
-                in 0.0..45.0 -> DayStatus.LIMIT_OK
+                in 0.0..gramThresholdValue -> DayStatus.LIMIT_OK
                 else -> DayStatus.LIMIT_BREACHED
             }
         }

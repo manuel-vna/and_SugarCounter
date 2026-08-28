@@ -24,7 +24,7 @@ android {
     defaultConfig {
         applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
-        targetSdk = 36
+        targetSdk = 37
         versionCode = versionCodeValue // e.g. 1
         versionName = versionNameValue // e.g. "v0.0.1"
 
