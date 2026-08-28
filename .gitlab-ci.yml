@@ -61,7 +61,7 @@ before_script:
   # Install components using correct 2026 CLI syntax
   - android sdk install --canary "platforms;android-${ANDROID_COMPILE_SDK}" "platform-tools" "build-tools;${ANDROID_BUILD_TOOLS}"
 
-  # Not necessary, but just for surity
+  # Not necessary, but just for security
   - chmod +x ./gradlew
 
 lintCheck:
