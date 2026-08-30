@@ -226,8 +226,9 @@ fun LazyListScope.entryListItems(
                                     "%.1f".format(
                                         HelperMethods.calculateTotalGramPerDayBlock(
                                             entryGroup.entryList,
-                                        ),
-                                    ),
+                                        )
+                                    ) +
+                                    stringResource(id = R.string.gram_unit_short),
                             fontWeight = FontWeight.Bold,
                         )
                     }
