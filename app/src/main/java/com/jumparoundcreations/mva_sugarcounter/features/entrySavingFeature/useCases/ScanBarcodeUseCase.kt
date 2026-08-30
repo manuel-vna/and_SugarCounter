@@ -1,15 +1,19 @@
 package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.useCases
 
 import android.content.Context
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.OptionalModuleApi
 import com.google.android.gms.common.moduleinstall.ModuleAvailabilityResponse
 import com.google.android.gms.common.moduleinstall.ModuleInstall
 import com.google.android.gms.common.moduleinstall.ModuleInstallRequest
 import com.google.android.gms.common.moduleinstall.ModuleInstallResponse
+import com.google.mlkit.common.MlKitException
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
 import com.jumparoundcreations.mva_sugarcounter.database.AppDatabase
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.ScanResult
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -51,7 +55,19 @@ class ScanBarcodeUseCase : KoinComponent {
                 }
             }
         } catch (e: Exception) {
+            if (e.isUserCancellation()) {
+                println("Scan was canceled by the user: ${e.message}")
+                return ScanResult.UserCancelled
+            }
             println("Scan failed or module installation failed: ${e.message}")
             ScanResult.Failed(e)
+        }
+
+    private fun Exception.isUserCancellation(): Boolean =
+        when (this) {
+            is CancellationException -> true
+            is MlKitException -> errorCode == MlKitException.CODE_SCANNER_CANCELLED || errorCode == MlKitException.INTERNAL
+            is ApiException -> statusCode == CommonStatusCodes.CANCELED || statusCode == CommonStatusCodes.INTERNAL_ERROR
+            else -> false
         }
 }

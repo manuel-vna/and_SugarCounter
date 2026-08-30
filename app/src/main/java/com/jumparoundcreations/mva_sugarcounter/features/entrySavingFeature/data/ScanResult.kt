@@ -10,6 +10,8 @@ sealed class ScanResult {
         val barcode: String,
     ) : ScanResult()
 
+    data object UserCancelled : ScanResult()
+
     data class Failed(
         val reason: Throwable?,
     ) : ScanResult()
