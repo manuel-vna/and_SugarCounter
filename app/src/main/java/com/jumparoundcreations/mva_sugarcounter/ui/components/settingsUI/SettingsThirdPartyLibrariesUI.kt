@@ -14,7 +14,7 @@ import com.mikepenz.aboutlibraries.ui.compose.m3.LibrariesContainer
 
 @Composable
 fun SettingsThirdPartyLibrariesUI(navController: NavController) {
-    val libraries by produceLibraries()
+    val libraries by produceLibraries(R.raw.aboutlibraries)
 
     Column {
         SharedTopAppBar(

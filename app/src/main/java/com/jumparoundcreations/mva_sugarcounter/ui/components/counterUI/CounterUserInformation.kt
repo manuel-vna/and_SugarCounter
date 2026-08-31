@@ -107,7 +107,7 @@ fun CounterUserInformation(
 
                 is ScanUiEvents.ScanResultFailed -> {
                     snackbarHostState.showSnackbar(
-                        message = "ToDo: Scan failed",
+                        message = context.getString(R.string.scan_failed),
                         duration = SnackbarDuration.Short,
                     )
                 }

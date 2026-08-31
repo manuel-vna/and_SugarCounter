@@ -204,6 +204,11 @@ class EntrySavingViewModel(
                 is ScanResult.Failed -> {
                     _scanUiEvents.emit(value = ScanUiEvents.ScanResultFailed)
                 }
+
+                is ScanResult.UserCancelled -> {
+                    println("User cancelled the scan")
+                    // In this case nothing is emitted since no UI-reaction is needed
+                }
             }
         }
     }
