@@ -1112,10 +1112,6 @@ Compose:
   ModifierComposed:
     active: true
 
-  ModifierMissing:
-    active: true
-    checkModifiersForVisibility: only_public
-
   ModifierNaming:
     active: true
 
@@ -1140,10 +1136,6 @@ Compose:
   MutableStateParam:
     active: true
 
-  ParameterNaming:
-    active: true
-    allowedLambdaParameterNames: onClick,onDismiss,onValueChange,onCheckedChange
-
   PreviewAnnotationNaming:
     active: true
 
@@ -1161,11 +1153,6 @@ Compose:
 
   UnstableCollections:
     active: false
-
-  ViewModelForwarding:
-    active: true
-    allowedStateHolderNames: .*ViewModel,.*Presenter
-    allowedForwarding: .*Content
 
   ViewModelInjection:
     active: true
