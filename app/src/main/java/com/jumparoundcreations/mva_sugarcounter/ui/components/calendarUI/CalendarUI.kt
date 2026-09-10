@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -37,8 +39,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.CalendarDayUi
 import com.jumparoundcreations.mva_sugarcounter.data.historyData.DayStatus
+import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarStates
 import com.jumparoundcreations.mva_sugarcounter.features.entryCalendarFeature.EntryCalendarViewModel
+import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatDateForDisplay
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.formatMonthTitle
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toBackgroundColor
 import com.jumparoundcreations.mva_sugarcounter.util.extensions.toMondayBasedIndex
@@ -52,11 +56,11 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EntryCalendarFeature(
-    viewModel: EntryCalendarViewModel = koinViewModel(),
+    entryCalendarViewModel: EntryCalendarViewModel = koinViewModel(),
     sharedPrefsMain: SharedPreferences = koinInject(),
 ) {
 
-    val entryCalendarStates by viewModel.entryCalendarStates.collectAsStateWithLifecycle()
+    val entryCalendarStates by entryCalendarViewModel.entryCalendarStates.collectAsStateWithLifecycle()
     val currentMonth = remember { YearMonth.now() }
     val pagerState = rememberPagerState(initialPage = 11, pageCount = { 12 })
 
@@ -76,12 +80,41 @@ fun EntryCalendarFeature(
             MonthPage(
                 sharedPrefsMain = sharedPrefsMain,
                 entryCalendarStates = entryCalendarStates,
+                entryCalendarViewModel = entryCalendarViewModel,
                 month = month,
                 days = days,
                 onDayClick = { day ->
                     println("Clicked day: ${day.date}")
                     Log.d("EntryCalendarFeature", "Clicked day: ${day.date}")
                 }
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = entryCalendarStates.selectedDate.toString().formatDateForDisplay(
+                    "EEEE"
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Text(
+                text = entryCalendarStates.selectedDate.toString().formatDateForDisplay(
+                    "dd.MM."
+                ),
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = if (entryCalendarStates.selectedDayTotalGram == 0.0)
+                    ""
+                else
+                    entryCalendarStates.selectedDayTotalGram.toString()+" "+stringResource(
+                        R.string.general_gram),
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }
@@ -91,6 +124,7 @@ fun EntryCalendarFeature(
 private fun MonthPage(
     sharedPrefsMain: SharedPreferences,
     entryCalendarStates: EntryCalendarStates,
+    entryCalendarViewModel: EntryCalendarViewModel,
     month: YearMonth,
     days: List<CalendarDayUi>,
     onDayClick: (CalendarDayUi) -> Unit
@@ -123,6 +157,7 @@ private fun MonthPage(
                             DayCell(
                                 sharedPrefsMain = sharedPrefsMain,
                                 entryCalendarStates = entryCalendarStates,
+                                entryCalendarViewModel = entryCalendarViewModel,
                                 day = day,
                                 onClick = { onDayClick(day) }
                             )
@@ -172,16 +207,17 @@ private fun WeekdayHeader() {
 private fun DayCell(
     sharedPrefsMain: SharedPreferences,
     entryCalendarStates: EntryCalendarStates,
+    entryCalendarViewModel: EntryCalendarViewModel,
     day: CalendarDayUi,
     onClick: () -> Unit
 ) {
     val gramThresholdValue = sharedPrefsMain.getInt("gramThresholdValue", 50).toDouble()
+    val dateString = day.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
+    val summary = entryCalendarStates.gramSummariesPerDate.find { it.date == dateString }
     val status = remember(entryCalendarStates.gramSummariesPerDate, day.date) {
         if (!day.isInCurrentMonth) {
             DayStatus.NO_DATA
         } else {
-            val dateString = day.date.format(DateTimeFormatter.ISO_LOCAL_DATE)
-            val summary = entryCalendarStates.gramSummariesPerDate.find { it.date == dateString }
             when (summary?.totalGram) {
                 null -> DayStatus.NO_DATA
                 in 0.0..gramThresholdValue -> DayStatus.LIMIT_OK
@@ -192,14 +228,24 @@ private fun DayCell(
 
     val backgroundColor = status.toBackgroundColor()
     val contentAlpha = if (day.isInCurrentMonth) 1f else 0.35f
-    val currentDayBorder: Color = if (day.isToday) Color.Blue else Color.LightGray.copy(alpha = 0.3f)
+    val currentDayBorder: Color =
+        if (day.isToday) Color.Blue else Color.LightGray.copy(alpha = 0.3f)
 
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onClick() },
+            .clickable {
+                println("Day summary (g): $summary")
+                onClick()
+                entryCalendarViewModel.onAction(
+                    EntryCalendarIntents.CalendarDaySelection(
+                        date = day.date,
+                        totalDayGram = summary?.totalGram ?: 0.0
+                    )
+                )
+            },
         shape = RoundedCornerShape(8.dp),
         color = backgroundColor,
         tonalElevation = 0.dp
