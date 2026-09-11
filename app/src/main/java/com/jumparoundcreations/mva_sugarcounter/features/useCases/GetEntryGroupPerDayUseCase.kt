@@ -23,7 +23,7 @@ class GetEntryGroupPerDayUseCase(
                     .map { (date, items) ->
                         EntryGroup(
                             date = date,
-                            dayDisplayFormat = date.formatDateForDisplay(),
+                            dayDisplayFormat = date.formatDateForDisplay("EEEE (dd.MM.)"),
                             entryList = items.sortedBy { it.currentTimestamp },
                         )
                     }.sortedByDescending { it.date }

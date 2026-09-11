@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatter
 
 fun String.toDoubleFormattedOrNull(): Double? = this.replace(",", ".").toDoubleOrNull()
 
-fun String.formatDateForDisplay(): String =
+fun String.formatDateForDisplay(pattern: String): String =
     try {
         val input = LocalDate.parse(this)
-        val formatter = DateTimeFormatter.ofPattern("EEEE (dd.MM.)")
+        val formatter = DateTimeFormatter.ofPattern(pattern)
         input.format(formatter)
     } catch (e: Exception) {
         println(e)
