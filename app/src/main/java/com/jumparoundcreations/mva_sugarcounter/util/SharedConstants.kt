@@ -1,6 +1,7 @@
 package com.jumparoundcreations.mva_sugarcounter.util
 
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
+import kotlin.time.Duration.Companion.days
 
 object DatabaseConstants {
     const val DEFAULT_DATABASE_INT = 0
@@ -38,8 +39,7 @@ object TimeConstants {
     const val DAY_ONE_IN_MILLISECONDS = 86400000
     const val ONE_DAY_IN_SECONDS = 86400L
     const val NINETY_DAYS_IN_SECONDS = 7776000L
-
-    const val TIMEFRAME_OF_SHOWN_ENTRY_CARDS = 31557600L // = 1 year in seconds
+    val TIMEFRAME_OF_SHOWN_ENTRY_CARDS = 365.days.inWholeSeconds
     const val YEAR_ONE_IN_SECONDS = 31536000L
 
     const val DATE_SHORT_DAY = " EE dd.MM."

@@ -1,7 +1,5 @@
 package com.jumparoundcreations.mva_sugarcounter.ui.components.counterUI
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -42,11 +40,9 @@ import androidx.compose.ui.unit.sp
 import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
-import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 @Composable
 fun RowScope.CategoryDropdownField(
-    context: Context,
     onAction: (EntrySavingIntents) -> Unit,
     entrySavingStates: EntrySavingStates,
     keyboardController: SoftwareKeyboardController?,
@@ -73,26 +69,18 @@ fun RowScope.CategoryDropdownField(
                         width = 1.8.dp,
                         shape = RoundedCornerShape(15.dp),
                         color = Color.Transparent,
-                    ).semantics {
+                    )
+                    .semantics {
                         contentDescription = accessibilityCategoryInputField
                     },
             value = entrySavingStates.categoryInField,
             onValueChange = {
-                if (it.count() <= NumberConstants.CATEGORY_MAX_INPUT_CHARACTERS) {
-                    onAction(
-                        EntrySavingIntents.EditOfCategoryField(
-                            categoryInField = it,
-                            categoryDropdownExpanded = true,
-                        ),
-                    )
-                } else {
-                    Toast
-                        .makeText(
-                            context,
-                            context.getString(R.string.categoryMaxInput),
-                            Toast.LENGTH_LONG,
-                        ).show()
-                }
+                onAction(
+                    EntrySavingIntents.EditOfCategoryField(
+                        categoryInField = it,
+                        categoryDropdownExpanded = true,
+                    ),
+                )
             },
             colors =
                 OutlinedTextFieldDefaults.colors(
@@ -127,6 +115,11 @@ fun RowScope.CategoryDropdownField(
                     )
                 }
             },
+            supportingText = {
+                if (entrySavingStates.entrySavingButtonDisabled)
+                    Text(stringResource(R.string.categoryMaxInput))
+            },
+            isError = entrySavingStates.entrySavingButtonDisabled
         )
 
         AnimatedVisibility(visible = entrySavingStates.categoryDropdownExpanded) {
@@ -193,7 +186,8 @@ fun CategoryItems(
                 .fillMaxWidth()
                 .clickable {
                     onSelect(title)
-                }.padding(10.dp),
+                }
+                .padding(10.dp),
     ) {
         Text(text = title, fontSize = 16.sp)
     }

@@ -115,7 +115,6 @@ fun Counter(
         item {
             Row(modifier = Modifier.fillMaxWidth()) {
                 CategoryDropdownField(
-                    context = context,
                     onAction = entrySavingViewModel::onAction,
                     entrySavingStates = entrySavingStates,
                     keyboardController = keyboardController,
@@ -142,6 +141,7 @@ fun Counter(
                     entrySavingViewModel.onAction(EntrySavingIntents.ClearInputFields)
                     keyboardController?.hide()
                 },
+                enabled = entrySavingStates.entrySavingButtonDisabled.not()
             ) {
                 Text(
                     text = stringResource(id = R.string.saveButton),
