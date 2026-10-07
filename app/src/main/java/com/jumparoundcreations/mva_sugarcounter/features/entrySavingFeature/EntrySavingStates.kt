@@ -2,6 +2,7 @@ package com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature
 
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.CheckThresholdResult
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.data.GramCountMode
+import com.jumparoundcreations.mva_sugarcounter.util.NumberConstants
 
 data class EntrySavingStates(
     val datePickerShown: Boolean = false,
@@ -23,4 +24,8 @@ data class EntrySavingStates(
     val savingProcessMissingSugarData: Boolean = false,
     val savingProcessDailyGramThreshold: CheckThresholdResult =
         CheckThresholdResult.WithinDailyThresholdBoundaries,
-)
+) {
+    val entrySavingButtonDisabled: Boolean
+        get() = categoryInField.length > NumberConstants.CATEGORY_MAX_INPUT_CHARACTERS
+}
+
