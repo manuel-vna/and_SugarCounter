@@ -10,7 +10,6 @@
 image: eclipse-temurin:21-jdk-jammy
 
 variables:
-
   # Ensure git fetches all history and tags for version code calculation
   GIT_DEPTH: "0"
   GIT_FETCH_TAGS: "true"
