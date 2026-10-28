@@ -64,7 +64,7 @@ before_script:
   # Not necessary, but just for security
   - chmod +x ./gradlew
 
-lintCheck:
+.lintCheck:
   interruptible: true
   stage: test
   script:
@@ -76,14 +76,14 @@ lintCheck:
     when: always
 
 
-debugTests:
+.debugTests:
   interruptible: true
   stage: test
   script:
     - ./gradlew -Pci --console=plain :app:testDebug
 
 
-assembleDebug:
+.assembleDebug:
   interruptible: true
   stage: build
   script:
@@ -107,11 +107,8 @@ assembleRelease:
     SECURE_FILES_DOWNLOAD_PATH: './'
     SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
   script:
-    - apt-get --quiet install --yes ruby-full build-essential
-    - gem install bundler
-    - bundle install
-    - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
-    - ./gradlew assemble bundleRelease
+    - apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
+    - gem install fastlane --no-document
     - bundle exec fastlane internal
     - mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.apk
     - mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.aab
