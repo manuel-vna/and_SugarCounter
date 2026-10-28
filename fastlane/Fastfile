@@ -27,7 +27,8 @@ platform :android do
         aab: "app/build/outputs/bundle/release/app-release.aab",
         json_key: ENV["GOOGLE_PLAY_SERVICE_ACCOUNT_JSON"],
         package_name: "com.jumparoundcreations.mva_sugarcounter",
-        release_status: "draft"
+        release_status: "draft",
+        skip_upload_apk: true
     )
   end
 
