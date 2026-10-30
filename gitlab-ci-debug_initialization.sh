@@ -3,8 +3,7 @@ set -euo pipefail
 
 # This debugging script only works locally on its dedicated machine
 
-#Release variables: Start
-# The release variables are retrieved from the local 'Keychain Access' tool and
+# The release variables stored in 'Settings->CI/CD->Variables' are retrieved from the local 'Keychain Access' tool and
 # stored as an environment variable of the current shell session
 export SUGAR_COUNTER_KEY_ALIAS=$(security find-generic-password \
   -a "$USER" \
@@ -18,8 +17,9 @@ export RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$(security find-generic-password \
   -a "$USER" \
   -s "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" \
   -w)
-#Release variables: End
 
+# The secure files stored in 'Settings->CI/CD->Secure Files' are retrieved from a local directory
+# which is added to the container as a mounted volume and the files are passed in as external-keys
 docker run --rm -it --platform linux/amd64 \
   -v "$PWD":/workspace \
   -v "$HOME/MobileDev/FilesForLocalPipelineDebugging/":/external-keys \
