@@ -26,10 +26,12 @@ export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$(security find-generic-password \
 
 docker run --rm -it --platform linux/amd64 \
   -v "$PWD":/workspace \
+  -v "$HOME/MobileDev/FilesForLocalPipelineDebugging/":/external-keys \
   -w /workspace \
   -e "SUGAR_COUNTER_KEY_ALIAS=$SUGAR_COUNTER_KEY_ALIAS" \
   -e "SUGAR_COUNTER_KEY=$SUGAR_COUNTER_KEY" \
   -e "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" \
   -e "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" \
+  -e "SUGAR_COUNTER_KEY_FILE=/external-keys/releasePlayConsoleMva-keystore" \
   eclipse-temurin:21-jdk-jammy \
   bash gitlab-ci-debug_pipelineMirror.sh
