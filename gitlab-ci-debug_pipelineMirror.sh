@@ -51,8 +51,11 @@ apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
 gem install fastlane --no-document
 fastlane internal
 #Fastlane: End
+
+#Renaming build files: Start
 mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.apk
 mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.aab
+#Renaming build files: End
 
 #interactive shell
 #echo "Setup complete. Entering interactive shell..."
