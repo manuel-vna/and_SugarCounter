@@ -25,7 +25,7 @@ android {
         applicationId = "com.jumparoundcreations.mva_sugarcounter"
         minSdk = 28
         targetSdk = 37
-        versionCode = 55 //versionCodeValue // e.g. 1
+        versionCode = versionCodeValue // e.g. 1
         versionName = versionNameValue // e.g. "v0.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
