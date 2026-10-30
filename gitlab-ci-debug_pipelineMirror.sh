@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This debugging script only works locally on its dedicated machine
-
 # pipeline variables
 export ANDROID_COMPILE_SDK="37"
 export ANDROID_SDK_TOOLS="15859902"
@@ -42,31 +40,9 @@ android sdk install --canary "platforms;android-${ANDROID_COMPILE_SDK}" "platfor
 
 chmod +x ./gradlew
 
-
 #debug tests:
 #./gradlew -Pci --console=plain :app:testDebug
 echo "Debug tests done"
-
-#Release variables: Start
-# The release variables are retrieved from the local 'Keychain Access' tool and
-# stored as an environment variable of the current shell session
-export SUGAR_COUNTER_KEY_ALIAS=$(security find-generic-password \
-  -a "$USER" \
-  -s "SUGAR_COUNTER_KEY_ALIAS" \
-  -w)
-export SUGAR_COUNTER_KEY=$(security find-generic-password \
-  -a "$USER" \
-  -s "SUGAR_COUNTER_KEY" \
-  -w)
-export RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$(security find-generic-password \
-  -a "$USER" \
-  -s "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" \
-  -w)
-export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$(security find-generic-password \
-  -a "$USER" \
-  -s "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" \
-  -w)
-#Release variables: End
 
 #Release Build and Fastlane: Start
 ./gradlew assemble bundleRelease
