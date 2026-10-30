@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# pipeline variables
+#pipeline variables
 export ANDROID_COMPILE_SDK="37"
 export ANDROID_SDK_TOOLS="15859902"
 export ANDROID_BUILD_TOOLS="37.0.0"
@@ -44,15 +44,16 @@ chmod +x ./gradlew
 #./gradlew -Pci --console=plain :app:testDebug
 echo "Debug tests done"
 
-#Release Build and Fastlane: Start
 ./gradlew assemble bundleRelease
+
+#Fastlane: Start
 apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
 gem install fastlane --no-document
 fastlane internal
-#Release Build and Fastlane: End
+#Fastlane: End
 mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.apk
 mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${CI_COMMIT_SHORT_SHA}-release.aab
 
 #interactive shell
-echo "Setup complete. Entering interactive shell..."
-exec bash
+#echo "Setup complete. Entering interactive shell..."
+#exec bash

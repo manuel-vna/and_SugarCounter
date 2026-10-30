@@ -18,10 +18,6 @@ export RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$(security find-generic-password \
   -a "$USER" \
   -s "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" \
   -w)
-#export GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$(security find-generic-password \
-  #-a "$USER" \
-  #-s "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" \
-  #-w)
 #Release variables: End
 
 docker run --rm -it --platform linux/amd64 \
