@@ -68,7 +68,8 @@ jobs:
 
       - name: Upload Debug Artifact
         if: ${{ !contains(github.ref_name, 'release') }}
-        uses: actions/upload-artifact@v4
+        # At the moment self-hosted Gitea runners do not support the v4 protocol
+        uses: actions/upload-artifact@v3
         with:
           name: sugarCounter-${{ env.SHORT_SHA }}-debug
           path: app/build/outputs/
