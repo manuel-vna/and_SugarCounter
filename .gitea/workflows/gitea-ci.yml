@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  Setup:
+  Sugar Counter:
     runs-on: ubuntu-latest
     env:
       ACTIONS_STEP_DEBUG: true
@@ -29,7 +29,7 @@ jobs:
           export ANDROID_HOME="${{ github.workspace }}/android-sdk-root"
           # Create a directory for that created path
           install -d $ANDROID_HOME
-          # Installing adnroid sdk tools
+          # Installing android sdk tools
           wget --no-verbose --output-document=$ANDROID_HOME/cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip
           unzip -q -d "$ANDROID_HOME/cmdline-tools-temp" "$ANDROID_HOME/cmdline-tools.zip"
           mkdir -p "$ANDROID_HOME/cmdline-tools/latest"
@@ -45,17 +45,11 @@ jobs:
 
           yes | sdkmanager --licenses --channel=3 > /dev/null || true
           android sdk install --canary "platforms;android-${ANDROID_COMPILE_SDK}" "platform-tools" "build-tools;${ANDROID_BUILD_TOOLS}"
+          
+          chmod +x gradlew
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Run Detekt
+        run: ./gradlew detekt --no-daemon
 
-jobs:
-  Linting and Tests:
-    steps:
-      - name: Running Detekt
-      - run: ./gradlew detekt --no-daemon
-
-      - name: Run unit tests
+      - name: Run Unit Tests
         run: ./gradlew testDebugUnitTest --no-daemon
-
-
