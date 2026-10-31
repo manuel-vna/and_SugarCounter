@@ -120,6 +120,7 @@ fun EntryCalendarFeature(
     }
 }
 
+@Suppress("LongParameterList")
 @Composable
 private fun MonthPage(
     sharedPrefsMain: SharedPreferences,

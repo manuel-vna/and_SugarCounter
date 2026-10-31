@@ -41,6 +41,7 @@ import com.jumparoundcreations.mva_sugarcounter.R
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingIntents
 import com.jumparoundcreations.mva_sugarcounter.features.entrySavingFeature.EntrySavingStates
 
+@Suppress("LongMethod")
 @Composable
 fun RowScope.CategoryDropdownField(
     onAction: (EntrySavingIntents) -> Unit,
