@@ -98,6 +98,11 @@ jobs:
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        env:
+          SUGAR_COUNTER_KEY_FILE: "${{ github.workspace }}/.secrets/release-keystore"
+          SUGAR_COUNTER_KEY_ALIAS: "${{ secrets.SUGAR_COUNTER_KEY_ALIAS }}"
+          SUGAR_COUNTER_KEY: "${{ secrets.SUGAR_COUNTER_KEY }}"
+          RELEASE_PLAY_CONSOLE_MVA_KEYSTORE: "${{ secrets.RELEASE_PLAY_CONSOLE_MVA_KEYSTORE }}"
         run: |
           ./gradlew assemble bundleRelease
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
