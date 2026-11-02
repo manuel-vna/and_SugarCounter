@@ -75,6 +75,7 @@ jobs:
           path: app/build/outputs/
 
       - name: Store Secure Files
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
           ANDROID_KEYSTORE_BASE64: "${{ secrets.ANDROID_KEYSTORE_BASE64 }}"
           SUGAR_COUNTER_KEY_FILE: "${{ secrets.release-keystore }}"
