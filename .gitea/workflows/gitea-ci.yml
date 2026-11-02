@@ -78,14 +78,23 @@ jobs:
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
           ANDROID_KEYSTORE_BASE64: "${{ secrets.ANDROID_KEYSTORE_BASE64 }}"
-          SUGAR_COUNTER_KEY_FILE: "${{ github.workspace }}/.secrets/release-keystore"
           GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}"
+          SUGAR_COUNTER_KEY_ALIAS: "${{ secrets.SUGAR_COUNTER_KEY_ALIAS }}"
+          SUGAR_COUNTER_KEY: "${{ secrets.SUGAR_COUNTER_KEY }}"
+          RELEASE_PLAY_CONSOLE_MVA_KEYSTORE: "${{ secrets.RELEASE_PLAY_CONSOLE_MVA_KEYSTORE }}"
         run: |
           mkdir -p .secrets
           printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > .secrets/play-service-account.json
           echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > .secrets/release-keystore
           chmod 600 .secrets/play-service-account.json
           chmod 600 .secrets/release-keystore
+
+          # Persist environment variables for subsequent steps (Assemble Release & Fastlane)
+          echo "SUGAR_COUNTER_KEY_FILE=${{ github.workspace }}/.secrets/release-keystore" >> $GITHUB_ENV
+          echo "SUGAR_COUNTER_KEY_ALIAS=$SUGAR_COUNTER_KEY_ALIAS" >> $GITHUB_ENV
+          echo "SUGAR_COUNTER_KEY=$SUGAR_COUNTER_KEY" >> $GITHUB_ENV
+          echo "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" >> $GITHUB_ENV
+          echo "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" >> $GITHUB_ENV
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
