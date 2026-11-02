@@ -73,3 +73,43 @@ jobs:
         with:
           name: sugarCounter-${{ env.SHORT_SHA }}-debug
           path: app/build/outputs/
+
+      - name: Store Secure Files
+        env:
+          ANDROID_KEYSTORE_BASE64: "${{ secrets.ANDROID_KEYSTORE_BASE64 }}"
+          SUGAR_COUNTER_KEY_FILE: "${{ secrets.release-keystore }}"
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}"
+        run: |
+          mkdir -p .secrets
+          printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > .secrets/play-service-account.json
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > .secrets/release-keystore
+          chmod 600 .secrets/play-service-account.json
+          chmod 600 .secrets/release-keystore
+
+      - name: Assemble Release
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        run: |
+          ./gradlew assemble bundleRelease
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Install Fastlane & Run
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        run: |
+          sudo apt-get --quiet update --yes && sudo apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
+          gem install fastlane --no-document
+          fastlane internal
+
+      - name: Rename Release Outputs
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        run: |
+          mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${{ env.SHORT_SHA }}-release.apk
+          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${{ env.SHORT_SHA }}-release.aab
+
+      - name: Upload Release Artifact
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: sugarCounter-${{ env.SHORT_SHA }}-release
+          path: app/build/outputs/
