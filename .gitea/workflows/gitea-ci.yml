@@ -119,7 +119,7 @@ jobs:
 
       - name: Install Fastlane & Run
         env:
-          FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane-json_key.json"
+          FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane_json_key.json"
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         run: |
           apt-get --quiet update --yes && apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
