@@ -45,7 +45,7 @@ android {
             keyAlias = System.getenv("KEY_ALIAS") ?: "debug"
             keyPassword = System.getenv("KEY_PASSWORD") ?: "password"
             storeFile = file(System.getenv("KEYSTORE_FILE") ?: "debug.keystore")
-            storePassword = System.getenv("RELEASE_PLAY_CONSOLE_MVA_KEYSTORE") ?: "password"
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "password"
         }
     }
 

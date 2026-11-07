@@ -81,6 +81,7 @@ jobs:
           KEY_PASSWORD: "${{secrets.KEY_PASSWORD }}"
           KEY_ALIAS: "${{secrets.KEY_ALIAS }}"
           KEYSTORE_FILE_B64: "${{secrets.KEYSTORE_FILE_B64 }}"
+          KEYSTORE_PASSWORD: "${{secrets.KEYSTORE_PASSWORD}}"
         run: |
           mkdir -p .secrets
           echo "$FASTLANE_JSON_KEY" > .secrets/fastlane_json_key.json
@@ -90,10 +91,10 @@ jobs:
           chmod 600 .secrets/keystore-file
 
           # Persist environment variables for subsequent steps (Assemble Release & Fastlane)
-          echo "FASTLANE_JSON_KEY=$FASTLANE_JSON_KEY" >> $GITHUB_ENV
           echo "KEY_PASSWORD=$KEY_PASSWORD" >> $GITHUB_ENV
           echo "KEY_ALIAS=$KEY_ALIAS" >> $GITHUB_ENV
           echo "KEYSTORE_FILE=${{ github.workspace }}/.secrets/keystore-file" >> $GITHUB_ENV
+          echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" >> $GITHUB_ENV
 
       - name: Debug keystore
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
@@ -111,6 +112,7 @@ jobs:
           KEY_PASSWORD: "${{secrets.KEY_PASSWORD}}"
           KEY_ALIAS: "${{secrets.KEY_ALIAS}}"
           KEYSTORE_FILE: "${{ github.workspace }}/.secrets/keystore-file"
+          KEYSTORE_PASSWORD: "${{secrets.KEYSTORE_PASSWORD}}"
         run: |
           ./gradlew assemble bundleRelease
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
