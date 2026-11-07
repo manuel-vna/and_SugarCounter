@@ -42,9 +42,9 @@ android {
 
     signingConfigs {
         create("release") {
-            keyAlias = System.getenv("SUGAR_COUNTER_KEY_ALIAS") ?: "debug"
-            keyPassword = System.getenv("SUGAR_COUNTER_KEY") ?: "password"
-            storeFile = file(System.getenv("SUGAR_COUNTER_KEY_FILE") ?: "debug.keystore")
+            keyAlias = System.getenv("KEY_ALIAS") ?: "debug"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "password"
+            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "debug.keystore")
             storePassword = System.getenv("RELEASE_PLAY_CONSOLE_MVA_KEYSTORE") ?: "password"
         }
     }

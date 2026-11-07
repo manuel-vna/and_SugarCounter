@@ -77,39 +77,37 @@ jobs:
       - name: Store Secure Files
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
-          ANDROID_KEYSTORE_BASE64: "${{ secrets.ANDROID_KEYSTORE_BASE64 }}"
-          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}"
-          SUGAR_COUNTER_KEY_ALIAS: "${{ secrets.SUGAR_COUNTER_KEY_ALIAS }}"
-          SUGAR_COUNTER_KEY: "${{ secrets.SUGAR_COUNTER_KEY }}"
-          RELEASE_PLAY_CONSOLE_MVA_KEYSTORE: "${{ secrets.RELEASE_PLAY_CONSOLE_MVA_KEYSTORE }}"
+          FASTLANE_JSON_KEY: "${{secrets.FASTLANE_JSON_KEY }}"
+          KEY_PASSWORD: "${{secrets.KEY_PASSWORD }}"
+          KEY_ALIAS: "${{secrets.KEY_ALIAS }}"
+          KEYSTORE_FILE_B64: "${{secrets.KEYSTORE_FIL_B64 }}"
         run: |
           mkdir -p .secrets
-          printf '%s' "$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" > .secrets/play-service-account.json
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > .secrets/release-keystore
-          chmod 600 .secrets/play-service-account.json
-          chmod 600 .secrets/release-keystore
+          echo "$FASTLANE_JSON_KEY" > .secrets/fastlane_json_key.json
+          echo "$KEYSTORE_FILE_B64" | base64 --decode > .secrets/keystore-file
+          chmod 600 .secrets/fastlane_json_key.json
+          chmod 600 .secrets/keystore-file
 
           # Persist environment variables for subsequent steps (Assemble Release & Fastlane)
-          echo "SUGAR_COUNTER_KEY_FILE=${{ github.workspace }}/.secrets/release-keystore" >> $GITHUB_ENV
-          echo "SUGAR_COUNTER_KEY_ALIAS=$SUGAR_COUNTER_KEY_ALIAS" >> $GITHUB_ENV
-          echo "SUGAR_COUNTER_KEY=$SUGAR_COUNTER_KEY" >> $GITHUB_ENV
-          echo "RELEASE_PLAY_CONSOLE_MVA_KEYSTORE=$RELEASE_PLAY_CONSOLE_MVA_KEYSTORE" >> $GITHUB_ENV
-          echo "GOOGLE_PLAY_SERVICE_ACCOUNT_JSON=$GOOGLE_PLAY_SERVICE_ACCOUNT_JSON" >> $GITHUB_ENV
+          echo "FASTLANE_JSON_KEY=$FASTLANE_JSON_KEY" >> $GITHUB_ENV
+          echo "KEY_PASSWORD=$KEY_PASSWORD" >> $GITHUB_ENV
+          echo "KEY_ALIAS=$KEY_ALIAS" >> $GITHUB_ENV
+          echo "KEYSTORE_FILE=${{ github.workspace }}/.secrets/keystore-file" >> $GITHUB_ENV
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
-          SUGAR_COUNTER_KEY_FILE: "${{ github.workspace }}/.secrets/release-keystore"
-          SUGAR_COUNTER_KEY_ALIAS: "${{ secrets.SUGAR_COUNTER_KEY_ALIAS }}"
-          SUGAR_COUNTER_KEY: "${{ secrets.SUGAR_COUNTER_KEY }}"
-          RELEASE_PLAY_CONSOLE_MVA_KEYSTORE: "${{ secrets.RELEASE_PLAY_CONSOLE_MVA_KEYSTORE }}"
+          FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane-json_key.json"
+          KEY_PASSWORD: "${{secrets.KEY_PASSWORD}}"
+          KEY_ALIAS: "${{secrets.KEY_ALIAS}}"
+          KEYSTORE_FILE: "${{ github.workspace }}/.secrets/keystore-file"
         run: |
           ./gradlew assemble bundleRelease
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Install Fastlane & Run
         env:
-          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane-json_key.json"
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         run: |
           sudo apt-get --quiet update --yes && sudo apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
