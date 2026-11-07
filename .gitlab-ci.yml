@@ -108,7 +108,7 @@ assembleRelease:
   stage: build
   variables:
     SECURE_FILES_DOWNLOAD_PATH: './'
-    SUGAR_COUNTER_KEY_FILE: "../releasePlayConsoleMva-keystore"
+    SUGAR_COUNTER_KEY_FILE: "../KEYSTORE_FILE"
   script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assemble bundleRelease
