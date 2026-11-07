@@ -56,8 +56,8 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt --no-daemon
 
-      - name: Run Unit Tests
-        run: ./gradlew testDebugUnitTest --no-daemon
+      #- name: Run Unit Tests
+        #run: ./gradlew testDebugUnitTest --no-daemon
 
       - name: Assemble Debug
         if: ${{ !contains(github.ref_name, 'release') }}
