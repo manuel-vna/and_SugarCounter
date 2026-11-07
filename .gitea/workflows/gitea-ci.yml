@@ -99,8 +99,10 @@ jobs:
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         run: |
           ls -l .secrets/keystore-file
-          head -c 4 .secrets/keystore-file | xxd
-          keytool -list -keystore .secrets/keystore-file -storepass "$KEY_PASSWORD" | head -3
+          echo "First bytes (hex):"
+          od -An -tx1 -N4 .secrets/keystore-file
+          echo "keytool result:"
+          keytool -list -keystore .secrets/keystore-file -storepass "$KEY_PASSWORD" 2>&1 | head -5 || true
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
