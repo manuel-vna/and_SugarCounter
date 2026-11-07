@@ -25,7 +25,7 @@ platform :android do
     upload_to_play_store(
         track: "internal",
         aab: "app/build/outputs/bundle/release/app-release.aab",
-        json_key: "FASTLANE_JSON_KEY",
+        json_key: ENV["FASTLANE_JSON_KEY"],
         package_name: "com.jumparoundcreations.mva_sugarcounter",
         release_status: "draft",
         skip_upload_apk: true
