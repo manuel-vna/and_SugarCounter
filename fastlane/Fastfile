@@ -18,10 +18,14 @@ default_platform(:android)
 platform :android do
 
   lane :internal do
-    gradle(
-        task: "bundle",
-        build_type: "Release"
-    )
+
+    # Building the release bundle here is only needed in cases where it is not built in a
+    # dedicated pipeline step (Assemble Release) before this Fastlane step
+    #gradle(
+        #task: "bundle",
+        #build_type: "Release"
+    #)
+
     upload_to_play_store(
         track: "internal",
         aab: "app/build/outputs/bundle/release/app-release.aab",
