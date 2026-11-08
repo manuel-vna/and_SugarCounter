@@ -8,7 +8,6 @@ jobs:
   Sugar Counter:
     runs-on: ubuntu-latest
     env:
-      ACTIONS_STEP_DEBUG: true
       ANDROID_SDK_TOOLS: "15859902"
       ANDROID_COMPILE_SDK: "37"
       ANDROID_BUILD_TOOLS: "37.0.0"
@@ -16,6 +15,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      # Computed once so every later step (debug and release) can use it
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
 
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -56,15 +59,14 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt --no-daemon
 
-      #- name: Run Unit Tests
-        #run: ./gradlew testDebugUnitTest --no-daemon
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest --no-daemon
 
       - name: Assemble Debug
         if: ${{ !contains(github.ref_name, 'release') }}
         run: |
           ./gradlew assembleDebug
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${{ env.SHORT_SHA }}-debug.apk
+          mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${SHORT_SHA}-debug.apk
 
       - name: Upload Debug Artifact
         if: ${{ !contains(github.ref_name, 'release') }}
@@ -77,46 +79,24 @@ jobs:
       - name: Store Secure Files
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
-          FASTLANE_JSON_KEY: "${{secrets.FASTLANE_JSON_KEY }}"
-          KEY_PASSWORD: "${{secrets.KEY_PASSWORD }}"
-          KEY_ALIAS: "${{secrets.KEY_ALIAS }}"
-          KEYSTORE_FILE_B64: "${{secrets.KEYSTORE_FILE_B64 }}"
-          KEYSTORE_PASSWORD: "${{secrets.KEYSTORE_PASSWORD}}"
+          FASTLANE_JSON_KEY: "${{ secrets.FASTLANE_JSON_KEY }}"
+          KEYSTORE_FILE_B64: "${{ secrets.KEYSTORE_FILE_B64 }}"
         run: |
           mkdir -p .secrets
-          echo "$FASTLANE_JSON_KEY" > .secrets/fastlane_json_key.json
-          #echo "$KEYSTORE_FILE_B64" | base64 --decode > .secrets/keystore-file
+          printf '%s' "$FASTLANE_JSON_KEY" > .secrets/fastlane_json_key.json
           printf '%s' "$KEYSTORE_FILE_B64" | tr -d '[:space:]' | base64 --decode > .secrets/keystore-file
-          chmod 600 .secrets/fastlane_json_key.json
-          chmod 600 .secrets/keystore-file
-
-          # Persist environment variables for subsequent steps (Assemble Release & Fastlane)
-          echo "KEY_PASSWORD=$KEY_PASSWORD" >> $GITHUB_ENV
-          echo "KEY_ALIAS=$KEY_ALIAS" >> $GITHUB_ENV
-          echo "KEYSTORE_FILE=${{ github.workspace }}/.secrets/keystore-file" >> $GITHUB_ENV
-          echo "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" >> $GITHUB_ENV
-
-      - name: Debug keystore
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
-        run: |
-          ls -l .secrets/keystore-file
-          echo "First bytes (hex):"
-          od -An -tx1 -N4 .secrets/keystore-file
-          echo "keytool result:"
-          keytool -list -keystore .secrets/keystore-file -storepass "$KEY_PASSWORD" 2>&1 | head -5 || true
+          chmod 600 .secrets/fastlane_json_key.json .secrets/keystore-file
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         env:
-          FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane_json_key.json"
-          KEY_PASSWORD: "${{secrets.KEY_PASSWORD}}"
-          KEY_ALIAS: "${{secrets.KEY_ALIAS}}"
+          KEY_ALIAS: "${{ secrets.KEY_ALIAS }}"
+          KEY_PASSWORD: "${{ secrets.KEY_PASSWORD }}"
           KEYSTORE_FILE: "${{ github.workspace }}/.secrets/keystore-file"
-          KEYSTORE_PASSWORD: "${{secrets.KEYSTORE_PASSWORD}}"
-        run: |
-          ./gradlew assemble bundleRelease
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          KEYSTORE_PASSWORD: "${{ secrets.KEYSTORE_PASSWORD }}"
+        run: ./gradlew assembleRelease bundleRelease
 
+      # Must run before "Rename Release Outputs": the Fastfile expects app-release.aab
       - name: Install Fastlane & Run
         env:
           FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane_json_key.json"
@@ -129,8 +109,8 @@ jobs:
       - name: Rename Release Outputs
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
         run: |
-          mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${{ env.SHORT_SHA }}-release.apk
-          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${{ env.SHORT_SHA }}-release.aab
+          mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${SHORT_SHA}-release.apk
+          mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${SHORT_SHA}-release.aab
 
       - name: Upload Release Artifact
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
@@ -138,3 +118,8 @@ jobs:
         with:
           name: sugarCounter-${{ env.SHORT_SHA }}-release
           path: app/build/outputs/
+
+      # Don't leave the keystore and service account key on the runner
+      - name: Remove secure files
+        if: ${{ always() }}
+        run: rm -rf .secrets
