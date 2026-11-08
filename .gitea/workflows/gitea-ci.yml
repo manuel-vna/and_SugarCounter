@@ -17,6 +17,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # full history and tags, needed for git describe in build.gradle
+          # fetch-depth controls how many commits of history the checkout step downloads.
+          # The default is 1: only the last commit is downloaded
+          # The value 0 means no limit: All commits, branches and tags are downloaded
 
       # Computed once so every later step (debug and release) can use it
       - name: Set short SHA
