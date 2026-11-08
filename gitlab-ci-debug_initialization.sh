@@ -27,7 +27,7 @@ docker run --rm -it --platform linux/amd64 \
   -e "KEY_ALIAS=$KEY_ALIAS" \
   -e "KEY_PASSWORD=$KEY_PASSWORD" \
   -e "KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD" \
-  -e "FASTLANE_JSON_KEY=/external-keys/FASTLANE_JSON_KEY" \
+  -e "FASTLANE_JSON_KEY=/external-keys/FASTLANE_JSON_KEY.json" \
   -e "KEYSTORE_FILE=/external-keys/KEYSTORE_FILE" \
   eclipse-temurin:21-jdk-jammy \
   bash gitlab-ci-debug_pipelineMirror.sh
