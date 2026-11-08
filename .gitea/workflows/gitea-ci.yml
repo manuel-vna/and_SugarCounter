@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history and tags, needed for git describe in build.gradle
 
       # Computed once so every later step (debug and release) can use it
       - name: Set short SHA
@@ -86,6 +88,12 @@ jobs:
           printf '%s' "$FASTLANE_JSON_KEY" > .secrets/fastlane_json_key.json
           printf '%s' "$KEYSTORE_FILE_B64" | tr -d '[:space:]' | base64 --decode > .secrets/keystore-file
           chmod 600 .secrets/fastlane_json_key.json .secrets/keystore-file
+
+      - name: Verify version tag
+        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        run: |
+          git describe --tags --long --always
+          git describe --tags --long --always | grep -Eq '^v.*_[0-9]+-' || { echo "No tag like v1.2.3_58 found on this commit"; exit 1; }
 
       - name: Assemble Release
         if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
