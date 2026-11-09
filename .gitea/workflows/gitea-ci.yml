@@ -69,6 +69,7 @@ jobs:
 
       - name: Assemble Debug
         if: ${{ contains(github.ref_name, 'feature') }}
+        run: |
           ./gradlew assembleDebug
           mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${SHORT_SHA}-debug.apk
 
@@ -131,5 +132,5 @@ jobs:
 
       # Don't leave the keystore and service account key on the runner
       - name: Remove secure files
-        if: ${{ contains(github.ref_name, 'release') }}
+        if: ${{ always() && contains(github.ref_name, 'release') }}
         run: rm -rf .secrets
