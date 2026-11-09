@@ -68,13 +68,12 @@ jobs:
         run: ./gradlew testDebugUnitTest --no-daemon
 
       - name: Assemble Debug
-        if: ${{ !contains(github.ref_name, 'release') }}
-        run: |
+        if: ${{ contains(github.ref_name, 'feature') }}
           ./gradlew assembleDebug
           mv app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/sugarCounter-${SHORT_SHA}-debug.apk
 
       - name: Upload Debug Artifact
-        if: ${{ !contains(github.ref_name, 'release') }}
+        if: ${{ contains(github.ref_name, 'feature') }}
         # At the moment self-hosted Gitea runners do not support the v4 protocol
         uses: actions/upload-artifact@v3
         with:
@@ -82,7 +81,7 @@ jobs:
           path: app/build/outputs/
 
       - name: Store Secure Files
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         env:
           FASTLANE_JSON_KEY: "${{ secrets.FASTLANE_JSON_KEY }}"
           KEYSTORE_FILE_B64: "${{ secrets.KEYSTORE_FILE_B64 }}"
@@ -93,13 +92,13 @@ jobs:
           chmod 600 .secrets/fastlane_json_key.json .secrets/keystore-file
 
       - name: Verify version tag
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         run: |
           git describe --tags --long --always
           git describe --tags --long --always | grep -Eq '^v.*_[0-9]+-' || { echo "No tag like v1.2.3_58 found on this commit"; exit 1; }
 
       - name: Assemble Release
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         env:
           KEY_ALIAS: "${{ secrets.KEY_ALIAS }}"
           KEY_PASSWORD: "${{ secrets.KEY_PASSWORD }}"
@@ -111,20 +110,20 @@ jobs:
       - name: Install Fastlane & Run
         env:
           FASTLANE_JSON_KEY: "${{ github.workspace }}/.secrets/fastlane_json_key.json"
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         run: |
           apt-get --quiet update --yes && apt-get --quiet install --yes ruby-full build-essential libssl-dev zlib1g-dev
           gem install fastlane --no-document
           fastlane internal
 
       - name: Rename Release Outputs
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         run: |
           mv app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/sugarCounter-${SHORT_SHA}-release.apk
           mv app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/sugarCounter-${SHORT_SHA}-release.aab
 
       - name: Upload Release Artifact
-        if: ${{ contains(github.ref_name, 'release') || github.ref_name == 'master' }}
+        if: ${{ contains(github.ref_name, 'release') }}
         uses: actions/upload-artifact@v3
         with:
           name: sugarCounter-${{ env.SHORT_SHA }}-release
@@ -132,5 +131,5 @@ jobs:
 
       # Don't leave the keystore and service account key on the runner
       - name: Remove secure files
-        if: ${{ always() }}
+        if: ${{ contains(github.ref_name, 'release') }}
         run: rm -rf .secrets
