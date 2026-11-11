@@ -109,6 +109,7 @@ assembleRelease:
   variables:
     SECURE_FILES_DOWNLOAD_PATH: './'
     KEYSTORE_FILE: "../KEYSTORE_FILE"
+    FASTLANE_JSON_KEY: "../FASTLANE_JSON_KEY.json"
   script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ./gradlew assemble bundleRelease
